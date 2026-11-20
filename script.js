@@ -8,7 +8,18 @@ const OWNER = (() => { try { const q = location.search + location.hash; if (/own
 /* 홈페이지에 저장하고 10분이 지나면(새 data.js 가 반영된 뒤) 이 브라우저에 임시로 남겨둔 수정본 · 사진을 정리해요 */
 const SYE_CLEAN = OWNER && (() => { try { const t = +localStorage.getItem('sye-pub-at') || 0; if (t && Date.now() - t > 10 * 60e3 && !(+localStorage.getItem('sye-pend') || 0)) { localStorage.removeItem('sye-draft'); localStorage.removeItem('sye-pub-at'); return true; } } catch (e) {} return false; })();
 let SYE_ON = OWNER && (() => { try { return localStorage.getItem('syEdit') === '1'; } catch (e) { return false; } })();
-const SYE_DRAFT = OWNER ? (() => { try { return JSON.parse(localStorage.getItem('sye-draft') || 'null'); } catch (e) { return null; } })() : null;
+/* 이 브라우저에 남은 수정본(draft) 정리 : 홈페이지 내용과 같거나, 예전에 올라가 있던 내용 그대로인 칸은 지워서
+   새로 바뀐 data.js 가 가려지지 않게 해요 (내가 직접 고친 칸만 남아요) */
+const SITE0 = OWNER ? JSON.parse(JSON.stringify(SITE)) : null;   // 처음 불러온 data.js 그대로 (비교용)
+const SYE_OLD = {"brand":["u0o6ul"],"title":["7wm8ks"],"pair":["190n3mn"],"pairs":["1j5zkc8"],"pairLabels":["19meff0"],"heroTicket":["13a3uc3"],"studio":["664do9"],"online":["a8ojfi"],"residence":["1nlav7m"],"venue":["18rnmsz"],"passLabel":["1s1xibj"],"footer":["1cdq8b0"],"marquee":["1s3ogt5"],"credit":["1e5wm5l"],"clinic":["1w7fn05"],"cursor":["137so3u"],"intro":["f97by8","1otue6n"],"extraApps":["o2njmk","jn7ybg"],"home":["17d8bm0"],"blueprint":["kmzeet"],"spec":["8qfz1i"],"bgm":["1f2r0ez"],"memberOpen":["efwnq4"],"members":["qy5fs2"],"characters":["l3g4mc"],"chat":["9d0puz"],"toasts":["cfmjcw"],"monitor":["wej6ae"],"pedal":["1owetwf"],"memo":["krlcuc"],"records":["htrjpy"],"notice":["zs1qpn"],"neighbors":["7r54zp"],"internet":["12mqh9x"],"game":["924z6h"],"links":["1s1qu8y"]};
+const SYE_DRAFT = OWNER ? (() => { try {
+  const d = JSON.parse(localStorage.getItem('sye-draft') || 'null'); if (!d || typeof d !== 'object') return null;
+  const hs = t => { let x = 2166136261; for (let i = 0; i < t.length; i++) { x ^= t.charCodeAt(i); x = Math.imul(x, 16777619); } return (x >>> 0).toString(36); };
+  let ch = false;
+  Object.keys(d).forEach(k => { if (!(k in SITE)) return; const j = JSON.stringify(d[k]); if (j === JSON.stringify(SITE[k]) || (SYE_OLD[k] || []).includes(hs(j))) { delete d[k]; ch = true; } });
+  if (ch) localStorage.setItem('sye-draft', JSON.stringify(d));
+  return Object.keys(d).length ? d : null;
+} catch (e) { return null; } })() : null;
 const RAW = SYE_DRAFT ? Object.assign({}, SITE, SYE_DRAFT) : SITE;   // 글 수정은 이 브라우저에만 저장 → JS 내보내기로 진짜 반영
 const S = JSON.parse(JSON.stringify(RAW));
 /* 사진 자리 : 사진 칸마다 '어느 칸인지' 표시를 붙여서, 편집 모드에서 누르면 그 칸에 사진을 넣어요 */
@@ -5084,7 +5095,7 @@ html.sye-editing .sye-t.on{background:rgba(127,214,176,.4);outline:2px solid #3F
     if (b.dataset.add) { const p = JSON.parse(b.dataset.add), arr = getP(p); arr.push(arr.length ? blank(clone(arr[arr.length - 1])) : ''); dirty = true; }
     else if (b.dataset.del) { const [p, i] = JSON.parse(b.dataset.del); if (!confirm('이 항목을 지울까요?')) return; getP(p).splice(i, 1); dirty = true; }
     else if (b.dataset.mv) { const [p, i, d] = JSON.parse(b.dataset.mv), arr = getP(p), j = i + d; if (j < 0 || j >= arr.length) return; [arr[i], arr[j]] = [arr[j], arr[i]]; dirty = true; }
-    else if (b.dataset.a === 'apply') { try { localStorage.setItem('sye-draft', JSON.stringify(ED)); sessionStorage.setItem('sye-fast', '1'); sessionStorage.setItem('sye-open', String(tab)); } catch (err) { alert('저장 공간이 부족해서 적용하지 못했어요'); return; } location.reload(); return; }
+    else if (b.dataset.a === 'apply') { try { const df = {}; Object.keys(ED).forEach(k => { if (JSON.stringify(ED[k]) !== JSON.stringify(SITE0[k])) df[k] = ED[k]; }); localStorage.setItem('sye-draft', JSON.stringify(df)); sessionStorage.setItem('sye-fast', '1'); sessionStorage.setItem('sye-open', String(tab)); } catch (err) { alert('저장 공간이 부족해서 적용하지 못했어요'); return; } location.reload(); return; }
     else if (b.dataset.a === 'reset') { if (!confirm('글 수정한 내용을 모두 지우고 지금 홈페이지에 저장돼 있는 내용으로 되돌릴까요? (넣은 사진은 그대로예요)')) return; try { localStorage.removeItem('sye-draft'); sessionStorage.setItem('sye-fast', '1'); } catch (err) {} location.reload(); return; }
     mark(); draw(); pane.querySelector('.sye-body').scrollTop = keep;
   });
