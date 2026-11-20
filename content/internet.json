@@ -1,0 +1,116 @@
+{
+  "internet": {
+    "flix": {
+      "name": "Lunaflix",
+      "domain": "lunaflix.tv",
+      "path": "/browse/hana",
+      "viewer": "하나",
+      "hero": {
+        "badge": "이어보기",
+        "title": "너의 파장이 보여",
+        "meta": "S2 · 12화",
+        "time": "41:20 / 62:10",
+        "progress": 66,
+        "image": ""
+      },
+      "hero2": {
+        "badge": "렌 님이 시청 중",
+        "title": "2026 투어 파이널",
+        "meta": "HANA vs REN | 매치 하이라이트",
+        "time": "4:11 / 95:01",
+        "progress": 4,
+        "image": "",
+        "big": [
+          "THE LAST",
+          "ENCORE"
+        ],
+        "sub": "HANA VS REN · BO5"
+      },
+      "row": [
+        {
+          "title": "너의 파장이 보여",
+          "meta": "S2 · 12화 · 41:20 / 62:10",
+          "image": "",
+          "w": 66
+        },
+        {
+          "title": "나의 맨 앞줄 수호천사! (+번외)",
+          "meta": "1기 · 1화 · 7:02 / 24:30",
+          "image": "",
+          "w": 28
+        },
+        {
+          "title": "우리 합주실에 기타리스트가 산다",
+          "meta": "3화 · 58:44 / 70:00",
+          "image": "",
+          "w": 84
+        },
+        {
+          "title": "2026 투어 파이널",
+          "meta": "HANA vs REN | 매치 하이라이트 · 4:11 / 95:01",
+          "image": "",
+          "w": 4
+        }
+      ]
+    },
+    "stats": {
+      "name": "TICKET.GG",
+      "domain": "ticket.gg",
+      "path": "/fan/맨앞줄오른쪽-HANA",
+      "player": "맨앞줄오른쪽#HANA",
+      "sub": "주 포지션 · 스탠딩",
+      "tier": "GRANDMASTER",
+      "lp": "812 LP",
+      "rate": 61,
+      "rateSub": "186승 121패",
+      "history": [
+        {
+          "result": "성공",
+          "mode": "오픈 예매",
+          "min": "28분",
+          "icon": "스",
+          "role": "스탠딩",
+          "score": "12 / 2 / 9",
+          "diff": "12분 전",
+          "win": true
+        },
+        {
+          "result": "성공",
+          "mode": "오픈 예매",
+          "min": "31분",
+          "icon": "지",
+          "role": "지정석",
+          "score": "9 / 3 / 14",
+          "diff": "1시간 전",
+          "win": true
+        },
+        {
+          "result": "실패",
+          "mode": "취소표",
+          "min": "25분",
+          "icon": "스",
+          "role": "스탠딩",
+          "score": "7 / 6 / 5",
+          "diff": "새벽 4:02",
+          "win": false
+        },
+        {
+          "result": "성공",
+          "mode": "선예매",
+          "min": "22분",
+          "icon": "앵",
+          "role": "앵콜석",
+          "score": "5 / 1 / 22",
+          "diff": "어제 · 2연석",
+          "win": true
+        }
+      ],
+      "tip": {
+        "label": "추천 공략",
+        "title": "맨앞줄 공략: 오픈 3초 전 새로고침 금지",
+        "text": "1. 대기열 70% 넘으면 무리하지 말고 취소표 노려라 2. 예매 버튼 누를 때 숨 참기 3. 좌석보다 시야 우선 ㄱㄱ",
+        "by": "by 맨앞줄오른쪽 · 조회 12.4만"
+      }
+    }
+  }
+}

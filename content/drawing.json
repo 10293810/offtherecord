@@ -1,0 +1,203 @@
+{
+  "blueprint": {
+    "image": "",
+    "keySize": 85,
+    "keyX": -6,
+    "keyY": 0,
+    "dim": "OVERALL · 168 (1:1)",
+    "detail": "DETAIL A",
+    "capTop": [
+      "BAND EQUIPMENT",
+      "MUSIC MAKES US STAY"
+    ],
+    "capBottom": [
+      "MOON STUDIO",
+      "OFF THE RECORD"
+    ],
+    "capRight": [
+      "SAME STAGE",
+      "DIFFERENT DREAMS"
+    ],
+    "labels": [
+      {
+        "k": "BOW",
+        "v": "CLOVER · FILIGREE"
+      },
+      {
+        "k": "COLLAR",
+        "v": "CROWN BAND"
+      },
+      {
+        "k": "SHANK",
+        "v": "KNURLED GRIP"
+      },
+      {
+        "k": "BIT",
+        "v": "HEART WARD"
+      }
+    ],
+    "stack": [],
+    "spare": [
+      {
+        "name": "BASS",
+        "model": "JAZZ TYPE · 4 STRINGS",
+        "src": "",
+        "x": 53,
+        "y": 50,
+        "w": 56,
+        "r": 14,
+        "side": "R",
+        "labelY": 70,
+        "rows": [
+          {
+            "k": "LENGTH",
+            "v": "1,180 mm"
+          },
+          {
+            "k": "WIDTH",
+            "v": "340 mm"
+          },
+          {
+            "k": "SCALE",
+            "v": "34\""
+          },
+          {
+            "k": "STRINGS",
+            "v": "4"
+          }
+        ]
+      },
+      {
+        "name": "GUITAR",
+        "model": "STRAT TYPE",
+        "src": "",
+        "x": 44,
+        "y": 22,
+        "w": 30,
+        "r": -8,
+        "side": "R",
+        "labelY": 14,
+        "rows": [
+          {
+            "k": "LENGTH",
+            "v": "1,000 mm"
+          },
+          {
+            "k": "WIDTH",
+            "v": "325 mm"
+          },
+          {
+            "k": "SCALE",
+            "v": "25.5\""
+          }
+        ]
+      },
+      {
+        "name": "DRUMS",
+        "model": "SNARE DRUM · STICKS",
+        "src": "",
+        "x": 52,
+        "y": 58,
+        "w": 52,
+        "r": -6,
+        "side": "R",
+        "labelY": 52,
+        "rows": [
+          {
+            "k": "DIAMETER",
+            "v": "350 mm"
+          },
+          {
+            "k": "HEIGHT",
+            "v": "150 mm"
+          },
+          {
+            "k": "STICKS",
+            "v": "7A · 2 pcs"
+          }
+        ]
+      },
+      {
+        "name": "KEYS",
+        "model": "61 KEYS",
+        "src": "",
+        "x": 50,
+        "y": 72,
+        "w": 74,
+        "r": -8,
+        "side": "L",
+        "labelY": 68,
+        "rows": [
+          {
+            "k": "LENGTH",
+            "v": "1,000 mm"
+          },
+          {
+            "k": "WIDTH",
+            "v": "300 mm"
+          },
+          {
+            "k": "HEIGHT",
+            "v": "100 mm"
+          }
+        ]
+      },
+      {
+        "name": "VOCALS",
+        "model": "STAND MIC",
+        "src": "",
+        "x": 64,
+        "y": 86,
+        "w": 19,
+        "r": 22,
+        "side": "R",
+        "labelY": 82,
+        "rows": [
+          {
+            "k": "HEIGHT",
+            "v": "1,800 mm"
+          },
+          {
+            "k": "BASE",
+            "v": "250 mm"
+          },
+          {
+            "k": "WEIGHT",
+            "v": "2.1 kg"
+          }
+        ]
+      }
+    ],
+    "notes": []
+  },
+  "spec": {
+    "sub": "DRAWING Nº SY-01 · ARCH CLINIC",
+    "title": "SPEC SHEET",
+    "cells": [
+      {
+        "k": "GUIDE",
+        "v": "PURE"
+      },
+      {
+        "k": "SENTINEL",
+        "v": "UXI"
+      },
+      {
+        "k": "SINCE P2U",
+        "v": "D+{d}"
+      },
+      {
+        "k": "TODAY",
+        "v": "{today}"
+      },
+      {
+        "k": "DRAWN BY",
+        "v": "↳ PpLE"
+      },
+      {
+        "k": "SCALE",
+        "v": "1 : 1"
+      }
+    ]
+  }
+}

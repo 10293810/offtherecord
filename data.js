@@ -3,6 +3,10 @@
    - 이미지: 주소(URL)를 '' 안에 넣으면 적용, 비워두면 기본 그라데이션이 나와요.
    - 음악: src 에 mp3 주소를 넣으면 실제로 재생돼요. 비워두면 재생 '연출'만 돼요.
    - body 에는 <b>, <br>, <p> 같은 간단한 HTML을 써도 돼요.
+
+   ★ 지금은 관리자 화면(https://app.pagescms.org)에서 고쳐요!
+     실제 내용은 content/ 폴더의 JSON 파일에 저장되고, 이 파일은 예비용이에요.
+     (여기를 고쳐도 content/ 에 같은 내용이 있으면 그쪽이 보여요)
    ========================================================= */
 
 const SITE = {
@@ -267,8 +271,6 @@ const SITE = {
     }
   ],
 
-  /* ★ 東京青藍大学 · FRONTLINE · ETC. 의 MEMBER / PAIR 는 이제 관리자 화면(Pages CMS)에서 고쳐요.
-     실제 내용은 content/seiran.json · frontline.json · etc.json 에 저장되고, 아래 내용은 예비용이에요. */
   /* ---------- 캐릭터 정리 창 (東京青藍大学 · FRONTLINE · ETC. 앱) ----------
      - worlds 안에 앱 하나당 한 덩어리가 있어요. (seiran = 東京青藍大学, frontline = FRONTLINE, etc = ETC.)
      - 각 덩어리 안의 MEMBER / PAIR / AU 가 창 위쪽 탭 3개예요. 그 안에 캐릭터를 넣으면 카드가 생겨요.

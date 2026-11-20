@@ -1,0 +1,105 @@
+{
+  "memo": [
+    {
+      "tab": "연습 메모",
+      "sections": [
+        {
+          "title": "SETLIST · VOL.05",
+          "items": [
+            {
+              "text": "01 Moonlit Feedback — 인트로 반 박자 늦게",
+              "done": false
+            },
+            {
+              "text": "02 B-P-M — 브릿지 후 떼창 파트",
+              "done": false
+            },
+            {
+              "text": "03 Knife Edge — 렌 애드리브 구간 비워두기",
+              "done": true
+            },
+            {
+              "text": "앵콜 Last Train — 하나 자리 보고 부르기",
+              "done": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tab": "할 일",
+      "sections": [
+        {
+          "title": "TO DO · HANA",
+          "items": [
+            {
+              "text": "렌 목 캔디 (유자맛) 사기 (매진이었음… 다른 맛 사옴)",
+              "done": true
+            },
+            {
+              "text": "투어 3회차 티켓팅 10시 정각",
+              "done": false
+            },
+            {
+              "text": "앵콜곡 떼창 파트 외우기",
+              "done": false
+            },
+            {
+              "text": "리허설 룸 출입증 챙기기",
+              "done": false
+            },
+            {
+              "text": "렌 잠 못 잔 거 체크",
+              "done": false
+            }
+          ]
+        },
+        {
+          "title": "TO DO · REN",
+          "items": [
+            {
+              "text": "하나 자리 맨 앞줄 오른쪽 확인",
+              "done": true
+            },
+            {
+              "text": "셋리스트 마지막 곡 몰래 바꾸기",
+              "done": false
+            },
+            {
+              "text": "새벽 4시 데모 녹음 ← 그냥 포기",
+              "done": true
+            },
+            {
+              "text": "뒤풀이 장소 예약",
+              "done": false
+            },
+            {
+              "text": "대기실 정리",
+              "done": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tab": "낙서장",
+      "sections": [
+        {
+          "title": "SECRET · 비밀 노트",
+          "note": "고민 중 🌙",
+          "items": [
+            {
+              "text": "대기실 소파에 하나 전용 담요 하나 놔둘까?",
+              "done": false
+            },
+            {
+              "text": "매니저 형이 알면 뭐라 하겠지만 내 마음이니까…",
+              "done": false,
+              "plain": true
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

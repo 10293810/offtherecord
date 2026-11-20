@@ -1,0 +1,43 @@
+{
+  "notice": {
+    "lockLabel": "✦ PROMPT ✦",
+    "posts": [
+      {
+        "no": 10,
+        "title": "✎ : Banner",
+        "tag": "NOTICE",
+        "date": "2026. 10. 14.",
+        "excerpt": "배너 교환",
+        "images": [
+          {
+            "src": "",
+            "name": "setlist-1.gif",
+            "size": "283KB",
+            "url": "https://example.com/setlist-1.gif"
+          },
+          {
+            "src": "",
+            "name": "setlist-2.gif",
+            "size": "269KB",
+            "url": "https://example.com/setlist-2.gif"
+          }
+        ],
+        "fields": [
+          {
+            "label": "Title(alt)",
+            "value": "Setlist"
+          },
+          {
+            "label": "Link",
+            "value": "https://example.com/"
+          },
+          {
+            "label": "Subtitle",
+            "value": "beats per minute<br><small>(필수 X)</small>",
+            "dim": true
+          }
+        ]
+      }
+    ]
+  }
+}

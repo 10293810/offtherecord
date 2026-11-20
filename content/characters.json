@@ -1,0 +1,22 @@
+{
+  "title": [
+    "CHARACTERS",
+    "MEMBERS"
+  ],
+  "sub": "MEMBER DATABASE",
+  "drawnBy": "↳ HANA",
+  "tabs": [
+    {
+      "key": "member",
+      "label": "MEMBER"
+    },
+    {
+      "key": "pair",
+      "label": "PAIR"
+    },
+    {
+      "key": "au",
+      "label": "AU"
+    }
+  ]
+}

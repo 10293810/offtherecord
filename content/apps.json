@@ -1,0 +1,918 @@
+{
+  "order": [
+    "gallery",
+    "letters",
+    "lockbox",
+    "setlist",
+    "camera",
+    "calendar",
+    "archive",
+    "about",
+    "list",
+    "linked",
+    "ooc",
+    "prompt",
+    "album",
+    "guestbook",
+    "diary",
+    "shop",
+    "stickers",
+    "radio",
+    "mail",
+    "map",
+    "settings",
+    "notes",
+    "wishlist",
+    "video",
+    "xgame",
+    "search",
+    "weather",
+    "contacts",
+    "cloud",
+    "alarm",
+    "wallet",
+    "library",
+    "stats",
+    "scan",
+    "pharmacy",
+    "vitals"
+  ],
+  "grid": [
+    {
+      "id": "gallery",
+      "name": "Gallery",
+      "items": [
+        {
+          "title": "제목 1",
+          "date": "10.26",
+          "img": ""
+        },
+        {
+          "title": "제목 2",
+          "date": "10.23",
+          "img": ""
+        },
+        {
+          "title": "제목 3",
+          "date": "10.20",
+          "img": ""
+        },
+        {
+          "title": "제목 4",
+          "date": "10.17",
+          "img": ""
+        },
+        {
+          "title": "제목 5",
+          "date": "10.14",
+          "img": ""
+        },
+        {
+          "title": "제목 6",
+          "date": "10.11",
+          "img": ""
+        }
+      ]
+    },
+    {
+      "id": "letters",
+      "name": "Letters",
+      "items": [
+        {
+          "title": "편지 1",
+          "date": "10.26",
+          "img": ""
+        },
+        {
+          "title": "편지 2",
+          "date": "10.23",
+          "img": ""
+        },
+        {
+          "title": "편지 3",
+          "date": "10.20",
+          "img": ""
+        }
+      ]
+    },
+    {
+      "id": "setlist",
+      "name": "Setlist",
+      "items": [
+        {
+          "title": "곡 1",
+          "date": "10.26",
+          "img": ""
+        },
+        {
+          "title": "곡 2",
+          "date": "10.23",
+          "img": ""
+        },
+        {
+          "title": "곡 3",
+          "date": "10.20",
+          "img": ""
+        }
+      ]
+    },
+    {
+      "id": "camera",
+      "name": "Camera",
+      "items": [
+        {
+          "title": "사진 1",
+          "date": "10.26",
+          "img": ""
+        },
+        {
+          "title": "사진 2",
+          "date": "10.23",
+          "img": ""
+        },
+        {
+          "title": "사진 3",
+          "date": "10.20",
+          "img": ""
+        }
+      ]
+    },
+    {
+      "id": "album",
+      "name": "Album",
+      "items": [
+        {
+          "title": "사진 1",
+          "date": "11.04",
+          "img": ""
+        },
+        {
+          "title": "사진 2",
+          "date": "11.02",
+          "img": ""
+        },
+        {
+          "title": "사진 3",
+          "date": "10.30",
+          "img": ""
+        }
+      ]
+    },
+    {
+      "id": "shop",
+      "name": "Shop",
+      "items": [
+        {
+          "title": "상품 1",
+          "date": "11.04",
+          "img": ""
+        },
+        {
+          "title": "상품 2",
+          "date": "11.02",
+          "img": ""
+        },
+        {
+          "title": "상품 3",
+          "date": "10.30",
+          "img": ""
+        }
+      ]
+    },
+    {
+      "id": "stickers",
+      "name": "Stickers",
+      "items": [
+        {
+          "title": "스티커 1",
+          "date": "11.04",
+          "img": ""
+        },
+        {
+          "title": "스티커 2",
+          "date": "11.02",
+          "img": ""
+        },
+        {
+          "title": "스티커 3",
+          "date": "10.30",
+          "img": ""
+        }
+      ]
+    }
+  ],
+  "list": [
+    {
+      "id": "lockbox",
+      "name": "Lock Box",
+      "rows": [
+        {
+          "text": "항목 1",
+          "date": "10.25"
+        },
+        {
+          "text": "항목 2",
+          "date": "10.23"
+        },
+        {
+          "text": "항목 3",
+          "date": "10.21"
+        }
+      ]
+    },
+    {
+      "id": "calendar",
+      "name": "Calendar",
+      "rows": [
+        {
+          "text": "일정 1",
+          "date": "10.25"
+        },
+        {
+          "text": "일정 2",
+          "date": "10.23"
+        },
+        {
+          "text": "일정 3",
+          "date": "10.21"
+        }
+      ]
+    },
+    {
+      "id": "archive",
+      "name": "Archive",
+      "rows": [
+        {
+          "text": "기록 1",
+          "date": "10.25"
+        },
+        {
+          "text": "기록 2",
+          "date": "10.23"
+        },
+        {
+          "text": "기록 3",
+          "date": "10.21"
+        }
+      ]
+    },
+    {
+      "id": "guestbook",
+      "name": "Guest Book",
+      "rows": [
+        {
+          "text": "방명록 1",
+          "date": "11.04"
+        },
+        {
+          "text": "방명록 2",
+          "date": "11.02"
+        },
+        {
+          "text": "방명록 3",
+          "date": "10.30"
+        }
+      ]
+    },
+    {
+      "id": "diary",
+      "name": "Diary",
+      "rows": [
+        {
+          "text": "일기 1",
+          "date": "11.04"
+        },
+        {
+          "text": "일기 2",
+          "date": "11.02"
+        },
+        {
+          "text": "일기 3",
+          "date": "10.30"
+        }
+      ]
+    },
+    {
+      "id": "radio",
+      "name": "Radio",
+      "rows": [
+        {
+          "text": "방송 1",
+          "date": "11.04"
+        },
+        {
+          "text": "방송 2",
+          "date": "11.02"
+        },
+        {
+          "text": "방송 3",
+          "date": "10.30"
+        }
+      ]
+    },
+    {
+      "id": "mail",
+      "name": "Mail",
+      "rows": [
+        {
+          "text": "항목 1",
+          "date": "11.15"
+        },
+        {
+          "text": "항목 2",
+          "date": "11.12"
+        },
+        {
+          "text": "항목 3",
+          "date": "11.09"
+        }
+      ]
+    },
+    {
+      "id": "map",
+      "name": "Map",
+      "rows": [
+        {
+          "text": "항목 1",
+          "date": "11.15"
+        },
+        {
+          "text": "항목 2",
+          "date": "11.12"
+        },
+        {
+          "text": "항목 3",
+          "date": "11.09"
+        }
+      ]
+    },
+    {
+      "id": "settings",
+      "name": "Settings",
+      "rows": [
+        {
+          "text": "항목 1",
+          "date": "11.15"
+        },
+        {
+          "text": "항목 2",
+          "date": "11.12"
+        },
+        {
+          "text": "항목 3",
+          "date": "11.09"
+        }
+      ]
+    },
+    {
+      "id": "notes",
+      "name": "Notes",
+      "rows": [
+        {
+          "text": "항목 1",
+          "date": "11.15"
+        },
+        {
+          "text": "항목 2",
+          "date": "11.12"
+        },
+        {
+          "text": "항목 3",
+          "date": "11.09"
+        }
+      ]
+    },
+    {
+      "id": "wishlist",
+      "name": "Wishlist",
+      "rows": [
+        {
+          "text": "항목 1",
+          "date": "11.15"
+        },
+        {
+          "text": "항목 2",
+          "date": "11.12"
+        },
+        {
+          "text": "항목 3",
+          "date": "11.09"
+        }
+      ]
+    },
+    {
+      "id": "video",
+      "name": "Video",
+      "rows": [
+        {
+          "text": "항목 1",
+          "date": "11.15"
+        },
+        {
+          "text": "항목 2",
+          "date": "11.12"
+        },
+        {
+          "text": "항목 3",
+          "date": "11.09"
+        }
+      ]
+    },
+    {
+      "id": "xgame",
+      "name": "Game",
+      "rows": [
+        {
+          "text": "항목 1",
+          "date": "11.15"
+        },
+        {
+          "text": "항목 2",
+          "date": "11.12"
+        },
+        {
+          "text": "항목 3",
+          "date": "11.09"
+        }
+      ]
+    },
+    {
+      "id": "search",
+      "name": "Search",
+      "rows": [
+        {
+          "text": "항목 1",
+          "date": "11.15"
+        },
+        {
+          "text": "항목 2",
+          "date": "11.12"
+        },
+        {
+          "text": "항목 3",
+          "date": "11.09"
+        }
+      ]
+    },
+    {
+      "id": "weather",
+      "name": "Weather",
+      "rows": [
+        {
+          "text": "항목 1",
+          "date": "11.15"
+        },
+        {
+          "text": "항목 2",
+          "date": "11.12"
+        },
+        {
+          "text": "항목 3",
+          "date": "11.09"
+        }
+      ]
+    },
+    {
+      "id": "contacts",
+      "name": "Contacts",
+      "rows": [
+        {
+          "text": "항목 1",
+          "date": "11.15"
+        },
+        {
+          "text": "항목 2",
+          "date": "11.12"
+        },
+        {
+          "text": "항목 3",
+          "date": "11.09"
+        }
+      ]
+    },
+    {
+      "id": "cloud",
+      "name": "Cloud",
+      "rows": [
+        {
+          "text": "항목 1",
+          "date": "11.15"
+        },
+        {
+          "text": "항목 2",
+          "date": "11.12"
+        },
+        {
+          "text": "항목 3",
+          "date": "11.09"
+        }
+      ]
+    },
+    {
+      "id": "alarm",
+      "name": "Alarm",
+      "rows": [
+        {
+          "text": "항목 1",
+          "date": "11.15"
+        },
+        {
+          "text": "항목 2",
+          "date": "11.12"
+        },
+        {
+          "text": "항목 3",
+          "date": "11.09"
+        }
+      ]
+    },
+    {
+      "id": "wallet",
+      "name": "Wallet",
+      "rows": [
+        {
+          "text": "항목 1",
+          "date": "11.15"
+        },
+        {
+          "text": "항목 2",
+          "date": "11.12"
+        },
+        {
+          "text": "항목 3",
+          "date": "11.09"
+        }
+      ]
+    },
+    {
+      "id": "library",
+      "name": "Library",
+      "rows": [
+        {
+          "text": "항목 1",
+          "date": "11.15"
+        },
+        {
+          "text": "항목 2",
+          "date": "11.12"
+        },
+        {
+          "text": "항목 3",
+          "date": "11.09"
+        }
+      ]
+    },
+    {
+      "id": "stats",
+      "name": "Stats",
+      "rows": [
+        {
+          "text": "항목 1",
+          "date": "11.15"
+        },
+        {
+          "text": "항목 2",
+          "date": "11.12"
+        },
+        {
+          "text": "항목 3",
+          "date": "11.09"
+        }
+      ]
+    },
+    {
+      "id": "scan",
+      "name": "Scan",
+      "rows": [
+        {
+          "text": "항목 1",
+          "date": "11.15"
+        },
+        {
+          "text": "항목 2",
+          "date": "11.12"
+        },
+        {
+          "text": "항목 3",
+          "date": "11.09"
+        }
+      ]
+    },
+    {
+      "id": "pharmacy",
+      "name": "Pharmacy",
+      "rows": [
+        {
+          "text": "항목 1",
+          "date": "11.15"
+        },
+        {
+          "text": "항목 2",
+          "date": "11.12"
+        },
+        {
+          "text": "항목 3",
+          "date": "11.09"
+        }
+      ]
+    },
+    {
+      "id": "vitals",
+      "name": "Vitals",
+      "rows": [
+        {
+          "text": "항목 1",
+          "date": "11.15"
+        },
+        {
+          "text": "항목 2",
+          "date": "11.12"
+        },
+        {
+          "text": "항목 3",
+          "date": "11.09"
+        }
+      ]
+    }
+  ],
+  "about": {
+    "id": "about",
+    "name": "Profile",
+    "icon": "idcard",
+    "no": "NO. 2026-HANA",
+    "title": "PROFILE",
+    "sub": "ABOUT // SELF INTRO",
+    "handle": "@handle",
+    "info": [
+      {
+        "k": "STATUS",
+        "v": "여기에 상태를 적어요"
+      },
+      {
+        "k": "TYPE",
+        "v": "여기에 타입을 적어요"
+      }
+    ],
+    "infoNote": "*짧은 메모가 들어가요",
+    "table": [
+      {
+        "k": "항목 1",
+        "v": "메모가 들어가요"
+      },
+      {
+        "k": "항목 2",
+        "v": "메모가 들어가요"
+      },
+      {
+        "k": "항목 3",
+        "v": "-"
+      },
+      {
+        "k": "항목 4",
+        "v": "메모가 들어가요\n두 줄도 돼요"
+      }
+    ],
+    "ng": [
+      "NG",
+      "주의할 점 제목",
+      "주의할 점 설명이 들어가요"
+    ],
+    "valid": "VALID UNTIL: PERMANENT",
+    "org": "MOON STUDIO",
+    "stamp": "APPROVED"
+  },
+  "inventory": {
+    "id": "list",
+    "name": "List",
+    "icon": "list",
+    "chip": "LOCKED",
+    "title": "INVENTORY",
+    "sub": "LIST // DATABASE",
+    "intro": "여기에 리스트 설명이 들어가요. 짧게 적어주세요.",
+    "groups": [
+      {
+        "name": "그룹 이름 1",
+        "handle": "@handle",
+        "items": [
+          "항목",
+          "항목",
+          "항목"
+        ]
+      },
+      {
+        "name": "그룹 이름 2",
+        "handle": "@handle",
+        "items": [
+          "항목"
+        ]
+      },
+      {
+        "name": "그룹 이름 3",
+        "handle": "@handle",
+        "items": [
+          "항목",
+          "항목"
+        ]
+      }
+    ]
+  },
+  "linked": {
+    "id": "linked",
+    "name": "Linked",
+    "icon": "link",
+    "title": "LINKED",
+    "sub": "DOSSIERS",
+    "tag": "LINKED DOSSIERS",
+    "no": "NO. 2026-10-29",
+    "banner": {
+      "img": "",
+      "link": ""
+    },
+    "crewTitle": "CREW BANNER",
+    "crewSub": "♥ 맞배너",
+    "crew": [
+      {
+        "top": "처방전",
+        "small": "TEAM",
+        "name": "@name",
+        "img": "",
+        "link": ""
+      },
+      {
+        "top": "처방전",
+        "small": "TEAM",
+        "name": "@name",
+        "img": "",
+        "link": ""
+      },
+      {
+        "top": "처방전",
+        "small": "TEAM",
+        "name": "@name",
+        "img": "",
+        "link": ""
+      },
+      {
+        "top": "처방전",
+        "small": "TEAM",
+        "name": "@name",
+        "img": "",
+        "link": ""
+      }
+    ]
+  },
+  "ooc": {
+    "id": "ooc",
+    "name": "OOC",
+    "room": "ROOM 04",
+    "sub": "ARCHIVE // COPY & PASTE",
+    "hint": "분류를 누르면 OOC가 나와요. COPY를 누르면 바로 복사돼요.",
+    "cats": [
+      {
+        "k": "HELLO",
+        "n": "인사",
+        "items": [
+          "(( 안녕하세요! 오늘도 잘 부탁드려요 ))",
+          "(( 늦은 시간에 인사드려요, 편하게 이어 주세요 ))",
+          "(( 처음 뵙겠습니다! 잘 부탁드려요 ))"
+        ]
+      },
+      {
+        "k": "LATE",
+        "n": "늦은 답장",
+        "items": [
+          "(( 답이 늦어 죄송해요! 천천히 이어갈게요 ))",
+          "(( 오늘은 답이 조금 느릴 수 있어요 ))"
+        ]
+      },
+      {
+        "k": "AWAY",
+        "n": "자리 비움",
+        "items": [
+          "(( 잠깐 자리 비울게요, 금방 올게요! ))",
+          "(( 밥 먹고 올게요 ))",
+          "(( 오늘은 여기까지 할게요, 내일 이어가요 ))"
+        ]
+      },
+      {
+        "k": "THANKS",
+        "n": "감사",
+        "items": [
+          "(( 오늘도 함께해 주셔서 감사해요 ))",
+          "(( 덕분에 너무 즐거웠어요! ))"
+        ]
+      },
+      {
+        "k": "BYE",
+        "n": "마무리",
+        "items": [
+          "(( 수고하셨어요! 좋은 밤 보내세요 ))",
+          "(( 다음에 또 이어가요, 감사합니다 ))"
+        ]
+      },
+      {
+        "k": "ETC",
+        "n": "기타",
+        "items": [
+          "(( 여기에 OOC 문구가 들어가요 ))"
+        ]
+      }
+    ]
+  },
+  "prompt": {
+    "id": "prompt",
+    "name": "Prompt",
+    "room": "ROOM 05",
+    "sub": "BACKGROUND + OUTFIT",
+    "hint": "세로 · 가로 사진이 섞여도 각자 모양에 맞게 보여요.",
+    "cats": [
+      {
+        "k": "DAILY",
+        "n": "일상",
+        "items": [
+          {
+            "t": "하늘색 오후",
+            "image": "",
+            "images": [
+              "",
+              "",
+              ""
+            ],
+            "bg": "cozy cafe by the window, soft afternoon sunlight, pale blue walls, potted plants, light bokeh",
+            "fit": "oversized sky blue knit sweater, pleated white skirt, loafers, small silver earrings"
+          },
+          {
+            "t": "새벽 옥상",
+            "wide": true,
+            "image": "",
+            "images": [
+              "",
+              "",
+              ""
+            ],
+            "bg": "rooftop at dawn, pale blue sky, city lights fading, light haze, calm and lonely atmosphere",
+            "fit": "white hoodie, mint windbreaker over it, wide denim pants, canvas sneakers"
+          },
+          {
+            "t": "여기에 제목",
+            "image": "",
+            "images": [
+              "",
+              "",
+              ""
+            ],
+            "bg": "여기에 배경 프롬프트가 들어가요.",
+            "fit": "여기에 의상 프롬프트가 들어가요."
+          }
+        ]
+      },
+      {
+        "k": "STAGE",
+        "n": "무대",
+        "items": [
+          {
+            "t": "유리 라이브하우스",
+            "wide": true,
+            "image": "",
+            "images": [
+              "",
+              "",
+              ""
+            ],
+            "bg": "small live house stage, glass panels, mint spotlight, scattered confetti, empty seats, wide angle",
+            "fit": "cropped mint stage jacket, glossy pastel fabric, silver zipper details, white wide pants"
+          },
+          {
+            "t": "앵콜 무대",
+            "image": "",
+            "images": [
+              "",
+              "",
+              ""
+            ],
+            "bg": "concert stage after encore, blue laser lights, floating sparkles, smoky air, audience lightsticks",
+            "fit": "sheer white blouse, sky blue corset vest, star hair pins, platform boots"
+          }
+        ]
+      },
+      {
+        "k": "SEASON",
+        "n": "계절",
+        "items": [
+          {
+            "t": "눈 오는 밤",
+            "wide": true,
+            "image": "",
+            "images": [
+              "",
+              "",
+              ""
+            ],
+            "bg": "snowy street at night, warm shop lights, falling snow, quiet blue tone, soft glow",
+            "fit": "long cream coat, mint muffler, knitted gloves, white earmuffs"
+          }
+        ]
+      }
+    ]
+  }
+}
