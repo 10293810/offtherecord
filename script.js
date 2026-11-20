@@ -2397,7 +2397,7 @@ function charDetailHTML() {
   const { w, m } = cur;
   if (charSel.t === 'pair') return pairView === 'log' ? pairDetailHTML(w, m) : pairFloatHTML(w, m);
   if (!['profile', 'prompt', 'gallery'].includes(charTab)) charTab = 'profile';
-  const tags = `<div class="cd-tags">${(m.tags || []).map(t => `<i>${esc(t)}</i>`).join('')}<i class="ed">✎ 수정</i></div>`;
+  const tags = `<div class="cd-tags">${(m.tags || []).map(t => `<i>${esc(t)}</i>`).join('')}<i class="ed">✎ 줄 추가 · 삭제</i></div>`;
   const foot = `<div class="cy-foot2"><button class="cd-toggle">${charView === 'photo' ? 'PROFILE' : 'PHOTO'} ↗</button></div>`;
   const top = `<div class="cy-top"><small>SPEC SHEET · No.${pad(charSel.i + 1)}</small></div>`;
   if (charView === 'photo') { const tg = (m.tags || []).filter(Boolean), song = m.theme || {};   // 영상처럼: 위 정보 카드 · 큰 사진 · 아래 노래 + PROFILE
@@ -2463,7 +2463,7 @@ function pairDetailHTML(w, m) {
   const next = (m.next && m.next > n) ? m.next : Math.ceil((n + 1) / 100) * 100;
   const chip = (x, k) => `<button class="cz-chip ${x.link ? 'lk' : ''}" ${x.link ? `data-link="${k}"` : ''}>${ph(x.avatar, { cls: 'av', seed: x.name || k })}<span><b>${esc(x.name || '')}</b><small>${esc(x.sub || '')}${x.link ? ' ↗' : ''}</small></span></button>`;
   return `<div class="cy-pcard nt"><small>${esc(w.name)} · DUET</small><b>${esc(m.name)}${m.en ? `<span class="en">${esc(m.en)}</span>` : ''}</b>${m.quote ? `<em>“${esc(m.quote)}”</em>` : ''}
-    <div class="cd-tags">${m.tags ? `<i>${esc(m.tags)}</i>` : ''}${m.status ? `<i class="st">● ${esc(m.status)}</i>` : ''}<i class="ed">✎ 수정</i></div></div>
+    <div class="cd-tags">${m.tags ? `<i>${esc(m.tags)}</i>` : ''}${m.status ? `<i class="st">● ${esc(m.status)}</i>` : ''}<i class="ed">✎ 줄 추가 · 삭제</i></div></div>
   <div class="cz-body">
     <div class="cz-ph flip"><div class="flip-in">
       <div class="face front">${ph(m.photo, { seed: m.name + 'a', label: 'PHOTO · 16:9' })}</div>
@@ -5309,7 +5309,7 @@ html:not(.sye-editing) .cx-add,html:not(.sye-editing) .cd-tags .ed{display:none!
     const del = FF.querySelector('.del'); if (del) { let armed = false; del.onclick = () => { if (!armed) { armed = true; del.textContent = '한 번 더 누르면 삭제'; return; } fDelete(w, t, i); }; }
     FS = { w, t, i, o }; fm.classList.add('on');
   }
-  function commit(msg, w) { try { localStorage.setItem('sye-draft', JSON.stringify(RAW)); sessionStorage.setItem('sye-fast', '1'); sessionStorage.setItem('sye-reopen', w); } catch (e) { alert('저장 공간이 부족해서 저장하지 못했어요'); return; } toast(msg); setTimeout(() => location.reload(), 500); }
+  function commit(msg, w) { pend(); try { localStorage.setItem('sye-draft', JSON.stringify(RAW)); sessionStorage.setItem('sye-fast', '1'); sessionStorage.setItem('sye-reopen', w); } catch (e) { alert('저장 공간이 부족해서 저장하지 못했어요'); return; } toast(msg); setTimeout(() => location.reload(), 500); }
   function fDelete(w, t, i) {
     const list = W()[w][t]; list.splice(i, 1);
     const base = `characters.worlds.${w}.${t}.`; idbAll().then(all => Promise.all(Object.keys(all).filter(k => k.startsWith(base)).map(k => { const rest = k.slice(base.length), n = parseInt(rest, 10), tail = rest.slice(String(n).length);
@@ -5341,10 +5341,37 @@ html:not(.sye-editing) .cx-add,html:not(.sye-editing) .cd-tags .ed{display:none!
     if (file && /^image\//.test(file.type)) { const idx = i == null ? list.length - 1 : i; idbPut(`characters.worlds.${w}.${t}.${idx}.${isP ? 'photo' : 'card'}`, file).then(() => commit(msg + ' · 사진도 넣었어요', w), () => commit(msg, w)); }
     else commit(msg, w);
   });
-  addEventListener('sye-char', e => fOpen(e.detail));
+  // + 추가 : 따로 창을 띄우지 않고, 같은 모양의 새 카드를 바로 만들어서 열어줘요 → 글자를 눌러 고치고 사진 자리를 눌러 사진을 넣어요
+  function quickAdd({ w, t }) {
+    const world = W()[w]; if (!world) return; const list = world[t] || (world[t] = []), n = list.length + 1;
+    let o;
+    if (t === 'pair') o = { badge: 'NEW', name: `새 페어 ${n}`, en: 'NEW PAIR', quote: '페어 한 줄 소개를 적어 주세요', tags: '태그 X 태그', status: 'ING', since: new Date().toISOString().slice(0, 10), next: 100, photo: '', back: '', memo: '페어 메모를 적어 주세요',
+      a: { name: '캐릭터 A', sub: 'A', avatar: '', link: '' }, b: { name: '캐릭터 B', sub: 'B', avatar: '', link: '' } };
+    else if (world.style === 'roster' && (world.member || [])[0]) { o = JSON.parse(JSON.stringify(world.member[0])); Object.assign(o, { name: `새 캐릭터 ${n}`, en: `New Character ${n}`, quote: '‘한 줄 소개를 적어 주세요.’', card: '', avatar: '', hero: '', gallery: ['', '', ''] }); }
+    else o = { dept: '소속', name: `새 캐릭터 ${n}`, en: `New Character ${n}`, quote: '한 줄 소개를 적어 주세요', tags: ['#태그'],
+      spec: [['AGE', '00'], ['HEIGHT', '000'], ['BIRTH', '00.00'], ['LOVER', '연인 이름']], card: '', photo: '', theme: { title: 'CHARACTER SONG', src: '' },
+      profile: { rows: [['좋아하는 것', '내용'], ['싫어하는 것', '내용'], ['특징', '내용']], personality: '성격을 적어 주세요.', memo: '짧은 메모를 적어 주세요.' },
+      prompts: [{ title: '기본 외형', text: '프롬프트를 적어요' }], gallery: ['', '', ''], music: [{ title: '노래 제목', artist: '가수', src: '' }], talk: [] };
+    list.push(o);
+    try { sessionStorage.setItem('sye-reopen-sel', JSON.stringify({ t, i: list.length - 1 })); } catch (e) {}
+    commit((t === 'pair' ? '새 페어' : '새 캐릭터') + '를 만들었어요 · 글자를 눌러 고치고, 사진 자리를 눌러 사진을 넣어요', w);
+  }
+  addEventListener('sye-char', e => e.detail && e.detail.i == null ? quickAdd(e.detail) : fOpen(e.detail));
+  // 편집 중에도 캐릭터 · 페어 목록의 카드를 누르면 상세 창이 열려요 (카드 안 글자 · 사진은 상세 창에서 고쳐요)
+  let cardPass = false;
+  const cardOf = e => SYE_ON && !cardPass && e.isTrusted && e.target.closest && e.target.closest('#winlayer .cxwin [data-ci]');   // 코드로 누른 클릭은 그대로 통과
+  ['pointerdown', 'mousedown'].forEach(ev => window.addEventListener(ev, e => { if (cardOf(e)) e.stopPropagation(); }, true));
+  window.addEventListener('click', e => { const c = cardOf(e); if (!c) return; e.stopPropagation(); e.preventDefault(); cardPass = true; try { c.click(); } finally { cardPass = false; } }, true);
   document.addEventListener('click', e => { const b = e.target.closest('.cd-tags .ed'); if (!b || !charSel) return; e.preventDefault(); e.stopPropagation(); fOpen({ w: charSel.w, t: charSel.t, i: charSel.i }); }, true);
   // 저장하고 다시 불러오면 그 캐릭터 창을 다시 열어줘요
-  try { const rw = sessionStorage.getItem('sye-reopen'); if (rw) { sessionStorage.removeItem('sye-reopen'); const t0 = Date.now(), iv = setInterval(() => { if (document.querySelector('#intro') && Date.now() - t0 < 9000) return; clearInterval(iv); const id = Object.keys(GRP_APPS).find(k => GRP_APPS[k] === rw); const a = id && document.querySelector(`.apps [data-open="${id}"]`); a && setTimeout(() => a.click(), 400); }, 200); } } catch (e) {}
+  try { const rw = sessionStorage.getItem('sye-reopen'); if (rw) { sessionStorage.removeItem('sye-reopen'); const t0 = Date.now(), iv = setInterval(() => { if (document.querySelector('#intro') && Date.now() - t0 < 9000) return; clearInterval(iv); const id = Object.keys(GRP_APPS).find(k => GRP_APPS[k] === rw); const a = id && document.querySelector(`.apps [data-open="${id}"]`); a && setTimeout(() => a.click(), 400);
+    let sel = null; try { sel = JSON.parse(sessionStorage.getItem('sye-reopen-sel') || 'null'); sessionStorage.removeItem('sye-reopen-sel'); } catch (e) {}
+    if (sel) { let tries = 0, tabbed = false; const go = () => { const win = document.querySelector('#winlayer .cxwin');
+        if (win && sel.t !== 'member' && !tabbed) { win.querySelector(`[data-ck="${sel.t}"]`)?.click(); tabbed = true; return setTimeout(go, 450); }
+        const c = win && win.querySelector(`[data-ci="${sel.i}"]`);
+        if (c) { setTimeout(() => { c.scrollIntoView({ block: 'nearest' }); c.click(); }, 350); } else if (++tries < 25) setTimeout(go, 250); };
+      setTimeout(go, 700); }
+  }, 200); } } catch (e) {}
   /* ---------- ✎ 연필 : Notice 에 글쓰기 (나만) ---------- */
   const wf = el(`<div class="sye-fm sye-wf"><form><div class="fh"><span>✎ Notice 에 글쓰기</span><button type="button" class="fx">✕</button></div><div class="fb">
     <label><span>제목 *</span><input name="title" required placeholder="글 제목"></label>
