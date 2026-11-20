@@ -680,6 +680,17 @@ const appHTML = (a, i = 0) => `<button class="app app-tile ${a.seen ? 'seen' : '
 // 6×4 칸 = 원래 앱 12개 + Stage Monitor + Notice + 새 칸 10개 (data.js 의 extraApps)
 // SYRINGE 시안 (10×5) 에서 늘어난 칸 아이콘
 Object.assign(P, {
+  // 10×6 으로 늘어난 칸
+  clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  lab: '<path d="M9 3h6M10 3v6L4.6 18.4A2 2 0 0 0 6.3 21.5h11.4a2 2 0 0 0 1.7-3.1L14 9V3"/><path d="M7.2 15h9.6"/>',
+  ward: '<path d="M3 6v13M3 15h18v4M21 15v-3a3 3 0 0 0-3-3h-7v6"/><circle cx="7" cy="11.5" r="2"/>',
+  chart: '<rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1M9 10h6M9 14h6M9 18h3"/>',
+  pmonitor: '<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4M6 10h3l1.5-2.5 2.5 5 1.5-2.5H18"/>',
+  exam: '<path d="M6 3v6a5 5 0 0 0 10 0V3"/><path d="M11 14v2a4 4 0 0 0 8 0v-2"/><circle cx="19" cy="12" r="2"/>',
+  thermo: '<path d="M14 14.8V5a2 2 0 0 0-4 0v9.8a4 4 0 1 0 4 0z"/><path d="M12 10v6"/>',
+  vaccine: '<path d="M18 3l3 3M16.5 4.5l3 3M18 6l-9 9M15 5l4 4M6 18l-3 3M8 12l4 4M10 10l2 2M7.5 14.5l2 2"/><path d="M13 7l4 4-7 7H6v-4z"/>',
+  firstaid: '<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2M12 10.5v6M9 13.5h6"/>',
+  ticket: '<path d="M3 8a2 2 0 0 0 2-2h14a2 2 0 0 0 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 0-2 2H5a2 2 0 0 0-2-2v-2a2 2 0 0 0 0-4z"/><path d="M14 7v2M14 11v2M14 15v2"/>',
   mail: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>',
   map: '<path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3z"/><path d="M9 3v15M15 6v15"/>',
   settings: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/>',
@@ -701,7 +712,7 @@ Object.assign(P, {
   syplus: '<path d="M12 5v14M5 12h14"/>'
 });
 const GRID_APPS = APPS.concat(EXTRA_APPS, [{ id: 'notice', name: 'Notice', icon: 'bell', t: 'soft' }],
-  (S.extraApps || []).map(x => ({ id: 'x-' + x.id, name: x.name, icon: x.icon || x.id, t: x.color || EXTRA_T[x.id] || 'soft' }))).slice(0, 50);
+  (S.extraApps || []).map(x => ({ id: 'x-' + x.id, name: x.name, icon: x.icon || x.id, t: x.color || EXTRA_T[x.id] || 'soft' }))).slice(0, 60);
 // D-DAY 바로 옆으로 : Profile · List · Linked · OOC · Prompt (나머지는 한 칸씩 뒤로)
 { const FRONT = ['x-about', 'x-list', 'x-linked', 'x-ooc', 'x-prompt'], mv = FRONT.map(id => GRID_APPS.find(a => a.id === id)).filter(Boolean);
   mv.forEach(a => GRID_APPS.splice(GRID_APPS.indexOf(a), 1)); GRID_APPS.splice(GRID_APPS.findIndex(a => a.id === 'dday') + 1, 0, ...mv); }
@@ -4312,10 +4323,10 @@ function syPass(el) {
 function syLayout() {
   const desk = $('#desk'); if (!desk) return;
   const W = deskW(), H = innerHeight / Z;
-  // 아이콘 창은 높이 고정(504) — 화면이 커지면 위 배너가 커져요
-  const pw = W - 18 - 270 - 22, heroH = H - 54 - 68 - 524;
+  // 아이콘 창은 높이 고정(556 · 10×6) — 화면이 커지면 위 배너가 커져요
+  const pw = W - 18 - 270 - 22, heroH = H - 54 - 68 - 576;
   desk.style.setProperty('--sy-ts', Math.max(1, Math.min(1.06, pw / 1130)).toFixed(4));
-  desk.style.setProperty('--hk', Math.max(1, Math.min(1.35, 1 + (heroH - 254) / 400)).toFixed(4));
+  desk.style.setProperty('--hk', Math.max(1, Math.min(1.35, 1 + (heroH - 202) / 400)).toFixed(4));
   // 큰 글씨가 길면(UNRELEASED 등) 오른쪽 D+ 칸에 닿지 않게 자동으로 줄여요
   const t = desk.querySelector('.sy-title'), hero = desk.querySelector('.sy-hero');
   if (t && hero) { t.style.removeProperty('--tfit'); const max = hero.clientWidth - 44 - 27 - 300 - 46, w = t.scrollWidth; if (w > max) t.style.setProperty('--tfit', (max / w).toFixed(4)); }
@@ -4326,7 +4337,7 @@ function syLayout() {
       const fs0 = parseFloat(getComputedStyle(t).fontSize) / tf0 * tf0;
       const cv = syLayout._c || (syLayout._c = document.createElement('canvas').getContext('2d'));
       const met = fs => { cv.font = `900 ${fs}px Pretendard, sans-serif`; const m = cv.measureText('UNRELEASED'), fa = m.fontBoundingBoxAscent ?? fs * .95, fd = m.fontBoundingBoxDescent ?? fs * .24, base = (fs - fa - fd) / 2 + fa, cap = m.actualBoundingBoxAscent || fs * .72; return { base, cap, below: fs - base }; };
-      const KH = 12, KV = 2.5, G1 = 14, MT = 34, MB = 26;   // 키커 높이, 키커 글자 아래 여백, 선↔키커, 위/아래 여백
+      const KH = 12, KV = 2.5, G1 = 14, MT = 18, MB = 18;   // 10×6 으로 배너가 낮아져서 위/아래 여백을 줄였어요 (예전 34 · 26)   // 키커 높이, 키커 글자 아래 여백, 선↔키커, 위/아래 여백
       const need = (fs, G) => { const m = met(fs); return MB + P + G + m.cap + G + KH - KV + G1 + 3 + MT; };
       let f = 1, G = 0;
       for (; f > .84; f -= .01) { const fs = fs0 * f, m = met(fs); G = Math.min(.42 * m.cap, (H - need(fs, 0)) / 2); if (G >= .3 * m.cap) break; }
@@ -4372,7 +4383,7 @@ function syLayout() {
   /* 무대 */
   #desk .stage{position:absolute!important;inset:0!important;padding:0!important;overflow:visible!important}
   #desk .stage .leftcol{position:absolute!important;left:18px!important;top:54px!important;right:292px!important;bottom:68px!important;width:auto!important;height:auto!important;transform:none!important;zoom:1!important;margin:0!important;scale:none!important;translate:none!important;rotate:none!important}
-  #desk .stage .leftcol .hz.ltop{position:absolute!important;left:0!important;top:0!important;right:0!important;width:auto!important;height:calc(100% - 524px)!important;min-height:254px!important;transform:none!important;margin:0!important;zoom:1!important}
+  #desk .stage .leftcol .hz.ltop{position:absolute!important;left:0!important;top:0!important;right:0!important;width:auto!important;height:calc(100% - 576px)!important;min-height:190px!important;transform:none!important;margin:0!important;zoom:1!important}
   /* 위 배너 */
   .sy-hero{--syf:var(--syb);position:absolute;inset:0;border-radius:20px;background:radial-gradient(120% 140% at 20% 0%,#F6F9F1 0%,#EEF5EC 55%,#E7F1EA 100%);border:1px solid #DCE9E1;box-shadow:0 10px 26px rgba(30,70,60,.06),inset 0 1px 0 #fff;overflow:visible;font-family:var(--syf);color:var(--sy-ink)}
   .sy-hero::before{content:'';position:absolute;left:10px;top:10px;width:16px;height:16px;border:1.4px solid rgba(80,170,130,.45);border-right:0;border-bottom:0;border-radius:12px 0 0 0}
@@ -4387,7 +4398,7 @@ function syLayout() {
   .sy-pairrow{position:absolute;left:46px;bottom:var(--pb,19px);display:flex;align-items:center;gap:8px;white-space:nowrap}
   .sy-pair{font:700 21px/1 var(--syf);letter-spacing:.01em;color:#1F5546;margin-right:9px}
   .sy-chip{height:22px;padding:0 10px;display:inline-flex;align-items:center;border-radius:99px;border:1.3px solid #49A887;font:700 8.5px var(--syf);letter-spacing:.01em;color:#1F5546}
-  .sy-r{position:absolute;right:27px;top:calc(50% - 43px);width:300px;height:160px}
+  .sy-r{position:absolute;right:27px;top:auto;bottom:-2px;width:300px;height:160px}
   .sy-nav{position:absolute;right:2px;top:0;display:flex;align-items:center;gap:8px}
   .sy-nav button{width:14px;height:16px;padding:0;border:0;background:none;color:#24413A;font:400 16px/1 var(--syf);cursor:pointer;display:grid;place-items:center}
   .sy-nav button svg{width:11px;height:11px;stroke-width:2.6}
@@ -4402,12 +4413,12 @@ function syLayout() {
   .sy-bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#9BE0C3,#6CCBA6)}
   .sy-sub{position:absolute;left:0;right:0;top:142px;display:flex;justify-content:space-between;font:500 9.5px var(--syf);letter-spacing:.03em;color:#7F8F8A}
   /* 아이콘 창 */
-  #desk .stage .leftcol .apps-panel{position:absolute!important;left:0!important;right:0!important;top:auto!important;bottom:0!important;width:auto!important;height:504px!important;margin:0!important;padding:0!important;border-radius:18px!important;background:rgba(248,251,250,.94)!important;border:1px solid #E3ECE8!important;box-shadow:0 10px 24px rgba(30,70,60,.06)!important;transform:none!important;zoom:1!important;overflow:visible!important}
+  #desk .stage .leftcol .apps-panel{position:absolute!important;left:0!important;right:0!important;top:auto!important;bottom:0!important;width:auto!important;height:556px!important;margin:0!important;padding:0!important;border-radius:18px!important;background:rgba(248,251,250,.94)!important;border:1px solid #E3ECE8!important;box-shadow:0 10px 24px rgba(30,70,60,.06)!important;transform:none!important;zoom:1!important;overflow:visible!important}
   #desk .apps-panel .panel-tab{position:absolute!important;left:22px!important;top:-21px!important;height:21px!important;padding:0 6px 0 10px!important;display:flex!important;align-items:center!important;gap:6px!important;border-radius:9px 9px 0 0!important;background:rgba(248,251,250,.94)!important;border:1px solid #E3ECE8!important;border-bottom:0!important;box-shadow:none!important}
   #desk .apps-panel .panel-tab i{display:none!important}
   #desk .apps-panel .panel-tab span{font:800 7.5px var(--syf)!important;letter-spacing:.14em!important;color:#1E2A27!important;background:none!important;-webkit-text-fill-color:currentColor!important}
   #desk .apps-panel .panel-tab .sy-cnt{min-width:15px;height:15px;padding:0 3px;box-sizing:border-box;border-radius:99px;background:#1E2A27;color:#fff;font:800 7px/15px var(--syf);text-align:center}
-  #desk .stage .leftcol .apps{position:absolute!important;inset:22px 11px 14px!important;width:auto!important;height:auto!important;display:grid!important;grid-template-columns:repeat(10,minmax(0,1fr))!important;grid-template-rows:repeat(5,auto)!important;align-content:space-between!important;gap:0 0!important;padding:0!important;margin:0!important;transform:none!important}
+  #desk .stage .leftcol .apps{position:absolute!important;inset:22px 11px 14px!important;width:auto!important;height:auto!important;display:grid!important;grid-template-columns:repeat(10,minmax(0,1fr))!important;grid-template-rows:repeat(6,auto)!important;align-content:space-between!important;gap:0 0!important;padding:0!important;margin:0!important;transform:none!important}
   #desk .apps .app-tile{display:flex!important;flex-direction:column!important;align-items:center!important;gap:calc(6px * var(--sy-ts,1))!important;padding:0!important;margin:0!important;background:none!important;border:0!important;font:600 calc(12.5px * var(--sy-ts,1))/1.15 var(--syf)!important;letter-spacing:-.01em!important;color:#4A5753!important;text-align:center!important;white-space:normal!important;word-break:keep-all!important}
   #desk .apps .app-tile .cjk{font:800 1em/1.15 'Noto Sans JP','IBM Plex Sans KR',sans-serif;letter-spacing:0}
   #desk .apps .app-ic.tilebox{width:calc(58px * var(--sy-ts,1))!important;height:calc(58px * var(--sy-ts,1))!important;border-radius:calc(13px * var(--sy-ts,1))!important;background:#fff!important;border:1px solid #E4ECE8!important;box-shadow:0 4px 10px rgba(30,70,60,.07),inset 0 -2px 0 rgba(30,70,60,.03)!important;color:#45AE86!important;display:grid!important;place-items:center!important}
@@ -4979,11 +4990,13 @@ html.sye-editing [data-slot]{position:relative}
     fitTa(); setTimeout(() => { ta.focus(); ta.select(); }, 0);
   };
   ta.addEventListener('input', () => { fitTa(); live(ta.value.replace(/\n/g, ' ')); });
-  ta.addEventListener('keydown', e => { e.stopPropagation(); if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); closeBox(true); } if (e.key === 'Escape') { e.preventDefault(); closeBox(false); } });
+  let imeEnter = false;
+  ta.addEventListener('keydown', e => { e.stopPropagation(); if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); if (e.isComposing || e.keyCode === 229) { imeEnter = true; return; } closeBox(true); } if (e.key === 'Escape') { e.preventDefault(); closeBox(false); } });
+  ta.addEventListener('compositionend', () => { if (imeEnter) { imeEnter = false; setTimeout(() => closeBox(true), 0); } });
   tbox.addEventListener('click', e => { e.stopPropagation(); const b = e.target.closest('[data-tb]'); if (b) closeBox(b.dataset.tb === 'ok'); });
   ['pointerdown', 'mousedown', 'click'].forEach(ev => document.addEventListener(ev, e => {
     if (!SYE_ON) return;
-    if (e.target.closest('.sye-tbox')) { e.stopPropagation(); return; }
+    if (e.target.closest('.sye-tbox')) { e.stopPropagation(); if (ev === 'click' && !e.target.closest('.sye-tbox2')) { const b = e.target.closest('[data-tb]'); if (b) closeBox(b.dataset.tb === 'ok'); } return; }
     const sp = e.target.closest('.sye-t');
     if (sp && !e.target.closest('.sye,.sye-ebar,.sye-pop')) { e.stopPropagation(); e.preventDefault(); if (ev === 'click') openBox(sp); return; }
     if (ev === 'pointerdown' && cur != null) closeBox(true);
@@ -5030,7 +5043,9 @@ html.sye-editing .sye-t.on{background:rgba(127,214,176,.4);outline:2px solid #3F
     fit2(); setTimeout(() => { ta2.focus(); ta2.select(); }, 0);
   };
   ta2.addEventListener('input', fit2);
-  ta2.addEventListener('keydown', e => { e.stopPropagation(); if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); close2('ok'); } if (e.key === 'Escape') { e.preventDefault(); close2('x'); } });
+  let ime2 = false;
+  ta2.addEventListener('keydown', e => { e.stopPropagation(); if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); if (e.isComposing || e.keyCode === 229) { ime2 = true; return; } close2('ok'); } if (e.key === 'Escape') { e.preventDefault(); close2('x'); } });
+  ta2.addEventListener('compositionend', () => { if (ime2) { ime2 = false; setTimeout(() => close2('ok'), 0); } });
   tb2.addEventListener('click', e => { e.stopPropagation(); const b = e.target.closest('[data-tb]'); if (b) close2(b.dataset.tb); });
   const textAt = (x, y) => {
     let n = null;
@@ -5047,16 +5062,14 @@ html.sye-editing .sye-t.on{background:rgba(127,214,176,.4);outline:2px solid #3F
   };
   ['pointerdown', 'mousedown', 'click'].forEach(ev => document.addEventListener(ev, e => {
     if (!SYE_ON) return;
-    if (e.target.closest('.sye-tbox2')) { e.stopPropagation(); return; }
-    if (e.target.closest('.sye-t,.sye,.sye-ebar,.sye-pop,.sye-tbox,input,textarea,select,[data-slot]')) return;
+    if (e.target.closest('.sye-tbox2')) { e.stopPropagation(); if (ev === 'click') { const b = e.target.closest('[data-tb]'); if (b) close2(b.dataset.tb); } return; }
+    // B. 홈페이지 화면(바탕 · 창 · 런처) 글자만 — 편집 창 · 입력칸 · 버튼 모음은 그대로 눌리게
+    if (!e.target.closest('#desk,#winlayer,#launcher') || e.target.closest('form,.sye-fm,.sye-t,.sye,.sye-ebar,.sye-pop,.sye-tbox,input,textarea,select,[data-slot],.cx-add,.cd-tags .ed')) return;
     const hit = textAt(e.clientX, e.clientY);
     if (!hit) { if (ev === 'pointerdown' && k2 != null) close2('ok'); return; }
     const t = hit.n.textContent.trim(); if (t.length > 300) return;
     e.stopPropagation(); e.preventDefault(); if (ev === 'click') open2(t, hit.rr);
   }, true));
-  const css3 = document.createElement('style');
-  css3.textContent = `html.sye-editing #desk,html.sye-editing #winlayer{cursor:text}`;
-  document.head.appendChild(css3);
   own.onclick = e => { e.stopPropagation(); setEdit(!SYE_ON); toast(SYE_ON ? '편집 모드 · 사진 자리를 누르면 사진 넣기' : '편집을 끝냈어요'); };
   pane.querySelector('.sye-x').onclick = () => pane.classList.remove('on');
   pane.querySelector('.sye-tabs').onclick = e => { const b = e.target.closest('[data-t]'); if (!b) return; tab = +b.dataset.t; pane.querySelectorAll('.sye-tabs button').forEach(x => x.classList.toggle('on', x === b)); draw(); pane.querySelector('.sye-body').scrollTop = 0; };
@@ -5159,7 +5172,7 @@ html.sye-editing .sye-t.on{background:rgba(127,214,176,.4);outline:2px solid #3F
   /* ---------- 캐릭터 · 페어 추가 / 수정 / 삭제 (창 안의 + 추가 · ✎ 수정 버튼) ---------- */
   document.documentElement.classList.add('sy-owner');
   css.textContent += `
-.cx-add,.cd-tags .ed{display:none!important}
+html:not(.sye-editing) .cx-add,html:not(.sye-editing) .cd-tags .ed{display:none!important}
 .sye-fm{position:fixed;inset:0;z-index:99996;display:none;align-items:center;justify-content:center;background:rgba(20,40,35,.28);padding:14px}
 .sye-fm.on{display:flex}
 .sye-fm form{width:min(520px,100%);max-height:calc(100vh - 28px);display:flex;flex-direction:column;background:#F7FAF9;border-radius:16px;box-shadow:0 24px 60px rgba(20,40,35,.3);overflow:hidden;font:500 13px/1.45 'IBM Plex Sans KR',sans-serif;color:#1E2A27}
@@ -5358,7 +5371,7 @@ requestAnimationFrame(() => setTimeout(startDesk, 50));
   // 도트 주사기 하나로 (평소 · 누를 수 있는 곳 모두 같은 모양) — 바늘 끝이 클릭 지점
   const SYR_DOT = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"30\" height=\"30\" viewBox=\"0 0 20 20\" shape-rendering=\"crispEdges\"><rect x=\"0\" y=\"0\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"1\" y=\"1\" width=\"1\" height=\"1\" fill=\"#8FA7A0\"/><rect x=\"2\" y=\"2\" width=\"1\" height=\"1\" fill=\"#8FA7A0\"/><rect x=\"3\" y=\"3\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"4\" y=\"3\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"7\" y=\"3\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"3\" y=\"4\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"4\" y=\"4\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"5\" y=\"4\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"6\" y=\"4\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"7\" y=\"4\" width=\"1\" height=\"1\" fill=\"#3FAE84\"/><rect x=\"8\" y=\"4\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"4\" y=\"5\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"5\" y=\"5\" width=\"1\" height=\"1\" fill=\"#5CC79A\"/><rect x=\"6\" y=\"5\" width=\"1\" height=\"1\" fill=\"#5CC79A\"/><rect x=\"7\" y=\"5\" width=\"1\" height=\"1\" fill=\"#3FAE84\"/><rect x=\"8\" y=\"5\" width=\"1\" height=\"1\" fill=\"#3FAE84\"/><rect x=\"9\" y=\"5\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"4\" y=\"6\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"5\" y=\"6\" width=\"1\" height=\"1\" fill=\"#5CC79A\"/><rect x=\"6\" y=\"6\" width=\"1\" height=\"1\" fill=\"#5CC79A\"/><rect x=\"7\" y=\"6\" width=\"1\" height=\"1\" fill=\"#5CC79A\"/><rect x=\"8\" y=\"6\" width=\"1\" height=\"1\" fill=\"#3FAE84\"/><rect x=\"9\" y=\"6\" width=\"1\" height=\"1\" fill=\"#3FAE84\"/><rect x=\"10\" y=\"6\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"3\" y=\"7\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"4\" y=\"7\" width=\"1\" height=\"1\" fill=\"#A6EBCB\"/><rect x=\"5\" y=\"7\" width=\"1\" height=\"1\" fill=\"#A6EBCB\"/><rect x=\"6\" y=\"7\" width=\"1\" height=\"1\" fill=\"#5CC79A\"/><rect x=\"7\" y=\"7\" width=\"1\" height=\"1\" fill=\"#5CC79A\"/><rect x=\"8\" y=\"7\" width=\"1\" height=\"1\" fill=\"#5CC79A\"/><rect x=\"9\" y=\"7\" width=\"1\" height=\"1\" fill=\"#3FAE84\"/><rect x=\"10\" y=\"7\" width=\"1\" height=\"1\" fill=\"#3FAE84\"/><rect x=\"11\" y=\"7\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"4\" y=\"8\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"5\" y=\"8\" width=\"1\" height=\"1\" fill=\"#A6EBCB\"/><rect x=\"6\" y=\"8\" width=\"1\" height=\"1\" fill=\"#A6EBCB\"/><rect x=\"7\" y=\"8\" width=\"1\" height=\"1\" fill=\"#5CC79A\"/><rect x=\"8\" y=\"8\" width=\"1\" height=\"1\" fill=\"#5CC79A\"/><rect x=\"9\" y=\"8\" width=\"1\" height=\"1\" fill=\"#5CC79A\"/><rect x=\"10\" y=\"8\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"11\" y=\"8\" width=\"1\" height=\"1\" fill=\"#F4FBF8\"/><rect x=\"12\" y=\"8\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"5\" y=\"9\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"6\" y=\"9\" width=\"1\" height=\"1\" fill=\"#A6EBCB\"/><rect x=\"7\" y=\"9\" width=\"1\" height=\"1\" fill=\"#A6EBCB\"/><rect x=\"8\" y=\"9\" width=\"1\" height=\"1\" fill=\"#5CC79A\"/><rect x=\"9\" y=\"9\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"10\" y=\"9\" width=\"1\" height=\"1\" fill=\"#F4FBF8\"/><rect x=\"11\" y=\"9\" width=\"1\" height=\"1\" fill=\"#F4FBF8\"/><rect x=\"12\" y=\"9\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"13\" y=\"9\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"6\" y=\"10\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"7\" y=\"10\" width=\"1\" height=\"1\" fill=\"#A6EBCB\"/><rect x=\"8\" y=\"10\" width=\"1\" height=\"1\" fill=\"#CFEFE0\"/><rect x=\"9\" y=\"10\" width=\"1\" height=\"1\" fill=\"#F4FBF8\"/><rect x=\"10\" y=\"10\" width=\"1\" height=\"1\" fill=\"#F4FBF8\"/><rect x=\"11\" y=\"10\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"12\" y=\"10\" width=\"1\" height=\"1\" fill=\"#F4FBF8\"/><rect x=\"13\" y=\"10\" width=\"1\" height=\"1\" fill=\"#F4FBF8\"/><rect x=\"14\" y=\"10\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"17\" y=\"10\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"7\" y=\"11\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"8\" y=\"11\" width=\"1\" height=\"1\" fill=\"#CFEFE0\"/><rect x=\"9\" y=\"11\" width=\"1\" height=\"1\" fill=\"#CFEFE0\"/><rect x=\"10\" y=\"11\" width=\"1\" height=\"1\" fill=\"#F4FBF8\"/><rect x=\"11\" y=\"11\" width=\"1\" height=\"1\" fill=\"#F4FBF8\"/><rect x=\"12\" y=\"11\" width=\"1\" height=\"1\" fill=\"#F4FBF8\"/><rect x=\"13\" y=\"11\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"14\" y=\"11\" width=\"1\" height=\"1\" fill=\"#F4FBF8\"/><rect x=\"15\" y=\"11\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"16\" y=\"11\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"17\" y=\"11\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"8\" y=\"12\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"9\" y=\"12\" width=\"1\" height=\"1\" fill=\"#CFEFE0\"/><rect x=\"10\" y=\"12\" width=\"1\" height=\"1\" fill=\"#CFEFE0\"/><rect x=\"11\" y=\"12\" width=\"1\" height=\"1\" fill=\"#F4FBF8\"/><rect x=\"12\" y=\"12\" width=\"1\" height=\"1\" fill=\"#F4FBF8\"/><rect x=\"13\" y=\"12\" width=\"1\" height=\"1\" fill=\"#F4FBF8\"/><rect x=\"14\" y=\"12\" width=\"1\" height=\"1\" fill=\"#F4FBF8\"/><rect x=\"15\" y=\"12\" width=\"1\" height=\"1\" fill=\"#F4FBF8\"/><rect x=\"16\" y=\"12\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"9\" y=\"13\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"10\" y=\"13\" width=\"1\" height=\"1\" fill=\"#CFEFE0\"/><rect x=\"11\" y=\"13\" width=\"1\" height=\"1\" fill=\"#CFEFE0\"/><rect x=\"12\" y=\"13\" width=\"1\" height=\"1\" fill=\"#F4FBF8\"/><rect x=\"13\" y=\"13\" width=\"1\" height=\"1\" fill=\"#F4FBF8\"/><rect x=\"14\" y=\"13\" width=\"1\" height=\"1\" fill=\"#F4FBF8\"/><rect x=\"15\" y=\"13\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"10\" y=\"14\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"11\" y=\"14\" width=\"1\" height=\"1\" fill=\"#CFEFE0\"/><rect x=\"12\" y=\"14\" width=\"1\" height=\"1\" fill=\"#CFEFE0\"/><rect x=\"13\" y=\"14\" width=\"1\" height=\"1\" fill=\"#F4FBF8\"/><rect x=\"14\" y=\"14\" width=\"1\" height=\"1\" fill=\"#F4FBF8\"/><rect x=\"15\" y=\"14\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"11\" y=\"15\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"12\" y=\"15\" width=\"1\" height=\"1\" fill=\"#F4FBF8\"/><rect x=\"13\" y=\"15\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"14\" y=\"15\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"15\" y=\"15\" width=\"1\" height=\"1\" fill=\"#F4FBF8\"/><rect x=\"16\" y=\"15\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"19\" y=\"15\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"11\" y=\"16\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"12\" y=\"16\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"15\" y=\"16\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"16\" y=\"16\" width=\"1\" height=\"1\" fill=\"#F4FBF8\"/><rect x=\"17\" y=\"16\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"18\" y=\"16\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"19\" y=\"16\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"10\" y=\"17\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"11\" y=\"17\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"16\" y=\"17\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"17\" y=\"17\" width=\"1\" height=\"1\" fill=\"#5CC79A\"/><rect x=\"18\" y=\"17\" width=\"1\" height=\"1\" fill=\"#5CC79A\"/><rect x=\"19\" y=\"17\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"16\" y=\"18\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"17\" y=\"18\" width=\"1\" height=\"1\" fill=\"#5CC79A\"/><rect x=\"18\" y=\"18\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"15\" y=\"19\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"16\" y=\"19\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/><rect x=\"17\" y=\"19\" width=\"1\" height=\"1\" fill=\"#1D4A40\"/></svg>";
   const U = s => `url("data:image/svg+xml,${encodeURIComponent(s)}") 1 1`;
-  const NORM = `${U(SYR_DOT)}, auto`, PTR = `${U(SYR_DOT)}, pointer`;
+  const NORM = 'auto', PTR = 'pointer';   // 커서는 기본 모양 (예전: 도트 주사기)
   const css = document.createElement('style');
   css.textContent = `html,body{cursor:${NORM}}a,button,label,summary,select,[role=button],[data-app],.app-tile{cursor:${PTR}}input[type=text],input:not([type]),textarea,[contenteditable=true]{cursor:text}`;
   document.head.appendChild(css);
