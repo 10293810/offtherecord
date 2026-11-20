@@ -4705,6 +4705,20 @@ function syTheme() {
   ['#winlayer', '#launcher', '#toasts'].forEach(q => { const host = $(q); if (!host) return; fix(host);
     new MutationObserver(ms => ms.forEach(m => m.addedNodes.forEach(fix))).observe(host, { childList: true, subtree: true }); });
 }
+/* ---------- 화면에서 직접 바꾼 글자 (data.js 의 textOverrides) ----------
+   ✎ EDIT 에서 아무 글자나 눌러 바꾸면 { 원래 글자: 바꾼 글자 } 로 저장돼서 모두에게 똑같이 보여요 */
+const TOV = (RAW.textOverrides && typeof RAW.textOverrides === 'object' && !Array.isArray(RAW.textOverrides)) ? RAW.textOverrides : {};
+RAW.textOverrides = TOV;
+const tovSkip = n => { const p = n.parentElement; return !p || !!p.closest('script,style,textarea,input,select,.sye,.sye-ebar,.sye-tbox,.sye-pop'); };
+const tovApply = root => {
+  if (!root || !Object.keys(TOV).length) return;
+  if (root.nodeType === 3) root = root.parentElement; if (!root) return;
+  const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT), list = []; let n;
+  while ((n = w.nextNode())) list.push(n);
+  list.forEach(n => { const t = n.textContent, k = t.trim(); if (k && Object.prototype.hasOwnProperty.call(TOV, k) && TOV[k] !== k && !tovSkip(n)) n.textContent = t.replace(k, TOV[k]); });
+};
+tovApply(document.body);
+new MutationObserver(ms => ms.forEach(m => m.addedNodes.forEach(x => tovApply(x)))).observe(document.body, { childList: true, subtree: true });
 /* =========================================================
    ✎ EDIT (나만 보이는 편집) — 주소 끝에 ?owner 를 한 번 붙여서 들어오면 이 브라우저에선 계속 보여요 (?guest 로 끄기)
    · 사진 자리를 누르면 사진 넣기 / 바꾸기 / 빼기 (이 브라우저에 저장)
@@ -4716,7 +4730,7 @@ function syTheme() {
   if (!OWNER) return;
   const clone = o => JSON.parse(JSON.stringify(o));
   let ED = clone(RAW), dirty = false;
-  const LABEL = { imgPos: '사진 위치 · 크기 (사진 자리에서 조절)', brand: '로고 · 이름', clinic: '위 배너 (SYRINGE)', online: '위 바 알약 글자', credit: '아래 바 오른쪽 글자', spec: 'SPEC SHEET 카드', pairs: '페어 목록 (오른쪽 카드 · 배너 D+)', pair: '기본 페어 (D-DAY 알림)', pairLabels: '페어 카드 작은 글자', venue: '페어 카드 위 제목', passLabel: '페어 카드 작은 제목', characters: '캐릭터 정리 창 (東京青藍大学 · ARCH · FRONTLINE · ETC.)', members: 'MEMBER 프로필', memberOpen: '처음 보이는 MEMBER 번호', extraApps: '아이콘 창 내용 (Gallery · About · Mail …)', bgm: '음악 (Player · 아래 BGM)', chat: 'MOONtalk 메신저', toasts: '자동 알림', memo: 'Memo', records: 'Records (CATEGORY)', notice: 'Notice', monitor: 'Stage Monitor', pedal: 'Pedal Board', neighbors: 'Neighbors', internet: 'Internet', game: 'Game', links: 'Link Hub', intro: '입장화면', title: '(예전) 큰 제목', heroTicket: '(예전) 티켓', studio: '(예전) 글자', residence: '(예전) 글자', footer: '(예전) 글자', marquee: '(예전) 흐르는 글자', home: '(예전/휴대폰) 메인 글자', blueprint: '(예전) 설계도' };
+  const LABEL = { textOverrides: '화면에서 직접 바꾼 글자 (원래 글자 → 바꾼 글자)', imgPos: '사진 위치 · 크기 (사진 자리에서 조절)', brand: '로고 · 이름', clinic: '위 배너 (SYRINGE)', online: '위 바 알약 글자', credit: '아래 바 오른쪽 글자', spec: 'SPEC SHEET 카드', pairs: '페어 목록 (오른쪽 카드 · 배너 D+)', pair: '기본 페어 (D-DAY 알림)', pairLabels: '페어 카드 작은 글자', venue: '페어 카드 위 제목', passLabel: '페어 카드 작은 제목', characters: '캐릭터 정리 창 (東京青藍大学 · ARCH · FRONTLINE · ETC.)', members: 'MEMBER 프로필', memberOpen: '처음 보이는 MEMBER 번호', extraApps: '아이콘 창 내용 (Gallery · About · Mail …)', bgm: '음악 (Player · 아래 BGM)', chat: 'MOONtalk 메신저', toasts: '자동 알림', memo: 'Memo', records: 'Records (CATEGORY)', notice: 'Notice', monitor: 'Stage Monitor', pedal: 'Pedal Board', neighbors: 'Neighbors', internet: 'Internet', game: 'Game', links: 'Link Hub', intro: '입장화면', title: '(예전) 큰 제목', heroTicket: '(예전) 티켓', studio: '(예전) 글자', residence: '(예전) 글자', footer: '(예전) 글자', marquee: '(예전) 흐르는 글자', home: '(예전/휴대폰) 메인 글자', blueprint: '(예전) 설계도' };
   const GROUPS = [['메인 화면', ['clinic', 'brand', 'online', 'credit', 'spec']], ['페어 · D-DAY', ['pairs', 'pair', 'pairLabels', 'venue', 'passLabel']], ['캐릭터', ['characters', 'members', 'memberOpen']], ['아이콘 창', ['extraApps']], ['음악', ['bgm']], ['메신저 · 알림', ['chat', 'toasts']], ['글 · 기록', ['memo', 'records', 'notice']], ['기타 창', ['monitor', 'pedal', 'neighbors', 'internet', 'game', 'links']], ['입장화면', ['intro']], ['예전 글자', ['title', 'heroTicket', 'studio', 'residence', 'footer', 'marquee', 'home', 'blueprint']]];
   const used = new Set(GROUPS.flatMap(g => g[1])), rest = Object.keys(ED).filter(k => !used.has(k)); if (rest.length) GROUPS.push(['그 밖에', rest]);
   const IMGK = /^(image|imageBack|img|cover|photo|avatar|banner|thumb|passImage|bg|face|profile|pic|poster)$/i;
@@ -4988,6 +5002,61 @@ html.sye-editing .sye-t.on{background:rgba(127,214,176,.4);outline:2px solid #3F
 .sye-tb button{height:28px;padding:0 12px;border-radius:8px;border:1px solid #DDE8E3;background:#fff;font:700 12px 'IBM Plex Sans KR',sans-serif;color:#1D4A40;cursor:pointer}
 .sye-tb button.pri{background:#3FAE84;border-color:#3FAE84;color:#fff}`;
   document.head.appendChild(css2);
+  /* ---------- 아무 글자나 눌러서 바꾸기 (data.js 에 없는 글자 · 메뉴 · 앱 이름 등) ---------- */
+  const tb2 = el(`<div class="sye-tbox sye-tbox2"><div class="sye-tl"><b>✎ 글자 바꾸기</b><small>화면에서 바로 바꾼 글자 · 같은 글자는 다 같이 바뀌어요</small></div><textarea rows="1" spellcheck="false"></textarea><div class="sye-tb"><span>Enter 저장 · Esc 취소</span><button type="button" data-tb="reset">원래대로</button><button type="button" data-tb="x">취소</button><button type="button" data-tb="ok" class="pri">저장</button></div></div>`);
+  document.body.append(tb2);
+  const ta2 = tb2.querySelector('textarea');
+  let k2 = null, shown2 = '';
+  const fit2 = () => { ta2.style.height = 'auto'; ta2.style.height = Math.min(160, ta2.scrollHeight) + 'px'; };
+  // 지금 화면에 shown 으로 보이는 글자를 모두 v 로 바꾸기
+  const swapAll = (shown, v) => { const w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT), list = []; let n; while ((n = w.nextNode())) list.push(n);
+    list.forEach(n => { if (n.textContent.trim() === shown && !tovSkip(n)) n.textContent = n.textContent.replace(shown, v); }); };
+  const saveTov = () => { try { const d = JSON.parse(localStorage.getItem('sye-draft') || 'null') || {}; d.textOverrides = clone(TOV); localStorage.setItem('sye-draft', JSON.stringify(d)); } catch (e) { toast('저장 공간이 부족해서 저장하지 못했어요'); } };
+  const close2 = mode => {
+    if (k2 == null) return;
+    const v = ta2.value.replace(/\s*\n\s*/g, ' ').trim();
+    if (mode === 'ok' && v && v !== shown2) { if (v === k2) delete TOV[k2]; else TOV[k2] = v; swapAll(shown2, v); saveTov(); pend(); toast('바꿨어요 · [홈페이지에 저장]을 누르면 모두에게 보여요'); }
+    else if (mode === 'reset' && shown2 !== k2) { delete TOV[k2]; swapAll(shown2, k2); saveTov(); pend(); toast('원래 글자로 되돌렸어요'); }
+    tb2.classList.remove('on'); k2 = null;
+  };
+  const open2 = (shown, rr) => {
+    closeBox(true); close2('x');
+    k2 = Object.keys(TOV).find(k => TOV[k] === shown) || shown; shown2 = shown; ta2.value = shown;
+    tb2.querySelector('[data-tb=reset]').style.display = k2 !== shown ? '' : 'none';
+    tb2.querySelector('.sye-tl small').textContent = k2 !== shown ? `원래 글자: ${k2}` : '같은 글자는 다 같이 바뀌어요';
+    tb2.classList.add('on'); const W = Math.min(340, innerWidth - 20);
+    tb2.style.width = W + 'px'; tb2.style.left = Math.max(10, Math.min(rr.left, innerWidth - W - 10)) + 'px';
+    const h = tb2.offsetHeight || 120; tb2.style.top = (rr.bottom + 8 + h > innerHeight - 10 ? Math.max(10, rr.top - h - 8) : rr.bottom + 8) + 'px';
+    fit2(); setTimeout(() => { ta2.focus(); ta2.select(); }, 0);
+  };
+  ta2.addEventListener('input', fit2);
+  ta2.addEventListener('keydown', e => { e.stopPropagation(); if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); close2('ok'); } if (e.key === 'Escape') { e.preventDefault(); close2('x'); } });
+  tb2.addEventListener('click', e => { e.stopPropagation(); const b = e.target.closest('[data-tb]'); if (b) close2(b.dataset.tb); });
+  const textAt = (x, y) => {
+    let n = null;
+    if (document.caretRangeFromPoint) { const r = document.caretRangeFromPoint(x, y); n = r && r.startContainer; }
+    else if (document.caretPositionFromPoint) { const p = document.caretPositionFromPoint(x, y); n = p && p.offsetNode; }
+    const inside = t => { if (!t || t.nodeType !== 3 || !t.textContent.trim() || tovSkip(t)) return null; const rg = document.createRange(); rg.selectNodeContents(t); const rr = rg.getBoundingClientRect();
+      return (rr.width && x >= rr.left - 3 && x <= rr.right + 3 && y >= rr.top - 3 && y <= rr.bottom + 3) ? { n: t, rr } : null; };
+    let hit = inside(n);
+    if (!hit) {   // 선택이 막힌 글자(user-select:none)는 위치로 다시 찾아요
+      const elx = document.elementFromPoint(x, y); if (!elx || elx.closest('svg') && !elx.closest('text')) return null;
+      const w = document.createTreeWalker(elx, NodeFilter.SHOW_TEXT); let t; while (!hit && (t = w.nextNode())) hit = inside(t);
+    }
+    return hit;
+  };
+  ['pointerdown', 'mousedown', 'click'].forEach(ev => document.addEventListener(ev, e => {
+    if (!SYE_ON) return;
+    if (e.target.closest('.sye-tbox2')) { e.stopPropagation(); return; }
+    if (e.target.closest('.sye-t,.sye,.sye-ebar,.sye-pop,.sye-tbox,input,textarea,select,[data-slot]')) return;
+    const hit = textAt(e.clientX, e.clientY);
+    if (!hit) { if (ev === 'pointerdown' && k2 != null) close2('ok'); return; }
+    const t = hit.n.textContent.trim(); if (t.length > 300) return;
+    e.stopPropagation(); e.preventDefault(); if (ev === 'click') open2(t, hit.rr);
+  }, true));
+  const css3 = document.createElement('style');
+  css3.textContent = `html.sye-editing #desk,html.sye-editing #winlayer{cursor:text}`;
+  document.head.appendChild(css3);
   own.onclick = e => { e.stopPropagation(); setEdit(!SYE_ON); toast(SYE_ON ? '편집 모드 · 사진 자리를 누르면 사진 넣기' : '편집을 끝냈어요'); };
   pane.querySelector('.sye-x').onclick = () => pane.classList.remove('on');
   pane.querySelector('.sye-tabs').onclick = e => { const b = e.target.closest('[data-t]'); if (!b) return; tab = +b.dataset.t; pane.querySelectorAll('.sye-tabs button').forEach(x => x.classList.toggle('on', x === b)); draw(); pane.querySelector('.sye-body').scrollTop = 0; };
