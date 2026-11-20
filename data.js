@@ -267,6 +267,8 @@ const SITE = {
     }
   ],
 
+  /* ★ 東京青藍大学 · FRONTLINE · ETC. 의 MEMBER / PAIR 는 이제 관리자 화면(Pages CMS)에서 고쳐요.
+     실제 내용은 content/seiran.json · frontline.json · etc.json 에 저장되고, 아래 내용은 예비용이에요. */
   /* ---------- 캐릭터 정리 창 (東京青藍大学 · FRONTLINE · ETC. 앱) ----------
      - worlds 안에 앱 하나당 한 덩어리가 있어요. (seiran = 東京青藍大学, frontline = FRONTLINE, etc = ETC.)
      - 각 덩어리 안의 MEMBER / PAIR / AU 가 창 위쪽 탭 3개예요. 그 안에 캐릭터를 넣으면 카드가 생겨요.

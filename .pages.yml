@@ -1,0 +1,727 @@
+# Pages CMS 관리자 화면 설정 (https://app.pagescms.org)
+# 여기서 정한 칸들이 관리자 화면에 보여요. 고친 내용은 content/ 폴더의 JSON에 저장돼요.
+
+media:
+  input: media
+  output: /offtherecord/media
+content:
+  - name: seiran
+    label: 東京青藍大学
+    type: file
+    path: content/seiran.json
+    format: json
+    fields:
+      - name: member
+        label: MEMBER
+        type: object
+        list: true
+        fields:
+          - name: name
+            label: 이름
+            type: string
+          - name: en
+            label: 영어 이름
+            type: string
+          - name: dept
+            label: 소속
+            type: string
+          - name: quote
+            label: 한 줄 소개
+            type: text
+          - name: tags
+            label: 태그
+            type: string
+            list: true
+            description: "#태그 형식으로 하나씩"
+          - name: card
+            label: 카드 사진
+            type: image
+            description: 목록·상세에 나오는 사진
+          - name: photo
+            label: PHOTO 버튼 사진
+            type: image
+            description: 비우면 카드 사진이 나와요 (4:5 추천)
+          - name: spec
+            label: 사진 옆 작은 칸
+            type: object
+            list: true
+            fields:
+              - name: k
+                label: 항목
+                type: string
+              - name: v
+                label: 내용
+                type: string
+          - name: theme
+            label: 캐릭터 송 버튼
+            type: object
+            fields:
+              - name: title
+                label: 버튼 글자
+                type: string
+              - name: src
+                label: mp3 주소
+                type: string
+          - name: profile
+            label: 프로필
+            type: object
+            fields:
+              - name: rows
+                label: 프로필 표
+                type: object
+                list: true
+                fields:
+                  - name: k
+                    label: 항목
+                    type: string
+                  - name: v
+                    label: 내용
+                    type: text
+              - name: personality
+                label: 성격
+                type: text
+              - name: memo
+                label: 짧은 설명
+                type: text
+          - name: prompts
+            label: 프롬프트
+            type: object
+            list: true
+            fields:
+              - name: title
+                label: 제목
+                type: string
+              - name: text
+                label: 프롬프트
+                type: text
+          - name: gallery
+            label: 갤러리 사진
+            type: image
+            list: true
+          - name: music
+            label: 음악
+            type: object
+            list: true
+            fields:
+              - name: title
+                label: 노래 제목
+                type: string
+              - name: artist
+                label: 가수
+                type: string
+              - name: src
+                label: mp3 주소
+                type: string
+          - name: talk
+            label: 리뷰(톡)
+            type: object
+            list: true
+            fields:
+              - name: name
+                label: 쓴 캐릭터
+                type: string
+              - name: avatar
+                label: 프로필 사진
+                type: image
+              - name: relation
+                label: 관계
+                type: string
+              - name: call
+                label: 호칭
+                type: string
+              - name: best
+                label: BEST 표시
+                type: boolean
+              - name: likes
+                label: 좋아요 수
+                type: number
+              - name: text
+                label: 리뷰 내용
+                type: text
+              - name: replies
+                label: 답글
+                type: object
+                list: true
+                fields:
+                  - name: who
+                    label: 누가
+                    type: string
+                  - name: text
+                    label: 답글 내용
+                    type: text
+      - name: pair
+        label: PAIR
+        type: object
+        list: true
+        fields:
+          - name: name
+            label: 페어 이름
+            type: string
+          - name: en
+            label: 영어 이름
+            type: string
+          - name: badge
+            label: 왼쪽 위 뱃지 (비우면 안 보여요)
+            type: string
+          - name: tags
+            label: "오른쪽 위 작은 글씨 (예: 태그 X 태그)"
+            type: string
+          - name: quote
+            label: 한 줄 소개
+            type: text
+          - name: status
+            label: 상태
+            type: string
+          - name: since
+            label: 시작일 (YYYY-MM-DD)
+            type: string
+          - name: next
+            label: 다음 기념일 (D+숫자)
+            type: number
+          - name: photo
+            label: 사진 (16:9)
+            type: image
+          - name: back
+            label: 뒷면 사진
+            type: image
+          - name: memo
+            label: 메모
+            type: text
+          - name: a
+            label: 캐릭터 A
+            type: object
+            fields:
+              - name: name
+                label: 이름
+                type: string
+              - name: sub
+                label: 작은 글씨
+                type: string
+              - name: avatar
+                label: 동그라미 사진
+                type: image
+              - name: link
+                label: MEMBER 이름 (똑같이 적으면 그 캐릭터 정보를 가져와요)
+                type: string
+              - name: photo
+                label: 사진 (MEMBER에 없는 캐릭터만)
+                type: image
+              - name: en
+                label: 영어 이름 (MEMBER에 없는 캐릭터만)
+                type: string
+              - name: quote
+                label: 소개 (MEMBER에 없는 캐릭터만)
+                type: text
+              - name: tags
+                label: 태그 (MEMBER에 없는 캐릭터만)
+                type: string
+                list: true
+          - name: b
+            label: 캐릭터 B
+            type: object
+            fields:
+              - name: name
+                label: 이름
+                type: string
+              - name: sub
+                label: 작은 글씨
+                type: string
+              - name: avatar
+                label: 동그라미 사진
+                type: image
+              - name: link
+                label: MEMBER 이름 (똑같이 적으면 그 캐릭터 정보를 가져와요)
+                type: string
+              - name: photo
+                label: 사진 (MEMBER에 없는 캐릭터만)
+                type: image
+              - name: en
+                label: 영어 이름 (MEMBER에 없는 캐릭터만)
+                type: string
+              - name: quote
+                label: 소개 (MEMBER에 없는 캐릭터만)
+                type: text
+              - name: tags
+                label: 태그 (MEMBER에 없는 캐릭터만)
+                type: string
+                list: true
+  - name: frontline
+    label: FRONTLINE
+    type: file
+    path: content/frontline.json
+    format: json
+    fields:
+      - name: member
+        label: MEMBER
+        type: object
+        list: true
+        fields:
+          - name: name
+            label: 이름
+            type: string
+          - name: en
+            label: 영어 이름
+            type: string
+          - name: dept
+            label: 소속
+            type: string
+          - name: quote
+            label: 한 줄 소개
+            type: text
+          - name: tags
+            label: 태그
+            type: string
+            list: true
+            description: "#태그 형식으로 하나씩"
+          - name: card
+            label: 카드 사진
+            type: image
+            description: 목록·상세에 나오는 사진
+          - name: photo
+            label: PHOTO 버튼 사진
+            type: image
+            description: 비우면 카드 사진이 나와요 (4:5 추천)
+          - name: spec
+            label: 사진 옆 작은 칸
+            type: object
+            list: true
+            fields:
+              - name: k
+                label: 항목
+                type: string
+              - name: v
+                label: 내용
+                type: string
+          - name: theme
+            label: 캐릭터 송 버튼
+            type: object
+            fields:
+              - name: title
+                label: 버튼 글자
+                type: string
+              - name: src
+                label: mp3 주소
+                type: string
+          - name: profile
+            label: 프로필
+            type: object
+            fields:
+              - name: rows
+                label: 프로필 표
+                type: object
+                list: true
+                fields:
+                  - name: k
+                    label: 항목
+                    type: string
+                  - name: v
+                    label: 내용
+                    type: text
+              - name: personality
+                label: 성격
+                type: text
+              - name: memo
+                label: 짧은 설명
+                type: text
+          - name: prompts
+            label: 프롬프트
+            type: object
+            list: true
+            fields:
+              - name: title
+                label: 제목
+                type: string
+              - name: text
+                label: 프롬프트
+                type: text
+          - name: gallery
+            label: 갤러리 사진
+            type: image
+            list: true
+          - name: music
+            label: 음악
+            type: object
+            list: true
+            fields:
+              - name: title
+                label: 노래 제목
+                type: string
+              - name: artist
+                label: 가수
+                type: string
+              - name: src
+                label: mp3 주소
+                type: string
+          - name: talk
+            label: 리뷰(톡)
+            type: object
+            list: true
+            fields:
+              - name: name
+                label: 쓴 캐릭터
+                type: string
+              - name: avatar
+                label: 프로필 사진
+                type: image
+              - name: relation
+                label: 관계
+                type: string
+              - name: call
+                label: 호칭
+                type: string
+              - name: best
+                label: BEST 표시
+                type: boolean
+              - name: likes
+                label: 좋아요 수
+                type: number
+              - name: text
+                label: 리뷰 내용
+                type: text
+              - name: replies
+                label: 답글
+                type: object
+                list: true
+                fields:
+                  - name: who
+                    label: 누가
+                    type: string
+                  - name: text
+                    label: 답글 내용
+                    type: text
+      - name: pair
+        label: PAIR
+        type: object
+        list: true
+        fields:
+          - name: name
+            label: 페어 이름
+            type: string
+          - name: en
+            label: 영어 이름
+            type: string
+          - name: badge
+            label: 왼쪽 위 뱃지 (비우면 안 보여요)
+            type: string
+          - name: tags
+            label: "오른쪽 위 작은 글씨 (예: 태그 X 태그)"
+            type: string
+          - name: quote
+            label: 한 줄 소개
+            type: text
+          - name: status
+            label: 상태
+            type: string
+          - name: since
+            label: 시작일 (YYYY-MM-DD)
+            type: string
+          - name: next
+            label: 다음 기념일 (D+숫자)
+            type: number
+          - name: photo
+            label: 사진 (16:9)
+            type: image
+          - name: back
+            label: 뒷면 사진
+            type: image
+          - name: memo
+            label: 메모
+            type: text
+          - name: a
+            label: 캐릭터 A
+            type: object
+            fields:
+              - name: name
+                label: 이름
+                type: string
+              - name: sub
+                label: 작은 글씨
+                type: string
+              - name: avatar
+                label: 동그라미 사진
+                type: image
+              - name: link
+                label: MEMBER 이름 (똑같이 적으면 그 캐릭터 정보를 가져와요)
+                type: string
+              - name: photo
+                label: 사진 (MEMBER에 없는 캐릭터만)
+                type: image
+              - name: en
+                label: 영어 이름 (MEMBER에 없는 캐릭터만)
+                type: string
+              - name: quote
+                label: 소개 (MEMBER에 없는 캐릭터만)
+                type: text
+              - name: tags
+                label: 태그 (MEMBER에 없는 캐릭터만)
+                type: string
+                list: true
+          - name: b
+            label: 캐릭터 B
+            type: object
+            fields:
+              - name: name
+                label: 이름
+                type: string
+              - name: sub
+                label: 작은 글씨
+                type: string
+              - name: avatar
+                label: 동그라미 사진
+                type: image
+              - name: link
+                label: MEMBER 이름 (똑같이 적으면 그 캐릭터 정보를 가져와요)
+                type: string
+              - name: photo
+                label: 사진 (MEMBER에 없는 캐릭터만)
+                type: image
+              - name: en
+                label: 영어 이름 (MEMBER에 없는 캐릭터만)
+                type: string
+              - name: quote
+                label: 소개 (MEMBER에 없는 캐릭터만)
+                type: text
+              - name: tags
+                label: 태그 (MEMBER에 없는 캐릭터만)
+                type: string
+                list: true
+  - name: etc
+    label: ETC.
+    type: file
+    path: content/etc.json
+    format: json
+    fields:
+      - name: member
+        label: MEMBER
+        type: object
+        list: true
+        fields:
+          - name: name
+            label: 이름
+            type: string
+          - name: en
+            label: 영어 이름
+            type: string
+          - name: dept
+            label: 소속
+            type: string
+          - name: quote
+            label: 한 줄 소개
+            type: text
+          - name: tags
+            label: 태그
+            type: string
+            list: true
+            description: "#태그 형식으로 하나씩"
+          - name: card
+            label: 카드 사진
+            type: image
+            description: 목록·상세에 나오는 사진
+          - name: photo
+            label: PHOTO 버튼 사진
+            type: image
+            description: 비우면 카드 사진이 나와요 (4:5 추천)
+          - name: spec
+            label: 사진 옆 작은 칸
+            type: object
+            list: true
+            fields:
+              - name: k
+                label: 항목
+                type: string
+              - name: v
+                label: 내용
+                type: string
+          - name: theme
+            label: 캐릭터 송 버튼
+            type: object
+            fields:
+              - name: title
+                label: 버튼 글자
+                type: string
+              - name: src
+                label: mp3 주소
+                type: string
+          - name: profile
+            label: 프로필
+            type: object
+            fields:
+              - name: rows
+                label: 프로필 표
+                type: object
+                list: true
+                fields:
+                  - name: k
+                    label: 항목
+                    type: string
+                  - name: v
+                    label: 내용
+                    type: text
+              - name: personality
+                label: 성격
+                type: text
+              - name: memo
+                label: 짧은 설명
+                type: text
+          - name: prompts
+            label: 프롬프트
+            type: object
+            list: true
+            fields:
+              - name: title
+                label: 제목
+                type: string
+              - name: text
+                label: 프롬프트
+                type: text
+          - name: gallery
+            label: 갤러리 사진
+            type: image
+            list: true
+          - name: music
+            label: 음악
+            type: object
+            list: true
+            fields:
+              - name: title
+                label: 노래 제목
+                type: string
+              - name: artist
+                label: 가수
+                type: string
+              - name: src
+                label: mp3 주소
+                type: string
+          - name: talk
+            label: 리뷰(톡)
+            type: object
+            list: true
+            fields:
+              - name: name
+                label: 쓴 캐릭터
+                type: string
+              - name: avatar
+                label: 프로필 사진
+                type: image
+              - name: relation
+                label: 관계
+                type: string
+              - name: call
+                label: 호칭
+                type: string
+              - name: best
+                label: BEST 표시
+                type: boolean
+              - name: likes
+                label: 좋아요 수
+                type: number
+              - name: text
+                label: 리뷰 내용
+                type: text
+              - name: replies
+                label: 답글
+                type: object
+                list: true
+                fields:
+                  - name: who
+                    label: 누가
+                    type: string
+                  - name: text
+                    label: 답글 내용
+                    type: text
+      - name: pair
+        label: PAIR
+        type: object
+        list: true
+        fields:
+          - name: name
+            label: 페어 이름
+            type: string
+          - name: en
+            label: 영어 이름
+            type: string
+          - name: badge
+            label: 왼쪽 위 뱃지 (비우면 안 보여요)
+            type: string
+          - name: tags
+            label: "오른쪽 위 작은 글씨 (예: 태그 X 태그)"
+            type: string
+          - name: quote
+            label: 한 줄 소개
+            type: text
+          - name: status
+            label: 상태
+            type: string
+          - name: since
+            label: 시작일 (YYYY-MM-DD)
+            type: string
+          - name: next
+            label: 다음 기념일 (D+숫자)
+            type: number
+          - name: photo
+            label: 사진 (16:9)
+            type: image
+          - name: back
+            label: 뒷면 사진
+            type: image
+          - name: memo
+            label: 메모
+            type: text
+          - name: a
+            label: 캐릭터 A
+            type: object
+            fields:
+              - name: name
+                label: 이름
+                type: string
+              - name: sub
+                label: 작은 글씨
+                type: string
+              - name: avatar
+                label: 동그라미 사진
+                type: image
+              - name: link
+                label: MEMBER 이름 (똑같이 적으면 그 캐릭터 정보를 가져와요)
+                type: string
+              - name: photo
+                label: 사진 (MEMBER에 없는 캐릭터만)
+                type: image
+              - name: en
+                label: 영어 이름 (MEMBER에 없는 캐릭터만)
+                type: string
+              - name: quote
+                label: 소개 (MEMBER에 없는 캐릭터만)
+                type: text
+              - name: tags
+                label: 태그 (MEMBER에 없는 캐릭터만)
+                type: string
+                list: true
+          - name: b
+            label: 캐릭터 B
+            type: object
+            fields:
+              - name: name
+                label: 이름
+                type: string
+              - name: sub
+                label: 작은 글씨
+                type: string
+              - name: avatar
+                label: 동그라미 사진
+                type: image
+              - name: link
+                label: MEMBER 이름 (똑같이 적으면 그 캐릭터 정보를 가져와요)
+                type: string
+              - name: photo
+                label: 사진 (MEMBER에 없는 캐릭터만)
+                type: image
+              - name: en
+                label: 영어 이름 (MEMBER에 없는 캐릭터만)
+                type: string
+              - name: quote
+                label: 소개 (MEMBER에 없는 캐릭터만)
+                type: text
+              - name: tags
+                label: 태그 (MEMBER에 없는 캐릭터만)
+                type: string
+                list: true
