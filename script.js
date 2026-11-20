@@ -5,6 +5,8 @@
 (() => {
 /* ---------- 제작자(나) 모드 : 주소 끝에 ?owner 를 붙여 한 번 들어오면 이 브라우저에선 계속 ✎ EDIT 가 보여요 (?guest 로 끄기) ---------- */
 const OWNER = (() => { try { const q = location.search + location.hash; if (/owner|#edit\b/i.test(q)) localStorage.setItem('syOwner', '1'); if (/guest/i.test(q)) localStorage.removeItem('syOwner'); return localStorage.getItem('syOwner') === '1'; } catch (e) { return false; } })();
+/* 홈페이지에 저장하고 10분이 지나면(새 data.js 가 반영된 뒤) 이 브라우저에 임시로 남겨둔 수정본 · 사진을 정리해요 */
+const SYE_CLEAN = OWNER && (() => { try { const t = +localStorage.getItem('sye-pub-at') || 0; if (t && Date.now() - t > 10 * 60e3 && !(+localStorage.getItem('sye-pend') || 0)) { localStorage.removeItem('sye-draft'); localStorage.removeItem('sye-pub-at'); return true; } } catch (e) {} return false; })();
 let SYE_ON = OWNER && (() => { try { return localStorage.getItem('syEdit') === '1'; } catch (e) { return false; } })();
 const SYE_DRAFT = OWNER ? (() => { try { return JSON.parse(localStorage.getItem('sye-draft') || 'null'); } catch (e) { return null; } })() : null;
 const RAW = SYE_DRAFT ? Object.assign({}, SITE, SYE_DRAFT) : SITE;   // 글 수정은 이 브라우저에만 저장 → JS 내보내기로 진짜 반영
@@ -4503,6 +4505,7 @@ function syLayout() {
   #desk .taskbar .credit b{font:800 8px var(--syf)!important;letter-spacing:0!important;color:#1E2A27!important;-webkit-text-fill-color:#1E2A27!important;background:none!important}
   #desk .taskbar .credit b::before{content:none!important}
 }
+html:not(.sy-owner) .sy-write,html:not(.sy-owner) #desk .top-r .sq.sy-write{display:none!important}
 @media (max-width:720px),(max-aspect-ratio:4/5) and (max-width:1100px){ .sy-only,#desk .top-r .sq.sy-only:not(.sy-write){display:none!important} .apps .app-tile:nth-child(n+33){display:none!important} .apps-panel .panel-tab .sy-cnt{display:none} }
 `;
   document.head.appendChild(st);
@@ -4555,6 +4558,7 @@ function syLayout() {
   #desk .top-r{order:2;margin-left:auto!important;height:62px!important;gap:6px!important}
   #desk .top-r .pill,#desk .top-r .clock{display:none!important}
   #desk .top-r .sq[data-nav=launcher],#desk .top-r .sq.sy-write{display:grid!important;place-items:center!important;width:38px!important;height:38px!important;border-radius:12px!important;background:#fff!important;border:1px solid #E1EAE6!important;color:#4A5753!important;box-shadow:none!important}
+  html:not(.sy-owner) #desk .top-r .sq.sy-write{display:none!important}
   #desk .top-r .sq svg{width:15px!important;height:15px!important}
   /* 내용 순서 : 배너 → 아이콘 → D-DAY 카드 */
   #desk .stage{top:62px!important;padding:14px 12px 104px!important;gap:16px!important}
@@ -4705,7 +4709,8 @@ function syTheme() {
    ✎ EDIT (나만 보이는 편집) — 주소 끝에 ?owner 를 한 번 붙여서 들어오면 이 브라우저에선 계속 보여요 (?guest 로 끄기)
    · 사진 자리를 누르면 사진 넣기 / 바꾸기 / 빼기 (이 브라우저에 저장)
    · [글 수정] 으로 글 · 목록 고치기 (이 브라우저에 저장)
-   · [JS 내보내기] → data.js + 사진 파일들을 받아서 나루에 올리면 모두에게 보여요
+   · [홈페이지에 저장] → 글(data.js)과 사진(media/)이 GitHub에 바로 저장돼서 1~10분 뒤 모두에게 보여요
+   · [JS 내보내기] → 예전처럼 파일로 받기 (백업용)
    ========================================================= */
 (function syeOwner() {
   if (!OWNER) return;
@@ -4840,14 +4845,14 @@ html.sye-editing [data-slot]{position:relative}
   const fP = el('<input type="file" accept="image/*" hidden>'), fB = el('<input type="file" accept=".json,application/json" hidden>');
   const pop = el('<div class="sye-pop"></div>');
   const own = el('<button class="sye-own" type="button">✎ EDIT</button>');
-  const bar = el(`<div class="sye-ebar"><span class="sye-st"></span><span class="sye-tip">글자 누르면 고치기 · 사진 자리에 누르기 / 끌어다 놓기 / 붙여넣기</span><button data-e="undo" title="되돌리기 (Ctrl+Z)">↶ 되돌리기</button><button data-e="text">전체 글 목록</button><button data-e="export">JS 내보내기</button><button data-e="backup">백업 저장</button><button data-e="restore">백업 불러오기</button><button data-e="end" class="end">끝내기</button></div>`);
+  const bar = el(`<div class="sye-ebar"><span class="sye-st"></span><span class="sye-tip">글자 누르면 고치기 · 사진 자리에 누르기 / 끌어다 놓기 / 붙여넣기</span><button data-e="undo" title="되돌리기 (Ctrl+Z)">↶ 되돌리기</button><button data-e="text">전체 글 목록</button><button data-e="publish" class="pub">홈페이지에 저장</button><button data-e="export">JS 내보내기</button><button data-e="backup">백업 저장</button><button data-e="restore">백업 불러오기</button><button data-e="end" class="end">끝내기</button></div>`);
   let tgt = null;
   const setEdit = on => { SYE_ON = on; document.documentElement.classList.toggle('sye-editing', on); try { localStorage.setItem('syEdit', on ? '1' : '0'); } catch (e) {} if (!on) { pop.classList.remove('on'); pane.classList.remove('on'); } };
   const pick = k => { tgt = k; fP.value = ''; fP.click(); };
-  // 나루에 아직 안 올린 수정 개수 (아래 바에 표시)
+  // 아직 홈페이지에 저장 안 한 수정 개수 (아래 바에 표시)
   let PEND = (() => { try { return +localStorage.getItem('sye-pend') || 0; } catch (e) { return 0; } })();
-  const pend = (d = 1) => { PEND = d === 0 ? 0 : PEND + d; try { localStorage.setItem('sye-pend', String(PEND)); } catch (e) {} showPend(); };
-  const showPend = () => { const st = bar.querySelector('.sye-st'), ex = bar.querySelector('[data-e=export]'); if (st) st.innerHTML = PEND ? `<i class="dot"></i>나루에 아직 안 올린 수정 <b>${PEND}</b>개` : '<i class="ok">✓</i>나루와 같아요'; ex && ex.classList.toggle('attn', PEND > 0); };
+  const pend = (d = 1) => { PEND = d === 0 ? 0 : PEND + d; try { localStorage.setItem('sye-pend', String(PEND)); if (d !== 0) localStorage.removeItem('sye-pub-at'); } catch (e) {} showPend(); };
+  const showPend = () => { const st = bar.querySelector('.sye-st'), ex = bar.querySelector('[data-e=publish]'); if (st) st.innerHTML = PEND ? `<i class="dot"></i>아직 저장 안 한 수정 <b>${PEND}</b>개` : '<i class="ok">✓</i>홈페이지와 같아요'; ex && ex.classList.toggle('attn', PEND > 0); };
   const putPhoto = (k, f) => { if (!f || !/^image\//.test(f.type)) { toast('사진 파일만 넣을 수 있어요'); return; } idbPut(k, f).then(() => { setURL(k, f); PV[k] = PV[k] || ''; paint(k); pend(); toast('사진을 넣었어요 · 모두에게 보이게 하려면 JS 내보내기'); }).catch(() => toast('저장하지 못했어요')); };
   fP.addEventListener('change', () => { const f = fP.files && fP.files[0]; if (!f || !tgt) return; putPhoto(tgt, f); });
   // 사진 끌어다 놓기 · 붙여넣기 (참고한 홈페이지처럼)
@@ -4894,7 +4899,7 @@ html.sye-editing [data-slot]{position:relative}
   }, true);
   ['pointerdown', 'mousedown'].forEach(ev => document.addEventListener(ev, e => { if (SYE_ON && e.target.closest('[data-slot]') && !e.target.closest('.sye')) e.stopPropagation(); }, true));
   /* ---------- 글 수정 창 ---------- */
-  const pane = el(`<aside class="sye"><div class="sye-h"><h3><i>✎</i>글 수정</h3><p>고치고 <b>[적용해서 보기]</b> → 다 되면 아래 바의 <b>[JS 내보내기]</b> 로 받은 파일을 나루에 올리면 모두에게 보여요. 사진은 화면의 사진 자리를 바로 눌러서 넣어요.</p><button class="sye-x" title="닫기">✕</button></div>
+  const pane = el(`<aside class="sye"><div class="sye-h"><h3><i>✎</i>글 수정</h3><p>고치고 <b>[적용해서 보기]</b> → 다 되면 아래 바의 <b>[홈페이지에 저장]</b> 을 누르면 모두에게 보여요. 사진은 화면의 사진 자리를 바로 눌러서 넣어요.</p><button class="sye-x" title="닫기">✕</button></div>
     <div class="sye-tabs">${GROUPS.map((g, i) => `<button data-t="${i}" class="${i ? '' : 'on'}">${E(g[0])}</button>`).join('')}</div><div class="sye-body"></div>
     <div class="sye-f2"><div class="sye-dirty"></div><button class="pri" data-a="apply">적용해서 보기</button><button data-a="reset">글 처음으로 되돌리기</button></div></aside>`);
   document.body.append(bar, pop, pane, fP, fB); showPend();
@@ -4998,7 +5003,7 @@ html.sye-editing .sye-t.on{background:rgba(127,214,176,.4);outline:2px solid #3F
     else if (b.dataset.del) { const [p, i] = JSON.parse(b.dataset.del); if (!confirm('이 항목을 지울까요?')) return; getP(p).splice(i, 1); dirty = true; }
     else if (b.dataset.mv) { const [p, i, d] = JSON.parse(b.dataset.mv), arr = getP(p), j = i + d; if (j < 0 || j >= arr.length) return; [arr[i], arr[j]] = [arr[j], arr[i]]; dirty = true; }
     else if (b.dataset.a === 'apply') { try { localStorage.setItem('sye-draft', JSON.stringify(ED)); sessionStorage.setItem('sye-fast', '1'); sessionStorage.setItem('sye-open', String(tab)); } catch (err) { alert('저장 공간이 부족해서 적용하지 못했어요'); return; } location.reload(); return; }
-    else if (b.dataset.a === 'reset') { if (!confirm('글 수정한 내용을 모두 지우고 지금 나루에 올라가 있는 data.js 로 되돌릴까요? (넣은 사진은 그대로예요)')) return; try { localStorage.removeItem('sye-draft'); sessionStorage.setItem('sye-fast', '1'); } catch (err) {} location.reload(); return; }
+    else if (b.dataset.a === 'reset') { if (!confirm('글 수정한 내용을 모두 지우고 지금 홈페이지에 저장돼 있는 내용으로 되돌릴까요? (넣은 사진은 그대로예요)')) return; try { localStorage.removeItem('sye-draft'); sessionStorage.setItem('sye-fast', '1'); } catch (err) {} location.reload(); return; }
     mark(); draw(); pane.querySelector('.sye-body').scrollTop = keep;
   });
   /* ---------- JS 내보내기 : data.js (사진 칸엔 파일 이름) + 사진 파일들 ---------- */
@@ -5024,8 +5029,49 @@ html.sye-editing .sye-t.on{background:rgba(127,214,176,.4);outline:2px solid #3F
     }).catch(() => toast('내보내지 못했어요 · 다시 눌러 주세요'));
   }
   const toData = b => new Promise(ok => { const r = new FileReader(); r.onload = () => ok(r.result); r.readAsDataURL(b); });
+  /* ---------- 홈페이지에 저장 (GitHub) ---------- */
+  const GH = { owner: '10293810', repo: 'offtherecord', branch: 'main', api: window.__GH_API || 'https://api.github.com' };
+  const ghToken = ask => { let t = ''; try { t = localStorage.getItem('gh-token') || ''; } catch (e) {}
+    if (!t || ask) { t = (prompt('GitHub 토큰을 붙여 넣어 주세요.\n(처음 한 번만 넣으면 이 브라우저가 기억해요)') || '').trim(); if (t) try { localStorage.setItem('gh-token', t); } catch (e) {} }
+    return t; };
+  const b64text = str => { const b = new TextEncoder().encode(str); let bin = ''; for (let i = 0; i < b.length; i += 0x8000) bin += String.fromCharCode.apply(null, b.subarray(i, i + 0x8000)); return btoa(bin); };
+  const ghPut = (tok, path, content, msg) => {
+    const url = `${GH.api}/repos/${GH.owner}/${GH.repo}/contents/${path}`, H = { Authorization: 'Bearer ' + tok, Accept: 'application/vnd.github+json' };
+    return fetch(url + '?ref=' + GH.branch + '&t=' + Date.now(), { headers: H, cache: 'no-store' }).then(r => r.ok ? r.json() : (r.status === 404 ? null : Promise.reject(Object.assign(new Error('HTTP ' + r.status), { status: r.status }))))
+      .then(cur => fetch(url, { method: 'PUT', headers: H, body: JSON.stringify(Object.assign({ message: msg, content, branch: GH.branch }, cur && cur.sha ? { sha: cur.sha } : {})) }))
+      .then(r => r.ok ? r.json() : r.json().catch(() => ({})).then(j => { throw Object.assign(new Error(j.message || ('HTTP ' + r.status)), { status: r.status }); }));
+  };
+  let PUBBING = false;
+  function publishGH() {
+    if (PUBBING) return; const tok = ghToken(); if (!tok) { toast('토큰이 있어야 저장할 수 있어요'); return; }
+    PUBBING = true; const btn = bar.querySelector('[data-e=publish]'); if (btn) { btn.disabled = true; btn.textContent = '저장하는 중…'; }
+    const done = () => { PUBBING = false; if (btn) { btn.disabled = false; btn.textContent = '홈페이지에 저장'; } };
+    const out = clone(RAW), stamp = Date.now().toString(36), pics = [];
+    Object.keys(PV).forEach(k => { if (PV[k] === '' && !SLOT_URL[k]) setAt(out, k, ''); });
+    toast('사진 정리하는 중이에요…');
+    idbAll().then(all => Promise.all(Object.keys(all).map(k => shrink(all[k], /hero|banner|back|imageBack/.test(k) ? 1800 : 1400).then(r => {
+      if (!r || !r.blob) return; const name = 'media/' + k.replace(/[^A-Za-z0-9]+/g, '_') + '-' + stamp + '.' + r.ext;
+      if (setAt(out, k, name)) pics.push({ name, blob: r.blob });
+    })))).then(() => pics.reduce((p, f, i) => p.then(() => { toast(`사진 올리는 중… (${i + 1}/${pics.length})`); return toData(f.blob).then(u => ghPut(tok, f.name, u.split(',')[1], '사진 올리기: ' + f.name)); }), Promise.resolve()))
+    .then(() => {
+      const head = `/* =========================================================\n   data.js — 홈페이지 내용 (✎ EDIT → 홈페이지에 저장 · ${new Date().toLocaleString('ko-KR')})\n   - 홈페이지 주소 끝에 ?owner 를 붙여 들어가면 ✎ EDIT 로 바로 고칠 수 있어요.\n   - 사진은 media/ 폴더에 있어요.\n   ========================================================= */\n\n`;
+      const parts = Object.keys(out).map(k => `  // ${(LABEL[k] || k).replace(/\*\//g, '')}\n  ${JSON.stringify(k)}: ${JSON.stringify(out[k], null, 2).replace(/\n/g, '\n  ')}`);
+      toast('글 저장하는 중…');
+      return ghPut(tok, 'data.js', b64text(head + 'const SITE = {\n' + parts.join(',\n\n') + '\n};\n'), '홈페이지 수정' + (pics.length ? ` (사진 ${pics.length}장)` : ''));
+    }).then(() => {
+      pend(0); try { localStorage.setItem('sye-pub-at', String(Date.now())); } catch (e) {}
+      toast(pics.length ? `저장했어요! 사진 ${pics.length}장 · 1~10분 뒤 모두에게 보여요` : '저장했어요! 1~10분 뒤 모두에게 보여요'); done();
+    }).catch(err => {
+      done();
+      if (err && (err.status === 401 || err.status === 403 || err.status === 404)) { try { localStorage.removeItem('gh-token'); } catch (e) {} toast('토큰이 맞지 않아요 · 다시 누르면 토큰을 새로 넣을 수 있어요'); }
+      else toast('저장하지 못했어요 · 인터넷 연결을 확인하고 다시 눌러 주세요');
+      console.warn('publish', err);
+    });
+  }
+  if (SYE_CLEAN) idbAll().then(all => Promise.all(Object.keys(all).map(k => idbDel(k)))).catch(() => {});
   bar.addEventListener('click', e => {
     const a = e.target.dataset && e.target.dataset.e; if (!a) return;
+    if (a === 'publish') publishGH();
     if (a === 'end') { setEdit(false); toast('편집을 끝냈어요'); }
     if (a === 'text') pane.classList.toggle('on');
     if (a === 'undo') undo();
@@ -5098,7 +5144,7 @@ html.sye-editing .sye-t.on{background:rgba(127,214,176,.4);outline:2px solid #3F
         + `<div class="sec">캐릭터 A</div>` + fld('이름', 'aname', A.name) + fld('작은 글씨', 'asub', A.sub) + fld('MEMBER 와 연결', 'alink', A.link || '', 'select', 'MEMBER 캐릭터를 고르면 그 캐릭터 사진 · 소개를 그대로 가져와요', memberNames)
         + `<div class="sec">캐릭터 B</div>` + fld('이름', 'bname', B.name) + fld('작은 글씨', 'bsub', B.sub) + fld('MEMBER 와 연결', 'blink', B.link || '', 'select', '', memberNames);
     }
-    h += `<div class="note">사진은 저장한 뒤 ✎ EDIT 상태에서 화면의 사진 자리를 눌러서 넣어요.<br>다른 기기 · 다른 사람에게도 보이게 하려면 아래 바의 <b>JS 내보내기</b> → 나루에 올리기.</div>`;
+    h += `<div class="note">사진은 저장한 뒤 ✎ EDIT 상태에서 화면의 사진 자리를 눌러서 넣어요.<br>다른 기기 · 다른 사람에게도 보이게 하려면 아래 바의 <b>홈페이지에 저장</b>.</div>`;
     FB.innerHTML = h; FB.scrollTop = 0;
     FF.innerHTML = `<button type="submit" class="sv">저장</button>${i != null ? '<button type="button" class="del">삭제</button>' : ''}<button type="button" class="cc">취소</button>`;
     FF.querySelector('.cc').onclick = fClose;
@@ -5146,14 +5192,14 @@ html.sye-editing .sye-t.on{background:rgba(127,214,176,.4);outline:2px solid #3F
     <label><span>한 줄 요약</span><input name="excerpt" placeholder="목록 카드에 보이는 한 줄"></label>
     <label><span>내용</span><textarea name="body" rows="7" placeholder="본문을 적어요"></textarea></label>
     <label><span>사진 (여러 장 가능)</span><input name="pics" type="file" accept="image/*" multiple><small>사진은 이 브라우저에 저장되고, JS 내보내기 할 때 사진 파일로 같이 나와요</small></label>
-    <div class="note">올리면 이 브라우저의 Notice 에 바로 보여요. 모두에게 보이게 하려면 ✎ EDIT → JS 내보내기 → 나루에 올리기</div>
+    <div class="note">올리면 이 브라우저의 Notice 에 바로 보여요. 모두에게 보이게 하려면 ✎ EDIT → 홈페이지에 저장</div>
     </div><div class="ff"><button type="button" class="fx2">취소</button><button type="submit" class="sv">올리기</button></div></form></div>`);
   document.body.appendChild(wf);
   const wForm = wf.querySelector('form');
   const wClose = () => wf.classList.remove('on');
   wf.querySelectorAll('.fx,.fx2').forEach(b => b.onclick = wClose);
   wf.addEventListener('click', e => { if (e.target === wf) wClose(); });
-  document.querySelector('.sy-write:not(.cms-admin)')?.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); wForm.reset(); wf.classList.add('on'); setTimeout(() => wForm.elements.title.focus(), 50); }, true);
+  document.querySelector('.sy-write')?.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); wForm.reset(); wf.classList.add('on'); setTimeout(() => wForm.elements.title.focus(), 50); }, true);
   const draftNow = () => { let d = null; try { d = JSON.parse(localStorage.getItem('sye-draft') || 'null'); } catch (e) {} return Object.assign(clone(RAW), d || {}); };
   const saveDraft = d => { localStorage.setItem('sye-draft', JSON.stringify(d)); sessionStorage.setItem('sye-fast', '1'); };
   wForm.addEventListener('submit', e => {
