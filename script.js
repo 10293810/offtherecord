@@ -692,6 +692,9 @@ const appHTML = (a, i = 0) => `<button class="app app-tile ${a.seen ? 'seen' : '
 // SYRINGE 시안 (10×5) 에서 늘어난 칸 아이콘
 Object.assign(P, {
   // 10×6 으로 늘어난 칸
+  sofa: '<path d="M5 11V8a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v3"/><path d="M3 13a2 2 0 0 1 4 0v2h10v-2a2 2 0 0 1 4 0v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M6 18v2M18 18v2"/>',
+  headphones: '<path d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="14" width="4" height="6" rx="1.5"/><rect x="17" y="14" width="4" height="6" rx="1.5"/>',
+  shirt: '<path d="M8 3l-5 3 2 4 3-1v12h8V9l3 1 2-4-5-3a4 4 0 0 1-8 0z"/>',
   clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
   lab: '<path d="M9 3h6M10 3v6L4.6 18.4A2 2 0 0 0 6.3 21.5h11.4a2 2 0 0 0 1.7-3.1L14 9V3"/><path d="M7.2 15h9.6"/>',
   ward: '<path d="M3 6v13M3 15h18v4M21 15v-3a3 3 0 0 0-3-3h-7v6"/><circle cx="7" cy="11.5" r="2"/>',
@@ -2304,7 +2307,9 @@ const CHAR_H = 0;   // 0 = 화면 높이에 꽉 차게 / 숫자를 넣으면 그
 function charLayout() {
   if (isMobile()) return null;
   const avail = deskH() - 72 - 72 - 8, gap = 14;
-  let H = CHAR_H ? Math.min(CHAR_H, avail) : avail;
+  // OOC · 프로필 창과 같은 크기 : OOC 창(440×640)에 같은 배율을 곱한 높이 (화면이 작으면 화면에 맞춰 줄어요)
+  const ooc = Math.min(640 * WZ * Math.min(WIN_SMALL, passZoom(true)), deskH() - 144 - 16);
+  let H = Math.min(CHAR_H || ooc, avail, ooc);
   const maxW = deskW() - 40; if (H * 1.32 + gap > maxW) H = Math.floor((maxW - gap) / 1.32);
   const W1 = Math.round(H * .70), W2 = Math.round(H * .62);
   const x1 = Math.max(12, Math.round((deskW() - W1 - gap - W2) / 2)), y = Math.round(72 + (deskH() - 72 - 72 - H) / 2);
@@ -4348,14 +4353,14 @@ function syLayout() {
       const fs0 = parseFloat(getComputedStyle(t).fontSize) / tf0 * tf0;
       const cv = syLayout._c || (syLayout._c = document.createElement('canvas').getContext('2d'));
       const met = fs => { cv.font = `900 ${fs}px Pretendard, sans-serif`; const m = cv.measureText('UNRELEASED'), fa = m.fontBoundingBoxAscent ?? fs * .95, fd = m.fontBoundingBoxDescent ?? fs * .24, base = (fs - fa - fd) / 2 + fa, cap = m.actualBoundingBoxAscent || fs * .72; return { base, cap, below: fs - base }; };
-      const KH = 12, KV = 2.5, G1 = 14, MT = 18, MB = 18;   // 10×6 으로 배너가 낮아져서 위/아래 여백을 줄였어요 (예전 34 · 26)   // 키커 높이, 키커 글자 아래 여백, 선↔키커, 위/아래 여백
-      const need = (fs, G) => { const m = met(fs); return MB + P + G + m.cap + G + KH - KV + G1 + 3 + MT; };
+      const KH = 12, KV = 2.5, G1 = 14, MT = 22, MB = 20;   // 10×6 으로 배너가 낮아져서 위/아래 여백을 줄였어요 (예전 34 · 26)   // 키커 높이, 키커 글자 아래 여백, 선↔키커, 위/아래 여백
+      const need = (fs, G) => { const m = met(fs); return MB + P + G * 1.3 + m.cap + G + KH - KV + G1 + 3 + MT; };   // 큰 글씨 아래(칩 쪽) 여백을 1.3배로
       let f = 1, G = 0;
-      for (; f > .84; f -= .01) { const fs = fs0 * f, m = met(fs); G = Math.min(.42 * m.cap, (H - need(fs, 0)) / 2); if (G >= .3 * m.cap) break; }
-      const fs = fs0 * f, m = met(fs); G = Math.max(8, G);
+      for (; f > .66; f -= .01) { const fs = fs0 * f, m = met(fs); G = Math.min(.42 * m.cap, (H - need(fs, 0)) / 2.3); if (G >= .36 * m.cap && G >= 19) break; }   // 큰 글씨 위아래가 붙지 않게 (여백 최소 21)
+      const fs = fs0 * f, m = met(fs); G = Math.max(18, G);
       if (f < 1) t.style.setProperty('--tfit', (tf0 * f).toFixed(4));
       const extra = Math.max(0, H - need(fs, G)), pb = MB + extra / 2;
-      const tb = pb + P + G - m.below;                 // 큰 글씨 baseline이 칩 위 G 만큼
+      const tb = pb + P + G * 1.3 - m.below;                 // 큰 글씨 baseline이 칩 위 G 만큼
       const kb = tb + m.below + m.cap + G - KV;          // 키커 글자 바닥이 큰 글씨 윗선 위 G 만큼
       const lb = kb + KH + G1;
       [['--pb', pb], ['--tb', tb], ['--kb', kb], ['--lb', lb]].forEach(([k, v]) => hero.style.setProperty(k, v.toFixed(1) + 'px')); } }
@@ -4409,20 +4414,20 @@ function syLayout() {
   .sy-pairrow{position:absolute;left:46px;bottom:var(--pb,19px);display:flex;align-items:center;gap:8px;white-space:nowrap}
   .sy-pair{font:700 21px/1 var(--syf);letter-spacing:.01em;color:#1F5546;margin-right:9px}
   .sy-chip{height:22px;padding:0 10px;display:inline-flex;align-items:center;border-radius:99px;border:1.3px solid #49A887;font:700 8.5px var(--syf);letter-spacing:.01em;color:#1F5546}
-  .sy-r{position:absolute;right:27px;top:auto;bottom:-2px;width:300px;height:160px}
+  .sy-r{position:absolute;right:34px;top:calc(40px + (100% - 40px - 146px) / 2);width:300px;height:146px}
   .sy-nav{position:absolute;right:2px;top:0;display:flex;align-items:center;gap:8px}
   .sy-nav button{width:14px;height:16px;padding:0;border:0;background:none;color:#24413A;font:400 16px/1 var(--syf);cursor:pointer;display:grid;place-items:center}
   .sy-nav button svg{width:11px;height:11px;stroke-width:2.6}
   .sy-dots{display:flex;gap:4px;align-items:center}
   .sy-dots i{width:5px;height:5px;border-radius:99px;background:#BFDCCF;transition:width .25s,background .25s}
   .sy-dots i.on{width:16px;background:#5BBE95}
-  .sy-dd{position:absolute;left:2px;top:36px;font:800 72px/1 var(--syf);letter-spacing:-.025em;background:linear-gradient(180deg,#6FD0A6,#45B285);-webkit-background-clip:text;background-clip:text;color:transparent}
-  .sy-next{position:absolute;left:0;right:0;top:110px;display:flex;justify-content:space-between;align-items:baseline;font:600 10.5px var(--syf);color:#6B7A76}
+  .sy-dd{position:absolute;left:2px;top:30px;font:800 72px/1 var(--syf);letter-spacing:-.025em;background:linear-gradient(180deg,#6FD0A6,#45B285);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .sy-next{position:absolute;left:0;right:0;top:102px;display:flex;justify-content:space-between;align-items:baseline;font:600 10.5px var(--syf);color:#6B7A76}
   .sy-next span b{font-weight:700;color:var(--sy-ink)}
   .sy-next > b{font:700 11px var(--syf);color:#3E9C77}
-  .sy-bar{position:absolute;left:0;right:0;top:129.5px;height:3px;border-radius:99px;background:#DCEDE5;overflow:hidden}
+  .sy-bar{position:absolute;left:0;right:0;top:120.5px;height:3px;border-radius:99px;background:#DCEDE5;overflow:hidden}
   .sy-bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#9BE0C3,#6CCBA6)}
-  .sy-sub{position:absolute;left:0;right:0;top:142px;display:flex;justify-content:space-between;font:500 9.5px var(--syf);letter-spacing:.03em;color:#7F8F8A}
+  .sy-sub{position:absolute;left:0;right:0;top:133px;display:flex;justify-content:space-between;font:500 9.5px var(--syf);letter-spacing:.03em;color:#7F8F8A}
   /* 아이콘 창 */
   #desk .stage .leftcol .apps-panel{position:absolute!important;left:0!important;right:0!important;top:auto!important;bottom:0!important;width:auto!important;height:556px!important;margin:0!important;padding:0!important;border-radius:18px!important;background:rgba(248,251,250,.94)!important;border:1px solid #E3ECE8!important;box-shadow:0 10px 24px rgba(30,70,60,.06)!important;transform:none!important;zoom:1!important;overflow:visible!important}
   #desk .apps-panel .panel-tab{position:absolute!important;left:22px!important;top:-21px!important;height:21px!important;padding:0 6px 0 10px!important;display:flex!important;align-items:center!important;gap:6px!important;border-radius:9px 9px 0 0!important;background:rgba(248,251,250,.94)!important;border:1px solid #E3ECE8!important;border-bottom:0!important;box-shadow:none!important}
@@ -4430,7 +4435,7 @@ function syLayout() {
   #desk .apps-panel .panel-tab span{font:800 7.5px var(--syf)!important;letter-spacing:.14em!important;color:#1E2A27!important;background:none!important;-webkit-text-fill-color:currentColor!important}
   #desk .apps-panel .panel-tab .sy-cnt{min-width:15px;height:15px;padding:0 3px;box-sizing:border-box;border-radius:99px;background:#1E2A27;color:#fff;font:800 7px/15px var(--syf);text-align:center}
   #desk .stage .leftcol .apps{position:absolute!important;inset:26px 11px 20px!important;width:auto!important;height:auto!important;display:grid!important;grid-template-columns:repeat(10,minmax(0,1fr))!important;grid-template-rows:repeat(6,auto)!important;align-content:space-between!important;gap:0 0!important;padding:0!important;margin:0!important;transform:none!important}
-  #desk .apps .app-tile{display:flex!important;flex-direction:column!important;align-items:center!important;gap:calc(6px * var(--sy-ts,1))!important;padding:0!important;margin:0!important;background:none!important;border:0!important;font:600 calc(8.5px * var(--sy-ts,1))/1.15 var(--syf)!important;letter-spacing:-.01em!important;color:#4A5753!important;text-align:center!important;white-space:normal!important;word-break:keep-all!important}
+  #desk .apps .app-tile{display:flex!important;flex-direction:column!important;align-items:center!important;gap:calc(6px * var(--sy-ts,1))!important;padding:0!important;margin:0!important;background:none!important;border:0!important;font:600 calc(8px * var(--sy-ts,1))/1.15 var(--syf)!important;letter-spacing:-.01em!important;color:#4A5753!important;text-align:center!important;white-space:normal!important;word-break:keep-all!important}
   #desk .apps .app-tile .cjk{font:800 1em/1.15 'Noto Sans JP','IBM Plex Sans KR',sans-serif;letter-spacing:0}
   #desk .apps .app-ic.tilebox{width:calc(50px * var(--sy-ts,1))!important;height:calc(50px * var(--sy-ts,1))!important;border-radius:calc(11.5px * var(--sy-ts,1))!important;background:#fff!important;border:1px solid #E4ECE8!important;box-shadow:0 4px 10px rgba(30,70,60,.07),inset 0 -2px 0 rgba(30,70,60,.03)!important;color:#45AE86!important;display:grid!important;place-items:center!important}
   #desk .apps .app-ic.tilebox svg{width:calc(19px * var(--sy-ts,1))!important;height:calc(19px * var(--sy-ts,1))!important;stroke-width:1.7!important}
@@ -4741,6 +4746,25 @@ const tovApply = root => {
 };
 tovApply(document.body);
 new MutationObserver(ms => ms.forEach(m => m.addedNodes.forEach(x => tovApply(x)))).observe(document.body, { childList: true, subtree: true });
+/* ---------- 클릭 효과음 (작게~중간 · 부드러운 소리, 파일 없이 브라우저에서 만들어요) ---------- */
+const SFX_VOL = 0.22;   // 효과음 크기 (0 = 끄기 · 0.4 정도면 꽤 커요)
+const SFX = (() => {
+  let ac = null;
+  const ctx = () => { if (!ac) { const A = window.AudioContext || window.webkitAudioContext; if (!A) return null; try { ac = new A(); } catch (e) { return null; } } if (ac.state === 'suspended') ac.resume(); return ac; };
+  const tone = (f1, f2, dur, g, delay = 0) => { if (!SFX_VOL) return; const a = ctx(); if (!a) return; const t = a.currentTime + delay, o = a.createOscillator(), v = a.createGain();
+    o.type = 'sine'; o.frequency.setValueAtTime(f1, t); o.frequency.exponentialRampToValueAtTime(f2, t + dur);
+    v.gain.setValueAtTime(0.0001, t); v.gain.exponentialRampToValueAtTime(g * SFX_VOL, t + .008); v.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(v); v.connect(a.destination); o.start(t); o.stop(t + dur + .03); };
+  return {
+    tap: () => tone(1250, 950, .06, .45),                                   // 버튼 · 글자 : 톡
+    open: () => { tone(880, 880, .12, .42); tone(1318, 1318, .18, .32, .07); },   // 앱 열기 : 띵-똥
+    close: () => tone(740, 440, .1, .38)                                    // 닫기 : 툭
+  };
+})();
+document.addEventListener('click', e => { try { const t = e.target; if (!t || !t.closest) return;
+  if (t.closest('.app-tile,[data-open]')) SFX.open();
+  else if (t.closest('[data-a=close],.fx,.cc,.sye-tb [data-tb=x]')) SFX.close();
+  else if (t.closest('button,a,[role=button],.sye-t,[data-ci],[data-slot],label')) SFX.tap(); } catch (err) {} }, true);
 /* =========================================================
    ✎ EDIT (나만 보이는 편집) — 주소 끝에 ?owner 를 한 번 붙여서 들어오면 이 브라우저에선 계속 보여요 (?guest 로 끄기)
    · 사진 자리를 누르면 사진 넣기 / 바꾸기 / 빼기 (이 브라우저에 저장)
@@ -4881,7 +4905,7 @@ html.sye-editing [data-slot]{position:relative}
   const fP = el('<input type="file" accept="image/*" hidden>'), fB = el('<input type="file" accept=".json,application/json" hidden>');
   const pop = el('<div class="sye-pop"></div>');
   const own = el('<button class="sye-own" type="button">✎ EDIT</button>');
-  const bar = el(`<div class="sye-ebar"><span class="sye-st"></span><span class="sye-tip">글자 누르면 고치기 · 사진 자리에 누르기 / 끌어다 놓기 / 붙여넣기</span><button data-e="undo" title="되돌리기 (Ctrl+Z)">↶ 되돌리기</button><button data-e="text">전체 글 목록</button><button data-e="publish" class="pub">홈페이지에 저장</button><button data-e="export">JS 내보내기</button><button data-e="backup">백업 저장</button><button data-e="restore">백업 불러오기</button><button data-e="end" class="end">끝내기</button></div>`);
+  const bar = el(`<div class="sye-ebar"><span class="sye-st"></span><span class="sye-tip">글자 누르면 고치기 · 사진 자리에 누르기 / 끌어다 놓기 / 붙여넣기</span><button data-e="undo" title="되돌리기 (Ctrl+Z)">↶ 되돌리기</button><button data-e="publish" class="pub">홈페이지에 저장</button><button data-e="export">JS 내보내기</button><button data-e="backup">백업 저장</button><button data-e="restore">백업 불러오기</button><button data-e="end" class="end">끝내기</button></div>`);
   let tgt = null;
   const setEdit = on => { SYE_ON = on; document.documentElement.classList.toggle('sye-editing', on); try { localStorage.setItem('syEdit', on ? '1' : '0'); } catch (e) {} if (!on) { pop.classList.remove('on'); pane.classList.remove('on'); } };
   const pick = k => { tgt = k; fP.value = ''; fP.click(); };
@@ -5201,6 +5225,14 @@ html:not(.sye-editing) .cx-add,html:not(.sye-editing) .cd-tags .ed{display:none!
 .sye-fm .ff button{height:40px;padding:0 16px;border-radius:10px;border:1px solid #DCE6E2;background:#fff;font:800 13px 'IBM Plex Sans KR',sans-serif;cursor:pointer;color:#1E2A27}
 .sye-fm .ff .sv{flex:1;border:0;background:linear-gradient(160deg,#8ADBB9,#4DB88E);color:#fff}
 .sye-fm .ff .del{color:#D9506A}
+.sye-fm details.more{margin-top:16px;border-top:1px solid #E1EAE6;padding-top:4px}
+.sye-fm details.more summary{cursor:pointer;list-style:none;font:800 12.5px 'IBM Plex Sans KR',sans-serif;color:#3FAE84;padding:10px 0 4px}
+.sye-fm details.more summary::before{content:'＋ ';}.sye-fm details.more[open] summary::before{content:'－ ';}
+.sye-fm .re-r{display:flex;gap:6px;margin-top:6px;align-items:flex-start}
+.sye-fm .re-r input,.sye-fm .re-r textarea{flex:1;min-width:0}
+.sye-fm .re-x{width:32px;height:34px;flex:none;border:1px solid #DCE6E2;border-radius:8px;background:#fff;color:#D9506A;font:700 15px/1 sans-serif;cursor:pointer}
+.sye-fm .re-add{margin-top:7px;height:30px;padding:0 12px;border:1px dashed #6CCBA6;border-radius:8px;background:#fff;color:#3FAE84;font:700 12px 'IBM Plex Sans KR',sans-serif;cursor:pointer}
+.sye-fm label.pic input{padding:7px;background:#F4FAF7;border-style:dashed}
 `;
   const fm = el(`<div class="sye-fm"><form><div class="fh"><span class="ft"></span><button type="button" class="fx">✕</button></div><div class="fb"></div><div class="ff"></div></form></div>`);
   document.body.appendChild(fm);
@@ -5222,23 +5254,56 @@ html:not(.sye-editing) .cx-add,html:not(.sye-editing) .cd-tags .ed{display:none!
     const memberNames = ['', ...(world.member || []).map(m => m.name)];
     fm.querySelector('.ft').textContent = `${i == null ? '새로 추가' : '수정'} · ${world.name || w} ${isP ? '페어' : t === 'au' ? 'AU' : '캐릭터'}`;
     let h = '';
+    const rowsOf = rs => (rs || []).map(r => Array.isArray(r) ? r.join(' : ') : r).join('\n');
+    const pic = (label, name, has) => `<label class="pic"><span>${label}</span><input type="file" name="${name}" accept="image/*"><small>${has ? '바꿀 때만 골라요 · ' : ''}여기서 고르면 저장할 때 같이 들어가요 (나중에 사진 자리를 눌러서 바꿔도 돼요)</small></label>`;
     if (!isP) { const P = o.profile || {};
-      h += `<div class="sec">기본</div>` + fld('이름 *', 'name', o.name) + fld('영어 이름 (작은 글씨)', 'en', o.en) + fld('소속 · 학부 (카드 위 작은 글씨)', 'dept', o.dept) + fld('한 줄 소개', 'quote', o.quote) + fld('태그', 'tags', (o.tags || []).join(', '), 'text', '쉼표로 구분 · 예) #태그, #태그')
-        + fld('사진 옆 작은 칸 4개', 'spec', (o.spec || [['AGE', ''], ['HEIGHT', ''], ['BIRTH', ''], ['LOVER', '']]).map(r => r.join(' : ')).join('\n'), 'area', '한 줄에 하나씩 · 항목 : 내용', 4)
-        + `<div class="sec">프로필</div>` + fld('기본 정보', 'rows', (P.rows || [['좋아하는 것', ''], ['싫어하는 것', ''], ['특징', '']]).map(r => r.join(' : ')).join('\n'), 'area', '한 줄에 하나씩 · 항목 : 내용', 4)
+      h += `<div class="sec">기본 (이것만 적어도 돼요)</div>` + fld('이름 *', 'name', o.name) + fld('영어 이름', 'en', o.en) + fld('소속 · 학부', 'dept', o.dept, 'text', '카드 위 작은 글씨') + fld('한 줄 소개', 'quote', o.quote) + fld('태그', 'tags', (o.tags || []).join(', '), 'text', '쉼표로 나눠요 · 예) #다정, #고양이상')
+        + pic(o.card ? '카드 사진 바꾸기' : '카드 사진', 'pic', !!o.card)
+        + `<details class="more"><summary>더 적기 · 프로필 · 프롬프트 · 노래 (안 적어도 돼요)</summary>`
+        + fld('사진 옆 작은 칸', 'spec', rowsOf(o.spec || [['AGE', ''], ['HEIGHT', ''], ['BIRTH', ''], ['LOVER', '']]), 'area', '', 4)
+        + fld('프로필 표', 'rows', rowsOf(P.rows || [['좋아하는 것', ''], ['싫어하는 것', ''], ['특징', '']]), 'area', '', 4)
         + fld('성격', 'personality', P.personality, 'area', '', 3) + fld('메모', 'memo', P.memo, 'area', '', 2)
-        + `<div class="sec">PROMPT · MUSIC</div>` + fld('프롬프트', 'prompts', (o.prompts || []).map(p => `${p.title || ''} | ${p.text || ''}`).join('\n'), 'area', '한 줄에 하나씩 · 제목 | 프롬프트', 4)
-        + fld('노래', 'music', (o.music || []).map(m => `${m.title || ''} | ${m.artist || ''} | ${m.src || ''}`).join('\n'), 'area', '한 줄에 하나씩 · 제목 | 가수 | mp3 주소(없으면 비워요)', 3)
-        + fld('캐릭터 송 (♪ 버튼)', 'theme', (o.theme && o.theme.src) || '', 'text', 'mp3 주소 · 없으면 비워요')
-        + `<div class="sec">TALK (리뷰)</div>` + fld('리뷰', 'talk', (o.talk || []).map(x => [x.name, x.relation, x.call, x.text, x.likes].map(v => v == null ? '' : v).join(' | ') + ((x.replies || []).length ? ' | ' + x.replies.map(r => r.join(': ')).join(' // ') : '')).join('\n'), 'area', '한 줄에 하나씩 · 이름 | 관계 | 호칭 | 내용 | 좋아요 수 | 답글(이름: 내용 // 이름: 내용)', 3);
+        + fld('프롬프트', 'prompts', (o.prompts || []).map(p => `${p.title || ''} | ${p.text || ''}`).join('\n'), 'area', '', 4)
+        + fld('노래', 'music', (o.music || []).map(m => `${m.title || ''} | ${m.artist || ''} | ${m.src || ''}`).join('\n'), 'area', '', 3)
+        + fld('캐릭터 송 (♪ 버튼) mp3 주소', 'theme', (o.theme && o.theme.src) || '', 'text', '없으면 비워요')
+        + `</details><details class="more"><summary>리뷰 (TALK) 적기</summary>`
+        + fld('리뷰', 'talk', (o.talk || []).map(x => [x.name, x.relation, x.call, x.text, x.likes].map(v => v == null ? '' : v).join(' | ') + ((x.replies || []).length ? ' | ' + x.replies.map(r => r.join(': ')).join(' // ') : '')).join('\n'), 'area', '한 줄에 하나씩 · 이름 | 관계 | 호칭 | 내용 | 좋아요 수 | 답글(이름: 내용 // 이름: 내용)', 3)
+        + `</details>`;
     } else { const A = o.a || {}, B = o.b || {};
-      h += `<div class="sec">페어</div>` + fld('페어 이름 *', 'name', o.name) + fld('영어 이름', 'en', o.en) + fld('뱃지 (왼쪽 위 · 예: MAIN)', 'badge', o.badge) + fld('태그 (작은 글씨)', 'tags', o.tags, 'text', '예) 태그 X 태그')
-        + fld('한 줄 소개', 'quote', o.quote) + fld('상태', 'status', o.status, 'text', '예) BONDED, ING, 썸, 연애 중') + fld('시작일', 'since', o.since, 'date', 'D+ 날짜가 매일 자동으로 계산돼요') + fld('다음 기념일 (D+숫자)', 'next', o.next || 100, 'number') + fld('메모', 'memo', o.memo, 'area', '', 3)
-        + `<div class="sec">캐릭터 A</div>` + fld('이름', 'aname', A.name) + fld('작은 글씨', 'asub', A.sub) + fld('MEMBER 와 연결', 'alink', A.link || '', 'select', 'MEMBER 캐릭터를 고르면 그 캐릭터 사진 · 소개를 그대로 가져와요', memberNames)
-        + `<div class="sec">캐릭터 B</div>` + fld('이름', 'bname', B.name) + fld('작은 글씨', 'bsub', B.sub) + fld('MEMBER 와 연결', 'blink', B.link || '', 'select', '', memberNames);
+      h += `<div class="sec">기본 (이것만 적어도 돼요)</div>` + fld('페어 이름 *', 'name', o.name)
+        + fld('캐릭터 A', 'alink', A.link || '', 'select', 'MEMBER 캐릭터를 고르면 사진 · 소개를 그대로 가져와요', memberNames) + fld('캐릭터 A 이름 (MEMBER 에 없으면)', 'aname', A.link ? '' : A.name)
+        + fld('캐릭터 B', 'blink', B.link || '', 'select', '', memberNames) + fld('캐릭터 B 이름 (MEMBER 에 없으면)', 'bname', B.link ? '' : B.name)
+        + fld('시작일', 'since', o.since, 'date', 'D+ 날짜가 매일 자동으로 계산돼요')
+        + pic(o.photo ? '페어 사진 바꾸기' : '페어 사진 (가로 16:9)', 'pic', !!o.photo)
+        + `<details class="more"><summary>더 적기 (안 적어도 돼요)</summary>`
+        + fld('영어 이름', 'en', o.en) + fld('한 줄 소개', 'quote', o.quote) + fld('뱃지 (왼쪽 위 · 예: MAIN)', 'badge', o.badge) + fld('태그 (작은 글씨)', 'tags', o.tags, 'text', '예) 태그 X 태그')
+        + fld('상태', 'status', o.status, 'text', '예) BONDED, ING, 썸, 연애 중') + fld('다음 기념일 (D+숫자)', 'next', o.next || 100, 'number') + fld('메모', 'memo', o.memo, 'area', '', 3)
+        + fld('캐릭터 A 작은 글씨', 'asub', A.sub) + fld('캐릭터 B 작은 글씨', 'bsub', B.sub)
+        + `</details>`;
     }
-    h += `<div class="note">사진은 저장한 뒤 ✎ EDIT 상태에서 화면의 사진 자리를 눌러서 넣어요.<br>다른 기기 · 다른 사람에게도 보이게 하려면 아래 바의 <b>홈페이지에 저장</b>.</div>`;
+    h += `<div class="note">다 적었으면 <b>저장</b> → 모두에게 보이게 하려면 아래 바의 <b>홈페이지에 저장</b>.</div>`;
     FB.innerHTML = h; FB.scrollTop = 0;
+    const rowEd = (name, cols, sep) => {
+      const ta = F.elements[name]; if (!ta) return; ta.style.display = 'none';
+      const box = document.createElement('div'); box.className = 'rowed'; ta.after(box);
+      const plus = document.createElement('button'); plus.type = 'button'; plus.className = 're-add'; plus.textContent = '+ 한 줄 더'; box.append(plus);
+      const sync = () => { ta.value = [...box.querySelectorAll('.re-r')].map(r => [...r.querySelectorAll('input,textarea')].map(x => x.value.replace(/\s*\n\s*/g, ' ').trim()))
+        .filter(v => v.some(Boolean)).map(v => v.join(sep)).join('\n'); };
+      const add = vals => { const r = document.createElement('div'); r.className = 're-r';
+        r.innerHTML = cols.map(c => c.area ? `<textarea rows="2" placeholder="${E(c.p)}"></textarea>` : `<input placeholder="${E(c.p)}">`).join('') + '<button type="button" class="re-x" title="이 줄 지우기">×</button>';
+        [...r.querySelectorAll('input,textarea')].forEach((x, j) => { x.value = vals[j] || ''; }); box.insertBefore(r, plus); };
+      const split = l => sep.trim() === ':' ? kv(l) : (() => { const b = bars(l); return cols.length === 2 ? [b[0], b.slice(1).join(' | ')] : b; })();
+      const ls = ta.value.split('\n').filter(l => l.trim()); (ls.length ? ls : ['']).forEach(l => add(split(l)));
+      box.addEventListener('input', sync);
+      box.addEventListener('click', e => { if (e.target === plus) { add([]); sync(); box.querySelector('.re-r:last-of-type input,.re-r:last-of-type textarea')?.focus(); } else if (e.target.classList.contains('re-x')) { e.target.parentElement.remove(); sync(); } });
+      sync();
+    };
+    if (!isP) {
+      rowEd('spec', [{ p: '항목 (예: AGE)' }, { p: '내용' }], ' : ');
+      rowEd('rows', [{ p: '항목 (예: 좋아하는 것)' }, { p: '내용' }], ' : ');
+      rowEd('prompts', [{ p: '제목' }, { p: '프롬프트', area: true }], ' | ');
+      rowEd('music', [{ p: '노래 제목' }, { p: '가수' }, { p: 'mp3 주소 (없으면 비워요)' }], ' | ');
+    }
     FF.innerHTML = `<button type="submit" class="sv">저장</button>${i != null ? '<button type="button" class="del">삭제</button>' : ''}<button type="button" class="cc">취소</button>`;
     FF.querySelector('.cc').onclick = fClose;
     const del = FF.querySelector('.del'); if (del) { let armed = false; del.onclick = () => { if (!armed) { armed = true; del.textContent = '한 번 더 누르면 삭제'; return; } fDelete(w, t, i); }; }
@@ -5267,12 +5332,14 @@ html:not(.sye-editing) .cx-add,html:not(.sye-editing) .cd-tags .ed{display:none!
       if (!('card' in o)) o.card = ''; if (!('photo' in o)) o.photo = ''; if (!o.gallery) o.gallery = ['', '', ''];
     } else {
       ['name', 'en', 'badge', 'tags', 'quote', 'status', 'since', 'memo'].forEach(k => { o[k] = v(k); }); o.next = +v('next') || 100;
-      o.a = Object.assign({ avatar: '' }, o.a, { name: v('aname') || v('alink'), sub: v('asub'), link: v('alink') });
-      o.b = Object.assign({ avatar: '' }, o.b, { name: v('bname') || v('blink'), sub: v('bsub'), link: v('blink') });
+      o.a = Object.assign({ avatar: '' }, o.a, { name: v('alink') || v('aname'), sub: v('asub'), link: v('alink') });
+      o.b = Object.assign({ avatar: '' }, o.b, { name: v('blink') || v('bname'), sub: v('bsub'), link: v('blink') });
       if (!('photo' in o)) o.photo = ''; if (!('back' in o)) o.back = '';
     }
     if (i == null) list.push(o); else list[i] = o;
-    commit(i == null ? '추가했어요 · 사진은 사진 자리를 눌러 넣어요' : '저장했어요', w);
+    const msg = i == null ? '추가했어요' : '저장했어요', file = F.elements.pic && F.elements.pic.files && F.elements.pic.files[0];
+    if (file && /^image\//.test(file.type)) { const idx = i == null ? list.length - 1 : i; idbPut(`characters.worlds.${w}.${t}.${idx}.${isP ? 'photo' : 'card'}`, file).then(() => commit(msg + ' · 사진도 넣었어요', w), () => commit(msg, w)); }
+    else commit(msg, w);
   });
   addEventListener('sye-char', e => fOpen(e.detail));
   document.addEventListener('click', e => { const b = e.target.closest('.cd-tags .ed'); if (!b || !charSel) return; e.preventDefault(); e.stopPropagation(); fOpen({ w: charSel.w, t: charSel.t, i: charSel.i }); }, true);

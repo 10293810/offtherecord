@@ -10,7 +10,7 @@
 
 const SITE = {
   /* ---------- 기본 정보 ---------- */
-  brand: { name: 'SETLIST-01', sub: 'MOON STUDIO', start: 'P2U', home: 'SYRINGE-01', homeSub: 'ARCH CLINIC' },   // home = 메인 화면 왼쪽 위 로고 글자
+  brand: { name: 'SETLIST-01', sub: 'MOON STUDIO', start: 'P2U', home: 'UNRELEASED-01', homeSub: 'MOON STUDIO' },   // home = 메인 화면 왼쪽 위 로고 글자
   // 큰 제목: before + [마이크 모양 I] + after  →  SETL🎤ST
   title: { before: 'SETL', after: 'ST', tilt: true },   // tilt: 가운데 I(마이크)가 가끔 기울어지는 효과 (끄려면 false)
   pair: {
@@ -23,14 +23,14 @@ const SITE = {
     nextGoal: 200,                   // 다음 기념일 D+
     passNo: 'No. PU-0424',
     status: 'BONDED',
-    barcode: 'A-CLASS GUIDE × S-CLASS SENTINEL',
+    barcode: 'FRONT ROW × LEAD VOCAL',
     image: ''                        // 메인 오른쪽 카드 커플 이미지
   },
   // 오른쪽 BACKSTAGE PASS 카드에서 ‹ › 로 넘겨보는 페어 목록 (원하는 만큼 추가)
   //  - image: 앞면 이미지 / imageBack: 사진을 눌러 뒤집었을 때 나오는 뒷면 이미지 (비우면 글자 카드)
   //  - nextGoal 을 비우면 다음 100일 단위가 자동으로 잡혀요
   pairs: [
-    { a: 'PURE', b: 'UXI', since: '2026-04-24', passNo: 'No. PU-0424', status: 'BONDED', barcode: 'A-CLASS GUIDE × S-CLASS SENTINEL', image: '', imageBack: '', note: '맨 앞줄 오른쪽, 앵콜 마지막 소절' },
+    { a: 'PURE', b: 'UXI', since: '2026-04-24', passNo: 'No. PU-0424', status: 'BONDED', barcode: 'FRONT ROW × LEAD VOCAL', image: '', imageBack: '', note: '맨 앞줄 오른쪽, 앵콜 마지막 소절' },
     { a: 'PAIR', b: 'TWO', since: '2026-02-14', passNo: 'No. PT-0214', status: 'ON STAGE', barcode: 'GUITAR × DRUM', image: '', imageBack: '', note: '두 번째 페어 메모를 적어주세요' },
     { a: 'PAIR', b: 'THREE', since: '2025-12-25', passNo: 'No. PT-1225', status: 'ENCORE', barcode: 'BASS × KEYBOARD', image: '', imageBack: '', note: '세 번째 페어 메모를 적어주세요' }
   ],
@@ -45,21 +45,21 @@ const SITE = {
     admit: 'ADMIT ONE'
   },
   studio: 'STUDIO · ON AIR 24H',
-  online: 'PROTOCOL ONLINE',
+  online: 'STUDIO ONLINE',
   residence: 'MOON STUDIO · BACKSTAGE',
-  venue: 'ARCH MEDICAL CENTER',
+  venue: 'MOON STUDIO · UNRELEASED',
   passLabel: 'PAIR INFORMATION',
   footer: 'MOON STUDIO',
   marquee: 'OFF THE RECORD ✦ MOON LIVE HOUSE ✦ 月とナイフ LIVE TOUR 2026 ✦ HANA × REN ✦ LEAVING BEFORE THE ENCORE IS NOT ALLOWED ✦',
-  credit: { top: '© ↳ PpLE', bottom: 'Syringe.' },
+  credit: { top: '© ↳ PpLE', bottom: 'Unreleased.' },   // bottom 은 브라우저 탭 제목으로도 쓰여요
 
   /* ---------- 메인 화면 위 배너 (SYRINGE) ---------- */
   // 페어 이름(PURE × UXI)과 D+ 숫자는 위 pairs 에서 자동으로 가져와요 (‹ › 로 넘기면 같이 바뀌어요)
   clinic: {
-    kicker: 'ARCH CLINIC · RESIDENCE',                            // 큰 글씨 위 한 줄
+    kicker: 'MOON STUDIO · B-SIDE',                            // 큰 글씨 위 한 줄
     title: 'UNRELEASED',                                          // 메인 큰 글씨 (길면 자동으로 작아져요)
-    chips: ['LOVE DISORDER CLINIC +', '5.0 mL · STERILE // OPEN 24H'],   // 페어 이름 옆 알약들
-    tab: 'INFIRMARY · OPEN 24H',                                  // 배너 오른쪽 위 알약 (옆 날짜는 오늘 날짜로 자동)
+    chips: ['NOT FOR RELEASE +', 'TRACK 00 · DEMO // REC 24H'],   // 페어 이름 옆 알약들
+    tab: 'RECORDING · ON AIR 24H',                                  // 배너 오른쪽 위 알약 (옆 날짜는 오늘 날짜로 자동)
     nav: 'LUVINFO'                                                // 위 메뉴 네 번째 글자 (누르면 D-DAY)
   },
 
@@ -81,7 +81,7 @@ const SITE = {
     buttons: ['LOADING', 'ENTER', 'ADMITTED'],
     // 입장 화면 (자물쇠) 글자
     entry: { brand: 'UNRELEASED', sub: 'moon studio', room: 'ROOM 0101', gate: ['STAND BY', 'OPEN', 'OPENING'], load: ['UNLOCKING ROOM 0101', 'READY — 자물쇠를 눌러 주세요'] },
-    clinic: { nav: ['HOME', 'CATEGORY', 'NOTICE', 'LUVINFO'], online: 'NOW ADMITTING', status: ['READING CHART', 'CHECKING PULSE', 'SYMPTOM: LOVE', 'NO CURE FOUND', 'ADMISSION READY'] },   // 입장 화면 위 메뉴 · 알약 · 바뀌는 글자
+    clinic: { nav: ['HOME', 'CATEGORY', 'NOTICE'], online: 'NOW RECORDING', status: ['TUNING UP', 'SOUNDCHECK', 'TRACK: UNRELEASED', 'NO FINAL MIX', 'READY TO PLAY'] },   // 입장 화면 위 메뉴 · 알약 · 바뀌는 글자
     seconds: 2.6                                                 // 열쇠가 다 차오르는 시간(초)
   },
 
@@ -162,18 +162,18 @@ const SITE = {
     { id: 'library', name: 'Library', type: 'list', rows: [['항목 1', '11.15'], ['항목 2', '11.12'], ['항목 3', '11.09']] },
     { id: 'stats', name: 'Stats', type: 'list', rows: [['항목 1', '11.15'], ['항목 2', '11.12'], ['항목 3', '11.09']] },
     { id: 'scan', name: 'Scan', type: 'list', rows: [['항목 1', '11.15'], ['항목 2', '11.12'], ['항목 3', '11.09']] },
-    { id: 'pharmacy', name: 'Pharmacy', type: 'list', rows: [['항목 1', '11.15'], ['항목 2', '11.12'], ['항목 3', '11.09']] },
-    { id: 'vitals', name: 'Vitals', type: 'list', rows: [['항목 1', '11.15'], ['항목 2', '11.12'], ['항목 3', '11.09']] },
+    { id: 'pharmacy', name: 'Lyrics', icon: 'page', type: 'list', rows: [['항목 1', '11.15'], ['항목 2', '11.12'], ['항목 3', '11.09']] },
+    { id: 'vitals', name: 'Tuner', type: 'list', rows: [['항목 1', '11.15'], ['항목 2', '11.12'], ['항목 3', '11.09']] },
     // ↓ 10×6 (60칸) 으로 늘어난 10칸 — 이름·내용 자유롭게 바꿔도 돼요
     { id: 'clock', name: 'Clock', type: 'list', rows: [['항목 1', '11.21'], ['항목 2', '11.18'], ['항목 3', '11.15']] },
-    { id: 'lab', name: 'Lab', type: 'list', rows: [['항목 1', '11.21'], ['항목 2', '11.18'], ['항목 3', '11.15']] },
-    { id: 'ward', name: 'Ward', type: 'list', rows: [['항목 1', '11.21'], ['항목 2', '11.18'], ['항목 3', '11.15']] },
-    { id: 'chart', name: 'Chart', type: 'list', rows: [['항목 1', '11.21'], ['항목 2', '11.18'], ['항목 3', '11.15']] },
+    { id: 'lab', name: 'Studio', icon: 'mic', type: 'list', rows: [['항목 1', '11.21'], ['항목 2', '11.18'], ['항목 3', '11.15']] },
+    { id: 'ward', name: 'Green Room', icon: 'sofa', type: 'list', rows: [['항목 1', '11.21'], ['항목 2', '11.18'], ['항목 3', '11.15']] },
+    { id: 'chart', name: 'Score', icon: 'note', type: 'list', rows: [['항목 1', '11.21'], ['항목 2', '11.18'], ['항목 3', '11.15']] },
     { id: 'pmonitor', name: 'Monitor', type: 'list', rows: [['항목 1', '11.21'], ['항목 2', '11.18'], ['항목 3', '11.15']] },
-    { id: 'exam', name: 'Exam', type: 'list', rows: [['항목 1', '11.21'], ['항목 2', '11.18'], ['항목 3', '11.15']] },
-    { id: 'thermo', name: 'Thermo', type: 'list', rows: [['항목 1', '11.21'], ['항목 2', '11.18'], ['항목 3', '11.15']] },
-    { id: 'vaccine', name: 'Vaccine', type: 'list', rows: [['항목 1', '11.21'], ['항목 2', '11.18'], ['항목 3', '11.15']] },
-    { id: 'firstaid', name: 'First Aid', type: 'list', rows: [['항목 1', '11.21'], ['항목 2', '11.18'], ['항목 3', '11.15']] },
+    { id: 'exam', name: 'Soundcheck', icon: 'headphones', type: 'list', rows: [['항목 1', '11.21'], ['항목 2', '11.18'], ['항목 3', '11.15']] },
+    { id: 'thermo', name: 'Mixer', icon: 'sliders', type: 'list', rows: [['항목 1', '11.21'], ['항목 2', '11.18'], ['항목 3', '11.15']] },
+    { id: 'vaccine', name: 'Demo', icon: 'disc', type: 'list', rows: [['항목 1', '11.21'], ['항목 2', '11.18'], ['항목 3', '11.15']] },
+    { id: 'firstaid', name: 'Merch', icon: 'shirt', type: 'list', rows: [['항목 1', '11.21'], ['항목 2', '11.18'], ['항목 3', '11.15']] },
     { id: 'ticket', name: 'Ticket', type: 'list', rows: [['항목 1', '11.21'], ['항목 2', '11.18'], ['항목 3', '11.15']] }
   ],
 
@@ -234,9 +234,9 @@ const SITE = {
 
   // 설계도 아래 SPEC SHEET 카드 — {d} = 자동 D+ 숫자, {today} = 오늘 날짜
   spec: {
-    sub: 'DRAWING Nº SY-01 · ARCH CLINIC',
+    sub: 'TRACK Nº UR-01 · MOON STUDIO',
     title: 'SPEC SHEET',
-    cells: [['GUIDE', 'PURE'], ['SENTINEL', 'UXI'], ['SINCE P2U', 'D+{d}'], ['TODAY', '{today}'], ['DRAWN BY', '↳ PpLE'], ['SCALE', '1 : 1']]
+    cells: [['FRONT ROW', 'PURE'], ['LEAD VOCAL', 'UXI'], ['SINCE P2U', 'D+{d}'], ['TODAY', '{today}'], ['RECORDED BY', '↳ PpLE'], ['TAKE', '01']]
   },
 
   /* ---------- 음악 (Player · 하단 BGM) ---------- */
