@@ -4503,7 +4503,6 @@ function syLayout() {
   #desk .taskbar .credit b{font:800 8px var(--syf)!important;letter-spacing:0!important;color:#1E2A27!important;-webkit-text-fill-color:#1E2A27!important;background:none!important}
   #desk .taskbar .credit b::before{content:none!important}
 }
-html:not(.sy-owner) .sy-write,html:not(.sy-owner) #desk .top-r .sq.sy-write{display:none!important}
 @media (max-width:720px),(max-aspect-ratio:4/5) and (max-width:1100px){ .sy-only,#desk .top-r .sq.sy-only:not(.sy-write){display:none!important} .apps .app-tile:nth-child(n+33){display:none!important} .apps-panel .panel-tab .sy-cnt{display:none} }
 `;
   document.head.appendChild(st);
@@ -4556,7 +4555,6 @@ html:not(.sy-owner) .sy-write,html:not(.sy-owner) #desk .top-r .sq.sy-write{disp
   #desk .top-r{order:2;margin-left:auto!important;height:62px!important;gap:6px!important}
   #desk .top-r .pill,#desk .top-r .clock{display:none!important}
   #desk .top-r .sq[data-nav=launcher],#desk .top-r .sq.sy-write{display:grid!important;place-items:center!important;width:38px!important;height:38px!important;border-radius:12px!important;background:#fff!important;border:1px solid #E1EAE6!important;color:#4A5753!important;box-shadow:none!important}
-  html:not(.sy-owner) #desk .top-r .sq.sy-write{display:none!important}
   #desk .top-r .sq svg{width:15px!important;height:15px!important}
   /* 내용 순서 : 배너 → 아이콘 → D-DAY 카드 */
   #desk .stage{top:62px!important;padding:14px 12px 104px!important;gap:16px!important}
@@ -5155,7 +5153,7 @@ html.sye-editing .sye-t.on{background:rgba(127,214,176,.4);outline:2px solid #3F
   const wClose = () => wf.classList.remove('on');
   wf.querySelectorAll('.fx,.fx2').forEach(b => b.onclick = wClose);
   wf.addEventListener('click', e => { if (e.target === wf) wClose(); });
-  document.querySelector('.sy-write')?.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); wForm.reset(); wf.classList.add('on'); setTimeout(() => wForm.elements.title.focus(), 50); }, true);
+  document.querySelector('.sy-write:not(.cms-admin)')?.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); wForm.reset(); wf.classList.add('on'); setTimeout(() => wForm.elements.title.focus(), 50); }, true);
   const draftNow = () => { let d = null; try { d = JSON.parse(localStorage.getItem('sye-draft') || 'null'); } catch (e) {} return Object.assign(clone(RAW), d || {}); };
   const saveDraft = d => { localStorage.setItem('sye-draft', JSON.stringify(d)); sessionStorage.setItem('sye-fast', '1'); };
   wForm.addEventListener('submit', e => {

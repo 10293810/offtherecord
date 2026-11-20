@@ -53,6 +53,22 @@
         "READY — 자물쇠를 눌러 주세요"
       ]
     },
+    "clinic": {
+      "nav": [
+        "HOME",
+        "CATEGORY",
+        "NOTICE",
+        "LUVINFO"
+      ],
+      "online": "NOW ADMITTING",
+      "status": [
+        "READING CHART",
+        "CHECKING PULSE",
+        "SYMPTOM: LOVE",
+        "NO CURE FOUND",
+        "ADMISSION READY"
+      ]
+    },
     "seconds": 2.6
   }
 }

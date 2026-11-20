@@ -82,6 +82,7 @@ const SITE = {
     buttons: ['LOADING', 'ENTER', 'ADMITTED'],
     // 입장 화면 (자물쇠) 글자
     entry: { brand: 'UNRELEASED', sub: 'moon studio', room: 'ROOM 0101', gate: ['STAND BY', 'OPEN', 'OPENING'], load: ['UNLOCKING ROOM 0101', 'READY — 자물쇠를 눌러 주세요'] },
+    clinic: { nav: ['HOME', 'CATEGORY', 'NOTICE', 'LUVINFO'], online: 'NOW ADMITTING', status: ['READING CHART', 'CHECKING PULSE', 'SYMPTOM: LOVE', 'NO CURE FOUND', 'ADMISSION READY'] },   // 입장 화면 위 메뉴 · 알약 · 바뀌는 글자
     seconds: 2.6                                                 // 열쇠가 다 차오르는 시간(초)
   },
 

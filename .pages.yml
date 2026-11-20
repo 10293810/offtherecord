@@ -5,6 +5,154 @@ media:
   input: media
   output: /offtherecord/media
 content:
+  - name: design
+    label: 디자인 · 색 · 글꼴 · 고정 글자
+    type: file
+    path: content/design.json
+    format: json
+    fields:
+      - name: colors
+        label: 색 (비우면 원래 색)
+        type: object
+        fields:
+          - name: bg
+            label: 배경
+            type: string
+            description: "#35C4D8 처럼 적어요"
+          - name: card
+            label: 카드
+            type: string
+            description: "#35C4D8 처럼 적어요"
+          - name: soft
+            label: 연한 칸 1
+            type: string
+            description: "#35C4D8 처럼 적어요"
+          - name: soft2
+            label: 연한 칸 2
+            type: string
+            description: "#35C4D8 처럼 적어요"
+          - name: line
+            label: 선
+            type: string
+            description: "#35C4D8 처럼 적어요"
+          - name: ink
+            label: 글자 (진하게)
+            type: string
+            description: "#35C4D8 처럼 적어요"
+          - name: ink2
+            label: 글자 (중간)
+            type: string
+            description: "#35C4D8 처럼 적어요"
+          - name: ink3
+            label: 글자 (연하게)
+            type: string
+            description: "#35C4D8 처럼 적어요"
+          - name: blue
+            label: 포인트 1
+            type: string
+            description: "#35C4D8 처럼 적어요"
+          - name: blue2
+            label: 포인트 1 진하게
+            type: string
+            description: "#35C4D8 처럼 적어요"
+          - name: navy
+            label: 포인트 2
+            type: string
+            description: "#35C4D8 처럼 적어요"
+          - name: navy2
+            label: 포인트 2 진하게
+            type: string
+            description: "#35C4D8 처럼 적어요"
+          - name: mint
+            label: 민트
+            type: string
+            description: "#35C4D8 처럼 적어요"
+          - name: mint2
+            label: 민트 진하게
+            type: string
+            description: "#35C4D8 처럼 적어요"
+          - name: red
+            label: 빨강
+            type: string
+            description: "#35C4D8 처럼 적어요"
+          - name: gold
+            label: 금색
+            type: string
+            description: "#35C4D8 처럼 적어요"
+      - name: fonts
+        label: 글꼴 (비우면 원래 글꼴)
+        type: object
+        fields:
+          - name: disp
+            label: 큰 제목 글꼴
+            type: select
+            options:
+              values:
+                - Pretendard
+                - Outfit
+                - Space Grotesk
+                - Inter
+                - IBM Plex Sans KR
+                - Noto Sans JP
+                - Archivo Black
+                - Noto Serif Display
+                - Big Shoulders Display
+                - Barlow Condensed
+                - DM Mono
+          - name: mono
+            label: 작은 영문 글꼴
+            type: select
+            options:
+              values:
+                - Pretendard
+                - Outfit
+                - Space Grotesk
+                - Inter
+                - IBM Plex Sans KR
+                - Noto Sans JP
+                - Archivo Black
+                - Noto Serif Display
+                - Big Shoulders Display
+                - Barlow Condensed
+                - DM Mono
+          - name: sans
+            label: 본문 글꼴
+            type: select
+            options:
+              values:
+                - Pretendard
+                - Outfit
+                - Space Grotesk
+                - Inter
+                - IBM Plex Sans KR
+                - Noto Sans JP
+                - Archivo Black
+                - Noto Serif Display
+                - Big Shoulders Display
+                - Barlow Condensed
+                - DM Mono
+      - name: labels
+        label: 고정 글자
+        type: object
+        fields:
+          - name: pageTitle
+            label: 브라우저 탭 제목
+            type: string
+          - name: navHome
+            label: 위 메뉴 1
+            type: string
+          - name: navCategory
+            label: 위 메뉴 2
+            type: string
+          - name: navNotice
+            label: 위 메뉴 3
+            type: string
+          - name: appsTab
+            label: 앱 칸 제목
+            type: string
+          - name: bgmLabel
+            label: 아래 음악 칸 작은 글씨
+            type: string
   - name: basic
     label: 기본 정보 · 페어 · 티켓
     type: file
@@ -300,6 +448,21 @@ content:
                 list: true
               - name: load
                 label: load
+                type: string
+                list: true
+          - name: clinic
+            label: clinic
+            type: object
+            fields:
+              - name: nav
+                label: nav
+                type: string
+                list: true
+              - name: online
+                label: online
+                type: string
+              - name: status
+                label: 상태
                 type: string
                 list: true
           - name: seconds

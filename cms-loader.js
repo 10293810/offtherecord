@@ -10,7 +10,23 @@
   const FILES = [["basic",["brand","title","pair","pairs","pairLabels","heroTicket","studio","online","residence","venue","passLabel","footer","marquee","credit","clinic","cursor"]],["intro",["intro"]],["home",["home"]],["apps",null],["music",["bgm"]],["members",["memberOpen","members"]],["characters",null],["world-seiran",null],["world-arch",null],["world-frontline",null],["world-etc",null],["chat",["chat","toasts"]],["memo",["memo"]],["records",["records"]],["notice",["notice"]],["neighbors",["neighbors"]],["links",["links"]],["internet",["internet"]],["game",["game"]],["widgets",["monitor","pedal"]],["drawing",["blueprint","spec"]]];
   const SPECIAL = ["about","inventory","linked","ooc","prompt"];
 
-  const run = () => { const s = document.createElement('script'); s.src = SCRIPT; document.body.appendChild(s); };
+  let DESIGN = null;
+  // 디자인 · 색 · 글꼴 · 고정 글자
+  const STACK = { disp: ",'Pretendard','Noto Sans JP',sans-serif", mono: ",'Pretendard','Noto Sans JP',sans-serif", sans: ",'Noto Sans JP',-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif" };
+  const design = () => {
+    const d = DESIGN; if (!d || typeof d !== 'object') return;
+    const root = document.documentElement.style;
+    Object.entries(d.colors || {}).forEach(([k, v]) => { if (v && typeof v === 'string') root.setProperty('--' + k, v.trim()); });
+    Object.entries(d.fonts || {}).forEach(([k, v]) => { if (v && typeof v === 'string' && STACK[k]) root.setProperty('--' + k, "'" + v.replace(/'/g, '') + "'" + STACK[k]); });
+    const L = d.labels || {};
+    const setText = (sel, v) => { const b = document.querySelector(sel); if (!b || !v) return; const t = [...b.childNodes].reverse().find(n => n.nodeType === 3 && n.textContent.trim()); if (t) t.textContent = v; else b.append(v); };
+    if (L.pageTitle) document.title = L.pageTitle;
+    setText('.topnav [data-nav=home]', L.navHome); setText('.topnav [data-open=records]', L.navCategory); setText('.topnav [data-open=notice]', L.navNotice);
+    const at2 = document.querySelector('.apps-panel .panel-tab span'); if (at2 && L.appsTab) at2.textContent = L.appsTab;
+    const bg = document.querySelector('.mini-t small'); if (bg && L.bgmLabel) bg.textContent = L.bgmLabel;
+  };
+  const safeDesign = () => { try { design(); } catch (e) { console.warn('cms-loader design', e); } };
+  const run = () => { safeDesign(); const s = document.createElement('script'); s.src = SCRIPT; s.onload = () => setTimeout(safeDesign, 0); document.body.appendChild(s); };
   if (typeof SITE !== 'object' || !window.fetch) { run(); return; }
 
   const isObj = o => o && typeof o === 'object' && !Array.isArray(o);
@@ -98,7 +114,7 @@
     }
   };
 
-  Promise.all(FILES.map(([f]) => get(f))).then(list => {
+  Promise.all(FILES.map(([f]) => get(f)).concat(get('design').then(d => { DESIGN = d; }))).then(list => {
     list.forEach((d, i) => { if (isObj(d)) { try { apply(FILES[i][0], FILES[i][1], d); } catch (e) { console.warn('cms-loader', FILES[i][0], e); } } });
   }).catch(() => {}).then(run);
 })();

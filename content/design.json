@@ -1,0 +1,33 @@
+{
+  "colors": {
+    "bg": "",
+    "card": "",
+    "soft": "",
+    "soft2": "",
+    "line": "",
+    "ink": "",
+    "ink2": "",
+    "ink3": "",
+    "blue": "",
+    "blue2": "",
+    "navy": "",
+    "navy2": "",
+    "mint": "",
+    "mint2": "",
+    "red": "",
+    "gold": ""
+  },
+  "fonts": {
+    "disp": "",
+    "mono": "",
+    "sans": ""
+  },
+  "labels": {
+    "pageTitle": "Setlist",
+    "navHome": "HOME",
+    "navCategory": "CATEGORY",
+    "navNotice": "NOTICE",
+    "appsTab": "APPLICATIONS",
+    "bgmLabel": "BGM"
+  }
+}
