@@ -2322,9 +2322,7 @@ function charLayout() {
   const maxW = deskW() - 40; if (H * 1.32 + gap > maxW) H = Math.floor((maxW - gap) / 1.32);
   const W1 = Math.round(H * .70), W2 = Math.round(H * .62);
   const x1 = Math.max(12, Math.round((deskW() - W1 - gap - W2) / 2)), y = Math.round(72 + (deskH() - 72 - 72 - H) / 2);
-  // 한 창처럼 : 상세 창은 목록 창과 같은 자리 · 같은 크기로 위에 열려요 (OOC · 프로필 창처럼 창 하나 크기)  — 예전: 목록 옆에 따로
-  const solo = Math.max(12, Math.round((deskW() - W1) / 2));
-  return { solo, list: { x: solo, y, w: W1, h: H, abs: true }, det: { x: solo, y, w: W1, h: H, abs: true } };
+  return { solo: Math.max(12, Math.round((deskW() - W1) / 2)), list: { x: x1, y, w: W1, h: H, abs: true }, det: { x: x1 + W1 + gap, y, w: W2, h: H, abs: true } };
 }
 // ARCH 목록 (그룹별 줄 + 속성 뱃지 카드)
 function rosterHTML(W, list, isOn) {
@@ -2340,7 +2338,7 @@ let pairOv = null, cxAnim = true;   // 페어 목록 창 위에 띄운 페어 (�
 function cxShift() {
   const L = charLayout(), a = wins.get('chars'); if (!L || !a) return;
   const side = wins.get('chardet') || wins.get('agent'), wz = +a.el.dataset.wz || 1;
-  const x = L.solo, from = parseFloat(a.el.style.left) || 0, to = x / wz;
+  const x = side ? L.list.x : L.solo, from = parseFloat(a.el.style.left) || 0, to = x / wz;
   if (Math.abs(from - to) < 1) return;
   a.el.style.left = to + 'px';   // 자리는 바로 옮기고, 보이는 움직임은 transform 으로 (가볍게)
   a.el.animate([{ transform: `translateX(${(from - to) * wz}px)` }, { transform: 'none' }], { duration: 560, easing: 'cubic-bezier(.22,.9,.25,1)' });
