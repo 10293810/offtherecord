@@ -681,7 +681,7 @@ body.entered #desk .sy-bar i{animation:barFill 1.4s .45s cubic-bezier(.2,.8,.2,1
 #intro.gt .gt-kick em{font-style:normal;margin:0 10px}
 #intro.gt .gt-on{position:absolute;right:46px;top:40px;height:34px;padding:0 15px;border-radius:99px;background:#fff;border:1px solid var(--ln);display:inline-flex;align-items:center;gap:8px;font:900 11.5px 'Inter',sans-serif;letter-spacing:.06em}
 #intro.gt .gt-on i{background:#F06A6A;box-shadow:0 0 0 3px rgba(240,106,106,.2)}
-#intro.gt .gt-vin{position:absolute;left:56px;top:76px;width:196px;height:196px;animation:gt-pop .8s .7s cubic-bezier(.3,1.5,.5,1) both}
+#intro.gt .gt-vin{position:absolute;left:56px;top:89px;width:196px;height:196px;animation:gt-pop .8s .7s cubic-bezier(.3,1.5,.5,1) both}
 #intro.gt .gt-ph{position:absolute;inset:0;border-radius:50%;overflow:hidden;background:linear-gradient(135deg,#E9F8F0,#CBEEDD);border:7px solid #fff;box-shadow:0 14px 28px -10px rgba(20,35,30,.3),0 0 0 1.5px #DCE8E2;display:grid;place-items:center}
 #intro.gt .gt-ph > img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;animation:none}
 #intro.gt .gt-mono{position:relative;display:flex;align-items:center;justify-content:center}
