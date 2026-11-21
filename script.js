@@ -6157,13 +6157,13 @@ html body #desk .taskbar{background-color:rgba(253,254,254,.94)!important}
 /* Profile ~ ETC. (dz · cx 창) · 캐릭터 상세 · Link Hub : 초록 민트와 틸의 중간 · 파스텔 민트로 색만 바꿔요
    (이 창들에 쓰인 CSS 규칙을 복사해서 초록 · 청록 계열 색만 골라 바꿔 붙여요 — 사진 색은 그대로) */
 (() => {
-  const H0 = 168;   // 목표 색상 (초록 155 ↔ 틸 187 의 중간 · 파스텔 민트)
+  const H0 = 172;   // 목표 색상 (초록 155 ↔ 틸 187 의 중간 · 파스텔 민트)
   const SEL = /dzwin|\.dz|rmz|\.rm-|\.rm\b|cxwin|\.cx|cydet|chardet|charwin|\.cd-|\.cy-|\.cf-|\.lha/;
   const toHsl = (r, g, b) => { r /= 255; g /= 255; b /= 255; const mx = Math.max(r, g, b), mn = Math.min(r, g, b), l = (mx + mn) / 2; let h = 0, s = 0;
     if (mx !== mn) { const d = mx - mn; s = l > .5 ? d / (2 - mx - mn) : d / (mx + mn); h = mx === r ? (g - b) / d + (g < b ? 6 : 0) : mx === g ? (b - r) / d + 2 : (r - g) / d + 4; h *= 60; } return [h, s, l]; };
   const toRgb = (h, s, l) => { const k = n => (n + h / 30) % 12, a = s * Math.min(l, 1 - l), f = n => l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1))); return [f(0), f(8), f(4)].map(x => Math.round(x * 255)); };
   const shift = (r, g, b) => { let [h, s, l] = toHsl(+r, +g, +b); if (s < .12 || h < 120 || h > 205) return null;
-    h = H0 + (h - 171) * .25; s = Math.min(s, .62) * .92; if (l < .82) l = l + (1 - l) * .1;   // 살짝 연하고 부드럽게
+    h = H0; s = Math.min(s, .6) * .82; if (l < .86) l = l + (1 - l) * .2;   // 색상은 민트 하나로 맞추고 · 연하고 부드럽게
     return toRgb(h, s, l); };
   const remap = txt => txt.replace(/rgba?\(\s*(\d+),\s*(\d+),\s*(\d+)(\s*,\s*[\d.]+)?\s*\)/g, (m, r, g, b, a) => { const c = shift(r, g, b); return c ? (a ? `rgba(${c.join(', ')}${a})` : `rgb(${c.join(', ')})`) : m; });
   const run = () => {
