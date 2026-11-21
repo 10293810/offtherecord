@@ -1231,6 +1231,8 @@ const wins = new Map();
 let Zi = 10, focused = null;
 const deskW = () => $('#desk').offsetWidth || BASE_W;
 const deskH = () => $('#desk').offsetHeight || BASE_H;
+// CATEGORY(Records) · NOTICE · 폴더 창은 원래 자리(위 메뉴 아래)에서 열리고 뒤 화면도 흐려지지 않아요 (퓨어.kr 처럼)
+const PLAIN_WIN = /^(records|notice|folder)$/;
 function openWin(id, def) {
   if (wins.has(id)) { const w = wins.get(id); w.el.classList.remove('min'); focusWin(id); return w; }
   const el = document.createElement('div');
@@ -1261,7 +1263,7 @@ function openWin(id, def) {
   dragify(el, $('.win-h', el));
   def.render && def.render(rec.body, rec);
   // 창 자리: 화면 가운데 (여러 개면 살짝씩 비껴서) — 참고한 홈페이지처럼 가운데 팝업
-  if (!isMobile() && !def.abs && !def.keepPos && id !== 'pass') {
+  if (!isMobile() && !def.abs && !def.keepPos && id !== 'pass' && !PLAIN_WIN.test(id)) {
     const wz2 = +el.dataset.wz || 1, ww = el.offsetWidth * wz2, hh = el.offsetHeight * wz2, n = [...wins.values()].filter(o => o.id !== 'pass' && o.id !== id && !o.el.classList.contains('min')).length % 5;
     const T = 70, Bm = 72, cx = Math.round((deskW() - ww) / 2) + n * 26, cy = Math.round(T + Math.max(0, (deskH() - T - Bm - hh) / 2)) + n * 22;
     el.style.left = Math.max(12, Math.min(cx, deskW() - ww - 12)) / wz2 + 'px'; el.style.top = Math.max(64, Math.min(cy, deskH() - hh - 64)) / wz2 + 'px';
@@ -1289,7 +1291,7 @@ function minWin(id) { const w = wins.get(id); if (!w) return; w.el.classList.add
 function syncDim() {
   let d = $('#wdim');
   if (!d) { d = document.createElement('div'); d.id = 'wdim'; layer.appendChild(d); d.addEventListener('click', () => { if (document.documentElement.classList.contains('sye-editing')) return; const t = topWin(); if (t) closeWin(t.id); }); }
-  const t = topWin(), on = !!t && (isMobile() || !CX_IDS.includes(t.id));
+  const t = topWin(), on = !!t && (isMobile() || (!CX_IDS.includes(t.id) && !PLAIN_WIN.test(t.id)));
   d.classList.toggle('on', on); document.documentElement.classList.toggle('wdim-on', on); document.documentElement.classList.toggle('msheet', on && isMobile());
   if (on) d.style.zIndex = (+t.el.style.zIndex || Zi) - 1;
 }
@@ -1564,7 +1566,7 @@ const DEFS = {
   }),
 
   notice: () => openWin('notice', {
-    icon: 'folder', title: 'Notice', sub: '공지사항', task: 'Notice', acc: true, x: 68, y: 90, w: 656, h: 616,
+    icon: 'folder', title: 'Notice', sub: '공지사항', task: 'Notice', acc: true, x: 268, y: 74, w: 656, h: 616,
     foot: `<span>${S.notice.posts.length}개 기록</span><span>${esc(S.footer)}</span>`,
     render(b) {
       b.innerHTML = `${exBar(['Records', 'Notice'])}
