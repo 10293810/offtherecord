@@ -435,7 +435,7 @@ function jellyTitle(L, G) {
       <header class="gt-top"><b class="gt-stk"><i></i>✦ ${esc(S.brand?.home || 'UNRELEASED-01')}</b><span class="gt-est">EST. 2026 · ${esc(S.brand?.homeSub || 'SEIRAN UNIV. BAND')} // ${esc(A)} × ${esc(B)}</span>
         <div class="gt-chips"><span><i></i>${esc(S.online || 'CLUB ROOM OPEN')}</span><span><i></i>OPEN 24H</span></div></header>
       <div class="gt-par p1">${sp('s1', 34)}${sp('s2', 15)}</div><div class="gt-par p2">${sp('s3', 30)}${sp('s4', 13)}</div><div class="gt-par p3">${sp('s5', 26)}${sp('s6', 12)}</div>
-      <div class="gt-ball"><i class="gt-str"></i><div class="gt-db"><i class="gt-tiles"></i><i class="gt-shade"></i><i class="gt-glint g1"></i><i class="gt-glint g2"></i><i class="gt-glint g3"></i></div><i class="gt-halo"></i>${sp('gl', 18)}</div>
+      <div class="gt-ball"><i class="gt-str"></i><div class="gt-db"><svg class="gt-fb" viewBox="-100 -100 200 200"><defs><radialGradient id="gtSh" cx=".36" cy=".3" r=".75"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/><stop offset=".85" stop-color="#2F7A60" stop-opacity=".10"/><stop offset="1" stop-color="#2F7A60" stop-opacity=".28"/></radialGradient></defs><circle r="88" fill="#E9F7F0"/><g class="gt-fc"></g><circle r="88" fill="url(#gtSh)"/><circle r="87.5" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="1"/></svg><i class="gt-glint g1"></i><i class="gt-glint g2"></i><i class="gt-glint g3"></i></div><i class="gt-halo"></i>${sp('gl', 18)}</div>
       <section class="gt-tk">
         <div class="gt-main">
           <span class="gt-tab"><i></i>${esc(K.online || 'NOW REHEARSING')}</span>
@@ -647,18 +647,16 @@ body.entered #desk .sy-bar i{animation:barFill 1.4s .45s cubic-bezier(.2,.8,.2,1
 /* 미러볼 */
 #intro.gt .gt-ball{position:absolute;left:1000px;top:112px;width:176px;height:176px;z-index:3;animation:gt-drop 1.3s .5s cubic-bezier(.3,1.4,.5,1) both}
 #intro.gt .gt-db{position:absolute;inset:0;border-radius:50%;overflow:hidden;animation:gt-bob 5s 1.8s ease-in-out infinite;box-shadow:0 24px 40px -18px rgba(47,120,95,.45),inset 0 0 0 1px rgba(255,255,255,.6)}
-#intro.gt .gt-tiles{position:absolute;inset:-2px;border-radius:50%;background:linear-gradient(rgba(255,255,255,.55) 1px,transparent 1px) 0 0/100% 9px,linear-gradient(90deg,rgba(255,255,255,.55) 1px,transparent 1px) 0 0/9px 100%,repeating-conic-gradient(rgba(255,255,255,.35) 0 25%,transparent 0 50%) 0 0/27px 27px,repeating-conic-gradient(#EEF9F3 0 25%,#D6F1E4 0 50%) 0 0/18px 18px,radial-gradient(circle at 70% 75%,#F9E7EE 0,transparent 30%),radial-gradient(circle at 20% 60%,#FBF3D9 0,transparent 26%),linear-gradient(160deg,#F7FDFA,#C3EBD9 60%,#9AD9BE);animation:gt-roll 12s linear infinite}
-#intro.gt .gt-shade{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 34% 28%,rgba(255,255,255,.95) 0 8%,rgba(255,255,255,.35) 20%,transparent 42%),radial-gradient(circle at 50% 50%,transparent 52%,rgba(47,120,95,.28) 78%,rgba(30,80,64,.42) 100%)}
+#intro.gt .gt-fb{width:100%;height:100%;display:block}
+#intro.gt .gt-fc path{stroke:#fff;stroke-width:.9;stroke-opacity:.85;stroke-linejoin:round}
 #intro.gt .gt-glint{position:absolute;width:16px;height:16px;background:radial-gradient(circle,#fff 0 18%,transparent 55%);border-radius:50%;animation:gt-glint 2.6s ease-in-out infinite}
 #intro.gt .gt-glint::before,#intro.gt .gt-glint::after{content:'';position:absolute;left:50%;top:50%;background:#fff;border-radius:2px;transform:translate(-50%,-50%)}
 #intro.gt .gt-glint::before{width:2px;height:16px}#intro.gt .gt-glint::after{width:16px;height:2px}
 #intro.gt .gt-glint.g1{left:28%;top:22%}#intro.gt .gt-glint.g2{left:62%;top:52%;animation-delay:-.9s;transform:scale(.7)}#intro.gt .gt-glint.g3{left:40%;top:70%;animation-delay:-1.7s;transform:scale(.55)}
 #intro.gt .gt-halo{position:absolute;left:-40%;top:-40%;width:180%;height:180%;border-radius:50%;background:radial-gradient(circle,rgba(127,215,177,.28),transparent 60%);z-index:-1;animation:gt-halo 4s ease-in-out infinite;pointer-events:none}
-@keyframes gt-roll{to{background-position:0 0,108px 0,108px 0,108px 0,0 0,0 0,0 0}}
 @keyframes gt-glint{0%,100%{opacity:0;scale:.4}45%{opacity:1;scale:1}}
 @keyframes gt-halo{50%{opacity:.55;transform:scale(.92)}}
 #intro.gt .gt-str{width:1px!important;background:linear-gradient(transparent,rgba(20,35,30,.22))!important}
-#intro.gt.m .gt-tiles{background-size:100% 6px,6px 100%,18px 18px,12px 12px,100% 100%,100% 100%,100% 100%}
 #intro.gt .gt-ball svg.gt-sp{width:20px;height:20px;filter:none;left:128px;top:18px;animation:gt-tw 2.4s -.8s ease-in-out infinite}
 @keyframes gt-drop{from{transform:translateY(-420px)}}
 @keyframes gt-bob{50%{transform:translateY(8px) rotate(3deg)}}
@@ -825,8 +823,18 @@ body.entered #desk .sy-bar i{animation:barFill 1.4s .45s cubic-bezier(.2,.8,.2,1
   };
   fitT(); addEventListener('resize', fitT); document.fonts && document.fonts.ready.then(fitT); setTimeout(fitT, 400); setTimeout(fitT, 1200);
   // 미러볼이 빙글빙글 (세로줄 너비가 바뀌면서 돌아가 보여요)
-  const lon = $$('.gt-lon path', IN); let rot = 0, rl = 0;
+  const FC = $('.gt-fc', IN), R0 = 88, ROWS = 9, PAL = ['#FFFFFF', '#E6F7EE', '#CDEFDF', '#B5E6D0', '#F3FBF7', '#DDF3EA', '#FBEFF3', '#FBF5E2'];
+  const facets = []; for (let r = 0; r < ROWS; r++) { const la0 = -Math.PI / 2 + r * Math.PI / ROWS, la1 = la0 + Math.PI / ROWS, n = Math.max(4, Math.round(18 * Math.cos((la0 + la1) / 2))); for (let c = 0; c < n; c++) facets.push({ la0, la1, lo0: c * 2 * Math.PI / n, lo1: (c + 1) * 2 * Math.PI / n, col: PAL[(r * 7 + c * 3 + (c * r) % 5) % PAL.length], tw: Math.random() * 6.28 }); }
+  const fEls = facets.map(() => { const e = document.createElementNS('http://www.w3.org/2000/svg', 'path'); FC && FC.appendChild(e); return e; });
+  const TILT = .32, ct = Math.cos(TILT), st0 = Math.sin(TILT);
+  const P3 = (la, lo, rot) => { const x = Math.cos(la) * Math.sin(lo + rot), y = Math.sin(la), z = Math.cos(la) * Math.cos(lo + rot); return [x * R0, (y * ct - z * st0) * R0, y * st0 + z * ct]; };
+  const drawBall = (rot, t) => { facets.forEach((f, k) => { const g = .06, pts = [[f.la0 + g * .5, f.lo0 + g * .35], [f.la0 + g * .5, f.lo1 - g * .35], [f.la1 - g * .5, f.lo1 - g * .35], [f.la1 - g * .5, f.lo0 + g * .35]].map(([a, b]) => P3(a, b, rot));
+      const z = pts.reduce((s2, p) => s2 + p[2], 0) / 4, e = fEls[k]; if (z <= .02) { e.setAttribute('d', ''); return; }
+      e.setAttribute('d', 'M' + pts.map(p => p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join('L') + 'Z'); e.setAttribute('fill', f.col);
+      const shine = Math.max(0, Math.sin(t * 1.3 + f.tw)); e.setAttribute('fill-opacity', (.55 + .45 * z).toFixed(2)); e.style.filter = shine > .97 ? 'brightness(1.12)' : ''; }); };
+  const lon = []; let rot = 0, rl = 0;
   const spin = now => { if (!IN.isConnected) return; if (rl) rot += Math.min(.05, (now - rl) / 1000) * .32; rl = now;   // 천천히 (멍하게 보기 좋게)
+    drawBall(rot, now / 1000);
     lon.forEach((e, k) => { const ph = rot + k * Math.PI * 2 / lon.length, x = Math.sin(ph) * 86, rx = Math.abs(x).toFixed(1);
       e.setAttribute('d', `M0 -86 A${rx} 86 0 0 ${x >= 0 ? 1 : 0} 0 86`); e.classList.toggle('bk', Math.cos(ph) < 0); });
     requestAnimationFrame(spin); };
@@ -4653,7 +4661,7 @@ function syLayout() {
       const cv = syLayout._c || (syLayout._c = document.createElement('canvas').getContext('2d'));
       const met = fs => { cv.font = `900 ${fs}px Pretendard, sans-serif`; const m = cv.measureText('UNRELEASED'), fa = m.fontBoundingBoxAscent ?? fs * .95, fd = m.fontBoundingBoxDescent ?? fs * .24, base = (fs - fa - fd) / 2 + fa, cap = m.actualBoundingBoxAscent || fs * .72; return { base, cap, below: fs - base }; };
       const KH = 12, KV = 2.5, G1 = 14, MT = 22, MB = 20;   // 10×6 으로 배너가 낮아져서 위/아래 여백을 줄였어요 (예전 34 · 26)   // 키커 높이, 키커 글자 아래 여백, 선↔키커, 위/아래 여백
-      const need = (fs, G) => { const m = met(fs); return MB + P + G * 1.3 + m.cap + G + KH - KV + G1 + 3 + MT; };   // 큰 글씨 아래(칩 쪽) 여백을 1.3배로
+      const need = (fs, G) => { const m = met(fs); return MB + P + G * 1.3 + m.cap + G + KH - KV + MT; };   // 위 초록 선은 빼서 그 자리만큼 여백으로   // 큰 글씨 아래(칩 쪽) 여백을 1.3배로
       let f = 1, G = 0;
       for (; f > .66; f -= .01) { const fs = fs0 * f, m = met(fs); G = Math.min(.42 * m.cap, (H - need(fs, 0)) / 2.3); if (G >= .36 * m.cap && G >= 19) break; }   // 큰 글씨 위아래가 붙지 않게 (여백 최소 21)
       const fs = fs0 * f, m = met(fs); G = Math.max(18, G);
@@ -4707,7 +4715,7 @@ function syLayout() {
   .sy-tab::before{content:'';position:absolute;left:-21px;top:0;width:20px;height:20px;background:radial-gradient(circle at 0 100%,transparent 19px,#FEFEFE 19.5px);}
   .sy-pill{height:22px;padding:0 10px;display:inline-flex;align-items:center;gap:5px;border-radius:99px;background:#fff;border:1px solid #E1EAE6;font:800 7.5px var(--syf);letter-spacing:.04em;color:var(--sy-ink);white-space:nowrap}
   .sy-pill i{width:5px;height:5px;border-radius:50%;background:#5CC79A}
-  .sy-line{position:absolute;left:46px;bottom:var(--lb,calc(80px + 101px * var(--hk,1)));width:67px;height:3px;border-radius:2px;background:#5BBE95}
+  .sy-line{display:none!important;position:absolute;left:46px;bottom:var(--lb,calc(80px + 101px * var(--hk,1)));width:67px;height:3px;border-radius:2px;background:#5BBE95}
   .sy-kick{position:absolute;left:46px;bottom:var(--kb,calc(56px + 101px * var(--hk,1)));line-height:12px;font:700 10.5px var(--syf);letter-spacing:.33em;color:#2E3B38;white-space:nowrap}
   .sy-title{position:absolute;left:44px;bottom:var(--tb,56px);font:900 calc(112px * var(--hk,1) * var(--tfit,1))/1 'Pretendard',sans-serif;transform-origin:0 100%;letter-spacing:-.045em;color:var(--sy-d);white-space:nowrap}
   .sy-pairrow{position:absolute;left:46px;bottom:var(--pb,19px);display:flex;align-items:center;gap:8px;white-space:nowrap}
@@ -6271,7 +6279,7 @@ html.sye-editing #winlayer .cxwin [data-ci] .cx-ov,html.sye-editing #winlayer .c
   const dk = document.getElementById('desk'); if (!dk || dk.querySelector('.desk-fx')) return;
   const sp = (x, y, s, d) => `<svg class="dfx-sp" style="left:${x}%;top:${y}%;width:${s}px;height:${s}px;animation-delay:${d}s" viewBox="0 0 24 24"><path d="M12 1.5C12.6 8 16 11.4 22.5 12 16 12.6 12.6 16 12 22.5 11.4 16 8 12.6 1.5 12 8 11.4 11.4 8 12 1.5z"/></svg>`;
   const fx = document.createElement('div'); fx.className = 'desk-fx'; fx.setAttribute('aria-hidden', 'true');
-  fx.innerHTML = `<i class="dfx-b b1"></i><i class="dfx-b b2"></i>${sp(2.2, 30, 16, 0)}${sp(81.5, 3.6, 13, -1.2)}${sp(97.6, 47, 15, -2)}${sp(48, 95.6, 12, -.6)}${sp(1.4, 88, 11, -1.7)}<i class="dfx-cr c1"></i><i class="dfx-cr c2"></i><i class="dfx-cr c3"></i><i class="dfx-cr c4"></i>`;
+  fx.innerHTML = `${sp(2.2, 30, 16, 0)}${sp(81.5, 3.6, 13, -1.2)}${sp(97.6, 47, 15, -2)}${sp(48, 95.6, 12, -.6)}${sp(1.4, 88, 11, -1.7)}`;
   dk.prepend(fx);
   const st = document.createElement('style'); st.textContent = `
 #desk .desk-fx{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
