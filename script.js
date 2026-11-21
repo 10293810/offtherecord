@@ -5741,7 +5741,3 @@ requestAnimationFrame(() => setTimeout(startDesk, 50));
   scan(); addEventListener('load', scan);
   new MutationObserver(ms => { if (ms.some(m => [...m.addedNodes].some(n => n.nodeName === 'STYLE' || n.nodeName === 'LINK'))) requestAnimationFrame(scan); }).observe(document.head, { childList: true });
 })();
-/* 메인 화면 배경 : 비밀번호 화면과 같은 점무늬 + 연한 민트 번짐 */
-(() => { const st = document.createElement('style'); st.textContent = `
-html body #desk,html.m7 body #desk{background-color:#EDF3F0!important;background-image:radial-gradient(rgba(20,35,30,.09) 1px,transparent 1.4px),radial-gradient(46% 42% at 6% 4%,rgba(212,242,227,.85),rgba(212,242,227,0) 72%),radial-gradient(40% 36% at 98% 92%,rgba(222,244,234,.85),rgba(222,244,234,0) 72%),radial-gradient(30% 28% at 52% 46%,rgba(237,249,243,.7),rgba(237,249,243,0) 72%)!important;background-size:24px 24px,100% 100%,100% 100%,100% 100%!important;background-repeat:repeat,no-repeat,no-repeat,no-repeat!important;background-attachment:scroll!important}
-html.m7{background-color:#EDF3F0!important}`; document.head.appendChild(st); })();
