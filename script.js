@@ -6187,7 +6187,7 @@ html body #desk .taskbar{background-color:rgba(253,254,254,.94)!important}
 /* Profile ~ ETC. (dz · cx 창) · 캐릭터 상세 · Link Hub : 초록 민트와 틸의 중간 · 파스텔 민트로 색만 바꿔요
    (이 창들에 쓰인 CSS 규칙을 복사해서 초록 · 청록 계열 색만 골라 바꿔 붙여요 — 사진 색은 그대로) */
 (() => {
-  const H0 = 172;   // 목표 색상 (초록 155 ↔ 틸 187 의 중간 · 파스텔 민트)
+  const H0 = 156;   // 메인 · 입장 화면 민트(#3FAE84 · #6FD0A6)와 같은 색상   // 목표 색상 (초록 155 ↔ 틸 187 의 중간 · 파스텔 민트)
   const SEL = /dzwin|\.dz|rmz|\.rm-|\.rm\b|cxwin|\.cx|cydet|chardet|charwin|\.cd-|\.cy-|\.cf-|\.lha/;
   const toHsl = (r, g, b) => { r /= 255; g /= 255; b /= 255; const mx = Math.max(r, g, b), mn = Math.min(r, g, b), l = (mx + mn) / 2; let h = 0, s = 0;
     if (mx !== mn) { const d = mx - mn; s = l > .5 ? d / (2 - mx - mn) : d / (mx + mn); h = mx === r ? (g - b) / d + (g < b ? 6 : 0) : mx === g ? (b - r) / d + 2 : (r - g) / d + 4; h *= 60; } return [h, s, l]; };
