@@ -602,7 +602,7 @@ body.entered #desk .sy-bar i{animation:barFill 1.4s .45s cubic-bezier(.2,.8,.2,1
 .dz-card:hover,.rmz .rm-item:hover{transform:translateY(-2px);box-shadow:0 12px 22px -10px rgba(49,172,189,.35)!important}
 .m7-mq{display:none}
 @media (prefers-reduced-motion:reduce){.tcap .tc-cap,.tcap .tc-slosh,body.entered #desk .apps .app-tile,body.entered #desk .sy-hero,body.entered #desk .stage .leftcol .apps-panel,.m7-mq > div{animation:none!important}}
-#intro.gt{position:fixed;inset:0;z-index:50;overflow:hidden;background:#FCFDFC!important;background-image:none!important;color:#14231E;font-family:'Pretendard','Inter',sans-serif;--ink:#14231E;--m:#3FAE84;--m2:#6FD0A6;--mut:#6E7E78;--ln:#DCE8E2;cursor:default}
+#intro.gt{position:fixed;inset:0;z-index:50;overflow:hidden;background:#FEFEFE!important;background-image:none!important;color:#14231E;font-family:'Pretendard','Inter',sans-serif;--ink:#14231E;--m:#3FAE84;--m2:#6FD0A6;--mut:#6E7E78;--ln:#DCE8E2;cursor:default}
 #intro.gt *{box-sizing:border-box}
 #intro.gt .gt-bg{position:absolute;inset:0;pointer-events:none}
 #intro.gt .gt-bg::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(20,35,30,.032) 1px,transparent 1px),linear-gradient(90deg,rgba(20,35,30,.032) 1px,transparent 1px);background-size:24px 24px}
@@ -691,7 +691,7 @@ body.entered #desk .sy-bar i{animation:barFill 1.4s .45s cubic-bezier(.2,.8,.2,1
 #intro.gt .gt-tt p span{color:var(--m);font-size:20px}
 #intro.gt .gt-tt code{flex:none;white-space:nowrap;margin-left:6px;height:34px;padding:0 12px;border-radius:7px;background:#16201C;color:#fff;display:inline-flex;align-items:center;font:800 15px 'Pretendard',sans-serif}
 #intro.gt .gt-perf{position:absolute;left:860px;top:30px;bottom:30px;border-left:2px dashed #CFDDD6}
-#intro.gt .gt-perf::before,#intro.gt .gt-perf::after{content:'';position:absolute;left:-14px;width:26px;height:26px;border-radius:50%;background:#FCFDFC;box-shadow:inset 0 0 0 1.5px #fff}
+#intro.gt .gt-perf::before,#intro.gt .gt-perf::after{content:'';position:absolute;left:-14px;width:26px;height:26px;border-radius:50%;background:#FEFEFE;box-shadow:inset 0 0 0 1.5px #fff}
 #intro.gt .gt-perf::before{top:-44px}#intro.gt .gt-perf::after{bottom:-44px}
 #intro.gt .gt-stub{position:absolute;left:862px;right:0;top:0;bottom:0;padding:44px 40px 40px 44px;display:flex;flex-direction:column}
 #intro.gt .gt-adm{display:flex;justify-content:space-between;align-items:flex-start}
@@ -4676,7 +4676,7 @@ function syLayout() {
   st.textContent = `
 @media (min-width:721px) and (min-aspect-ratio:4/5) and (min-height:600px),(min-width:1101px) and (min-height:600px){
   #desk{font-synthesis:none;--syf:'Archivo Black','IBM Plex Sans KR',sans-serif;--syb:'Inter','IBM Plex Sans KR',sans-serif;--sys:'Noto Serif Display','Noto Serif',Georgia,serif;--sy-g:#3FAE84;--sy-m:#6CCBA6;--sy-d:#1D4A40;--sy-ink:#26332F;--sy-gr:#7F8F8A;--sy-ln:#DDE8E3;
-    background-color:#FCFDFC!important;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18'%3E%3Ccircle cx='9' cy='9' r='.95' fill='rgba(70,100,90,.2)'/%3E%3C/svg%3E")!important;background-size:18px 18px!important}
+    background-color:#FEFEFE!important;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18'%3E%3Ccircle cx='9' cy='9' r='.95' fill='rgba(70,100,90,.2)'/%3E%3C/svg%3E")!important;background-size:18px 18px!important}
   #desk.sy-rz *,#desk.sy-rz *::before,#desk.sy-rz *::after{transition:none!important}
   #desk .stage::before,#desk .stage::after{display:none!important}
   #desk .keysec,#desk .h-otr,#desk .h-note,#desk .blueprint,#desk .ot-folder,#desk .st-dd,#desk .taskbar .mini-eq,#desk .top-r .sq.theme-btn,#desk #winlayer .win.passwin::before,#desk #winlayer .win.passwin::after,#desk #winlayer .win.passwin > .win-h::before,#desk #winlayer .win.passwin > .win-h::after{display:none!important}
@@ -4709,8 +4709,8 @@ function syLayout() {
   .sy-hero{--syf:var(--syb);position:absolute;inset:0;border-radius:20px;background:radial-gradient(120% 140% at 20% 0%,#F6F9F1 0%,#EEF5EC 55%,#E7F1EA 100%);border:1px solid #DCE9E1;box-shadow:0 10px 26px rgba(30,70,60,.06),inset 0 1px 0 #fff;overflow:visible;font-family:var(--syf);color:var(--sy-ink)}
   .sy-hero::before{content:'';position:absolute;left:10px;top:10px;width:16px;height:16px;border:1.4px solid rgba(80,170,130,.45);border-right:0;border-bottom:0;border-radius:12px 0 0 0}
   .sy-hero::after{content:'';position:absolute;right:10px;bottom:10px;width:16px;height:16px;border:1.4px solid rgba(80,170,130,.45);border-left:0;border-top:0;border-radius:0 0 12px 0}
-  .sy-tab{position:absolute;right:-1px;top:-1px;height:40px;padding:0 14px 0 18px;display:flex;align-items:center;gap:8px;background:#FCFDFC;border:1px solid #DCE9E1;border-top:0;border-right:0;border-radius:0 0 0 20px}
-  .sy-tab::before{content:'';position:absolute;left:-21px;top:0;width:20px;height:20px;background:radial-gradient(circle at 0 100%,transparent 19px,#FCFDFC 19.5px);}
+  .sy-tab{position:absolute;right:-1px;top:-1px;height:40px;padding:0 14px 0 18px;display:flex;align-items:center;gap:8px;background:#FEFEFE;border:1px solid #DCE9E1;border-top:0;border-right:0;border-radius:0 0 0 20px}
+  .sy-tab::before{content:'';position:absolute;left:-21px;top:0;width:20px;height:20px;background:radial-gradient(circle at 0 100%,transparent 19px,#FEFEFE 19.5px);}
   .sy-pill{height:22px;padding:0 10px;display:inline-flex;align-items:center;gap:5px;border-radius:99px;background:#fff;border:1px solid #E1EAE6;font:800 7.5px var(--syf);letter-spacing:.04em;color:var(--sy-ink);white-space:nowrap}
   .sy-pill i{width:5px;height:5px;border-radius:50%;background:#5CC79A}
   .sy-line{position:absolute;left:46px;bottom:var(--lb,calc(80px + 101px * var(--hk,1)));width:67px;height:3px;border-radius:2px;background:#5BBE95}
@@ -4734,8 +4734,8 @@ function syLayout() {
   .sy-bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#9BE0C3,#6CCBA6)}
   .sy-sub{position:absolute;left:0;right:0;top:119px;display:flex;justify-content:space-between;font:500 9.5px var(--syf);letter-spacing:.03em;color:#7F8F8A}
   /* 아이콘 창 */
-  #desk .stage .leftcol .apps-panel{position:absolute!important;left:0!important;right:0!important;top:auto!important;bottom:0!important;width:auto!important;height:556px!important;margin:0!important;padding:0!important;border-radius:18px!important;background:rgba(248,251,250,.94)!important;border:1px solid #E3ECE8!important;box-shadow:0 10px 24px rgba(30,70,60,.06)!important;transform:none!important;zoom:1!important;overflow:visible!important}
-  #desk .apps-panel .panel-tab{position:absolute!important;left:22px!important;top:-21px!important;height:21px!important;padding:0 6px 0 10px!important;display:flex!important;align-items:center!important;gap:6px!important;border-radius:9px 9px 0 0!important;background:rgba(248,251,250,.94)!important;border:1px solid #E3ECE8!important;border-bottom:0!important;box-shadow:none!important}
+  #desk .stage .leftcol .apps-panel{position:absolute!important;left:0!important;right:0!important;top:auto!important;bottom:0!important;width:auto!important;height:556px!important;margin:0!important;padding:0!important;border-radius:18px!important;background:rgba(252,254,253,.94)!important;border:1px solid #E3ECE8!important;box-shadow:0 10px 24px rgba(30,70,60,.06)!important;transform:none!important;zoom:1!important;overflow:visible!important}
+  #desk .apps-panel .panel-tab{position:absolute!important;left:22px!important;top:-21px!important;height:21px!important;padding:0 6px 0 10px!important;display:flex!important;align-items:center!important;gap:6px!important;border-radius:9px 9px 0 0!important;background:rgba(252,254,253,.94)!important;border:1px solid #E3ECE8!important;border-bottom:0!important;box-shadow:none!important}
   #desk .apps-panel .panel-tab i{display:none!important}
   #desk .apps-panel .panel-tab span{font:800 7.5px var(--syf)!important;letter-spacing:.14em!important;color:#1E2A27!important;background:none!important;-webkit-text-fill-color:currentColor!important}
   #desk .apps-panel .panel-tab .sy-cnt{min-width:15px;height:15px;padding:0 3px;box-sizing:border-box;border-radius:99px;background:#1E2A27;color:#fff;font:800 7px/15px var(--syf);text-align:center}
@@ -4869,10 +4869,10 @@ html:not(.sy-owner) .sy-write,html:not(.sy-owner) #desk .top-r .sq.sy-write{disp
   /* ---------- 휴대폰 : 지금 PC 홈(SYRINGE · 민트)과 같은 모양으로 ---------- */
   { const m7 = document.createElement('style'); m7.textContent = `
 @media (max-width:720px),(max-aspect-ratio:4/5) and (max-width:1100px),(max-height:599px){
-  html.m7,#desk{background-color:#FCFDFC!important;background-image:radial-gradient(rgba(70,100,90,.17) 1px,transparent 1.35px)!important;background-size:18px 18px!important}
+  html.m7,#desk{background-color:#FEFEFE!important;background-image:radial-gradient(rgba(70,100,90,.17) 1px,transparent 1.35px)!important;background-size:18px 18px!important}
   #desk .stage::before,#desk .stage::after{display:none!important}
   /* 위 바 : 로고 알약 · 아이콘 버튼 */
-  #desk .topbar{left:0!important;right:0!important;top:0!important;height:62px!important;padding:0 12px!important;display:flex!important;align-items:center!important;gap:4px!important;background:rgba(252,253,252,.88)!important;-webkit-backdrop-filter:blur(12px)!important;backdrop-filter:blur(12px)!important;border:0!important;border-bottom:1px solid #E1EAE6!important;box-shadow:none!important}
+  #desk .topbar{left:0!important;right:0!important;top:0!important;height:62px!important;padding:0 12px!important;display:flex!important;align-items:center!important;gap:4px!important;background:rgba(254,254,254,.88)!important;-webkit-backdrop-filter:blur(12px)!important;backdrop-filter:blur(12px)!important;border:0!important;border-bottom:1px solid #E1EAE6!important;box-shadow:none!important}
   #desk .topbar::before{display:none!important}
   #desk .topbar .logo-dark{align-self:center!important;height:42px!important;padding:0 14px 0 6px!important;border-radius:14px!important;background:#fff!important;border:1px solid #E1EAE6!important;box-shadow:0 4px 12px rgba(30,70,60,.06)!important;display:flex!important;align-items:center!important;gap:8px!important}
   #desk .topbar .logo-dark .logo-ic{width:28px!important;height:28px!important;background:linear-gradient(160deg,#7FD6B2,#4DB88E)!important;display:grid!important;place-items:center!important}
@@ -4901,7 +4901,7 @@ html:not(.sy-owner) .sy-write,html:not(.sy-owner) #desk .top-r .sq.sy-write{disp
   /* 배너 */
   #desk .sy-hero{display:block!important;position:relative!important;inset:auto!important;border-radius:24px!important;background:radial-gradient(120% 140% at 20% 0%,#F6F9F1 0%,#EEF5EC 55%,#E7F1EA 100%)!important;border:1px solid #DCE9E1!important;box-shadow:0 10px 26px rgba(30,70,60,.07),inset 0 1px 0 #fff!important;padding:58px 20px 20px!important;color:#26332F;font-family:'Pretendard',sans-serif}
   #desk .sy-hero::before{content:'';position:absolute;left:12px;top:12px;width:16px;height:16px;border:1.4px solid rgba(80,170,130,.45);border-right:0;border-bottom:0;border-radius:12px 0 0 0}
-  #desk .sy-tab{position:absolute;right:-1px;top:-1px;height:40px;padding:0 12px 0 16px;display:flex;align-items:center;gap:6px;background:#FCFDFC;border:1px solid #DCE9E1;border-top:0;border-right:0;border-radius:0 0 0 20px}
+  #desk .sy-tab{position:absolute;right:-1px;top:-1px;height:40px;padding:0 12px 0 16px;display:flex;align-items:center;gap:6px;background:#FEFEFE;border:1px solid #DCE9E1;border-top:0;border-right:0;border-radius:0 0 0 20px}
   #desk .sy-pill{height:24px;padding:0 10px;display:inline-flex;align-items:center;gap:5px;border-radius:99px;background:#fff;border:1px solid #E1EAE6;font:800 9px 'Pretendard',sans-serif;letter-spacing:.04em;color:#26332F;white-space:nowrap}
   #desk .sy-pill i{width:6px;height:6px;border-radius:50%;background:#5CC79A}
   #desk .sy-line{display:block;width:44px;height:3px;border-radius:2px;background:#5BBE95;margin:0 0 10px 2px}
@@ -4925,8 +4925,8 @@ html:not(.sy-owner) .sy-write,html:not(.sy-owner) #desk .top-r .sq.sy-write{disp
   #desk .sy-bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#9BE0C3,#6CCBA6)}
   #desk .sy-sub{position:absolute;left:0;right:0;top:120px;display:flex;justify-content:space-between;font:500 10px 'Pretendard',sans-serif;color:#7F8F8A}
   /* 아이콘 : 4칸 (참고한 홈페이지처럼) */
-  #desk .stage .leftcol .apps-panel{margin-top:26px!important;border-radius:0 22px 22px 22px!important;background:rgba(248,251,250,.96)!important;border:1px solid #E3ECE8!important;box-shadow:0 10px 26px rgba(30,70,60,.06)!important;padding:22px 8px 20px!important}
-  #desk .apps-panel .panel-tab{left:-1px!important;top:-25px!important;height:26px!important;padding:0 8px 0 14px!important;border-radius:12px 12px 0 0!important;background:rgba(248,251,250,.96)!important;border:1px solid #E3ECE8!important;border-bottom:0!important;gap:7px!important}
+  #desk .stage .leftcol .apps-panel{margin-top:26px!important;border-radius:0 22px 22px 22px!important;background:rgba(252,254,253,.96)!important;border:1px solid #E3ECE8!important;box-shadow:0 10px 26px rgba(30,70,60,.06)!important;padding:22px 8px 20px!important}
+  #desk .apps-panel .panel-tab{left:-1px!important;top:-25px!important;height:26px!important;padding:0 8px 0 14px!important;border-radius:12px 12px 0 0!important;background:rgba(252,254,253,.96)!important;border:1px solid #E3ECE8!important;border-bottom:0!important;gap:7px!important}
   #desk .apps-panel .panel-tab svg,#desk .apps-panel .panel-tab i{display:none!important}
   #desk .apps-panel .panel-tab span{font:800 9.5px 'Pretendard',sans-serif!important;letter-spacing:.16em!important;color:#1E2A27!important}
   #desk .apps-panel .panel-tab .sy-cnt{display:inline-block!important;min-width:17px;height:17px;padding:0 4px;box-sizing:border-box;border-radius:99px;background:#1E2A27;color:#fff;font:800 8.5px/17px 'Pretendard',sans-serif;text-align:center}
@@ -5904,11 +5904,11 @@ requestAnimationFrame(() => setTimeout(startDesk, 50));
 })();
 /* 메인 화면 배경 : 비밀번호 화면과 같은 점무늬 + 민트 번짐 (조금 더 연하게 · 동그라미 · 큰 글씨 없이) */
 (() => { const st = document.createElement('style'); st.textContent = `
-html body #desk,html.m7 body #desk{background-color:#FCFDFC!important;background-image:linear-gradient(rgba(20,35,30,.032) 1px,transparent 1px),linear-gradient(90deg,rgba(20,35,30,.032) 1px,transparent 1px),radial-gradient(44% 40% at 0% 0%,rgba(214,242,228,.85),rgba(214,242,228,0) 72%),radial-gradient(44% 40% at 100% 100%,rgba(214,242,228,.85),rgba(214,242,228,0) 72%),radial-gradient(30% 28% at 52% 48%,rgba(238,250,244,.6),rgba(238,250,244,0) 72%)!important;background-size:24px 24px,24px 24px,100% 100%,100% 100%,100% 100%!important;background-repeat:repeat,repeat,no-repeat,no-repeat,no-repeat!important}`; document.head.appendChild(st); })();
+html body #desk,html.m7 body #desk{background-color:#FEFEFE!important;background-image:linear-gradient(rgba(20,35,30,.032) 1px,transparent 1px),linear-gradient(90deg,rgba(20,35,30,.032) 1px,transparent 1px),radial-gradient(44% 40% at 0% 0%,rgba(214,242,228,.85),rgba(214,242,228,0) 72%),radial-gradient(44% 40% at 100% 100%,rgba(214,242,228,.85),rgba(214,242,228,0) 72%),radial-gradient(30% 28% at 52% 48%,rgba(238,250,244,.6),rgba(238,250,244,0) 72%)!important;background-size:24px 24px,24px 24px,100% 100%,100% 100%,100% 100%!important;background-repeat:repeat,repeat,no-repeat,no-repeat,no-repeat!important}`; document.head.appendChild(st); })();
 /* 휴대폰 : 캐릭터 · 페어 상세 창 — 목록 창과 같은 자리에 꽉 찬 시트 + 위 이름 카드 + 가운데 큰 사진(아래로 스르륵) + 오른쪽 아래 동그라미 + 아래 노래 바 */
 (() => { const st = document.createElement('style'); st.textContent = `
 @media (max-width:720px),(max-aspect-ratio:4/5) and (max-width:1100px),(max-height:599px){
-  html.msheet #desk #winlayer .win.cydet.float{background:#FCFDFC!important;background-image:radial-gradient(rgba(20,35,30,.1) 1px,transparent 1.4px)!important;background-size:16px 16px!important;border:1px solid #fff!important;box-shadow:0 18px 40px -18px rgba(20,35,30,.3)!important;overflow:hidden!important}
+  html.msheet #desk #winlayer .win.cydet.float{background:#FEFEFE!important;background-image:radial-gradient(rgba(20,35,30,.1) 1px,transparent 1.4px)!important;background-size:16px 16px!important;border:1px solid #fff!important;box-shadow:0 18px 40px -18px rgba(20,35,30,.3)!important;overflow:hidden!important}
   html.msheet #desk #winlayer .win.cydet.float .win-h{height:22px!important;padding:0!important;justify-content:center!important;background:transparent!important}
   html.msheet #desk #winlayer .win.cydet.float .win-h::before{content:'';width:38px;height:4px;border-radius:99px;background:rgba(20,35,30,.14);margin-top:8px}
   html.msheet #desk #winlayer .win.cydet.float .win-h > *,html.msheet #desk #winlayer .win.cydet.float > .sh-grab,html.msheet #desk #winlayer .win.cydet.float .win-h::after{display:none!important}
@@ -6052,4 +6052,10 @@ html:not(.sye-editing) .tk .tk-add,html:not(.sye-editing) .tkroom .tk-ed{display
   #desk .win.tkwin,#desk .win.tkroom{box-shadow:0 18px 40px -18px rgba(20,35,30,.3)!important}
   #desk .win.tkwin > .win-h{display:none!important}
 }
+`; document.head.appendChild(st); })();
+/* 배너 · 아이콘 패널 : 배경에 맞춰 조금 더 밝게 */
+(() => { const st = document.createElement('style'); st.textContent = `
+html body #desk .sy-hero{background-image:radial-gradient(120% 140% at 20% 0%,#FBFDF9 0%,#F5FAF3 55%,#EFF7F2 100%)!important}
+html body #desk .apps-panel{background-color:rgba(252,254,253,.96)!important}
+html body #desk .taskbar{background-color:rgba(253,254,254,.94)!important}
 `; document.head.appendChild(st); })();
