@@ -5756,6 +5756,13 @@ html:not(.sye-editing) .cx-add,html:not(.sye-editing) .cd-tags .ed{display:none!
   });
   addEventListener('sye-talk', e => tOpen(e.detail ? e.detail.i : null));
   addEventListener('sye-char', e => e.detail && e.detail.i == null ? quickAdd(e.detail) : fOpen(e.detail));
+  // 편집 중 : 목록 카드의 글자(소속 · 이름 · 영어 이름)를 누르면 그 캐릭터의 수정 창이 바로 열려요
+  window.addEventListener('click', e => {
+    if (!SYE_ON || !e.isTrusted) return; const ov = e.target.closest && e.target.closest('#winlayer .cxwin [data-ci] .cx-ov, #winlayer .cxwin [data-ci] .ov, #winlayer .cxwin [data-ci] .cp-h, #winlayer .cxwin [data-ci] .cp-ov');
+    if (!ov) return; const c = ov.closest('[data-ci]'); e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
+    fOpen({ w: charWorld, t: charTabKey, i: +c.dataset.ci });
+  }, true);
+  ['pointerdown', 'mousedown'].forEach(ev => window.addEventListener(ev, e => { if (SYE_ON && e.target.closest && e.target.closest('#winlayer .cxwin [data-ci] .cx-ov, #winlayer .cxwin [data-ci] .ov, #winlayer .cxwin [data-ci] .cp-h, #winlayer .cxwin [data-ci] .cp-ov')) e.stopPropagation(); }, true));
   // 편집 중에도 캐릭터 · 페어 목록의 카드를 누르면 상세 창이 열려요 (카드 안 글자 · 사진은 상세 창에서 고쳐요)
   let cardPass = false;
   const cardOf = e => SYE_ON && !cardPass && e.isTrusted && e.target.closest && e.target.closest('#winlayer .cxwin [data-ci]');   // 코드로 누른 클릭은 그대로 통과
@@ -6209,3 +6216,9 @@ html body #desk .taskbar{background-color:rgba(253,254,254,.94)!important}
   };
   run(); setTimeout(run, 0); addEventListener('load', run);
 })();
+/* 편집 중 : 목록 카드 글자에 ✎ 표시 */
+(() => { const st = document.createElement('style'); st.textContent = `
+html.sye-editing #winlayer .cxwin [data-ci] .cx-ov,html.sye-editing #winlayer .cxwin [data-ci] .ov,html.sye-editing #winlayer .cxwin [data-ci] .cp-h{outline:1.5px dashed rgba(255,255,255,.85);outline-offset:-4px;border-radius:10px;cursor:text}
+html.sye-editing #winlayer .cxwin [data-ci] .cx-ov::before,html.sye-editing #winlayer .cxwin [data-ci] .ov::before{content:'✎ 글자 수정';position:absolute;right:8px;top:-22px;height:18px;padding:0 7px;border-radius:99px;background:#fff;color:#2F9C74;font:800 9.5px/18px 'Pretendard',sans-serif;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+html.sye-editing #winlayer .cxwin [data-ci] .cx-ov,html.sye-editing #winlayer .cxwin [data-ci] .ov,html.sye-editing #winlayer .cxwin [data-ci] .cp-h{z-index:5;pointer-events:auto!important}
+`; document.head.appendChild(st); })();
