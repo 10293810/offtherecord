@@ -705,7 +705,7 @@ body.entered #desk .sy-bar i{animation:barFill 1.4s .45s cubic-bezier(.2,.8,.2,1
 #intro.gt .gx-stat{font:800 10.5px 'Inter',sans-serif;letter-spacing:.12em;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #intro.gt .gx-ml{margin-left:auto;font:700 10.5px 'Inter',sans-serif;color:var(--mut);white-space:nowrap}
 #intro.gt .gx-ml em{font-style:normal;font-weight:900;color:var(--m)}
-#intro.gt .gx-pct{display:none!important}
+#intro.gt .gx-pct,#intro.gt .gx-ml{display:none!important}
 #intro.gt .gt-track{height:3px;border-radius:99px;background:#DCEBE4;overflow:hidden}
 #intro.gt .gt-track i{display:block;height:100%;width:var(--lp,0%);background:linear-gradient(90deg,#9BE3C3,#3FAE84)}
 #intro.gt .gt-bc{display:flex;gap:2px;height:30px;margin:18px 0 22px;overflow:hidden}
