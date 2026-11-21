@@ -869,7 +869,7 @@ const APPS = [
   { id: 'grp-etc', name: 'ETC.', icon: 'sparkle', t: 'lilac' },
   { id: 'memo', name: 'Memo', icon: 'file', t: 'cream' },
   { id: 'player', name: 'Player', icon: 'music', t: 'ink' },
-  { id: 'talk', name: 'MOONtalk', icon: 'chat', t: 'blue', badge: 4 },
+  { id: 'talk', name: 'TALK', icon: 'chat', t: 'blue', badge: (S.chat.rooms || []).reduce((a, r) => a + (+r.unread || 0), 0) || 4 },
   { id: 'internet', name: 'Internet', icon: 'globe', t: 'blue' },
   { id: 'pedal', name: 'Pedal Board', icon: 'sliders', t: '' },
   { id: 'links', name: 'Link Hub', icon: 'grid4', t: 'mint' },
@@ -1232,7 +1232,7 @@ let Zi = 10, focused = null;
 const deskW = () => $('#desk').offsetWidth || BASE_W;
 const deskH = () => $('#desk').offsetHeight || BASE_H;
 // CATEGORY(Records) · NOTICE · 폴더 창은 원래 자리(위 메뉴 아래)에서 열리고 뒤 화면도 흐려지지 않아요 (퓨어.kr 처럼)
-const PLAIN_WIN = /^(records|notice|folder|player)$/;
+const PLAIN_WIN = /^(records|notice|folder|player|talk|talkroom)$/;
 function openWin(id, def) {
   if (wins.has(id)) { const w = wins.get(id); w.el.classList.remove('min'); focusWin(id); return w; }
   const el = document.createElement('div');
@@ -1283,7 +1283,7 @@ function openWin(id, def) {
   // 옮겨 둔 자리 기억 (다시 열면 그 자리에서) · 크기 조절 손잡이 · 휴대폰은 아래에서 올라오는 시트
   if (!isMobile() && id !== 'pass') {
     const sp = WPOS[id], wz2 = +el.dataset.wz || 1;
-    if (sp && !def.abs && !/^(records|notice|player)$/.test(id)) { el.style.left = Math.max(-el.offsetWidth + 80, Math.min(sp.x, (deskW() - 60) / wz2)) + 'px'; el.style.top = Math.max(64 / wz2, Math.min(sp.y, (deskH() - 90) / wz2)) + 'px'; if (sp.w) el.style.width = sp.w + 'px'; if (sp.h) el.style.height = sp.h + 'px'; }
+    if (sp && !def.abs && !/^(records|notice|player|talk|talkroom)$/.test(id)) { el.style.left = Math.max(-el.offsetWidth + 80, Math.min(sp.x, (deskW() - 60) / wz2)) + 'px'; el.style.top = Math.max(64 / wz2, Math.min(sp.y, (deskH() - 90) / wz2)) + 'px'; if (sp.w) el.style.width = sp.w + 'px'; if (sp.h) el.style.height = sp.h + 'px'; }
     if (!def.abs && !/rmzw|cydet/.test(def.cls || '')) { const g = document.createElement('i'); g.className = 'wgrip'; g.title = '크기 조절'; el.appendChild(g); gripify(el, g, id); }
   }
   if (isMobile() && id !== 'pass') { const g = document.createElement('i'); g.className = 'sh-grab'; el.prepend(g); sheetDrag(el, g, id); }
@@ -1407,6 +1407,67 @@ function syncGrpDots() {
     const on = !!(mn && charWorld === wd), i = $('.app-ic', a); a.classList.toggle('seen', on);
     const d = $('.ndot', i); if (on && !d) i.insertAdjacentHTML('beforeend', '<span class="ndot"></span>'); if (!on && d) d.remove(); }));
 }
+/* ---------- TALK : 대화방 목록 + 대화 창 ---------- */
+const TK_ME = () => S.chat.me || { name: '나', avatar: '' };
+const TK_ROOMS = () => S.chat.rooms || [{ name: S.chat.partner, status: S.chat.status, avatar: S.chat.avatar, time: '', unread: 4, messages: S.chat.messages || [], replies: S.chat.replies || [], incoming: S.chat.incoming || [] }];
+const TK_READ = new Set();   // 이번에 열어 본 방은 안 읽음 숫자를 지워요
+const TK_UNREAD = i => TK_READ.has(i) ? 0 : (+(TK_ROOMS()[i] || {}).unread || 0);
+let TK_CUR = -1;
+// 목록 · 대화 창을 나란히 가운데에 (PC) — 캐릭터 목록 · 상세 창처럼
+function tkPlace() {
+  if (isMobile()) return;
+  const L = wins.get('talk'), Rm = wins.get('talkroom'); if (!L) return;
+  const lw = L.el.offsetWidth, rw = 400, gap = 14, H = Math.min(620, deskH() - 144 - 16);
+  const x0 = Math.max(12, Math.round((deskW() - lw - gap - rw) / 2)), y0 = Math.max(64, Math.round(72 + (deskH() - 72 - 72 - H) / 2));
+  L.el.style.left = x0 + 'px'; L.el.style.top = y0 + 'px'; L.el.style.height = H + 'px';
+  if (Rm) { Rm.el.style.left = x0 + lw + gap + 'px'; Rm.el.style.top = y0 + 'px'; Rm.el.style.height = H + 'px'; Rm.el.style.width = rw + 'px'; }
+}
+function openTalkRoom(i) {
+  const R = TK_ROOMS(), r = R[i]; if (!r) return; TK_CUR = i; TK_READ.add(i);
+  const L = wins.get('talk'); if (L) { $$('.tk-row', L.el).forEach(x => x.classList.toggle('on', +x.dataset.room === i)); const u = $(`.tk-row[data-room="${i}"] .tk-meta i`, L.el); u && u.remove(); }
+  const me = TK_ME();
+  const head = () => `<div class="chat-head"><span class="back" title="목록으로">${ic('chevl')}</span>${ph(r.avatar, { cls: 'tk-hav', seed: r.name })}<span><b>${esc(r.name)}</b><small>${esc(r.status || '')}</small></span><button type="button" class="cx-add tk-ed" data-tked>✎ 대화 수정</button></div>`;
+  const fill = (b) => {
+    b.style.overflow = 'hidden';
+    b.innerHTML = `<div class="chat"><div class="chat-list"></div><form class="chat-in"><button type="button" class="plus">${ic('plus')}</button><input placeholder="메시지 입력" maxlength="200"><button>${ic('send')}</button></form></div>`;
+    const list = $('.chat-list', b); let last = null;
+    const add = (m, anim = true) => {
+      const key = m.from + '|' + (m.name || '');
+      if (key !== last) {
+        const who = m.from === 'me' ? me : { name: m.name || r.name, avatar: m.name ? '' : r.avatar };
+        list.insertAdjacentHTML('beforeend', `<div class="who ${m.from}">${ph(who.avatar, { cls: 'av', seed: who.name })}<span>${esc(who.name)}</span></div>`);
+        last = key;
+      }
+      const d = document.createElement('div'); d.className = `msg ${m.from} ${m.emo || /^\p{Extended_Pictographic}$|^[♥♡]$/u.test(m.text || '') ? 'emo' : ''}`; if (!anim) d.style.animation = 'none';
+      d.textContent = m.text; list.appendChild(d); list.scrollTop = list.scrollHeight; return d;
+    };
+    (r.messages || []).forEach(m => add(m, false));
+    const n = new Date(); list.insertAdjacentHTML('beforeend', `<div class="msg-time">${n.getHours() < 12 ? '오전' : '오후'} ${n.getHours() % 12 || 12}:${pad(n.getMinutes())}</div>`);
+    list.scrollTop = list.scrollHeight;
+    let ri = 0; b.addMsg = m => add(m);
+    $('form', b).onsubmit = e => {
+      e.preventDefault(); const inp = $('input', b), v = inp.value.trim(); if (!v) return;
+      add({ from: 'me', text: v }); inp.value = '';
+      const rp = r.replies || []; if (!rp.length) return;
+      setTimeout(() => { const t = add({ from: 'them', text: '' }); t.innerHTML = '<span class="typing"><i></i><i></i><i></i></span>';
+        setTimeout(() => { t.textContent = rp[ri++ % rp.length]; list.scrollTop = list.scrollHeight; }, 1300); }, 500);
+    };
+  };
+  const ex = wins.get('talkroom');
+  if (ex) { const h = $('.chat-head', ex.el); if (h) h.outerHTML = head(); fill(ex.body); ex.el.classList.remove('min'); focusWin('talkroom'); }
+  else {
+    const rec = openWin('talkroom', { cls: 'chatwin tkroom', title: r.name, task: 'TALK · 대화', x: 660, y: 90, w: 400, h: 620, head: head(), render: fill });
+    if (!isMobile()) rec.el.animate([{ opacity: 0, transform: 'translateX(-60px) scale(.98)' }, { opacity: 1, transform: 'none' }], { duration: 420, easing: 'cubic-bezier(.22,.9,.25,1)' });
+  }
+  const w = wins.get('talkroom'); w.task = r.name; renderTasks();
+  w.el.onclick = e => {
+    if (e.target.closest('[data-tked]')) { e.stopPropagation(); dispatchEvent(new CustomEvent('sye-talk', { detail: { i: TK_CUR } })); return; }
+    if (e.target.closest('.chat-head .back')) { e.stopPropagation(); closeWin('talkroom'); }
+  };
+  tkPlace();
+}
+// 제작자 : 저장하고 다시 불러오면 그 대화방을 다시 열어줘요
+if (OWNER) try { const ro = sessionStorage.getItem('sye-talk-open'); if (ro != null) { sessionStorage.removeItem('sye-talk-open'); const t0 = Date.now(), iv = setInterval(() => { if (document.querySelector('#intro') && Date.now() - t0 < 9000) return; clearInterval(iv); setTimeout(() => { openApp('talk'); if (+ro >= 0) setTimeout(() => openTalkRoom(+ro), 300); }, 600); }, 300); } } catch (e) {}
 function openApp(id) { closeLauncher(); if (id.startsWith('x-')) return openExtra(id.slice(2)); if (id.startsWith('grp-')) return openChars(id.slice(4)); if (id === 'member' && S.characters?.worlds?.arch) return openChars('arch'); DEFS[id] && DEFS[id](); }
 document.addEventListener('click', e => {
   const o = e.target.closest('[data-open]');
@@ -1635,37 +1696,28 @@ const DEFS = {
   },
 
   /* ----- Messenger ----- */
-  talk: () => openWin('talk', {
-    cls: 'chatwin', title: 'Messenger', task: 'Messenger', x: 129, y: 117, w: 399, h: 648,
-    head: `<div class="chat-head"><span class="back">${ic('chevl')}</span><span class="avs">${ph(S.chat.avatar, { seed: S.chat.partner })}${ph(S.chat.me.avatar, { seed: S.chat.me.name })}</span><span><b>${esc(S.chat.partner)}</b><small>${esc(S.chat.status)}</small></span></div>`,
-    render(b) {
-      b.style.overflow = 'hidden';
-      b.innerHTML = `<div class="chat"><div class="chat-list"></div><form class="chat-in"><button type="button" class="plus">${ic('plus')}</button><input placeholder="메시지 입력" maxlength="200"><button>${ic('send')}</button></form></div>`;
-      const list = $('.chat-list', b); let last = null;
-      const add = (m, anim = true) => {
-        if (m.from !== last) {
-          const who = m.from === 'me' ? S.chat.me : { name: S.chat.partner, avatar: S.chat.avatar };
-          list.insertAdjacentHTML('beforeend', `<div class="who ${m.from}">${ph(who.avatar, { cls: 'av', seed: who.name })}<span>${esc(who.name)}</span></div>`);
-          last = m.from;
-        }
-        const d = document.createElement('div'); d.className = `msg ${m.from} ${m.emo ? 'emo' : ''}`; if (!anim) d.style.animation = 'none';
-        d.textContent = m.text; list.appendChild(d); list.scrollTop = list.scrollHeight; return d;
-      };
-      S.chat.messages.forEach(m => add(m, false));
-      const n = new Date(); list.insertAdjacentHTML('beforeend', `<div class="msg-time">${n.getHours() < 12 ? '오전' : '오후'} ${n.getHours() % 12 || 12}:${pad(n.getMinutes())}</div>`);
-      list.scrollTop = list.scrollHeight;
-      let ri = 0;
-      b.addMsg = m => add(m);
-      $('form', b).onsubmit = e => {
-        e.preventDefault(); const inp = $('input', b), v = inp.value.trim(); if (!v) return;
-        add({ from: 'me', text: v }); inp.value = '';
-        setTimeout(() => {
-          const t = add({ from: 'them', text: '' }); t.innerHTML = '<span class="typing"><i></i><i></i><i></i></span>';
-          setTimeout(() => { t.textContent = S.chat.replies[ri++ % S.chat.replies.length]; list.scrollTop = list.scrollHeight; }, 1300);
-        }, 500);
-      };
-    }
-  }),
+  talk: () => {   // TALK : 왼쪽은 대화방 목록 (카톡처럼) · 방을 누르면 오른쪽에 대화 창
+    const rec = openWin('talk', {
+      cls: 'tkwin', icon: 'chat', title: 'TALK', sub: '채팅', task: 'TALK', x: 300, y: 90, w: 340, h: 620,
+      render(b) {
+        const me = TK_ME(), R = TK_ROOMS();
+        const last = r => { const m = (r.messages || [])[r.messages.length - 1]; return m ? (m.from === 'me' ? '나: ' : m.name ? m.name + ': ' : '') + m.text : ''; };
+        b.innerHTML = `<div class="tk">
+          <div class="tk-me">${ph(me.avatar, { cls: 'tk-av', seed: me.name })}<div><b>${esc(me.name)}</b><small>내 프로필</small></div><span class="tk-on">ONLINE</span></div>
+          <div class="tk-search">${ic('search')}<input placeholder="대화방 검색" aria-label="대화방 검색"></div>
+          <div class="tk-sec"><span>채팅</span><em>${R.length}</em></div>
+          <div class="tk-list">${R.map((r, i) => `<div class="tk-row" data-room="${i}" role="button" tabindex="0">${ph(r.avatar, { cls: 'tk-av', seed: r.name })}<div class="tk-tx"><b>${esc(r.name)}</b><p>${esc(last(r))}</p></div><div class="tk-meta"><small>${esc(r.time || '')}</small>${TK_UNREAD(i) ? `<i>${TK_UNREAD(i) > 99 ? '99+' : TK_UNREAD(i)}</i>` : ''}</div></div>`).join('')}</div>
+          <button type="button" class="cx-add tk-add" data-tkadd>＋ 새 대화방</button></div>`;
+        b.addEventListener('click', e => {
+          if (e.target.closest('[data-tkadd]')) { dispatchEvent(new CustomEvent('sye-talk', { detail: { i: null } })); return; }
+          const r = e.target.closest('.tk-row'); if (r && !(SYE_ON && e.target.closest('[data-slot]'))) openTalkRoom(+r.dataset.room);
+        });
+        $('.tk-search input', b).addEventListener('input', e => { const q = e.target.value.trim().toLowerCase(); $$('.tk-row', b).forEach(r => { r.style.display = !q || r.textContent.toLowerCase().includes(q) ? '' : 'none'; }); });
+      }
+    });
+    tkPlace();
+    return rec;
+  },
 
   /* ----- Stage Monitor ----- */
   monitor: () => {
@@ -3057,10 +3109,11 @@ function startToasts() {
   (S.toasts || []).forEach(t => setTimeout(() => {
     if (t.app === 'game') toast({ title: S.game.name, text: S.game.invite, icon: 'game', icCls: 'dk', app: 'game' });
     if (t.app === 'talk') {
-      const text = S.chat.incoming[inc++ % S.chat.incoming.length];
+      const R0 = TK_ROOMS()[0] || {}, IN = R0.incoming || []; if (!IN.length) return;
+      const text = IN[inc++ % IN.length];
       setBadge(++talkBadge);
-      toast({ title: S.chat.partner, text, avatar: S.chat.avatar, app: 'talk' });
-      const w = wins.get('talk'); if (w && w.body.addMsg) w.body.addMsg({ from: 'them', text });
+      toast({ title: R0.name, text, avatar: R0.avatar, app: 'talk' });
+      const w = wins.get('talkroom'); if (w && TK_CUR === 0 && w.body.addMsg) w.body.addMsg({ from: 'them', text });
     }
   }, (t.delay || 30) * 1000));
 }
@@ -5052,7 +5105,7 @@ addEventListener('pointerup', e => { if (!fxDown) return; const moved = Math.hyp
   if (!OWNER) return;
   const clone = o => JSON.parse(JSON.stringify(o));
   let ED = clone(RAW), dirty = false;
-  const LABEL = { textOverrides: '화면에서 직접 바꾼 글자 (원래 글자 → 바꾼 글자)', imgPos: '사진 위치 · 크기 (사진 자리에서 조절)', brand: '로고 · 이름', clinic: '위 배너 (SYRINGE)', online: '위 바 알약 글자', credit: '아래 바 오른쪽 글자', spec: 'SPEC SHEET 카드', pairs: '페어 목록 (오른쪽 카드 · 배너 D+)', pair: '기본 페어 (D-DAY 알림)', pairLabels: '페어 카드 작은 글자', venue: '페어 카드 위 제목', passLabel: '페어 카드 작은 제목', characters: '캐릭터 정리 창 (東京青藍大学 · ARCH · FRONTLINE · ETC.)', members: 'MEMBER 프로필', memberOpen: '처음 보이는 MEMBER 번호', extraApps: '아이콘 창 내용 (Gallery · About · Mail …)', bgm: '음악 (Player · 아래 BGM)', chat: 'MOONtalk 메신저', toasts: '자동 알림', memo: 'Memo', records: 'Records (CATEGORY)', notice: 'Notice', monitor: 'Stage Monitor', pedal: 'Pedal Board', neighbors: 'Neighbors', internet: 'Internet', game: 'Game', links: 'Link Hub', intro: '입장화면', title: '(예전) 큰 제목', heroTicket: '(예전) 티켓', studio: '(예전) 글자', residence: '(예전) 글자', footer: '(예전) 글자', marquee: '(예전) 흐르는 글자', home: '(예전/휴대폰) 메인 글자', blueprint: '(예전) 설계도' };
+  const LABEL = { textOverrides: '화면에서 직접 바꾼 글자 (원래 글자 → 바꾼 글자)', imgPos: '사진 위치 · 크기 (사진 자리에서 조절)', brand: '로고 · 이름', clinic: '위 배너 (SYRINGE)', online: '위 바 알약 글자', credit: '아래 바 오른쪽 글자', spec: 'SPEC SHEET 카드', pairs: '페어 목록 (오른쪽 카드 · 배너 D+)', pair: '기본 페어 (D-DAY 알림)', pairLabels: '페어 카드 작은 글자', venue: '페어 카드 위 제목', passLabel: '페어 카드 작은 제목', characters: '캐릭터 정리 창 (東京青藍大学 · ARCH · FRONTLINE · ETC.)', members: 'MEMBER 프로필', memberOpen: '처음 보이는 MEMBER 번호', extraApps: '아이콘 창 내용 (Gallery · About · Mail …)', bgm: '음악 (Player · 아래 BGM)', chat: 'TALK 메신저 (대화방)', toasts: '자동 알림', memo: 'Memo', records: 'Records (CATEGORY)', notice: 'Notice', monitor: 'Stage Monitor', pedal: 'Pedal Board', neighbors: 'Neighbors', internet: 'Internet', game: 'Game', links: 'Link Hub', intro: '입장화면', title: '(예전) 큰 제목', heroTicket: '(예전) 티켓', studio: '(예전) 글자', residence: '(예전) 글자', footer: '(예전) 글자', marquee: '(예전) 흐르는 글자', home: '(예전/휴대폰) 메인 글자', blueprint: '(예전) 설계도' };
   const GROUPS = [['메인 화면', ['clinic', 'brand', 'online', 'credit', 'spec']], ['페어 · D-DAY', ['pairs', 'pair', 'pairLabels', 'venue', 'passLabel']], ['캐릭터', ['characters', 'members', 'memberOpen']], ['아이콘 창', ['extraApps']], ['음악', ['bgm']], ['메신저 · 알림', ['chat', 'toasts']], ['글 · 기록', ['memo', 'records', 'notice']], ['기타 창', ['monitor', 'pedal', 'neighbors', 'internet', 'game', 'links']], ['입장화면', ['intro']], ['예전 글자', ['title', 'heroTicket', 'studio', 'residence', 'footer', 'marquee', 'home', 'blueprint']]];
   const used = new Set(GROUPS.flatMap(g => g[1])), rest = Object.keys(ED).filter(k => !used.has(k)); if (rest.length) GROUPS.push(['그 밖에', rest]);
   const IMGK = /^(image|imageBack|img|cover|photo|avatar|banner|thumb|passImage|bg|face|profile|pic|poster)$/i;
@@ -5376,7 +5429,7 @@ html.sye-editing .sye-t.on{background:rgba(127,214,176,.4);outline:2px solid #3F
     if (!SYE_ON) return;
     if (e.target.closest('.sye-tbox2')) { e.stopPropagation(); if (ev === 'click') { const b = e.target.closest('[data-tb]'); if (b) close2(b.dataset.tb); } return; }
     // B. 홈페이지 화면(바탕 · 창 · 런처) 글자만 — 편집 창 · 입력칸 · 버튼 모음은 그대로 눌리게
-    if (!e.target.closest('#desk,#winlayer,#launcher') || e.target.closest('form,.sye-fm,.sye-t,.sye,.sye-ebar,.sye-pop,.sye-tbox,input,textarea,select,[data-slot],.cx-add,.cd-tags .ed')) return;
+    if (!e.target.closest('#desk,#winlayer,#launcher') || e.target.closest('form,.sye-fm,.sye-t,.sye,.sye-ebar,.sye-pop,.sye-tbox,input,textarea,select,[data-slot],.cx-add,.cd-tags .ed,.tk-row,.tk-me,.tkroom .chat-list,.tkroom .chat-head')) return;
     const hit = textAt(e.clientX, e.clientY);
     if (!hit) { if (ev === 'pointerdown' && k2 != null) close2('ok'); return; }
     const t = hit.n.textContent.trim(); if (t.length > 300) return;
@@ -5633,6 +5686,71 @@ html:not(.sye-editing) .cx-add,html:not(.sye-editing) .cd-tags .ed{display:none!
     try { sessionStorage.setItem('sye-reopen-sel', JSON.stringify({ t, i: list.length - 1 })); } catch (e) {}
     commit((t === 'pair' ? '새 페어' : '새 캐릭터') + '를 만들었어요 · 글자를 눌러 고치고, 사진 자리를 눌러 사진을 넣어요', w);
   }
+  /* ---------- TALK 대화방 추가 · 수정 · 삭제 ---------- */
+  const tRooms = () => {
+    const c = RAW.chat || (RAW.chat = {});
+    if (!c.rooms) RAW.chat = { me: c.me || { name: '나', avatar: '' }, rooms: [{ name: c.partner || '상대', status: c.status || '', avatar: c.avatar || '', time: '', unread: 0, messages: c.messages || [], replies: c.replies || [], incoming: c.incoming || [] }] };
+    return RAW.chat.rooms;
+  };
+  const tCommit = (msg, i) => { pend(); try { localStorage.setItem('sye-draft', JSON.stringify(RAW)); sessionStorage.setItem('sye-fast', '1'); sessionStorage.setItem('sye-talk-open', String(i)); } catch (e) { alert('저장 공간이 부족해서 저장하지 못했어요'); return; } toast(msg); setTimeout(() => location.reload(), 500); };
+  const tm = el(`<div class="sye-fm tk-fm"><form><div class="fh"><span class="ft"></span><button type="button" class="fx">✕</button></div><div class="fb"></div><div class="ff"></div></form></div>`);
+  document.body.appendChild(tm);
+  const TF = tm.querySelector('form'), TB = tm.querySelector('.fb'), TFF = tm.querySelector('.ff');
+  const tClose = () => tm.classList.remove('on');
+  tm.querySelector('.fx').onclick = tClose; tm.addEventListener('click', e => { if (e.target === tm) tClose(); });
+  const toLines = ms => (ms || []).map(m => (m.from === 'me' ? '나: ' : m.name ? '@' + m.name + ': ' : '') + (m.text || '')).join('\n');
+  const fromLines = t => t.split('\n').map(l => l.trim()).filter(Boolean).map(l => {
+    let m = l.match(/^(나|me)\s*[:：]\s*(.*)$/i); if (m) return { from: 'me', text: m[2] };
+    m = l.match(/^@([^:：]{1,20})[:：]\s*(.*)$/); if (m) return { from: 'them', name: m[1].trim(), text: m[2] };
+    return { from: 'them', text: l };
+  });
+  let TS = null;
+  function tOpen(i) {
+    const R = tRooms(), r = i == null ? { name: `새 대화방 ${R.length + 1}`, status: '온라인', avatar: '', time: '방금', unread: 1, messages: [{ from: 'them', text: '첫 메시지를 적어 주세요' }], replies: ['답장을 적어 주세요'], incoming: [] } : R[i];
+    if (!r) return; TS = { i };
+    tm.querySelector('.ft').textContent = i == null ? '＋ 새 대화방' : '✎ 대화방 수정';
+    TB.innerHTML = `<div class="sec">대화방</div>
+      <label><span>이름 (목록 · 대화 창 위)</span><input name="name" value="${E(r.name || '')}"></label>
+      <label><span>상태 한 줄</span><input name="status" value="${E(r.status || '')}" placeholder="예: 대기실 · 온라인"></label>
+      <div style="display:flex;gap:8px"><label style="flex:1"><span>목록에 보이는 시간</span><input name="time" value="${E(r.time || '')}" placeholder="예: 오후 9:41 · 어제"></label><label style="width:120px"><span>안 읽은 메시지 수</span><input name="unread" type="number" min="0" value="${+r.unread || 0}"></label></div>
+      <div class="sec">대화 내용</div>
+      <label><span>한 줄에 메시지 하나</span><textarea name="messages" rows="10">${E(toLines(r.messages))}</textarea>
+        <small>그냥 적으면 <b>상대</b> 말풍선 · <b>나: 내용</b> 은 내 말풍선 · 단톡방이면 <b>@이름: 내용</b> 으로 보낸 사람을 정해요</small></label>
+      <label><span>내가 메시지를 보내면 돌아오는 답장 (한 줄에 하나 · 차례대로)</span><textarea name="replies" rows="3">${E((r.replies || []).join('\n'))}</textarea></label>
+      <label><span>홈에 있으면 가끔 오는 알림 (한 줄에 하나 · 맨 위 대화방만)</span><textarea name="incoming" rows="2">${E((r.incoming || []).join('\n'))}</textarea></label>
+      <div class="sec">나</div>
+      <label><span>내 이름 (모든 대화방 공통)</span><input name="me" value="${E((RAW.chat.me || {}).name || '')}"></label>
+      ${i != null && i > 0 ? '<label class="tk-top"><input type="checkbox" name="top" style="width:auto;margin-right:6px">목록 맨 위로 올리기</label>' : ''}
+      <div class="note">프로필 사진은 <b>✎ EDIT</b> 를 켠 상태에서 목록이나 대화 창의 동그라미 사진 자리를 눌러서 넣어요. 다 고쳤으면 <b>저장</b> → 모두에게 보이게 하려면 아래 바의 <b>홈페이지에 저장</b>.</div>`;
+    TFF.innerHTML = `<button type="submit" class="sv">저장</button>${i != null ? '<button type="button" class="del">삭제</button>' : ''}<button type="button" class="cc">취소</button>`;
+    TFF.querySelector('.cc').onclick = tClose;
+    const del = TFF.querySelector('.del'); if (del) { let armed = false; del.onclick = () => { if (!armed) { armed = true; del.textContent = '한 번 더 누르면 삭제'; return; } tDelete(i); }; }
+    tm.classList.add('on'); setTimeout(() => TF.elements.name.focus(), 50);
+  }
+  function tDelete(i) {
+    const R = tRooms(); R.splice(i, 1); const base = 'chat.rooms.';
+    idbAll().then(all => Promise.all(Object.keys(all).filter(k => k.startsWith(base)).map(k => { const rest = k.slice(base.length), n = parseInt(rest, 10), tail = rest.slice(String(n).length);
+      if (n === i) return idbDel(k); if (n > i) return idbDel(k).then(() => idbPut(base + (n - 1) + tail, all[k])); }))).then(() => tCommit('대화방을 지웠어요', -1), () => tCommit('대화방을 지웠어요', -1));
+  }
+  TF.addEventListener('submit', e => {
+    e.preventDefault(); if (!TS) return; const v = n => (TF.elements[n] ? TF.elements[n].value.trim() : '');
+    if (!v('name')) { toast('대화방 이름을 적어 주세요'); return; }
+    const R = tRooms(), i = TS.i, o = i == null ? { avatar: '' } : JSON.parse(JSON.stringify(R[i]));
+    Object.assign(o, { name: v('name'), status: v('status'), time: v('time'), unread: Math.max(0, +v('unread') || 0), messages: fromLines(TF.elements.messages.value), replies: v('replies').split('\n').map(x => x.trim()).filter(Boolean), incoming: v('incoming').split('\n').map(x => x.trim()).filter(Boolean) });
+    if (v('me')) RAW.chat.me = Object.assign({ avatar: '' }, RAW.chat.me, { name: v('me') });
+    let at = i;
+    if (i == null) { R.push(o); at = R.length - 1; } else R[i] = o;
+    const top = TF.elements.top && TF.elements.top.checked;
+    if (top && at > 0) {   // 맨 위로 : 사진 자리 번호도 같이 옮겨요
+      R.splice(at, 1); R.unshift(o); const base = 'chat.rooms.', from = at;
+      idbAll().then(all => { const ks = Object.keys(all).filter(k => k.startsWith(base)), ops = [];
+        ks.forEach(k => { const rest = k.slice(base.length), n = parseInt(rest, 10), tail = rest.slice(String(n).length); if (n <= from) ops.push([k, base + (n === from ? 0 : n + 1) + tail, all[k]]); });
+        return Promise.all(ops.map(([k]) => idbDel(k))).then(() => Promise.all(ops.map(([, k2, val]) => idbPut(k2, val)))); }).then(() => tCommit('저장했어요 · 맨 위로 올렸어요', 0), () => tCommit('저장했어요', 0));
+      return;
+    }
+    tCommit(i == null ? '새 대화방을 만들었어요' : '저장했어요', at);
+  });
+  addEventListener('sye-talk', e => tOpen(e.detail ? e.detail.i : null));
   addEventListener('sye-char', e => e.detail && e.detail.i == null ? quickAdd(e.detail) : fOpen(e.detail));
   // 편집 중에도 캐릭터 · 페어 목록의 카드를 누르면 상세 창이 열려요 (카드 안 글자 · 사진은 상세 창에서 고쳐요)
   let cardPass = false;
@@ -5839,4 +5957,36 @@ html body #desk,html.m7 body #desk{background-color:#F9FAFA!important;background
 .mplayer.mg .mp-vol{display:flex;align-items:center;gap:10px;margin-top:10px;padding:0 8px;color:#6E7E78}
 .mplayer.mg .mp-vol svg{width:15px;height:15px}
 .mplayer.mg .mp-vol input{flex:1;accent-color:#3FAE84;height:3px}
+`; document.head.appendChild(st); })();
+/* TALK : 대화방 목록 (카톡 목록처럼) + 대화 창 */
+(() => { const st = document.createElement('style'); st.textContent = `
+#desk .win.tkwin .win-b{padding:0!important;overflow:hidden!important;display:flex;flex-direction:column}
+.tk{display:flex;flex-direction:column;height:100%;min-height:0;background:#fff;color:#14231E;font-family:'Pretendard','IBM Plex Sans KR',sans-serif}
+.tk-me{display:flex;align-items:center;gap:12px;padding:16px 18px 14px;border-bottom:1px solid #EEF3F1}
+.tk .tk-av{width:46px;height:46px;flex:none;border-radius:17px!important;overflow:hidden;box-shadow:none!important;border:0!important}
+.tk-me .tk-av{width:52px;height:52px;border-radius:19px!important}
+.tk-me div{flex:1;min-width:0}.tk-me b{display:block;font:800 15px 'Pretendard',sans-serif}.tk-me small{font:600 11px 'Pretendard',sans-serif;color:#8A9894}
+.tk-on{height:22px;padding:0 9px;border-radius:99px;background:#EAF7F1;color:#3FAE84;font:800 9px/22px 'Inter',sans-serif;letter-spacing:.12em}
+.tk-search{display:flex;align-items:center;gap:8px;margin:12px 14px 4px;height:36px;padding:0 12px;border-radius:12px;background:#F3F7F5;color:#8A9894}
+.tk-search svg{width:14px;height:14px;flex:none}
+.tk-search input{flex:1;min-width:0;border:0;outline:0;background:none;font:600 12.5px 'Pretendard',sans-serif;color:#14231E}
+.tk-sec{display:flex;align-items:center;gap:6px;padding:12px 18px 4px;font:800 10.5px 'Inter',sans-serif;letter-spacing:.14em;color:#8A9894}
+.tk-sec em{font-style:normal;color:#3FAE84}
+.tk-list{flex:1;min-height:0;overflow-y:auto;padding:2px 8px 10px;scrollbar-width:thin}
+.tk-row{display:flex;align-items:center;gap:12px;padding:9px 10px;border-radius:14px;cursor:pointer;transition:background .15s}
+.tk-row:hover{background:#F4F8F6}.tk-row.on{background:#EAF7F1}
+.tk-tx{flex:1;min-width:0}.tk-tx b{display:block;font:800 13.5px 'Pretendard',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tk-tx p{margin:3px 0 0;font:500 12px 'Pretendard',sans-serif;color:#6E7E78;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tk-meta{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex:none}
+.tk-meta small{font:600 10px 'Pretendard',sans-serif;color:#A3B2AD}
+.tk-meta i{min-width:20px;height:20px;padding:0 6px;border-radius:99px;background:#F06A6A;color:#fff;font:800 10.5px/20px 'Inter',sans-serif;font-style:normal;text-align:center}
+.tk .tk-add{margin:0 14px 14px;height:38px!important;border-radius:12px!important;border:1.5px dashed #9BDCC0!important;background:#F4FBF8!important;color:#2F9C74!important;font:800 12.5px 'Pretendard',sans-serif!important;cursor:pointer;flex:none}
+.tkroom .chat-head{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
+.tkroom .chat-head .back{cursor:pointer;display:grid;place-items:center}
+.tkroom .tk-hav{width:34px;height:34px;flex:none;border-radius:13px!important;overflow:hidden;border:0!important;box-shadow:none!important}
+.tkroom .chat-head > span:not(.back){min-width:0}.tkroom .chat-head b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tkroom .tk-ed{margin-left:auto;flex:none;height:26px!important;padding:0 10px!important;border-radius:8px!important;border:1.5px dashed #9BDCC0!important;background:#fff!important;color:#2F9C74!important;font:800 11px 'Pretendard',sans-serif!important;cursor:pointer}
+@media (min-width:721px){.tkroom .chat-head .back{display:none}}
+.tk-fm{z-index:99997}
+.tk-fm .tk-top{display:flex!important;align-items:center;font:700 12px 'IBM Plex Sans KR',sans-serif;margin-top:14px}
 `; document.head.appendChild(st); })();

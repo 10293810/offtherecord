@@ -445,27 +445,48 @@ const SITE = {
     }
   },
 
-  /* ---------- MOONtalk (메신저) ---------- */
+  /* ---------- TALK (메신저 · 대화방 목록) ---------- */
   chat: {
-    partner: 'REN', status: '대기실 · 온라인', avatar: '',
-    me: { name: 'HANA', avatar: '' },
-    // from: 'them'(상대) / 'me'(나)
-    messages: [
-      { from: 'them', text: '밥 안 먹으면 오늘 리허설 끝나고 바로 데리러 간다' },
-      { from: 'them', text: '선택해. 얌전히 문 열어줄래 아니면 내가 매니저 형한테 키 받아서 들어갈까?' },
-      { from: 'me', text: '협박범 진짜' },
-      { from: 'me', text: '열어놨어——' },
-      { from: 'them', text: '하나야, 혹시 오늘 저녁에 약속 있어? 공연 끝나고 파스타 먹으러 갈까' },
-      { from: 'them', text: '리허설 중에 다치지 말고, 힘들면 꼭 중간중간 쉬어가면서 해. 네 응원 소리 다 들려——' },
-      { from: 'them', text: '♥', emo: true },
-      { from: 'them', text: '방금 복도에서 스쳐 지나갔는데, 나 못 봤지? 우리 고양이ㅋㅋ' },
-      { from: 'them', text: '지금 어디야? 위치 공유 꺼놨어?' },
-      { from: 'them', text: '사운드체크 끝나면 바로 연락할게' },
-      { from: 'them', text: '공연 끝나고 뒷문으로 와 🌙' }
-    ],
-    replies: ['응, 듣고 있어', '지금 대기실. 너 온 거 보여', '…앵콜 한 곡 더 할까', '목소리 괜찮아. 너 오면 더 괜찮고', '잠깐만, 매니저 형 온다'],
-    // 홈에 있으면 가끔 상대가 보내는 메시지 (알림으로 떠요)
-    incoming: ['♥', '보고 싶다', '어디야?']
+    me: { name: 'HANA', avatar: '' },   // 나 (오른쪽 말풍선)
+    // 대화방 목록 · 위에 있는 방이 목록 맨 위 · 제작자 화면(?owner → ✎ EDIT)에서 추가 · 수정 · 삭제할 수 있어요
+    // messages : from 'them'(상대) / 'me'(나) · 단톡방에서 보낸 사람은 name 으로
+    rooms: [
+      { name: 'REN', status: '대기실 · 온라인', avatar: '', time: '오후 11:02', unread: 4,
+        messages: [
+          { from: 'them', text: '밥 안 먹으면 오늘 리허설 끝나고 바로 데리러 간다' },
+          { from: 'them', text: '선택해. 얌전히 문 열어줄래 아니면 내가 매니저 형한테 키 받아서 들어갈까?' },
+          { from: 'me', text: '협박범 진짜' },
+          { from: 'me', text: '열어놨어——' },
+          { from: 'them', text: '하나야, 혹시 오늘 저녁에 약속 있어? 공연 끝나고 파스타 먹으러 갈까' },
+          { from: 'them', text: '리허설 중에 다치지 말고, 힘들면 꼭 중간중간 쉬어가면서 해. 네 응원 소리 다 들려——' },
+          { from: 'them', text: '♥', emo: true },
+          { from: 'them', text: '방금 복도에서 스쳐 지나갔는데, 나 못 봤지? 우리 고양이ㅋㅋ' },
+          { from: 'them', text: '지금 어디야? 위치 공유 꺼놨어?' },
+          { from: 'them', text: '사운드체크 끝나면 바로 연락할게' },
+          { from: 'them', text: '공연 끝나고 뒷문으로 와 🌙' }
+        ],
+        replies: ['응, 듣고 있어', '지금 대기실. 너 온 거 보여', '…앵콜 한 곡 더 할까', '목소리 괜찮아. 너 오면 더 괜찮고', '잠깐만, 매니저 형 온다'],
+        incoming: ['♥', '보고 싶다', '어디야?']   // 홈에 있으면 가끔 오는 메시지 (알림)
+      },
+      { name: '밴드 단톡방', status: 'SEIRAN UNIV. BAND · 4명', avatar: '', time: '오후 9:40', unread: 12,
+        messages: [
+          { from: 'them', name: '드럼', text: '내일 합주 7시 맞지?' },
+          { from: 'them', name: '베이스', text: '402호 키 누가 갖고 있어' },
+          { from: 'me', text: '나한테 있어! 6시 반에 열어둘게' },
+          { from: 'them', name: '드럼', text: '천사다 진짜' },
+          { from: 'them', name: 'REN', text: '셋리스트 3번 4번 순서 바꾸자' }
+        ],
+        replies: ['ㅇㅋㅇㅋ', '내일 봐!', '간식 사갈게'], incoming: []
+      },
+      { name: '매니저 형', status: '연락 가능', avatar: '', time: '어제', unread: 0,
+        messages: [
+          { from: 'them', text: '축제 무대 리허설 시간 확정됐다' },
+          { from: 'them', text: '토요일 오후 3시. 늦지 마라' },
+          { from: 'me', text: '넵 알겠습니다!' }
+        ],
+        replies: ['그래', '확인했다'], incoming: []
+      }
+    ]
   },
 
   /* ---------- 자동 알림 (초 단위) ---------- */
