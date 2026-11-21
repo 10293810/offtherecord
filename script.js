@@ -1270,9 +1270,9 @@ function openWin(id, def) {
   }
   // CATEGORY(Records) · NOTICE 창은 위 메뉴 버튼 바로 밑에 붙어서 열려요 (화면 크기와 상관없이)
   if (!isMobile() && /^(records|notice)$/.test(id)) {
-    const btn = $('#desk .topnav [data-open="records"]'), dk = $('#desk');   // NOTICE 도 CATEGORY 와 같은 왼쪽 줄에 맞춰요 (겹쳐도 괜찮게)
+    const btn = $(`#desk .topnav [data-open="${id}"]`), dk = $('#desk');   // 각자 자기 메뉴 버튼 바로 밑에
     if (btn && dk) { const br = btn.getBoundingClientRect(), dr = dk.getBoundingClientRect(), k = (dr.width / deskW()) || 1, wz2 = +el.dataset.wz || 1, ww = el.offsetWidth * wz2;
-      const x = Math.max(12, Math.min((br.left - dr.left) / k - 14, deskW() - ww - 12)), y = (br.bottom - dr.top) / k + 12;
+      const x = Math.max(12, Math.min((br.left - dr.left) / k - 14, deskW() - ww - 12)), y = (br.bottom - dr.top) / k + 7;
       el.style.left = x / wz2 + 'px'; el.style.top = y / wz2 + 'px'; }
   }
   // 음악 플레이어는 오른쪽 위에 세로로 길게 붙어서 열려요 (퓨어.kr 처럼 · 뒤 화면은 그대로)
