@@ -1786,61 +1786,45 @@ const DEFS = {
   pedal: () => {
     const PD = S.pedal;
     openWin('pedal', {
-      cls: 'pedalwin', title: PD.title, x: 182, y: 78, w: 414, h: 688,
+      cls: 'pedalwin pb2', title: PD.title, x: 182, y: 78, w: 414, h: 688,
       head: `<div class="pd-head"><span class="tile">${ic('sliders')}</span><span><b>${esc(PD.title)}</b><small>${esc(PD.code)}</small></span><span class="st"><i class="led"></i>${esc(PD.status)}</span></div>`,
       render(b) {
         let sel = []; const found = new Set();
-        b.innerHTML = `<div class="pd">
-          <div class="pd-art"><div class="lbl"><span>RIG · PB-01</span><b>05 ITEMS</b></div>
-            <svg viewBox="0 0 390 218">
-              <defs><linearGradient id="pdB" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#56D2E3"/><stop offset="1" stop-color="#2CB0C2"/></linearGradient>
-              <pattern id="pdD" width="5" height="5" patternUnits="userSpaceOnUse"><circle cx="2.5" cy="2.5" r="1" fill="#fff" opacity=".5"/></pattern></defs>
-              <path d="M30 60 C 80 52, 120 66, 170 56" fill="none" stroke="#A1E0E9" stroke-width="3" stroke-linecap="round"/>
-              <rect x="52" y="54" width="82" height="13" rx="4" fill="url(#pdB)" transform="rotate(-4 93 60)"/>
-              <rect x="170" y="49" width="20" height="10" rx="2" fill="#CBE9ED" transform="rotate(-4 180 54)"/>
-              <rect x="188" y="51" width="38" height="5" rx="2" fill="#DCEFF1" transform="rotate(-4 207 53)"/>
-              <rect x="243" y="38" width="4" height="22" rx="2" fill="#2CB0C2"/>
-              <rect x="262" y="72" width="78" height="112" rx="12" fill="url(#pdB)"/>
-              <rect x="262" y="72" width="78" height="112" rx="12" fill="url(#pdD)" opacity=".7"/>
-              <rect x="272" y="96" width="58" height="34" rx="4" fill="#fff"/>
-              <text x="281" y="111" font-family="Space Grotesk" font-weight="700" font-size="8" fill="#2CB0C2">⁘ B-P-M</text>
-              <rect x="281" y="117" width="40" height="3" rx="1.5" fill="#D3EEF1"/>
-              <circle cx="284" cy="148" r="7" fill="#fff"/><circle cx="318" cy="148" r="7" fill="#fff"/>
-              <rect x="290" y="164" width="22" height="10" rx="3" fill="#ECFBFD"/>
-              <rect x="266" y="60" width="70" height="14" rx="4" fill="#2CB0C2"/>
-              <path d="M44 172 c-6 0 -22 -18 -22 -30 c0 -9 10 -14 22 -14 s22 5 22 14 c0 12 -16 30 -22 30z" fill="#47C3D4" transform="rotate(-20 44 150)"/>
-              <path d="M44 172 c-6 0 -22 -18 -22 -30 c0 -9 10 -14 22 -14 s22 5 22 14 c0 12 -16 30 -22 30z" fill="#fff" opacity=".9" transform="translate(30 -6) rotate(-20 44 150)"/>
-              <circle cx="152" cy="150" r="16" fill="#fff" stroke="#D9EDEF"/><path d="M140 150 h24" stroke="#D9EDEF" stroke-width="2"/>
-              <ellipse cx="200" cy="154" rx="15" ry="10" fill="#f2c14e"/>
-              <text x="18" y="198" font-size="10" fill="#38C0D2">✦</text><text x="22" y="98" font-size="8" fill="#38C0D2">✦</text><text x="128" y="78" font-size="8" fill="#A2DCE4">✕</text>
-            </svg></div>
-          <div class="pd-stats">${PD.stats.map((s, i) => `<div><small>${esc(s.label)}</small><b><span class="sv" data-i="${i}" style="font-size:inherit;color:inherit;margin:0">${Number(s.value).toFixed(s.fix)}</span><span>${esc(s.unit)}</span></b>${i === 0 ? '<i></i>' : ''}</div>`).join('')}</div>
-          <div class="pd-mix"><div class="pd-mix-h"><b>톤 조합실<small>TONE LAB · MIX UP TO 3</small></b><span class="dex">도감 0 /${PD.total}</span></div>
-            <p class="pd-mission">오늘의 미션<b>${esc(PD.mission)}</b></p>
-            <div class="pd-body"><div class="pd-items">${PD.items.map(it => `<button class="pd-item" data-it="${it.key}"><i style="--c:${it.color}"></i><span><b>${esc(it.name)}</b><small>${esc(it.en)}</small></span></button>`).join('')}</div>
-              <div class="pd-amp"><div class="amp"><span class="fill"></span></div><div class="pd-slots"><i></i><i></i><i></i></div></div></div>
-            <div class="pd-act"><button class="go">톤 만들기</button><button class="clr">비우기</button></div>
-            <div class="pd-res"><i></i><span>${esc(PD.hint)}</span></div></div></div>`;
-        const res = $('.pd-res', b);
+        const lum = c => { const h = (c || '#fff').replace('#', ''), n = parseInt(h.length === 3 ? h.split('').map(x => x + x).join('') : h, 16); return ((n >> 16) * .299 + ((n >> 8) & 255) * .587 + (n & 255) * .114) / 255; };
+        const pedal = (it, cls = '') => `<span class="pb-ped ${cls} ${lum(it.color) > .62 ? 'lt' : 'dk'}" style="--c:${it.color}"><i class="pb-led"></i><span class="pb-kn"><i></i><i></i></span><b>${esc(it.en)}</b><span class="pb-fs"></span></span>`;
+        b.innerHTML = `<div class="pb">
+          <div class="pb-chain"><div class="pb-ch-h"><span>SIGNAL CHAIN</span><b class="dex">도감 0 / ${PD.total}</b></div>
+            <div class="pb-rig"><span class="pb-jack"><i></i>IN</span><i class="pb-cable"></i>
+              <div class="pb-slots">${[0, 1, 2].map(i => `<span class="pb-slot" data-s="${i}"><em>${pad(i + 1)}</em></span>`).join('<i class="pb-cable sm"></i>')}</div>
+              <i class="pb-cable"></i><span class="pb-amp"><span class="pb-grill"></span><span class="pb-vu"><i></i></span><small>AMP</small></span></div>
+            <div class="pb-stats">${PD.stats.map((s, i) => `<div><small>${esc(s.label)}</small><b><span class="sv" data-i="${i}">${Number(s.value).toFixed(s.fix)}</span><em>${esc(s.unit)}</em></b></div>`).join('')}</div></div>
+          <p class="pb-mission"><span>오늘의 미션</span><b>${esc(PD.mission)}</b></p>
+          <div class="pb-shelf-h"><b>페달 고르기</b><small>눌러서 연결 · 최대 3개</small></div>
+          <div class="pb-shelf">${PD.items.map(it => `<button type="button" class="pb-pick" data-it="${it.key}">${pedal(it)}<span class="pb-nm"><b>${esc(it.name)}</b></span></button>`).join('')}</div>
+          <div class="pb-act"><button type="button" class="go">${ic('music')}톤 만들기</button><button type="button" class="clr">비우기</button></div>
+          <div class="pb-res"><i></i><span>${esc(PD.hint)}</span></div></div>`;
+        const res = $('.pb-res', b);
         const slots = () => {
-          $$('.pd-slots i', b).forEach((s, i) => { const it = PD.items.find(x => x.key === sel[i]); s.style.setProperty('--c', it ? it.color : 'transparent'); });
+          $$('.pb-slot', b).forEach((s, i) => { const it = PD.items.find(x => x.key === sel[i]); s.classList.toggle('on', !!it); s.innerHTML = it ? pedal(it, 'sm') : `<em>${pad(i + 1)}</em>`; });
           const last = PD.items.find(x => x.key === sel.at(-1));
-          $('.amp .fill', b).style.height = sel.length / 3 * 100 + '%';
-          $('.amp', b).style.setProperty('--fillc', last ? last.color : '#7AE6F4');
+          $('.pb-vu i', b).style.width = sel.length / 3 * 100 + '%';
+          $('.pb-amp', b).classList.toggle('live', sel.length === 3);
           $('.go', b).classList.toggle('ready', sel.length === 3);
           if (last) res.innerHTML = `<i style="--c:${last.color}"></i><span>${esc(last.name)} 연결 · ${sel.length}/3</span>`;
           else res.innerHTML = `<i></i><span>${esc(PD.hint)}</span>`;
         };
         b.addEventListener('click', e => {
-          const it = e.target.closest('[data-it]'); if (it && sel.length < 3) { sel.push(it.dataset.it); slots(); }
+          const it = e.target.closest('[data-it]'); if (it && sel.length < 3) { sel.push(it.dataset.it); slots(); it.classList.remove('hit'); void it.offsetWidth; it.classList.add('hit'); }
+          const sl = e.target.closest('.pb-slot.on'); if (sl) { sel.splice(+sl.dataset.s, 1); slots(); }
           if (e.target.closest('.clr')) { sel = []; slots(); }
           if (e.target.closest('.go')) {
             if (sel.length < 3) { res.innerHTML = `<i></i><span>페달을 3개 연결해 주세요 ✦</span>`; return; }
             const key = [...sel].sort().join(), r = PD.recipes.find(x => [...x.combo].sort().join() === key) || PD.fail;
             const isNew = r !== PD.fail && !found.has(r.name); if (r !== PD.fail) found.add(r.name);
-            $('.dex', b).textContent = `도감 ${found.size} /${PD.total}`;
+            $('.dex', b).textContent = `도감 ${found.size} / ${PD.total}`;
             const col = PD.items.find(x => x.key === sel[0]).color;
             sel = []; slots();
+            res.classList.remove('pop'); void res.offsetWidth; res.classList.add('pop');
             res.innerHTML = `<i style="--c:${col}"></i><span><b>${esc(r.name)}</b>${isNew ? '<span class="new">NEW</span>' : ''}<small>${esc(r.desc)}</small></span>`;
           }
         });
@@ -6058,4 +6042,74 @@ html:not(.sye-editing) .tk .tk-add,html:not(.sye-editing) .tkroom .tk-ed{display
 html body #desk .sy-hero{background-image:radial-gradient(120% 140% at 20% 0%,#FBFDF9 0%,#F5FAF3 55%,#EFF7F2 100%)!important}
 html body #desk .apps-panel{background-color:rgba(252,254,253,.96)!important}
 html body #desk .taskbar{background-color:rgba(253,254,254,.94)!important}
+`; document.head.appendChild(st); })();
+/* Pedal Board : 흰 바탕 · 민트 · 진짜 페달처럼 */
+(() => { const st = document.createElement('style'); st.textContent = `
+#desk .win.pb2{background:#fff!important;border:1px solid #E6EEEA!important;border-radius:24px!important;box-shadow:0 30px 60px -28px rgba(20,35,30,.3)!important;overflow:hidden}
+#desk .win.pb2 > .win-h{background:#fff!important;border-bottom:1px solid #F0F4F2!important}
+#desk .win.pb2 .pd-head .tile{background:linear-gradient(135deg,#6FD0A6,#3FAE84)!important;color:#fff!important;border-radius:10px!important}
+#desk .win.pb2 .pd-head .st{background:#EAF7F1!important;color:#2F9C74!important;border:0!important}
+#desk .win.pb2 .win-b{padding:14px!important;background:#fff!important;overflow-y:auto;scrollbar-width:none}
+.pb{display:flex;flex-direction:column;gap:12px;font-family:'Pretendard','IBM Plex Sans KR',sans-serif;color:#14231E}
+.pb-chain{border-radius:20px;background:#F6FAF8;border:1px solid #E6EEEA;padding:12px 14px 12px;background-image:linear-gradient(rgba(20,35,30,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(20,35,30,.035) 1px,transparent 1px);background-size:16px 16px}
+.pb-ch-h{display:flex;justify-content:space-between;align-items:center;font:800 9.5px 'Inter',sans-serif;letter-spacing:.16em;color:#8A9894}
+.pb-ch-h b{height:22px;padding:0 9px;border-radius:99px;background:#fff;color:#2F9C74;font:800 10px/22px 'Pretendard',sans-serif;letter-spacing:0;box-shadow:0 1px 4px rgba(20,35,30,.08)}
+.pb-rig{display:flex;align-items:center;margin:14px 0 12px;min-height:104px}
+.pb-jack{flex:none;display:flex;flex-direction:column;align-items:center;gap:4px;font:800 8.5px 'Inter',sans-serif;letter-spacing:.12em;color:#8A9894}
+.pb-jack i{width:18px;height:18px;border-radius:50%;background:#fff;border:4px solid #2F4E45;box-shadow:0 2px 6px rgba(20,35,30,.18)}
+.pb-cable{flex:1;min-width:6px;height:3px;border-radius:3px;background:#2F4E45;opacity:.8}
+.pb-cable.sm{flex:0 0 6px}
+.pb-slots{display:flex;align-items:center}
+.pb-slot{width:62px;height:92px;border-radius:12px;border:1.5px dashed #BFD9CC;background:rgba(255,255,255,.7);display:grid;place-items:center;cursor:default;transition:transform .2s}
+.pb-slot em{font:800 11px 'DM Mono',monospace;font-style:normal;color:#A9BDB4}
+.pb-slot.on{border:0;background:none;cursor:pointer}
+.pb-slot.on:hover{transform:translateY(-2px)}
+.pb-amp{flex:none;width:58px;height:84px;border-radius:12px;background:#2F4E45;padding:7px;display:flex;flex-direction:column;gap:5px;align-items:stretch;box-shadow:0 10px 18px -10px rgba(20,35,30,.6);position:relative}
+.pb-grill{flex:1;border-radius:6px;background:radial-gradient(circle,#4E7266 1.2px,transparent 1.6px) 0 0/5px 5px,#253F37}
+.pb-vu{height:5px;border-radius:3px;background:#1B2E28;overflow:hidden}.pb-vu i{display:block;height:100%;width:0;background:linear-gradient(90deg,#7FD7B1,#F2C66B);transition:width .4s}
+.pb-amp small{font:800 7.5px 'Inter',sans-serif;letter-spacing:.2em;color:#9FC9B8;text-align:center}
+.pb-amp.live{animation:pbAmp .5s ease-in-out infinite alternate}
+.pb-amp.live .pb-grill{background:radial-gradient(circle,#7FD7B1 1.2px,transparent 1.6px) 0 0/5px 5px,#253F37}
+@keyframes pbAmp{to{transform:scale(1.035)}}
+/* 페달 */
+.pb-ped{position:relative;display:flex;flex-direction:column;align-items:center;width:62px;height:92px;border-radius:12px;background:var(--c);padding:8px 6px 7px;box-shadow:inset 0 -6px 0 rgba(0,0,0,.08),0 8px 16px -10px rgba(20,35,30,.55);animation:pbIn .35s cubic-bezier(.3,1.5,.5,1)}
+@keyframes pbIn{from{transform:translateY(-14px) scale(.9);opacity:0}}
+.pb-ped .pb-led{position:absolute;right:8px;top:7px;width:6px;height:6px;border-radius:50%;background:#F06A6A;box-shadow:0 0 6px #F06A6A}
+.pb-kn{display:flex;gap:7px;margin-top:6px}.pb-kn i{width:14px;height:14px;border-radius:50%;background:#fff;box-shadow:0 2px 3px rgba(0,0,0,.18);position:relative}
+.pb-kn i::after{content:'';position:absolute;left:6px;top:2px;width:2px;height:5px;border-radius:1px;background:#2F4E45}
+.pb-ped b{margin-top:8px;font:800 7.5px 'Inter',sans-serif;letter-spacing:.1em}
+.pb-ped.lt b{color:#2F4E45}.pb-ped.dk b{color:#fff}
+.pb-fs{margin-top:auto;width:24px;height:24px;border-radius:50%;background:#E9EEEC;border:3px solid rgba(0,0,0,.12);box-shadow:inset 0 -2px 0 rgba(0,0,0,.12)}
+.pb-ped.sm{animation:pbIn .35s cubic-bezier(.3,1.5,.5,1)}
+/* 통계 */
+.pb-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.pb-stats div{border-radius:12px;background:#fff;padding:8px 10px;box-shadow:0 1px 4px rgba(20,35,30,.06)}
+.pb-stats small{display:block;font:800 8.5px 'Inter',sans-serif;letter-spacing:.14em;color:#8A9894}
+.pb-stats b{display:flex;align-items:baseline;gap:3px;margin-top:2px;font:800 17px 'Inter',sans-serif;color:#14231E}
+.pb-stats em{font:600 9.5px 'Inter',sans-serif;font-style:normal;color:#8A9894}
+.pb-mission{display:flex;align-items:center;gap:8px;margin:0;padding:9px 12px;border-radius:12px;background:#EEF8F3;font:500 11.5px 'Pretendard',sans-serif}
+.pb-mission span{flex:none;padding:3px 7px;border-radius:6px;background:#3FAE84;color:#fff;font:700 9.5px 'Pretendard',sans-serif}
+.pb-mission b{font-weight:700;color:#2F5A4E}
+.pb-shelf-h{display:flex;align-items:baseline;justify-content:space-between;padding:0 2px}
+.pb-shelf-h b{font:800 13px 'Pretendard',sans-serif}.pb-shelf-h small{font:500 10.5px 'Pretendard',sans-serif;color:#8A9894}
+.pb-shelf{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.pb-pick{display:flex;flex-direction:column;align-items:center;gap:7px;padding:10px 4px 9px;border-radius:16px;border:1px solid #EEF3F1;background:#fff;cursor:pointer;transition:transform .15s,box-shadow .2s}
+.pb-pick:hover{box-shadow:0 8px 18px -12px rgba(20,35,30,.4);transform:translateY(-2px)}
+.pb-pick .pb-ped{animation:none}
+.pb-pick.hit .pb-ped{animation:pbStomp .3s}
+@keyframes pbStomp{40%{transform:translateY(3px) scale(.96)}}
+.pb-nm b{font:700 11.5px 'Pretendard',sans-serif;color:#14231E}
+.pb-act{display:flex;gap:8px}
+.pb-act button{height:44px;border-radius:14px;border:0;font:800 13px 'Pretendard',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px}
+.pb-act .go{flex:1;background:#E9EFEC;color:#8A9894;transition:all .25s}
+.pb-act .go svg{width:15px;height:15px}
+.pb-act .go.ready{background:linear-gradient(135deg,#7FD7B1,#3FAE84);color:#fff;box-shadow:0 12px 22px -10px rgba(47,156,116,.75)}
+.pb-act .clr{width:84px;background:#F3F7F5;color:#3B544B}
+.pb-res{display:flex;align-items:center;gap:10px;min-height:52px;padding:10px 14px;border-radius:16px;border:1px solid #E6EEEA;background:#fff;font:500 11.5px/1.45 'Pretendard',sans-serif;color:#3B544B}
+.pb-res > i{flex:none;width:22px;height:22px;border-radius:7px;background:var(--c,#E9EFEC)}
+.pb-res b{display:inline;font:800 13px 'Pretendard',sans-serif;color:#14231E;margin-right:6px}
+.pb-res small{display:block;margin-top:2px;font:500 11px 'Pretendard',sans-serif;color:#6E7E78}
+.pb-res .new{display:inline-block;padding:1px 6px;border-radius:5px;background:#F06A6A;color:#fff;font:800 9px 'Inter',sans-serif;vertical-align:2px}
+.pb-res.pop{animation:pbRes .45s cubic-bezier(.3,1.5,.5,1)}
+@keyframes pbRes{from{transform:scale(.94);opacity:.4}}
 `; document.head.appendChild(st); })();

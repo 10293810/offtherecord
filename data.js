@@ -522,10 +522,10 @@ const SITE = {
     mission: '새벽 발라드 톤',
     stats: [{ label: 'VOLUME', value: 5.00, unit: 'dB', fix: 2 }, { label: 'TUNE', value: 440, unit: 'Hz', fix: 0, jitter: 0 }, { label: 'GAIN', value: 100, unit: '%', fix: 0, jitter: 2 }],
     items: [
-      { key: 'rv', name: '리버브', en: 'REVERB', color: '#dfe7ef' },
-      { key: 'od', name: '드라이브', en: 'OVERDRIVE', color: '#f5c55a' },
-      { key: 'dl', name: '딜레이', en: 'DELAY', color: '#4f9be8' },
-      { key: 'ch', name: '코러스', en: 'CHORUS', color: '#6fc3f0' }
+      { key: 'rv', name: '리버브', en: 'REVERB', color: '#DDF2E8' },
+      { key: 'od', name: '드라이브', en: 'OVERDRIVE', color: '#F2C66B' },
+      { key: 'dl', name: '딜레이', en: 'DELAY', color: '#3FAE84' },
+      { key: 'ch', name: '코러스', en: 'CHORUS', color: '#2F4E45' }
     ],
     hint: '페달을 앰프에 3개까지 연결하고 톤을 만들어 보세요 ✦',
     recipes: [
