@@ -5745,3 +5745,21 @@ requestAnimationFrame(() => setTimeout(startDesk, 50));
 /* 메인 화면 배경 : 비밀번호 화면과 같은 점무늬 + 민트 번짐 (조금 더 연하게 · 동그라미 · 큰 글씨 없이) */
 (() => { const st = document.createElement('style'); st.textContent = `
 html body #desk,html.m7 body #desk{background-color:#F9FAFA!important;background-image:radial-gradient(rgba(20,35,30,.09) 1px,transparent 1.4px),radial-gradient(44% 40% at 0% 0%,rgba(214,242,228,.85),rgba(214,242,228,0) 72%),radial-gradient(44% 40% at 100% 100%,rgba(214,242,228,.85),rgba(214,242,228,0) 72%),radial-gradient(30% 28% at 52% 48%,rgba(238,250,244,.6),rgba(238,250,244,0) 72%)!important;background-size:24px 24px,100% 100%,100% 100%,100% 100%!important;background-repeat:repeat,no-repeat,no-repeat,no-repeat!important}`; document.head.appendChild(st); })();
+/* 휴대폰 : 캐릭터 · 페어 상세 창 — 목록 창과 같은 자리에 꽉 찬 시트 + 위 이름 카드 + 가운데 큰 사진(아래로 스르륵) + 오른쪽 아래 동그라미 + 아래 노래 바 */
+(() => { const st = document.createElement('style'); st.textContent = `
+@media (max-width:720px),(max-aspect-ratio:4/5) and (max-width:1100px),(max-height:599px){
+  html.msheet #desk #winlayer .win.cydet.float{background:#F9FAFA!important;background-image:radial-gradient(rgba(20,35,30,.1) 1px,transparent 1.4px)!important;background-size:16px 16px!important;border:1px solid #fff!important;box-shadow:0 18px 40px -18px rgba(20,35,30,.3)!important;overflow:hidden!important}
+  html.msheet #desk #winlayer .win.cydet.float .win-h{height:22px!important;padding:0!important;justify-content:center!important;background:transparent!important}
+  html.msheet #desk #winlayer .win.cydet.float .win-h::before{content:'';width:38px;height:4px;border-radius:99px;background:rgba(20,35,30,.14);margin-top:8px}
+  html.msheet #desk #winlayer .win.cydet.float .win-h > *,html.msheet #desk #winlayer .win.cydet.float > .sh-grab,html.msheet #desk #winlayer .win.cydet.float .win-h::after{display:none!important}
+  html.msheet #desk #winlayer .win.cydet.float .win-b{padding:22px 12px 12px!important;display:flex!important;flex-direction:column!important;height:100%!important;box-sizing:border-box}
+  html.msheet #desk #winlayer .win.cydet.float .cy-pcard{position:relative;z-index:3;flex:none;margin:0!important;border:0!important;border-radius:18px!important;background:#fff!important;box-shadow:0 8px 22px -10px rgba(20,35,30,.18)!important}
+  html.msheet #desk #winlayer .win.cydet.float .cy-pstage,html.msheet #desk #winlayer .win.cydet.float .cf-stage{position:relative!important;flex:1 1 auto!important;min-height:0!important;margin:0 -12px!important;display:block!important;z-index:1}
+  html.msheet #desk #winlayer .win.cydet.float .cy-pstage .cy-pv,html.msheet #desk #winlayer .win.cydet.float .cf-stage .cy-pv{position:absolute!important;left:0!important;right:0!important;top:-26px!important;bottom:-6px!important;width:auto!important;height:auto!important;max-width:none!important;aspect-ratio:auto!important;margin:0!important;transform:none!important}
+  html.msheet #desk #winlayer .win.cydet.float .cy-pv .ph{position:absolute!important;inset:0!important;width:auto!important;height:auto!important;border-radius:0!important;border:0!important;box-shadow:none!important;background:linear-gradient(180deg,rgba(207,238,222,0),rgba(207,238,222,.85) 16%,rgba(207,238,222,.25) 70%,rgba(207,238,222,0))!important;-webkit-mask:linear-gradient(180deg,#000 62%,transparent 98%);mask:linear-gradient(180deg,#000 62%,transparent 98%)}
+  html.msheet #desk #winlayer .win.cydet.float .cy-pv .ph > img{width:100%!important;height:100%!important;object-fit:cover;object-position:50% 12%}
+  html.msheet #desk #winlayer .win.cydet.float .cy-pv .ph .ph-ic{opacity:.45}
+  html.msheet #desk #winlayer .win.cydet.float .cy-pv::before,html.msheet #desk #winlayer .win.cydet.float .cy-pv::after{display:none!important}
+  html.msheet #desk #winlayer .win.cydet.float .cf-side{position:absolute!important;right:12px!important;bottom:14px!important;top:auto!important;z-index:4}
+  html.msheet #desk #winlayer .win.cydet.float .pf-bar,html.msheet #desk #winlayer .win.cydet.float .cy-foot2{position:relative;z-index:3;flex:none;margin-top:8px!important}
+}`; document.head.appendChild(st); })();
