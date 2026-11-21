@@ -6134,9 +6134,9 @@ html body #desk .taskbar{background-color:rgba(253,254,254,.94)!important}
 .lha-gr{display:grid;grid-template-columns:1fr 1fr;gap:16px 14px;padding:0 18px}
 .lha-it{display:block;text-decoration:none;color:inherit;min-width:0}
 .lha-sl{position:relative;display:block;width:calc(100% - 14px);aspect-ratio:1}
-.lha-vn{position:absolute;left:0;top:5%;width:90%;height:90%;border-radius:50%;background:repeating-radial-gradient(circle,#15202A 0 2px,#22303A 2px 4px);transform:translateX(16%);transition:transform .45s cubic-bezier(.3,1.3,.5,1)}
+.lha-vn{position:absolute;left:0;top:5%;width:90%;height:90%;border-radius:50%;background:repeating-radial-gradient(circle,#15202A 0 2px,#22303A 2px 4px);transform:translateX(22%);transition:transform .45s cubic-bezier(.3,1.3,.5,1)}
 .lha-vn::after{content:'';position:absolute;left:50%;top:50%;width:32%;height:32%;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,#F3FCFD 0 3px,#5FD3BC 4px)}
-.lha-it:hover .lha-vn{transform:translateX(30%) rotate(40deg)}
+.lha-it:hover .lha-vn{transform:translateX(34%) rotate(40deg)}
 .lha-cv{position:absolute;inset:0;border-radius:12px;overflow:hidden;box-shadow:0 12px 20px -12px rgba(20,40,50,.5);z-index:1;transition:transform .25s}
 .lha-it:hover .lha-cv{transform:translateY(-2px)}
 .lha-cv .ph{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;border-radius:0!important;border:0!important;box-shadow:none!important}
