@@ -603,7 +603,8 @@ body.entered #desk .sy-bar i{animation:barFill 1.4s .45s cubic-bezier(.2,.8,.2,1
 #intro.gt .gt-bg::before{content:'';position:absolute;inset:0;background-image:radial-gradient(rgba(20,35,30,.16) 1px,transparent 1.4px);background-size:24px 24px;opacity:.55}
 #intro.gt .gt-blob{position:absolute;border-radius:50%;filter:blur(60px);opacity:.7;animation:gt-blob 14s ease-in-out infinite alternate}
 #intro.gt .gt-blob.b1{left:-8%;top:-12%;width:46vw;height:40vw;background:#C6EDDA}
-#intro.gt .gt-blob.b2{right:-10%;bottom:-14%;width:40vw;height:34vw;background:#D4F1E5;animation-delay:-5s}
+#intro.gt .gt-blob.b2{right:-8%;bottom:-12%;width:46vw;height:40vw;background:#C6EDDA;animation-name:gt-blob2}
+@keyframes gt-blob2{to{transform:translate(-4vw,-3vh) scale(1.08)}}
 #intro.gt .gt-blob.b3{left:38%;top:30%;width:30vw;height:26vw;background:#E5F8EE;animation-delay:-9s}
 @keyframes gt-blob{to{transform:translate(4vw,3vh) scale(1.08)}}
 #intro.gt .gt-rings{position:absolute;left:50%;top:50%;width:min(110vh,110vw);height:min(110vh,110vw);transform:translate(-50%,-50%)}
@@ -5743,4 +5744,4 @@ requestAnimationFrame(() => setTimeout(startDesk, 50));
 })();
 /* 메인 화면 배경 : 비밀번호 화면과 같은 점무늬 + 민트 번짐 (조금 더 연하게 · 동그라미 · 큰 글씨 없이) */
 (() => { const st = document.createElement('style'); st.textContent = `
-html body #desk,html.m7 body #desk{background-color:#F9FAFA!important;background-image:radial-gradient(rgba(20,35,30,.09) 1px,transparent 1.4px),radial-gradient(48% 44% at 4% 2%,rgba(214,242,228,.8),rgba(214,242,228,0) 72%),radial-gradient(48% 44% at 100% 100%,rgba(224,245,235,.8),rgba(224,245,235,0) 72%),radial-gradient(30% 28% at 52% 48%,rgba(238,250,244,.6),rgba(238,250,244,0) 72%)!important;background-size:24px 24px,100% 100%,100% 100%,100% 100%!important;background-repeat:repeat,no-repeat,no-repeat,no-repeat!important}`; document.head.appendChild(st); })();
+html body #desk,html.m7 body #desk{background-color:#F9FAFA!important;background-image:radial-gradient(rgba(20,35,30,.09) 1px,transparent 1.4px),radial-gradient(52% 48% at 0% 0%,rgba(214,242,228,.85),rgba(214,242,228,0) 72%),radial-gradient(52% 48% at 100% 100%,rgba(214,242,228,.85),rgba(214,242,228,0) 72%),radial-gradient(30% 28% at 52% 48%,rgba(238,250,244,.6),rgba(238,250,244,0) 72%)!important;background-size:24px 24px,100% 100%,100% 100%,100% 100%!important;background-repeat:repeat,no-repeat,no-repeat,no-repeat!important}`; document.head.appendChild(st); })();
