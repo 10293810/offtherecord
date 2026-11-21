@@ -2638,8 +2638,8 @@ function openChars(wid) {
       if (hd0) hd0.innerHTML = (C.tabs || []).map(([k, t]) => `<button class="btab cxt ${k === charTabKey ? 'on' : ''} ${k === 'au' ? 'ico' : ''}" data-ck="${k}" title="${esc(t)}"><span class="fav f-${k}">${ic(CHAR_TAB_ICON[k] || 'idcard')}</span>${k === 'au' ? '' : `${esc(t)}<em>${(W[k] || []).length}</em>`}</button>`).join('');
       return; }
     b.innerHTML = `<div class="cx ${cxAnim ? 'anim' : ''}">
-      <div class="cx-top2"><h3>${esc(W.title || W.name)}</h3><button class="cx-add">+ ${isPair ? '페어' : '캐릭터'} 추가</button></div>
-      <div class="cx-meta"><span>${esc(W.name)} · SCALE 1:1 · ${list.length} PCS</span></div>
+      <div class="dz-head cxz-head"><span class="dz-num">${pad(list.length)}</span><div><span class="dz-chip">${esc(W.name)}</span><b>${esc(W.title || W.name)}</b><small>${isPair ? 'PAIR' : 'MEMBER'} // SCALE 1:1 · ${list.length} PCS</small></div><button class="cx-add">+ ${isPair ? '페어' : '캐릭터'} 추가</button></div>
+      <div class="dz-rule"><i></i></div>
       <div class="cx-scroll">${!list.length ? `<div class="cx-empty">NO ${isPair ? 'PAIR' : 'CHARACTER'} · 오른쪽 위 + 버튼으로 추가해요</div>`
         : isPair ? `<div class="cp-list">${list.map((m, i) => { const A = m.a || {}, B = m.b || {}; return `<button class="cp-card ${isOn(i) ? 'on' : ''}" data-ci="${i}">
           <div class="cp-h">${m.badge ? `<i class="cp-badge">✦ ${esc(m.badge)}</i>` : ''}<b>${esc(m.name)}</b><span>${esc(m.tags || '')}</span></div>
@@ -6153,6 +6153,26 @@ html body #desk .taskbar{background-color:rgba(253,254,254,.94)!important}
 .lha-it b{display:block;margin-top:9px;font:800 12.5px 'Pretendard',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .lha-it p{margin:2px 0 0;font:500 10.5px 'Pretendard',sans-serif;color:#7C979E;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .lha-f{margin-top:auto;display:flex;justify-content:space-between;padding:18px 18px 14px;font:800 9px 'Inter',sans-serif;letter-spacing:.14em;color:#9AB3B9}
+`; document.head.appendChild(st); })();
+/* 장르 목록 창 (東京青藍大学 · ARCH · FRONTLINE · ETC.) : OOC · Profile 창과 같은 틀 — 상세 창은 그대로 */
+(() => { const st = document.createElement('style'); st.textContent = `
+#desk .win.cxwin{border-radius:24px!important;background:#F3FCFD!important;background-image:linear-gradient(rgba(49,172,189,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(49,172,189,.06) 1px,transparent 1px)!important;background-size:22px 22px!important;border:1.5px solid #D3EFF3!important;box-shadow:0 22px 50px -14px rgba(34,78,92,.35),inset 0 1px 0 #fff!important;overflow:hidden}
+#desk .win.cxwin::before{content:'';position:absolute;left:28px;right:28px;top:0;height:4px;border-radius:0 0 4px 4px;background:linear-gradient(90deg,#5FD3BC,#31ACBD)!important;z-index:3}
+#desk .win.cxwin > .win-h{background:transparent!important;border:0!important;padding:14px 14px 0 16px!important;height:auto!important;min-height:44px}
+#desk .win.cxwin .cxh-tabs{gap:6px!important}
+#desk .win.cxwin .cxh-tabs .btab{height:28px!important;padding:0 11px!important;border-radius:99px!important;background:#fff!important;border:1.5px solid #D3EFF3!important;box-shadow:none!important;color:#31ACBD!important;font:800 11px 'Inter',sans-serif!important;letter-spacing:.06em}
+#desk .win.cxwin .cxh-tabs .btab.on{background:linear-gradient(90deg,#6BCFA6,#31ACBD)!important;border-color:transparent!important;color:#fff!important}
+#desk .win.cxwin .cxh-tabs .btab .fav{background:transparent!important;color:inherit!important;box-shadow:none!important}#desk .win.cxwin .cxh-tabs .btab.on .fav,#desk .win.cxwin .cxh-tabs .btab.on .fav *{color:#fff!important;stroke:#fff!important}
+#desk .win.cxwin .cxh-tabs .btab small,#desk .win.cxwin .cxh-tabs .btab em{color:inherit!important;opacity:.75}
+#desk .win.cxwin .win-b{background:transparent!important}
+#desk .win.cxwin .cx{background:transparent!important}
+.cx .cxz-head{padding:10px 18px 10px!important;cursor:default;animation:none}
+.cx .cxz-head .dz-num{font-size:56px}
+.cx .cxz-head b{font-size:22px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px}
+.cx .cxz-head .cx-add{margin-left:auto;align-self:flex-start}
+.cx > .dz-rule{margin:0 18px 12px}
+#desk .win.cxwin .cx-card{border-radius:16px!important;box-shadow:0 12px 20px -12px rgba(34,78,92,.45)!important}
+#desk .win.cxwin .cp-card{border-color:#D3EFF3!important}
 `; document.head.appendChild(st); })();
 /* Profile ~ ETC. (dz · cx 창) · 캐릭터 상세 · Link Hub : 초록 민트와 틸의 중간 · 파스텔 민트로 색만 바꿔요
    (이 창들에 쓰인 CSS 규칙을 복사해서 초록 · 청록 계열 색만 골라 바꿔 붙여요 — 사진 색은 그대로) */
