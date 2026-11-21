@@ -1462,6 +1462,12 @@ function load(i, autoplay = true) {
   audio.loop = !!t.loop;   // loop: true 인 곡(배경음악)은 끝나면 처음부터 다시
   autoplay ? play() : syncPlayer();
 }
+// 다음 곡 : rotate: true 인 배경음악끼리는 차례대로 돌아가요 (마지막 곡 다음엔 다시 첫 곡)
+function nextI() {
+  const n = S.bgm.length; if (!S.bgm[PL.i] || !S.bgm[PL.i].rotate) return PL.i + 1;
+  for (let k = 1; k <= n; k++) { const j = (PL.i + k) % n; if (S.bgm[j] && S.bgm[j].rotate && S.bgm[j].src) return j; }
+  return PL.i + 1;
+}
 function play() { PL.on = true; if (cur().src) audio.play().catch(() => {}); syncPlayer(); }
 function pause() { PL.on = false; audio.pause(); syncPlayer(); }
 function toggle() { PL.on ? pause() : play(); try { PL.on ? localStorage.removeItem('bgm-off') : localStorage.setItem('bgm-off', '1'); } catch (e) {} }
@@ -1470,7 +1476,7 @@ function toggle() { PL.on ? pause() : play(); try { PL.on ? localStorage.removeI
 const BGM_VOL = 0.35;
 audio.volume = BGM_VOL;
 (() => {
-  const first = (S.bgm || [])[0]; if (!first || !first.src || !first.loop) return;
+  const first = (S.bgm || [])[0]; if (!first || !first.src || !(first.loop || first.rotate)) return;
   let off = false; try { off = localStorage.getItem('bgm-off') === '1'; } catch (e) {}
   if (off) return;
   const go = e => {
@@ -1486,10 +1492,10 @@ audio.volume = BGM_VOL;
 setInterval(() => {
   if (!PL.on) return;
   PL.pos = cur().src ? audio.currentTime : PL.pos + .25;
-  if (PL.pos >= dur()) { load(PL.i + 1); return; }
+  if (PL.pos >= dur()) { load(nextI()); return; }
   syncProgress();
 }, 250);
-audio.addEventListener('ended', () => load(PL.i + 1));
+audio.addEventListener('ended', () => load(nextI()));
 function syncPlayer() {
   const t = cur();
   $('.mini-title').textContent = t.title || '';

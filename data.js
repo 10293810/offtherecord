@@ -242,7 +242,9 @@ const SITE = {
 
   /* ---------- 음악 (Player · 하단 BGM) ---------- */
   bgm: [
-    { title: 'Snow Rehearsal (Piano Waltz)', artist: 'SEIRAN UNIV. BAND · BGM', cover: '', src: 'media/bgm-snow-waltz2.mp3', time: '2:46', line: '눈 오는 밤, 동아리방 피아노 앞에서', loop: true },   // 홈페이지 배경음악 (들어오면 작게 재생 · 반복)
+    { title: 'Snow Rehearsal (Piano Waltz)', artist: 'SEIRAN UNIV. BAND · BGM', cover: '', src: 'media/bgm-snow-waltz2.mp3', time: '2:46', line: '눈 오는 밤, 동아리방 피아노 앞에서', rotate: true },   // 홈페이지 배경음악 (들어오면 작게 재생 · 반복)
+    { title: 'Snow Rehearsal (Sleigh Ride)', artist: 'SEIRAN UNIV. BAND · BGM', cover: '', src: 'media/bgm-sleigh.mp3', time: '2:34', line: '썰매 방울 따라 합주실로 뛰어가기', rotate: true },
+    { title: 'Snow Rehearsal (Lullaby)', artist: 'SEIRAN UNIV. BAND · BGM', cover: '', src: 'media/bgm-lullaby.mp3', time: '2:51', line: '불 꺼진 동아리방, 창밖에 눈', rotate: true },   // rotate: true 인 곡 3개가 차례대로 돌아가며 재생돼요
     { title: 'Snow Rehearsal (Music Box)', artist: 'SEIRAN UNIV. BAND · BGM', cover: '', src: 'media/bgm-xmas.mp3', time: '0:50', line: '눈 내리는 동아리방, 마지막 합주' },
     { title: 'Love Disorder', artist: 'PURE × UXI', cover: '', src: '', time: '3:19', line: 'Beep. Beep.' },
     { title: 'B-P-M', artist: 'HANA × REN', cover: '', src: '', time: '2:58', line: '심장이 빨라지는 건' },
