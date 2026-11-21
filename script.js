@@ -697,7 +697,8 @@ body.entered #desk .sy-bar i{animation:barFill 1.4s .45s cubic-bezier(.2,.8,.2,1
 @keyframes gt-bub{from{transform:translateX(-50%) scale(.4);opacity:0}}
 #intro.gt .gt-tt{position:absolute;left:290px;right:40px;top:132px}
 #intro.gt .gt-tt h1{margin:0;font:900 var(--tfs,104px)/1.02 'Pretendard',sans-serif;letter-spacing:-.055em;white-space:nowrap;display:inline-block;padding-right:.04em}
-#intro.gt .gt-tt h1 b{color:var(--ink)}
+#intro.gt .gt-tt h1 b{background:linear-gradient(180deg,#7ED9B2,#3FAE84);-webkit-background-clip:text;background-clip:text;color:transparent}
+#intro.gt .gt-tt h1 b span{background:inherit;-webkit-background-clip:text;background-clip:text}
 #intro.gt .gt-tt h1 em{font-style:normal;background:linear-gradient(180deg,#7ED9B2,#3FAE84);-webkit-background-clip:text;background-clip:text;color:transparent}
 #intro.gt .gt-tt h1 span{display:inline-block;animation:gt-ch .7s cubic-bezier(.2,1.3,.4,1) both}
 #intro.gt .gt-tt h1 em span{background:inherit;-webkit-background-clip:text;background-clip:text}
