@@ -1519,10 +1519,13 @@ function syncPlayer() {
   const w = wins.get('player');
   if (w) {
     $('.mp-np h4', w.el).textContent = t.title; $('.mp-np p', w.el).textContent = t.artist;
-    $('.mp-art', w.el).innerHTML = ph(t.cover, { label: t.artist, seed: t.title });
-    $('.mp-lyric', w.el).innerHTML = `<b>♪</b>${esc(t.line || '')}`;
+    const mg = w.el.classList.contains('mglass');
+    $('.mp-art', w.el).innerHTML = mg ? (SRC(t.cover) ? `<img src="${esc(SRC(t.cover))}" alt="">` : '') : ph(t.cover, { label: t.artist, seed: t.title });
+    if (mg) { const sp = SPATH(t.cover); if (sp) $('.mp-art', w.el).dataset.slot = sp; else delete $('.mp-art', w.el).dataset.slot; }   // 제작자 편집 : 표지 자리를 누르면 사진 넣기
+    $('.mp-lyric', w.el).innerHTML = mg ? `<b>LYRIC</b><span>${esc(t.line || '')}</span>` : `<b>♪</b>${esc(t.line || '')}`;
+    w.el.classList.toggle('playing', PL.on);
     $('.mp-ctrl .big', w.el).innerHTML = ic(PL.on ? 'pause' : 'play');
-    $$('.mp-list button', w.el).forEach((b, i) => b.classList.toggle('on', i === PL.i));
+    $$('.mp-list button', w.el).forEach(b => b.classList.toggle('on', +b.dataset.t === PL.i));
   }
   $$('.tplayer').forEach(tp => { const me = +tp.dataset.bgm === PL.i; $('.pp', tp).innerHTML = ic(me && PL.on ? 'pause' : 'play'); });
   syncProgress();
@@ -1804,19 +1807,20 @@ const DEFS = {
 
   /* ----- Player ----- */
   player: () => openWin('player', {
-    cls: 'teal', icon: 'music', title: 'MUSIC PLAYER', task: 'Player', x: 686, y: 53, w: 336, h: 738,
+    cls: 'mglass', icon: 'music', title: 'NOW PLAYING', task: 'Player', x: 686, y: 53, w: 336, h: 738,
     render(b) {
-      b.innerHTML = `<div class="mplayer"><div class="mp-art"></div>
-        <div class="mp-np"><small>NOW PLAYING</small><h4></h4><p></p></div>
-        <div class="mp-wave">${Array.from({ length: 64 }, () => '<i></i>').join('')}</div>
+      // 민트 유리 플레이어 : 큰 표지 · 제목 · 진행 막대 · ◀ ▶ ▶ · 가사 한 줄 · 곡 목록 (표지 사진은 글씨 없이)
+      const mini = (t, i) => SRC(t.cover) ? `<img src="${esc(SRC(t.cover))}" alt="">` : `<i style="filter:hue-rotate(${(i % 3) * -14}deg) brightness(${1 + (i % 3) * .06})"></i>`;
+      b.innerHTML = `<div class="mplayer mg"><div class="mg-glow"></div><div class="mp-art"></div>
+        <div class="mp-np"><div><h4></h4><p></p></div><span class="mg-heart">${ic('heart')}</span></div>
+        <div class="mp-prog"><div class="bar"><i></i></div><div class="mg-t"><span class="t1">0:00</span><span class="t2">0:00</span></div></div>
+        <div class="mp-ctrl"><button data-p="prev">${ic('prev')}</button><button class="big" data-p="tog"></button><button data-p="next">${ic('next')}</button></div>
         <div class="mp-lyric"></div>
-        <div class="mp-prog"><span class="t1">0:00</span><div class="bar"><i></i></div><span class="t2">0:00</span></div>
-        <div class="mp-ctrl"><button data-p="shuf">${ic('shuffle')}</button><button data-p="prev">${ic('prev')}</button><button class="big" data-p="tog"></button><button data-p="next">${ic('next')}</button><button data-p="rep">${ic('repeat')}</button></div>
-        <div class="mp-list">${S.bgm.map((t, i) => `<button data-t="${i}"><span class="n">${pad(i + 1)}</span>${esc(t.title)}<small>${esc(t.artist)}</small></button>`).join('')}</div>
+        <div class="mp-list">${S.bgm.map((t, i) => t.src ? `<button data-t="${i}"><span class="mg-mini">${mini(t, i)}</span><span class="mg-tt">${esc(t.title.replace(/^Snow Rehearsal \((.*)\)$/, '$1'))}</span><em>${esc(t.time || '')}</em><span class="mg-eq"><i></i><i></i><i></i></span></button>` : '').join('')}</div>
         <div class="mp-vol">${ic('vol')}<input type="range" min="0" max="1" step=".01" value="${audio.volume}"></div></div>`;
       b.addEventListener('click', e => {
         const p = e.target.closest('[data-p]');
-        if (p) ({ tog: toggle, prev: () => load(PL.i - 1), next: () => load(PL.i + 1), shuf: () => load(Math.floor(Math.random() * S.bgm.length)), rep: () => { PL.pos = 0; if (cur().src) audio.currentTime = 0; syncProgress(); } })[p.dataset.p]();
+        if (p) ({ tog: toggle, prev: () => load(PL.i - 1), next: () => load(nextI()) })[p.dataset.p]();
         const t = e.target.closest('[data-t]'); if (t) load(+t.dataset.t);
         const pr = e.target.closest('.mp-prog .bar'); if (pr) { const r = pr.getBoundingClientRect(), f = (e.clientX - r.left) / r.width; PL.pos = f * dur(); if (cur().src) audio.currentTime = PL.pos; syncProgress(); }
       });
@@ -5783,3 +5787,56 @@ html body #desk,html.m7 body #desk{background-color:#F9FAFA!important;background
   html.msheet #desk #winlayer .win.cydet.float .cf-side{position:absolute!important;right:12px!important;bottom:14px!important;top:auto!important;z-index:4}
   html.msheet #desk #winlayer .win.cydet.float .pf-bar,html.msheet #desk #winlayer .win.cydet.float .cy-foot2{position:relative;z-index:3;flex:none;margin-top:8px!important}
 }`; document.head.appendChild(st); })();
+/* 음악 플레이어 : 민트 유리 (D 시안) */
+(() => { const st = document.createElement('style'); st.textContent = `
+#desk .win.mglass{background:rgba(255,255,255,.66)!important;border:1.5px solid #fff!important;border-radius:30px!important;box-shadow:0 30px 60px -26px rgba(20,35,30,.3)!important;-webkit-backdrop-filter:blur(20px) saturate(1.2)!important;backdrop-filter:blur(20px) saturate(1.2)!important;overflow:hidden!important;color:#14231E}
+#desk .win.mglass .win-h{background:transparent!important;border:0!important;height:46px!important;padding:0 16px 0 20px!important;position:relative;z-index:2}
+#desk .win.mglass .win-h .win-ic{background:none!important;color:#3B544B!important;width:auto!important;box-shadow:none!important}
+#desk .win.mglass .win-h .win-ic svg{width:13px;height:13px}
+#desk .win.mglass .win-t{font:800 10.5px 'Inter',sans-serif!important;letter-spacing:.16em!important;color:#3B544B!important}
+#desk .win.mglass .win-s{display:none}
+#desk .win.mglass .win-btns button{width:22px!important;height:22px!important;border-radius:50%!important;background:rgba(20,35,30,.08)!important;border:0!important;color:#3B544B!important}
+#desk .win.mglass .win-b{padding:0!important;background:transparent!important;overflow-y:auto;overflow-x:hidden;scrollbar-width:none}
+#desk .win.mglass .win-b::-webkit-scrollbar{display:none}
+.mplayer.mg{position:relative;display:flex;flex-direction:column;padding:4px 18px 16px;gap:0;background:none!important}
+.mplayer.mg .mg-glow{position:absolute;left:-60px;right:-60px;top:-110px;height:380px;background:radial-gradient(closest-side,rgba(111,208,166,.6),rgba(111,208,166,0));filter:blur(18px);pointer-events:none;z-index:0}
+.mplayer.mg > *{position:relative;z-index:1}
+.mplayer.mg .mp-art{width:236px;height:236px;margin:8px auto 0;border-radius:26px;overflow:hidden;background:linear-gradient(150deg,#2E5A4C,#3FAE84 60%,#A9E6CB);box-shadow:0 30px 40px -20px rgba(47,120,95,.7);transition:transform .5s cubic-bezier(.3,1.4,.5,1);transform:scale(.94)}
+.win.mglass.playing .mplayer.mg .mp-art{transform:none}
+.mplayer.mg .mp-art::after{content:'';position:absolute}
+.mplayer.mg .mp-art img{width:100%;height:100%;object-fit:cover;display:block}
+.mplayer.mg .mp-np{display:flex;align-items:flex-start;gap:10px;margin-top:22px;text-align:left}
+.mplayer.mg .mp-np > div{flex:1;min-width:0}
+.mplayer.mg .mp-np h4{margin:0;font:900 19px/1.2 'Pretendard',sans-serif!important;letter-spacing:-.03em;color:#14231E!important}
+.mplayer.mg .mp-np p{margin:5px 0 0;font:600 10.5px 'Inter',sans-serif;letter-spacing:.04em;color:#6E7E78!important}
+.mplayer.mg .mg-heart{color:#3FAE84;margin-top:4px}.mplayer.mg .mg-heart svg{width:16px;height:16px;fill:#3FAE84}
+.mplayer.mg .mp-prog{display:block;margin-top:16px}
+.mplayer.mg .mp-prog .bar{height:5px;border-radius:9px;background:rgba(20,35,30,.09)!important;cursor:pointer;position:relative;overflow:hidden}
+.mplayer.mg .mp-prog .bar i{display:block;height:100%;border-radius:9px;background:#14231E!important}
+.mplayer.mg .mg-t{display:flex;justify-content:space-between;margin-top:7px;font:600 10px 'DM Mono',monospace;color:#6E7E78}
+.mplayer.mg .mp-ctrl{display:flex;align-items:center;justify-content:center;gap:28px;margin-top:6px}
+.mplayer.mg .mp-ctrl button{background:none!important;border:0!important;color:#14231E!important;width:30px;height:30px;display:grid;place-items:center;box-shadow:none!important;padding:0}
+.mplayer.mg .mp-ctrl button svg{width:20px;height:20px}
+.mplayer.mg .mp-ctrl .big{width:60px!important;height:60px!important;border-radius:50%!important;background:#fff!important;box-shadow:0 10px 24px -8px rgba(20,35,30,.3)!important;transition:transform .2s}
+.mplayer.mg .mp-ctrl .big:active{transform:scale(.92)}
+.mplayer.mg .mp-lyric{margin-top:14px;border-radius:16px;background:rgba(255,255,255,.75);padding:11px 14px;display:flex;align-items:center;gap:10px;text-align:left;font:700 12px 'Pretendard',sans-serif;color:#2F5A4E!important;min-height:0}
+.mplayer.mg .mp-lyric b{flex:none;font:800 9px 'Inter',sans-serif;letter-spacing:.14em;color:#3FAE84}
+.mplayer.mg .mp-lyric span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mplayer.mg .mp-list{display:flex;flex-direction:column;gap:2px;margin-top:10px;max-height:none}
+.mplayer.mg .mp-list button{display:flex!important;align-items:center;gap:10px;height:42px;padding:0 8px!important;border-radius:12px!important;background:transparent!important;border:0!important;color:#14231E!important;font:700 12.5px 'Pretendard',sans-serif!important;text-align:left;box-shadow:none!important}
+.mplayer.mg .mp-list button:hover{background:rgba(255,255,255,.55)!important}
+.mplayer.mg .mp-list button.on{background:rgba(255,255,255,.85)!important}
+.mplayer.mg .mg-mini{width:28px;height:28px;border-radius:8px;overflow:hidden;flex:none;background:linear-gradient(150deg,#2E5A4C,#3FAE84 60%,#A9E6CB)}
+.mplayer.mg .mg-mini i,.mplayer.mg .mg-mini img{display:block;width:100%;height:100%;object-fit:cover;background:inherit}
+.mplayer.mg .mg-tt{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mplayer.mg .mp-list em{font:600 10px 'DM Mono',monospace;font-style:normal;color:#6E7E78}
+.mplayer.mg .mg-eq{display:none;align-items:flex-end;gap:2px;height:12px}
+.mplayer.mg .mg-eq i{width:3px;height:5px;border-radius:1px;background:#3FAE84}
+.mplayer.mg .mp-list button.on em{display:none}.mplayer.mg .mp-list button.on .mg-eq{display:flex}
+.win.mglass.playing .mg-eq i{animation:mgEq .9s ease-in-out infinite}
+.win.mglass.playing .mg-eq i:nth-child(2){animation-delay:-.3s}.win.mglass.playing .mg-eq i:nth-child(3){animation-delay:-.6s}
+@keyframes mgEq{0%,100%{height:4px}50%{height:12px}}
+.mplayer.mg .mp-vol{display:flex;align-items:center;gap:10px;margin-top:10px;padding:0 8px;color:#6E7E78}
+.mplayer.mg .mp-vol svg{width:15px;height:15px}
+.mplayer.mg .mp-vol input{flex:1;accent-color:#3FAE84;height:3px}
+`; document.head.appendChild(st); })();
