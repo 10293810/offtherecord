@@ -422,6 +422,7 @@ function jellyTitle(L, G) {
   const LK = I.lock || {}, PW = String(LK.password ?? '').trim();
   let locked = !!PW; try { if (sessionStorage.getItem('gt-pass') === PW) locked = false; } catch (e) {}
   IN.className = 'gx gt' + (locked ? ' locked' : '');
+  { const r = Math.random(); IN.classList.add(r < .4 ? 'aur-0' : r < .75 ? 'aur-1' : 'aur-2'); }   // 비눗방울 오로라 : 그날 컨디션 (없음 · 은은 · 잘 보임) 랜덤
   if (OWNER) setTimeout(() => { const ob = document.createElement('button'); ob.type = 'button'; ob.className = 'gt-own'; ob.textContent = '✎ 입장 화면 · 비밀번호 수정'; ob.addEventListener('click', e => { e.stopPropagation(); dispatchEvent(new CustomEvent('sye-intro')); }); IN.appendChild(ob); }, 50);
   IN.innerHTML = `<div class="gt-bg"><i class="gt-blob b1"></i><i class="gt-blob b2"></i><i class="gt-blob b3"></i>
       <svg class="gt-rings" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid meet"><circle cx="500" cy="520" r="470"/><circle class="d" cx="500" cy="520" r="360"/></svg>
@@ -650,6 +651,9 @@ body.entered #desk .sy-bar i{animation:barFill 1.4s .45s cubic-bezier(.2,.8,.2,1
   background:radial-gradient(circle at 50% 50%,rgba(236,248,242,.8) 0 40%,rgba(204,238,222,.85) 72%,rgba(140,208,178,.9) 100%),radial-gradient(circle at 50% 120%,rgba(127,205,170,.35),transparent 60%);
   box-shadow:0 26px 40px -22px rgba(47,120,95,.4),inset 0 0 0 1px rgba(255,255,255,.95),inset 0 -12px 26px rgba(95,180,150,.18);-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px)}
 #intro.gt .gt-film{position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 210deg,rgba(255,226,236,0),rgba(255,214,228,.85) 8%,rgba(255,238,200,.75) 16%,rgba(214,246,232,.6) 26%,rgba(190,228,255,.85) 36%,rgba(255,226,236,0) 46%,rgba(255,226,236,0) 70%,rgba(190,228,255,.6) 80%,rgba(255,226,236,0) 92%);-webkit-mask:radial-gradient(circle,transparent 52%,#000 82%,rgba(0,0,0,.55) 100%);mask:radial-gradient(circle,transparent 52%,#000 82%,rgba(0,0,0,.55) 100%);opacity:1;filter:blur(2px);animation:gt-film 14s linear infinite}
+#intro.gt.aur-0 .gt-film{opacity:0!important}
+#intro.gt.aur-1 .gt-film{opacity:.55!important}
+#intro.gt.aur-2 .gt-film{opacity:1!important;-webkit-mask:radial-gradient(circle,transparent 44%,#000 78%,rgba(0,0,0,.7) 100%)!important;mask:radial-gradient(circle,transparent 44%,#000 78%,rgba(0,0,0,.7) 100%)!important;animation-duration:9s!important}
 #intro.gt .gt-hl{position:absolute;left:17%;top:12%;width:36%;height:20%;border-radius:50%;background:radial-gradient(ellipse,#fff 0 30%,rgba(255,255,255,0) 72%);transform:rotate(-32deg);filter:blur(.6px)}
 #intro.gt .gt-hl2{position:absolute;right:20%;bottom:15%;width:12%;height:6%;border-radius:50%;background:rgba(255,255,255,.7);transform:rotate(-32deg);filter:blur(1px)}
 #intro.gt .gt-bstar{position:absolute;right:-14%;top:-8%;width:34%;z-index:2;filter:drop-shadow(0 8px 10px rgba(47,120,95,.3));animation:gt-bst 3.6s ease-in-out infinite}
@@ -677,7 +681,7 @@ body.entered #desk .sy-bar i{animation:barFill 1.4s .45s cubic-bezier(.2,.8,.2,1
 #intro.gt .gt-kick em{font-style:normal;margin:0 10px}
 #intro.gt .gt-on{position:absolute;right:46px;top:40px;height:34px;padding:0 15px;border-radius:99px;background:#fff;border:1px solid var(--ln);display:inline-flex;align-items:center;gap:8px;font:900 11.5px 'Inter',sans-serif;letter-spacing:.06em}
 #intro.gt .gt-on i{background:#F06A6A;box-shadow:0 0 0 3px rgba(240,106,106,.2)}
-#intro.gt .gt-vin{position:absolute;left:56px;top:118px;width:196px;height:196px;animation:gt-pop .8s .7s cubic-bezier(.3,1.5,.5,1) both}
+#intro.gt .gt-vin{position:absolute;left:56px;top:76px;width:196px;height:196px;animation:gt-pop .8s .7s cubic-bezier(.3,1.5,.5,1) both}
 #intro.gt .gt-ph{position:absolute;inset:0;border-radius:50%;overflow:hidden;background:linear-gradient(135deg,#E9F8F0,#CBEEDD);border:7px solid #fff;box-shadow:0 14px 28px -10px rgba(20,35,30,.3),0 0 0 1.5px #DCE8E2;display:grid;place-items:center}
 #intro.gt .gt-ph > img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;animation:none}
 #intro.gt .gt-mono{position:relative;display:flex;align-items:center;justify-content:center}
