@@ -1244,7 +1244,7 @@ function openWin(id, def) {
   x = Math.max(12, Math.min(x, deskW() - w - 12));
   // 창 안 글씨를 조금 크게 (창 전체를 WZ 배 확대 · 자리는 그대로)
   // 작은 창에서는 글씨를 살짝만 더 키워요 (WIN_SMALL = 최대 배율)
-  const wz = (isMobile() || id === 'pass' || WKZ) ? 1 : def.abs ? WZ_CHAR / Z : WZ / Z;   // 창 크기 고정 : 화면이 크든 작든 실제 크기는 같아요 (높이만 화면에 맞춰 줄어요 · 퓨어.kr 처럼)   // 캐릭터 창: 전체화면에서는 WZ_CHAR 배율   // 작은 창에서도 전체화면과 같은 글씨 크기
+  const wz = (isMobile() || id === 'pass' || WKZ) ? 1 : def.abs ? WZ_CHAR / Z : PLAIN_WIN.test(id) ? WZ : WZ / Z;   // CATEGORY · NOTICE · 폴더 창은 퓨어.kr 처럼 화면 크기에 맞춰 같이 줄고 늘어요   // 창 크기 고정 : 화면이 크든 작든 실제 크기는 같아요 (높이만 화면에 맞춰 줄어요 · 퓨어.kr 처럼)   // 캐릭터 창: 전체화면에서는 WZ_CHAR 배율   // 작은 창에서도 전체화면과 같은 글씨 크기
   if (def.abs) el.style.cssText = `left:${def.x / wz}px;top:${def.y / wz}px;width:${def.w / wz}px;height:${def.h / wz}px`;
   else el.style.cssText = `left:${Math.max(12, Math.min(x, deskW() - w * wz - 12)) / wz}px;top:${y / wz}px;width:${Math.min(w, (deskW() - 24) / wz)}px;${h ? `height:${Math.min(h * wz, deskH() - 144 - 16) / wz}px` : ''}`;
   if (wz !== 1) { el.style.zoom = wz; el.dataset.wz = wz; }
