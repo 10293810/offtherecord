@@ -1273,12 +1273,31 @@ const dur = () => (cur().src && isFinite(audio.duration) && audio.duration) || s
 function load(i, autoplay = true) {
   PL.i = (i + S.bgm.length) % S.bgm.length; PL.pos = 0;
   const t = cur();
-  if (t.src) audio.src = t.src; else { audio.removeAttribute('src'); audio.load(); }
+  if (t.src) audio.src = SRC(t.src) || t.src; else { audio.removeAttribute('src'); audio.load(); }
+  audio.loop = !!t.loop;   // loop: true 인 곡(배경음악)은 끝나면 처음부터 다시
   autoplay ? play() : syncPlayer();
 }
 function play() { PL.on = true; if (cur().src) audio.play().catch(() => {}); syncPlayer(); }
 function pause() { PL.on = false; audio.pause(); syncPlayer(); }
-function toggle() { PL.on ? pause() : play(); }
+function toggle() { PL.on ? pause() : play(); try { PL.on ? localStorage.removeItem('bgm-off') : localStorage.setItem('bgm-off', '1'); } catch (e) {} }
+/* 배경음악 : 홈페이지에 들어와서 처음 누르는 순간 작게 서서히 시작 (끄면 이 브라우저에서는 다음에도 꺼진 채로)
+   BGM_VOL = 크기 (0 ~ 1 · 0.35 = 작게~중간) */
+const BGM_VOL = 0.35;
+audio.volume = BGM_VOL;
+(() => {
+  const first = (S.bgm || [])[0]; if (!first || !first.src || !first.loop) return;
+  let off = false; try { off = localStorage.getItem('bgm-off') === '1'; } catch (e) {}
+  if (off) return;
+  const go = e => {
+    if (e && e.target && e.target.closest && e.target.closest('.mini-play,.mp-ctrl,.tp-play')) { stop(); return; }   // 재생 버튼을 직접 누른 거면 그 버튼에 맡겨요
+    stop(); if (PL.on) return;
+    if (PL.i !== 0) load(0, false);
+    audio.volume = 0; play();
+    const t0 = Date.now(), iv = setInterval(() => { const k = Math.min(1, (Date.now() - t0) / 2200); audio.volume = BGM_VOL * k; if (k >= 1) clearInterval(iv); }, 50);
+  };
+  const stop = () => { document.removeEventListener('pointerdown', go, true); document.removeEventListener('keydown', go, true); };
+  document.addEventListener('pointerdown', go, true); document.addEventListener('keydown', go, true);
+})();
 setInterval(() => {
   if (!PL.on) return;
   PL.pos = cur().src ? audio.currentTime : PL.pos + .25;

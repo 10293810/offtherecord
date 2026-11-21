@@ -241,6 +241,7 @@ const SITE = {
 
   /* ---------- 음악 (Player · 하단 BGM) ---------- */
   bgm: [
+    { title: 'Snow Rehearsal', artist: 'SEIRAN UNIV. BAND · BGM', cover: '', src: 'media/bgm-xmas.mp3', time: '0:50', line: '눈 내리는 동아리방, 마지막 합주', loop: true },   // 홈페이지 배경음악 (들어오면 작게 재생 · 반복)
     { title: 'Love Disorder', artist: 'PURE × UXI', cover: '', src: '', time: '3:19', line: 'Beep. Beep.' },
     { title: 'B-P-M', artist: 'HANA × REN', cover: '', src: '', time: '2:58', line: '심장이 빨라지는 건' },
     { title: 'Knife Edge', artist: 'HANA × REN', cover: '', src: '', time: '3:41', line: '칼끝 같은 조명 아래' },
