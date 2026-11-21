@@ -1956,11 +1956,13 @@ const DEFS = {
 
   /* ----- Link Hub ----- */
   links: () => openWin('links', {
-    cls: 'hub', title: 'Link Hub', x: 645, y: 108, w: 337,
-    head: `<span class="hub-ic">${ic('moon')}</span><span class="hub-t"><b>Link Hub</b><small>↳ 바로가기 모음</small></span>`,
+    cls: 'hub lha', title: 'Link Hub', x: 645, y: 108, w: 348, h: 600, noBtns: true, head: `<span class="cw-drag"></span>`,
     render(b) {
-      b.innerHTML = `<div class="lh-list">${S.links.map((l, i) => `<a class="lh-item" href="${esc(l.url)}" target="_blank" rel="noopener">${ph(l.image, { cls: 'th', seed: l.name + i, icon: 'link' })}<div><b><span class="n">${pad(i + 1)}</span>${esc(l.name)}</b><small>${esc(l.desc)}</small></div><span class="go">${ic('ext')}</span></a>`).join('')}</div>
-        <div class="lh-f"><span>✦ ${esc(S.brand.start)} PERSONAL DIRECTORY</span><span>${S.links.length} LINKS</span></div>`;
+      const L = S.links || [];
+      b.innerHTML = `<div class="lha-w"><div class="lha-hd"><span class="lha-num">${pad(L.length)}</span><div><small>LINK HUB</small><b>LINKS</b><em>RECORD SHELF // TAP TO GO</em></div><button type="button" class="lha-x" data-a="close" title="닫기">${ic('x')}</button></div><div class="lha-dash"></div>
+        <div class="lha-gr">${L.map((l, i) => `<a class="lha-it c${i % 6}" href="${esc(l.url)}" target="_blank" rel="noopener"><span class="lha-sl"><i class="lha-vn"></i><span class="lha-cv">${ph(l.image, { cls: 'th', seed: l.name + i })}<em>Nº${pad(i + 1)}</em></span></span><b>${esc(l.name)}</b><p>${esc(l.desc)}</p></a>`).join('')}</div>
+        <div class="lha-f"><span>✦ ${esc(S.brand.start)} PERSONAL DIRECTORY</span><span>${L.length} LINKS</span></div></div>`;
+      b.addEventListener('click', e => { if (SYE_ON && e.target.closest('.lha-it')) e.preventDefault(); }, true);   // 편집 중에는 링크로 안 넘어가요 (사진 넣기 · 글자 고치기)
     }
   })
 };
@@ -6112,4 +6114,43 @@ html body #desk .taskbar{background-color:rgba(253,254,254,.94)!important}
 .pb-res .new{display:inline-block;padding:1px 6px;border-radius:5px;background:#F06A6A;color:#fff;font:800 9px 'Inter',sans-serif;vertical-align:2px}
 .pb-res.pop{animation:pbRes .45s cubic-bezier(.3,1.5,.5,1)}
 @keyframes pbRes{from{transform:scale(.94);opacity:.4}}
+`; document.head.appendChild(st); })();
+/* Link Hub : 레코드 선반 (OOC 창과 같은 틀) — 커버를 누르면 바로 이동 */
+(() => { const st = document.createElement('style'); st.textContent = `
+#desk .win.lha{border-radius:24px!important;background:#F3FCFD!important;background-image:linear-gradient(rgba(49,172,189,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(49,172,189,.06) 1px,transparent 1px)!important;background-size:22px 22px!important;border:1.5px solid #D3EFF3!important;box-shadow:0 30px 60px -28px rgba(30,80,90,.35)!important;overflow:hidden!important}
+#desk .win.lha::before{content:'';position:absolute;left:28px;right:28px;top:0;height:4px;border-radius:0 0 4px 4px;background:linear-gradient(90deg,#5FD3BC,#31ACBD);z-index:3}
+#desk .win.lha > .win-h{position:absolute!important;left:0;right:60px;top:0;height:40px!important;background:transparent!important;border:0!important;z-index:2}
+#desk .win.lha .win-b{padding:0!important;background:transparent!important;overflow-y:auto;scrollbar-width:none}
+#desk .win.lha .win-b::-webkit-scrollbar{display:none}
+.lha-w{display:flex;flex-direction:column;min-height:100%;font-family:'Pretendard',sans-serif;color:#15202A}
+.lha-hd{display:flex;align-items:center;gap:12px;padding:20px 18px 12px}
+.lha-num{font:900 46px/1 'Inter',sans-serif;letter-spacing:-.04em;color:transparent;background:radial-gradient(circle,#31ACBD 1.3px,transparent 1.7px) 0 0/4.5px 4.5px;-webkit-background-clip:text;background-clip:text}
+.lha-hd small{display:inline-block;height:20px;padding:0 9px;border-radius:99px;background:#fff;border:1px solid #D3EFF3;font:800 9px/18px 'Inter',sans-serif;letter-spacing:.14em;color:#31ACBD}
+.lha-hd b{display:block;font:900 21px 'Inter',sans-serif;letter-spacing:-.02em;color:#31ACBD;margin-top:3px}
+.lha-hd em{display:block;font:700 9.5px 'Inter',sans-serif;font-style:normal;letter-spacing:.14em;color:#7C979E;margin-top:2px}
+.lha-x{margin-left:auto;align-self:flex-start;width:30px;height:30px;border-radius:50%;background:#fff;border:1px solid #D3EFF3;display:grid;place-items:center;color:#31ACBD;cursor:pointer;padding:0}
+.lha-x svg{width:13px;height:13px}
+.lha-dash{margin:0 18px 14px;border-top:1.5px dashed #B9E2E8}
+.lha-gr{display:grid;grid-template-columns:1fr 1fr;gap:16px 14px;padding:0 18px}
+.lha-it{display:block;text-decoration:none;color:inherit;min-width:0}
+.lha-sl{position:relative;display:block;width:calc(100% - 14px);aspect-ratio:1}
+.lha-vn{position:absolute;left:0;top:5%;width:90%;height:90%;border-radius:50%;background:repeating-radial-gradient(circle,#15202A 0 2px,#22303A 2px 4px);transform:translateX(16%);transition:transform .45s cubic-bezier(.3,1.3,.5,1)}
+.lha-vn::after{content:'';position:absolute;left:50%;top:50%;width:32%;height:32%;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,#F3FCFD 0 3px,#5FD3BC 4px)}
+.lha-it:hover .lha-vn{transform:translateX(30%) rotate(40deg)}
+.lha-cv{position:absolute;inset:0;border-radius:12px;overflow:hidden;box-shadow:0 12px 20px -12px rgba(20,40,50,.5);z-index:1;transition:transform .25s}
+.lha-it:hover .lha-cv{transform:translateY(-2px)}
+.lha-cv .ph{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;border-radius:0!important;border:0!important;box-shadow:none!important}
+.lha-it.c0 .lha-cv .ph{background:linear-gradient(150deg,#15202A,#2E4652)!important}
+.lha-it.c1 .lha-cv .ph{background:linear-gradient(150deg,#A8E6F0,#5FC9D6)!important}
+.lha-it.c2 .lha-cv .ph{background:linear-gradient(150deg,#FDF1C9,#F6D77A)!important}
+.lha-it.c3 .lha-cv .ph{background:linear-gradient(150deg,#D9F3F7,#B6E3EC)!important}
+.lha-it.c4 .lha-cv .ph{background:linear-gradient(150deg,#FCE1E7,#F4A9B8)!important}
+.lha-it.c5 .lha-cv .ph{background:linear-gradient(150deg,#7FD9C6,#36B3B8)!important}
+.lha-cv .ph .ph-ic{display:none}
+.lha-cv .ph::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 78% 22%,rgba(255,255,255,.35),transparent 45%);pointer-events:none}
+.lha-cv em{position:absolute;left:8px;top:7px;font:800 9px 'DM Mono',monospace;font-style:normal;color:rgba(255,255,255,.92);z-index:2;pointer-events:none;text-shadow:0 1px 3px rgba(0,0,0,.15)}
+.lha-it.c2 .lha-cv em,.lha-it.c3 .lha-cv em,.lha-it.c4 .lha-cv em{color:rgba(21,32,42,.55);text-shadow:none}
+.lha-it b{display:block;margin-top:9px;font:800 12.5px 'Pretendard',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lha-it p{margin:2px 0 0;font:500 10.5px 'Pretendard',sans-serif;color:#7C979E;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lha-f{margin-top:auto;display:flex;justify-content:space-between;padding:18px 18px 14px;font:800 9px 'Inter',sans-serif;letter-spacing:.14em;color:#9AB3B9}
 `; document.head.appendChild(st); })();
