@@ -157,6 +157,11 @@ const P = {
   pick: '<path d="M12 21.5c-1.8 0-8-8-8-13.2C4 5 7.6 2.8 12 2.8S20 5 20 8.3c0 5.2-6.2 13.2-8 13.2Z"/><path d="M9 9.5c1-.9 2-1.3 3-1.3"/>',
   mic: '<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/>',
   x: '<path d="M6 6l12 12M18 6 6 18"/>',
+  tkUser: '<circle cx="12" cy="8" r="4"/><path d="M4 20c1.5-4 5-5 8-5s6.5 1 8 5"/>',
+  tkSmile: '<circle cx="12" cy="12" r="9"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/>',
+  tkPen: '<path d="M4 20h4L19 9l-4-4L4 16z"/>',
+  tkMenu: '<path d="M4 7h16M4 12h16M4 17h10"/>',
+  tkArrow: '<path d="M5 12h14M13 6l6 6-6 6"/>',
   minus: '<path d="M6 12h12"/>',
   play: '<path d="M7 4.5v15l12-7.5Z" fill="currentColor"/>',
   pause: '<rect x="6" y="4.5" width="4" height="15" rx="1" fill="currentColor"/><rect x="14" y="4.5" width="4" height="15" rx="1" fill="currentColor"/>',
@@ -1426,11 +1431,14 @@ function openTalkRoom(i) {
   const R = TK_ROOMS(), r = R[i]; if (!r) return; TK_CUR = i; TK_READ.add(i);
   const L = wins.get('talk'); if (L) { $$('.tk-row', L.el).forEach(x => x.classList.toggle('on', +x.dataset.room === i)); const u = $(`.tk-row[data-room="${i}"] .tk-meta i`, L.el); u && u.remove(); }
   const me = TK_ME();
-  const head = () => `<div class="chat-head"><span class="back" title="목록으로">${ic('chevl')}</span>${ph(r.avatar, { cls: 'tk-hav', seed: r.name })}<span><b>${esc(r.name)}</b><small>${esc(r.status || '')}</small></span><button type="button" class="cx-add tk-ed" data-tked>✎ 대화 수정</button></div>`;
+  const isG = !!r.group || (r.messages || []).some(m => m.name), names = [...new Set((r.messages || []).filter(m => m.name).map(m => m.name))];
+  const head = () => `<div class="chat-head"><button type="button" class="back" title="닫기">${ic('chevl')}</button><div class="tk-hc"><div class="tk-stack">${ph(r.avatar, { cls: 'tk-hav', seed: r.name })}${isG ? names.slice(0, 2).map(n => `<div class="ph tk-hav ${V(n)}"></div>`).join('') : ''}</div><b>${esc(r.name)}</b><small><i></i>${esc(r.status || '')}</small></div><button type="button" class="cx-add tk-ed" data-tked title="대화 수정">${ic('tkMenu')}</button></div>
+    ${r.notice ? `<div class="tk-pin"><b>공지</b><span>${esc(r.notice)}</span></div>` : ''}`;
   const fill = (b) => {
     b.style.overflow = 'hidden';
-    b.innerHTML = `<div class="chat"><div class="chat-list"></div><form class="chat-in"><button type="button" class="plus">${ic('plus')}</button><input placeholder="메시지 입력" maxlength="200"><button>${ic('send')}</button></form></div>`;
+    b.innerHTML = `<div class="chat"><div class="chat-list"></div><form class="chat-in"><button type="button" class="plus">${ic('plus')}</button><label><input placeholder="메시지 입력" maxlength="200"><span class="sm">${ic('tkSmile')}</span><button>${ic('tkArrow')}</button></label></form></div>`;
     const list = $('.chat-list', b); let last = null;
+    const dd = new Date(); list.insertAdjacentHTML('beforeend', `<div class="tk-day">${dd.getMonth() + 1}월 ${dd.getDate()}일 ${'일월화수목금토'[dd.getDay()]}요일</div>`);
     const add = (m, anim = true) => {
       const key = m.from + '|' + (m.name || '');
       if (key !== last) {
@@ -1439,22 +1447,24 @@ function openTalkRoom(i) {
         last = key;
       }
       const d = document.createElement('div'); d.className = `msg ${m.from} ${m.emo || /^\p{Extended_Pictographic}$|^[♥♡]$/u.test(m.text || '') ? 'emo' : ''}`; if (!anim) d.style.animation = 'none';
-      d.textContent = m.text; list.appendChild(d); list.scrollTop = list.scrollHeight; return d;
+      d.textContent = m.text; list.appendChild(d);
+      if (m.react) list.insertAdjacentHTML('beforeend', `<span class="tk-re ${m.from}">${esc(m.react)}</span>`);
+      if (m.stamp) { const n2 = new Date(); list.insertAdjacentHTML('beforeend', `<span class="tk-rd"><em>1</em>${n2.getHours() < 12 ? '오전' : '오후'} ${n2.getHours() % 12 || 12}:${pad(n2.getMinutes())}</span>`); }
+      list.scrollTop = list.scrollHeight; return d;
     };
     (r.messages || []).forEach(m => add(m, false));
-    const n = new Date(); list.insertAdjacentHTML('beforeend', `<div class="msg-time">${n.getHours() < 12 ? '오전' : '오후'} ${n.getHours() % 12 || 12}:${pad(n.getMinutes())}</div>`);
     list.scrollTop = list.scrollHeight;
     let ri = 0; b.addMsg = m => add(m);
     $('form', b).onsubmit = e => {
       e.preventDefault(); const inp = $('input', b), v = inp.value.trim(); if (!v) return;
-      add({ from: 'me', text: v }); inp.value = '';
+      add({ from: 'me', text: v, stamp: 1 }); inp.value = '';
       const rp = r.replies || []; if (!rp.length) return;
-      setTimeout(() => { const t = add({ from: 'them', text: '' }); t.innerHTML = '<span class="typing"><i></i><i></i><i></i></span>';
+      setTimeout(() => { $$('.tk-rd em', list).forEach(x => x.remove()); const t = add({ from: 'them', text: '' }); t.innerHTML = '<span class="typing"><i></i><i></i><i></i></span>';
         setTimeout(() => { t.textContent = rp[ri++ % rp.length]; list.scrollTop = list.scrollHeight; }, 1300); }, 500);
     };
   };
   const ex = wins.get('talkroom');
-  if (ex) { const h = $('.chat-head', ex.el); if (h) h.outerHTML = head(); fill(ex.body); ex.el.classList.remove('min'); focusWin('talkroom'); }
+  if (ex) { const h = $('.win-h', ex.el); if (h) { const btns = $('.win-btns', h); h.innerHTML = head(); btns && h.appendChild(btns); } fill(ex.body); ex.el.classList.remove('min'); focusWin('talkroom'); }
   else {
     const rec = openWin('talkroom', { cls: 'chatwin tkroom', title: r.name, task: 'TALK · 대화', x: 660, y: 90, w: 400, h: 620, head: head(), render: fill });
     if (!isMobile()) rec.el.animate([{ opacity: 0, transform: 'translateX(-60px) scale(.98)' }, { opacity: 1, transform: 'none' }], { duration: 420, easing: 'cubic-bezier(.22,.9,.25,1)' });
@@ -1702,17 +1712,22 @@ const DEFS = {
       render(b) {
         const me = TK_ME(), R = TK_ROOMS();
         const last = r => { const m = (r.messages || [])[r.messages.length - 1]; return m ? (m.from === 'me' ? '나: ' : m.name ? m.name + ': ' : '') + m.text : ''; };
+        const grp = r => !!r.group || (r.messages || []).some(m => m.name);
         b.innerHTML = `<div class="tk">
-          <div class="tk-me">${ph(me.avatar, { cls: 'tk-av', seed: me.name })}<div><b>${esc(me.name)}</b><small>내 프로필</small></div><span class="tk-on">ONLINE</span></div>
-          <div class="tk-search">${ic('search')}<input placeholder="대화방 검색" aria-label="대화방 검색"></div>
-          <div class="tk-sec"><span>채팅</span><em>${R.length}</em></div>
-          <div class="tk-list">${R.map((r, i) => `<div class="tk-row" data-room="${i}" role="button" tabindex="0">${ph(r.avatar, { cls: 'tk-av', seed: r.name })}<div class="tk-tx"><b>${esc(r.name)}</b><p>${esc(last(r))}</p></div><div class="tk-meta"><small>${esc(r.time || '')}</small>${TK_UNREAD(i) ? `<i>${TK_UNREAD(i) > 99 ? '99+' : TK_UNREAD(i)}</i>` : ''}</div></div>`).join('')}</div>
-          <button type="button" class="cx-add tk-add" data-tkadd>＋ 새 대화방</button></div>`;
+          <div class="tk-top"><b>Talk</b><span class="tk-tbtn"><button type="button" class="cx-add tk-add" data-tkadd title="새 대화방">${ic('tkPen')}</button><button type="button" class="tk-x" data-tkx title="닫기">${ic('x')}</button></span></div>
+          <div class="tk-search">${ic('search')}<input placeholder="검색" aria-label="대화방 검색"></div>
+          <div class="tk-tabs"><button type="button" class="on" data-f="all">전체 ${R.reduce((a, r, i) => a + TK_UNREAD(i), 0) || ''}</button><button type="button" data-f="un">안 읽음</button><button type="button" data-f="grp">단톡</button></div>
+          <div class="tk-list">${R.map((r, i) => `<div class="tk-row" data-room="${i}" data-grp="${grp(r) ? 1 : 0}" role="button" tabindex="0">${ph(r.avatar, { cls: 'tk-av', seed: r.name })}<div class="tk-tx"><b>${esc(r.name)}</b><p>${esc(last(r))}</p></div><div class="tk-meta"><small>${esc(r.time || '')}</small>${TK_UNREAD(i) ? `<i>${TK_UNREAD(i) > 99 ? '99+' : TK_UNREAD(i)}</i>` : ''}</div></div>`).join('')}</div>
+          <nav class="tk-nav"><span class="on">${ic('chat')}채팅</span><span>${ic('tkUser')}친구</span><span>${ic('settings')}설정</span></nav></div>`;
+        let F = 'all', Q = '';
+        const filt = () => $$('.tk-row', b).forEach(r => { const i = +r.dataset.room, ok = (F === 'all' || (F === 'un' && TK_UNREAD(i)) || (F === 'grp' && r.dataset.grp === '1')) && (!Q || r.textContent.toLowerCase().includes(Q)); r.style.display = ok ? '' : 'none'; });
         b.addEventListener('click', e => {
           if (e.target.closest('[data-tkadd]')) { dispatchEvent(new CustomEvent('sye-talk', { detail: { i: null } })); return; }
+          if (e.target.closest('[data-tkx]')) { closeWin('talkroom'); closeWin('talk'); return; }
+          const f = e.target.closest('.tk-tabs [data-f]'); if (f) { F = f.dataset.f; $$('.tk-tabs button', b).forEach(x => x.classList.toggle('on', x === f)); filt(); return; }
           const r = e.target.closest('.tk-row'); if (r && !(SYE_ON && e.target.closest('[data-slot]'))) openTalkRoom(+r.dataset.room);
         });
-        $('.tk-search input', b).addEventListener('input', e => { const q = e.target.value.trim().toLowerCase(); $$('.tk-row', b).forEach(r => { r.style.display = !q || r.textContent.toLowerCase().includes(q) ? '' : 'none'; }); });
+        $('.tk-search input', b).addEventListener('input', e => { Q = e.target.value.trim().toLowerCase(); filt(); });
       }
     });
     tkPlace();
@@ -5698,11 +5713,13 @@ html:not(.sye-editing) .cx-add,html:not(.sye-editing) .cd-tags .ed{display:none!
   const TF = tm.querySelector('form'), TB = tm.querySelector('.fb'), TFF = tm.querySelector('.ff');
   const tClose = () => tm.classList.remove('on');
   tm.querySelector('.fx').onclick = tClose; tm.addEventListener('click', e => { if (e.target === tm) tClose(); });
-  const toLines = ms => (ms || []).map(m => (m.from === 'me' ? '나: ' : m.name ? '@' + m.name + ': ' : '') + (m.text || '')).join('\n');
+  const toLines = ms => (ms || []).map(m => (m.from === 'me' ? '나: ' : m.name ? '@' + m.name + ': ' : '') + (m.text || '') + (m.react ? ' [' + m.react + ']' : '')).join('\n');
   const fromLines = t => t.split('\n').map(l => l.trim()).filter(Boolean).map(l => {
-    let m = l.match(/^(나|me)\s*[:：]\s*(.*)$/i); if (m) return { from: 'me', text: m[2] };
+    let rx = ''; const rm = l.match(/\s*\[([^\]]{1,12})\]\s*$/); if (rm) { rx = rm[1].trim(); l = l.slice(0, rm.index); }
+    const o = (() => { let m = l.match(/^(나|me)\s*[:：]\s*(.*)$/i); if (m) return { from: 'me', text: m[2] };
     m = l.match(/^@([^:：]{1,20})[:：]\s*(.*)$/); if (m) return { from: 'them', name: m[1].trim(), text: m[2] };
-    return { from: 'them', text: l };
+    return { from: 'them', text: l }; })();
+    if (rx) o.react = rx; return o;
   });
   let TS = null;
   function tOpen(i) {
@@ -5712,15 +5729,16 @@ html:not(.sye-editing) .cx-add,html:not(.sye-editing) .cd-tags .ed{display:none!
     TB.innerHTML = `<div class="sec">대화방</div>
       <label><span>이름 (목록 · 대화 창 위)</span><input name="name" value="${E(r.name || '')}"></label>
       <label><span>상태 한 줄</span><input name="status" value="${E(r.status || '')}" placeholder="예: 대기실 · 온라인"></label>
+      <label><span>공지 (대화 창 위에 고정 · 비우면 안 보여요)</span><input name="notice" value="${E(r.notice || '')}" placeholder="예: 토요일 축제 리허설 오후 3시 · 402호 집합"></label>
       <div style="display:flex;gap:8px"><label style="flex:1"><span>목록에 보이는 시간</span><input name="time" value="${E(r.time || '')}" placeholder="예: 오후 9:41 · 어제"></label><label style="width:120px"><span>안 읽은 메시지 수</span><input name="unread" type="number" min="0" value="${+r.unread || 0}"></label></div>
       <div class="sec">대화 내용</div>
       <label><span>한 줄에 메시지 하나</span><textarea name="messages" rows="10">${E(toLines(r.messages))}</textarea>
-        <small>그냥 적으면 <b>상대</b> 말풍선 · <b>나: 내용</b> 은 내 말풍선 · 단톡방이면 <b>@이름: 내용</b> 으로 보낸 사람을 정해요</small></label>
+        <small>그냥 적으면 <b>상대</b> 말풍선 · <b>나: 내용</b> 은 내 말풍선 · 단톡방이면 <b>@이름: 내용</b> 으로 보낸 사람을 정해요 · 끝에 <b>[♥ 2]</b> 를 붙이면 하트 반응</small></label>
       <label><span>내가 메시지를 보내면 돌아오는 답장 (한 줄에 하나 · 차례대로)</span><textarea name="replies" rows="3">${E((r.replies || []).join('\n'))}</textarea></label>
       <label><span>홈에 있으면 가끔 오는 알림 (한 줄에 하나 · 맨 위 대화방만)</span><textarea name="incoming" rows="2">${E((r.incoming || []).join('\n'))}</textarea></label>
       <div class="sec">나</div>
       <label><span>내 이름 (모든 대화방 공통)</span><input name="me" value="${E((RAW.chat.me || {}).name || '')}"></label>
-      ${i != null && i > 0 ? '<label class="tk-top"><input type="checkbox" name="top" style="width:auto;margin-right:6px">목록 맨 위로 올리기</label>' : ''}
+      ${i != null && i > 0 ? '<label class="tk-topck"><input type="checkbox" name="top" style="width:auto;margin-right:6px">목록 맨 위로 올리기</label>' : ''}
       <div class="note">프로필 사진은 <b>✎ EDIT</b> 를 켠 상태에서 목록이나 대화 창의 동그라미 사진 자리를 눌러서 넣어요. 다 고쳤으면 <b>저장</b> → 모두에게 보이게 하려면 아래 바의 <b>홈페이지에 저장</b>.</div>`;
     TFF.innerHTML = `<button type="submit" class="sv">저장</button>${i != null ? '<button type="button" class="del">삭제</button>' : ''}<button type="button" class="cc">취소</button>`;
     TFF.querySelector('.cc').onclick = tClose;
@@ -5736,7 +5754,7 @@ html:not(.sye-editing) .cx-add,html:not(.sye-editing) .cd-tags .ed{display:none!
     e.preventDefault(); if (!TS) return; const v = n => (TF.elements[n] ? TF.elements[n].value.trim() : '');
     if (!v('name')) { toast('대화방 이름을 적어 주세요'); return; }
     const R = tRooms(), i = TS.i, o = i == null ? { avatar: '' } : JSON.parse(JSON.stringify(R[i]));
-    Object.assign(o, { name: v('name'), status: v('status'), time: v('time'), unread: Math.max(0, +v('unread') || 0), messages: fromLines(TF.elements.messages.value), replies: v('replies').split('\n').map(x => x.trim()).filter(Boolean), incoming: v('incoming').split('\n').map(x => x.trim()).filter(Boolean) });
+    Object.assign(o, { name: v('name'), status: v('status'), notice: v('notice'), time: v('time'), unread: Math.max(0, +v('unread') || 0), messages: fromLines(TF.elements.messages.value), replies: v('replies').split('\n').map(x => x.trim()).filter(Boolean), incoming: v('incoming').split('\n').map(x => x.trim()).filter(Boolean) });
     if (v('me')) RAW.chat.me = Object.assign({ avatar: '' }, RAW.chat.me, { name: v('me') });
     let at = i;
     if (i == null) { R.push(o); at = R.length - 1; } else R[i] = o;
@@ -5958,35 +5976,80 @@ html body #desk,html.m7 body #desk{background-color:#F9FAFA!important;background
 .mplayer.mg .mp-vol svg{width:15px;height:15px}
 .mplayer.mg .mp-vol input{flex:1;accent-color:#3FAE84;height:3px}
 `; document.head.appendChild(st); })();
-/* TALK : 대화방 목록 (카톡 목록처럼) + 대화 창 */
+/* TALK : 폰 메시지 앱 느낌 (흰 바탕 · 민트) — 목록 창 + 대화 창 */
 (() => { const st = document.createElement('style'); st.textContent = `
-#desk .win.tkwin .win-b{padding:0!important;overflow:hidden!important;display:flex;flex-direction:column}
-.tk{display:flex;flex-direction:column;height:100%;min-height:0;background:#fff;color:#14231E;font-family:'Pretendard','IBM Plex Sans KR',sans-serif}
-.tk-me{display:flex;align-items:center;gap:12px;padding:16px 18px 14px;border-bottom:1px solid #EEF3F1}
-.tk .tk-av{width:46px;height:46px;flex:none;border-radius:17px!important;overflow:hidden;box-shadow:none!important;border:0!important}
-.tk-me .tk-av{width:52px;height:52px;border-radius:19px!important}
-.tk-me div{flex:1;min-width:0}.tk-me b{display:block;font:800 15px 'Pretendard',sans-serif}.tk-me small{font:600 11px 'Pretendard',sans-serif;color:#8A9894}
-.tk-on{height:22px;padding:0 9px;border-radius:99px;background:#EAF7F1;color:#3FAE84;font:800 9px/22px 'Inter',sans-serif;letter-spacing:.12em}
-.tk-search{display:flex;align-items:center;gap:8px;margin:12px 14px 4px;height:36px;padding:0 12px;border-radius:12px;background:#F3F7F5;color:#8A9894}
+#desk .win.tkwin,#desk .win.tkroom{border-radius:30px!important;background:#fff!important;border:0!important;box-shadow:0 30px 60px -26px rgba(20,35,30,.32),0 0 0 5px #fff,0 0 0 6px #E3ECE8!important;overflow:hidden!important}
+#desk .win.tkwin > .win-h{display:none!important}
+#desk .win.tkwin .win-b,#desk .win.tkroom .win-b{padding:0!important;overflow:hidden!important;display:flex;flex-direction:column;background:#fff!important}
+.tk{display:flex;flex-direction:column;height:100%;min-height:0;color:#14231E;font-family:'Pretendard','IBM Plex Sans KR',sans-serif}
+.tk-top{display:flex;align-items:center;justify-content:space-between;padding:20px 18px 10px 20px}
+.tk-top b{font:900 22px 'Pretendard',sans-serif;letter-spacing:-.03em}
+.tk-tbtn{display:flex;gap:6px}
+.tk-tbtn button{width:30px;height:30px!important;padding:0!important;border-radius:10px!important;border:0!important;background:#F3F7F5!important;color:#3B544B!important;display:grid;place-items:center;cursor:pointer;box-shadow:none!important}
+.tk-tbtn button svg{width:15px;height:15px}
+.tk-search{display:flex;align-items:center;gap:8px;margin:2px 16px 8px;height:34px;padding:0 12px;border-radius:12px;background:#F3F7F5;color:#9AABA4}
 .tk-search svg{width:14px;height:14px;flex:none}
-.tk-search input{flex:1;min-width:0;border:0;outline:0;background:none;font:600 12.5px 'Pretendard',sans-serif;color:#14231E}
-.tk-sec{display:flex;align-items:center;gap:6px;padding:12px 18px 4px;font:800 10.5px 'Inter',sans-serif;letter-spacing:.14em;color:#8A9894}
-.tk-sec em{font-style:normal;color:#3FAE84}
-.tk-list{flex:1;min-height:0;overflow-y:auto;padding:2px 8px 10px;scrollbar-width:thin}
-.tk-row{display:flex;align-items:center;gap:12px;padding:9px 10px;border-radius:14px;cursor:pointer;transition:background .15s}
-.tk-row:hover{background:#F4F8F6}.tk-row.on{background:#EAF7F1}
-.tk-tx{flex:1;min-width:0}.tk-tx b{display:block;font:800 13.5px 'Pretendard',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.tk-tx p{margin:3px 0 0;font:500 12px 'Pretendard',sans-serif;color:#6E7E78;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tk-search input{flex:1;min-width:0;border:0;outline:0;background:none;font:600 12px 'Pretendard',sans-serif;color:#14231E}
+.tk-tabs{display:flex;gap:6px;padding:0 16px 6px}
+.tk-tabs button{height:26px;padding:0 12px;border-radius:99px;border:0;background:#F3F7F5;color:#6E7E78;font:700 11px 'Pretendard',sans-serif;cursor:pointer}
+.tk-tabs button.on{background:#14231E;color:#fff}
+.tk-list{flex:1;min-height:0;overflow-y:auto;padding:2px 8px 8px;scrollbar-width:none}
+.tk-list::-webkit-scrollbar{display:none}
+.tk-row{display:flex;align-items:center;gap:11px;padding:8px 10px;border-radius:16px;cursor:pointer;transition:background .15s}
+.tk-row:hover{background:#F6FAF8}.tk-row.on{background:#EEF8F3}
+.tk .tk-av{width:42px;height:42px;flex:none;border-radius:50%!important;overflow:hidden;box-shadow:none!important;border:0!important}
+.tk-tx{flex:1;min-width:0}.tk-tx b{display:block;font:800 13px 'Pretendard',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tk-tx p{margin:3px 0 0;font:500 11.5px 'Pretendard',sans-serif;color:#8A9894;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tk-meta{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex:none}
 .tk-meta small{font:600 10px 'Pretendard',sans-serif;color:#A3B2AD}
-.tk-meta i{min-width:20px;height:20px;padding:0 6px;border-radius:99px;background:#F06A6A;color:#fff;font:800 10.5px/20px 'Inter',sans-serif;font-style:normal;text-align:center}
-.tk .tk-add{margin:0 14px 14px;height:38px!important;border-radius:12px!important;border:1.5px dashed #9BDCC0!important;background:#F4FBF8!important;color:#2F9C74!important;font:800 12.5px 'Pretendard',sans-serif!important;cursor:pointer;flex:none}
-.tkroom .chat-head{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
-.tkroom .chat-head .back{cursor:pointer;display:grid;place-items:center}
-.tkroom .tk-hav{width:34px;height:34px;flex:none;border-radius:13px!important;overflow:hidden;border:0!important;box-shadow:none!important}
-.tkroom .chat-head > span:not(.back){min-width:0}.tkroom .chat-head b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.tkroom .tk-ed{margin-left:auto;flex:none;height:26px!important;padding:0 10px!important;border-radius:8px!important;border:1.5px dashed #9BDCC0!important;background:#fff!important;color:#2F9C74!important;font:800 11px 'Pretendard',sans-serif!important;cursor:pointer}
-@media (min-width:721px){.tkroom .chat-head .back{display:none}}
+.tk-meta i{min-width:18px;height:18px;padding:0 5px;border-radius:99px;background:#3FAE84;color:#fff;font:800 10px/18px 'Inter',sans-serif;font-style:normal;text-align:center}
+.tk-nav{display:flex;justify-content:space-around;padding:8px 16px 12px;border-top:1px solid #F0F4F2;flex:none}
+.tk-nav span{display:flex;flex-direction:column;align-items:center;gap:3px;font:700 9.5px 'Pretendard',sans-serif;color:#A3B2AD}
+.tk-nav span.on{color:#3FAE84}.tk-nav svg{width:17px;height:17px}
+/* 대화 창 */
+#desk .win.tkroom > .win-h{height:auto!important;padding:0!important;background:#fff!important;border:0!important;display:block!important;position:relative}
+#desk .win.tkroom > .win-h .win-btns{display:none!important}
+.tkroom .chat-head{position:relative;display:flex;justify-content:center;padding:14px 16px 10px}
+.tkroom .chat-head .back,.tkroom .chat-head .tk-ed{position:absolute;top:16px;width:30px;height:30px!important;padding:0!important;border-radius:10px!important;border:0!important;display:grid!important;place-items:center;cursor:pointer;box-shadow:none!important}
+.tkroom .chat-head .back{left:14px;background:none!important;color:#3FAE84}
+.tkroom .chat-head .tk-ed{right:14px;background:#F3F7F5!important;color:#3B544B!important}
+.tkroom .chat-head svg{width:17px;height:17px}
+.tk-hc{display:flex;flex-direction:column;align-items:center;min-width:0;max-width:70%}
+.tk-stack{display:flex}
+.tkroom .tk-hav{width:38px;height:38px;flex:none;border-radius:50%!important;overflow:hidden;border:2.5px solid #fff!important;box-shadow:none!important;margin-left:-11px}
+.tkroom .tk-hav:first-child{margin-left:0}
+.tk-hc b{margin-top:5px;font:800 13px 'Pretendard',sans-serif;color:#14231E;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.tk-hc small{display:flex;align-items:center;gap:5px;font:600 10px 'Pretendard',sans-serif;color:#3FAE84}
+.tk-hc small i{width:6px;height:6px;border-radius:50%;background:#3FAE84}
+.tk-pin{display:flex;align-items:center;gap:8px;margin:0 14px 2px;padding:8px 12px;border-radius:12px;background:#fff;box-shadow:0 0 0 1px #EAF0ED,0 4px 12px -8px rgba(20,35,30,.2);font:700 11.5px 'Pretendard',sans-serif;color:#2F5A4E;text-align:left}
+.tk-pin b{flex:none;padding:3px 6px;border-radius:6px;background:#3FAE84;color:#fff;font:800 9.5px 'Pretendard',sans-serif}
+.tk-pin span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tkroom .chat{background:#fff!important;height:100%}
+.tkroom .chat-list{background:#fff!important;padding:10px 16px 12px!important;gap:5px!important}
+.tk-day{align-self:center;margin:0 auto 6px;height:22px;padding:0 11px;border-radius:99px;background:#F3F7F5;font:700 10px/22px 'Pretendard',sans-serif;color:#8A9894;width:max-content}
+.tkroom .who{font:700 10px 'Pretendard',sans-serif!important;color:#8A9894!important;margin-top:6px}
+.tkroom .who .av{width:28px!important;height:28px!important;border-radius:50%!important}
+.tkroom .who.me{display:none!important}
+.tkroom .msg{font:600 12.5px/1.45 'Pretendard',sans-serif!important;padding:8px 13px!important;border-radius:18px!important;border:0!important;box-shadow:none!important;max-width:74%}
+.tkroom .msg.them{background:#EEF3F1!important;color:#14231E!important;margin-left:36px!important}
+.tkroom .msg.me{background:linear-gradient(135deg,#7FD7B1,#3FAE84)!important;color:#fff!important;box-shadow:0 6px 14px -8px rgba(47,156,116,.8)!important}
+.tkroom .msg.emo{background:none!important;box-shadow:none!important;font-size:26px!important;padding:0 6px!important}
+.tk-re{align-self:flex-start;margin:-8px 0 0 44px;height:20px;padding:0 7px;border-radius:99px;background:#fff;box-shadow:0 1px 5px rgba(20,35,30,.15);font:700 10px/20px 'Pretendard',sans-serif;color:#3FAE84;position:relative;z-index:1}
+.tk-re.me{align-self:flex-end;margin:-8px 6px 0 0}
+.tk-rd{align-self:flex-end;font:600 9.5px 'Pretendard',sans-serif;color:#A3B2AD}.tk-rd em{font-style:normal;color:#3FAE84;font-weight:800;margin-right:4px}
+.tkroom .chat-in{display:flex!important;align-items:center;gap:8px;padding:10px 14px 14px!important;background:#fff!important;border-top:0!important}
+.tkroom .chat-in .plus{width:32px!important;height:32px!important;border-radius:50%!important;background:#F1F5F3!important;color:#3FAE84!important;border:0!important;flex:none;display:grid;place-items:center;padding:0!important}
+.tkroom .chat-in label{flex:1;min-width:0;display:flex;align-items:center;gap:6px;height:38px;padding:0 4px 0 14px;border-radius:99px;border:1.5px solid #E3ECE8;background:#fff}
+.tkroom .chat-in input{flex:1;min-width:0;border:0!important;outline:0;background:none!important;font:600 12px 'Pretendard',sans-serif;color:#14231E;padding:0!important;height:auto!important;box-shadow:none!important}
+.tkroom .chat-in .sm{color:#A3B2AD;display:grid;place-items:center}.tkroom .chat-in .sm svg{width:17px;height:17px}
+.tkroom .chat-in label button{width:30px!important;height:30px!important;border-radius:50%!important;background:#14231E!important;color:#fff!important;border:0!important;flex:none;display:grid;place-items:center;padding:0!important}
+.tkroom .chat-in svg{width:15px;height:15px}
+.tk .tk-add{display:grid}
+html:not(.sye-editing) .tk .tk-add,html:not(.sye-editing) .tkroom .tk-ed{display:none!important}
 .tk-fm{z-index:99997}
-.tk-fm .tk-top{display:flex!important;align-items:center;font:700 12px 'IBM Plex Sans KR',sans-serif;margin-top:14px}
+.tk-fm .tk-topck{display:flex!important;align-items:center;font:700 12px 'IBM Plex Sans KR',sans-serif;margin-top:14px;padding:0}
+@media (max-width:720px),(max-aspect-ratio:4/5) and (max-width:1100px),(max-height:599px){
+  #desk .win.tkwin,#desk .win.tkroom{box-shadow:0 18px 40px -18px rgba(20,35,30,.3)!important}
+  #desk .win.tkwin > .win-h{display:none!important}
+}
 `; document.head.appendChild(st); })();

@@ -468,12 +468,12 @@ const SITE = {
         replies: ['응, 듣고 있어', '지금 대기실. 너 온 거 보여', '…앵콜 한 곡 더 할까', '목소리 괜찮아. 너 오면 더 괜찮고', '잠깐만, 매니저 형 온다'],
         incoming: ['♥', '보고 싶다', '어디야?']   // 홈에 있으면 가끔 오는 메시지 (알림)
       },
-      { name: '밴드 단톡방', status: 'SEIRAN UNIV. BAND · 4명', avatar: '', time: '오후 9:40', unread: 12,
+      { name: '밴드 단톡방', status: '4명 · 대화 중', notice: '토요일 축제 리허설 오후 3시 · 402호 집합', avatar: '', time: '오후 9:40', unread: 12,
         messages: [
           { from: 'them', name: '드럼', text: '내일 합주 7시 맞지?' },
           { from: 'them', name: '베이스', text: '402호 키 누가 갖고 있어' },
           { from: 'me', text: '나한테 있어! 6시 반에 열어둘게' },
-          { from: 'them', name: '드럼', text: '천사다 진짜' },
+          { from: 'them', name: '드럼', text: '천사다 진짜', react: '♥ 2' },
           { from: 'them', name: 'REN', text: '셋리스트 3번 4번 순서 바꾸자' }
         ],
         replies: ['ㅇㅋㅇㅋ', '내일 봐!', '간식 사갈게'], incoming: []
