@@ -1270,7 +1270,7 @@ function openWin(id, def) {
   }
   // CATEGORY(Records) · NOTICE 창은 위 메뉴 버튼 바로 밑에 붙어서 열려요 (화면 크기와 상관없이)
   if (!isMobile() && /^(records|notice)$/.test(id)) {
-    const btn = $(`#desk .topnav [data-open="${id}"]`), dk = $('#desk');
+    const btn = $('#desk .topnav [data-open="records"]'), dk = $('#desk');   // NOTICE 도 CATEGORY 와 같은 왼쪽 줄에 맞춰요 (겹쳐도 괜찮게)
     if (btn && dk) { const br = btn.getBoundingClientRect(), dr = dk.getBoundingClientRect(), k = (dr.width / deskW()) || 1, wz2 = +el.dataset.wz || 1, ww = el.offsetWidth * wz2;
       const x = Math.max(12, Math.min((br.left - dr.left) / k - 14, deskW() - ww - 12)), y = (br.bottom - dr.top) / k + 12;
       el.style.left = x / wz2 + 'px'; el.style.top = y / wz2 + 'px'; }
@@ -1278,7 +1278,7 @@ function openWin(id, def) {
   // 옮겨 둔 자리 기억 (다시 열면 그 자리에서) · 크기 조절 손잡이 · 휴대폰은 아래에서 올라오는 시트
   if (!isMobile() && id !== 'pass') {
     const sp = WPOS[id], wz2 = +el.dataset.wz || 1;
-    if (sp && !def.abs) { el.style.left = Math.max(-el.offsetWidth + 80, Math.min(sp.x, (deskW() - 60) / wz2)) + 'px'; el.style.top = Math.max(64 / wz2, Math.min(sp.y, (deskH() - 90) / wz2)) + 'px'; if (sp.w) el.style.width = sp.w + 'px'; if (sp.h) el.style.height = sp.h + 'px'; }
+    if (sp && !def.abs && !/^(records|notice)$/.test(id)) { el.style.left = Math.max(-el.offsetWidth + 80, Math.min(sp.x, (deskW() - 60) / wz2)) + 'px'; el.style.top = Math.max(64 / wz2, Math.min(sp.y, (deskH() - 90) / wz2)) + 'px'; if (sp.w) el.style.width = sp.w + 'px'; if (sp.h) el.style.height = sp.h + 'px'; }
     if (!def.abs && !/rmzw|cydet/.test(def.cls || '')) { const g = document.createElement('i'); g.className = 'wgrip'; g.title = '크기 조절'; el.appendChild(g); gripify(el, g, id); }
   }
   if (isMobile() && id !== 'pass') { const g = document.createElement('i'); g.className = 'sh-grab'; el.prepend(g); sheetDrag(el, g, id); }
