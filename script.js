@@ -2638,8 +2638,8 @@ function openChars(wid) {
       if (hd0) hd0.innerHTML = (C.tabs || []).map(([k, t]) => `<button class="btab cxt ${k === charTabKey ? 'on' : ''} ${k === 'au' ? 'ico' : ''}" data-ck="${k}" title="${esc(t)}"><span class="fav f-${k}">${ic(CHAR_TAB_ICON[k] || 'idcard')}</span>${k === 'au' ? '' : `${esc(t)}<em>${(W[k] || []).length}</em>`}</button>`).join('');
       return; }
     b.innerHTML = `<div class="cx ${cxAnim ? 'anim' : ''}">
-      <div class="cx-top2"><h3>${esc(W.title || W.name)}</h3><button class="cx-add">+ ${isPair ? '페어' : '캐릭터'} 추가</button></div>
-      <div class="cx-meta"><span>${esc(W.name)} · SCALE 1:1 · ${list.length} PCS</span></div>
+      <div class="cx-top2"><div class="cxt-t"><h3>${esc(W.title || W.name)}</h3><div class="cx-meta"><span>${esc(W.name)} · ${isPair ? 'PAIR' : 'MEMBER'} // SCALE 1:1 · ${list.length} PCS</span></div></div><button class="cx-add">+ ${isPair ? '페어' : '캐릭터'} 추가</button></div>
+      <div class="dz-rule cxr"><i></i></div>
       <div class="cx-scroll">${!list.length ? `<div class="cx-empty">NO ${isPair ? 'PAIR' : 'CHARACTER'} · 오른쪽 위 + 버튼으로 추가해요</div>`
         : isPair ? `<div class="cp-list">${list.map((m, i) => { const A = m.a || {}, B = m.b || {}; return `<button class="cp-card ${isOn(i) ? 'on' : ''}" data-ci="${i}">
           <div class="cp-h">${m.badge ? `<i class="cp-badge">✦ ${esc(m.badge)}</i>` : ''}<b>${esc(m.name)}</b><span>${esc(m.tags || '')}</span></div>
@@ -6183,6 +6183,8 @@ html body #desk .taskbar{background-color:rgba(253,254,254,.94)!important}
 #desk .win.cxwin .cp-card{border-color:#D3EFF3!important}
 `; document.head.appendChild(st); })();
 (() => { const st = document.createElement('style'); st.textContent = `#desk .win.cxwin .cx-top2 h3{color:#31ACBD!important}#desk .win.cxwin .cx-meta span{color:#7C979E!important}#desk .win.cxwin .cx-scroll .ph:not(:has(img)){background:linear-gradient(160deg,#BDEBE0 0%,#7FD3C2 55%,#4DB8AE 100%)!important}#desk .win.cxwin .cx-scroll .ph:not(:has(img))::before,#desk .win.cxwin .cx-scroll .ph:not(:has(img))::after{opacity:.35}`; document.head.appendChild(st); })();
+/* 장르 창 : 제목 아래 점선 (OOC 창처럼) */
+(() => { const st = document.createElement('style'); st.textContent = `.cx .cx-top2{display:flex;align-items:center;justify-content:flex-start!important;gap:12px}.cx .cx-top2 .cx-add{margin-left:auto}.cx .cxt-t{min-width:0}.cx .cxt-t .cx-meta{margin:4px 0 0!important;padding:0!important}.cx > .cxr{margin:8px 18px 14px!important}`; document.head.appendChild(st); })();
 /* Profile ~ ETC. (dz · cx 창) · 캐릭터 상세 · Link Hub : 초록 민트와 틸의 중간 · 파스텔 민트로 색만 바꿔요
    (이 창들에 쓰인 CSS 규칙을 복사해서 초록 · 청록 계열 색만 골라 바꿔 붙여요 — 사진 색은 그대로) */
 (() => {
