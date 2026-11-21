@@ -6021,26 +6021,26 @@ html body #desk,html.m7 body #desk{background-color:#F9FAFA!important;background
 .tk-hc b{margin-top:5px;font:800 13px 'Pretendard',sans-serif;color:#14231E;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 .tk-hc small{display:flex;align-items:center;gap:5px;font:600 10px 'Pretendard',sans-serif;color:#3FAE84}
 .tk-hc small i{width:6px;height:6px;border-radius:50%;background:#3FAE84}
-.tk-pin{display:flex;align-items:center;gap:8px;margin:0 14px 2px;padding:8px 12px;border-radius:12px;background:#fff;box-shadow:0 0 0 1px #EAF0ED,0 4px 12px -8px rgba(20,35,30,.2);font:700 11.5px 'Pretendard',sans-serif;color:#2F5A4E;text-align:left}
+.tk-pin{display:flex;align-items:center;gap:8px;margin:0 14px 2px;padding:7px 12px;border-radius:12px;background:#fff;box-shadow:0 0 0 1px #EAF0ED,0 4px 12px -8px rgba(20,35,30,.2);font:400 11px 'Pretendard',sans-serif;color:#2F5A4E;text-align:left}
 .tk-pin b{flex:none;padding:3px 6px;border-radius:6px;background:#3FAE84;color:#fff;font:800 9.5px 'Pretendard',sans-serif}
 .tk-pin span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tkroom .chat{background:#fff!important;height:100%}
 .tkroom .chat-list{background:#fff!important;padding:10px 16px 12px!important;gap:5px!important}
-.tk-day{align-self:center;margin:0 auto 6px;height:22px;padding:0 11px;border-radius:99px;background:#F3F7F5;font:700 10px/22px 'Pretendard',sans-serif;color:#8A9894;width:max-content}
-.tkroom .who{font:700 10px 'Pretendard',sans-serif!important;color:#8A9894!important;margin-top:6px}
+.tk-day{align-self:center;margin:0 auto 6px;height:20px;padding:0 10px;border-radius:99px;background:#F3F7F5;font:500 9.5px/20px 'Pretendard',sans-serif;color:#8A9894;width:max-content}
+.tkroom .who{font:500 9.5px 'Pretendard',sans-serif!important;color:#8A9894!important;margin-top:6px}
 .tkroom .who .av{width:28px!important;height:28px!important;border-radius:50%!important}
 .tkroom .who.me{display:none!important}
-.tkroom .msg{font:600 12.5px/1.45 'Pretendard',sans-serif!important;padding:8px 13px!important;border-radius:18px!important;border:0!important;box-shadow:none!important;max-width:74%}
+.tkroom .msg{font:400 11.5px/1.5 'Pretendard',sans-serif!important;padding:7px 12px!important;border-radius:18px!important;border:0!important;box-shadow:none!important;max-width:74%}
 .tkroom .msg.them{background:#EEF3F1!important;color:#14231E!important;margin-left:36px!important}
 .tkroom .msg.me{background:linear-gradient(135deg,#7FD7B1,#3FAE84)!important;color:#fff!important;box-shadow:0 6px 14px -8px rgba(47,156,116,.8)!important}
 .tkroom .msg.emo{background:none!important;box-shadow:none!important;font-size:26px!important;padding:0 6px!important}
-.tk-re{align-self:flex-start;margin:-8px 0 0 44px;height:20px;padding:0 7px;border-radius:99px;background:#fff;box-shadow:0 1px 5px rgba(20,35,30,.15);font:700 10px/20px 'Pretendard',sans-serif;color:#3FAE84;position:relative;z-index:1}
+.tk-re{align-self:flex-start;margin:-8px 0 0 44px;height:20px;padding:0 7px;border-radius:99px;background:#fff;box-shadow:0 1px 5px rgba(20,35,30,.15);font:500 9.5px/20px 'Pretendard',sans-serif;color:#3FAE84;position:relative;z-index:1}
 .tk-re.me{align-self:flex-end;margin:-8px 6px 0 0}
-.tk-rd{align-self:flex-end;font:600 9.5px 'Pretendard',sans-serif;color:#A3B2AD}.tk-rd em{font-style:normal;color:#3FAE84;font-weight:800;margin-right:4px}
+.tk-rd{align-self:flex-end;font:400 9px 'Pretendard',sans-serif;color:#A3B2AD}.tk-rd em{font-style:normal;color:#3FAE84;font-weight:800;margin-right:4px}
 .tkroom .chat-in{display:flex!important;align-items:center;gap:8px;padding:10px 14px 14px!important;background:#fff!important;border-top:0!important}
 .tkroom .chat-in .plus{width:32px!important;height:32px!important;border-radius:50%!important;background:#F1F5F3!important;color:#3FAE84!important;border:0!important;flex:none;display:grid;place-items:center;padding:0!important}
 .tkroom .chat-in label{flex:1;min-width:0;display:flex;align-items:center;gap:6px;height:38px;padding:0 4px 0 14px;border-radius:99px;border:1.5px solid #E3ECE8;background:#fff}
-.tkroom .chat-in input{flex:1;min-width:0;border:0!important;outline:0;background:none!important;font:600 12px 'Pretendard',sans-serif;color:#14231E;padding:0!important;height:auto!important;box-shadow:none!important}
+.tkroom .chat-in input{flex:1;min-width:0;border:0!important;outline:0;background:none!important;font:400 11.5px 'Pretendard',sans-serif;color:#14231E;padding:0!important;height:auto!important;box-shadow:none!important}
 .tkroom .chat-in .sm{color:#A3B2AD;display:grid;place-items:center}.tkroom .chat-in .sm svg{width:17px;height:17px}
 .tkroom .chat-in label button{width:30px!important;height:30px!important;border-radius:50%!important;background:#14231E!important;color:#fff!important;border:0!important;flex:none;display:grid;place-items:center;padding:0!important}
 .tkroom .chat-in svg{width:15px;height:15px}
