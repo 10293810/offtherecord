@@ -10,7 +10,7 @@
 
 const SITE = {
   /* ---------- 기본 정보 ---------- */
-  brand: { name: 'SETLIST-01', sub: 'MOON STUDIO', start: 'P2U', home: 'UNRELEASED-01', homeSub: 'SEIRAN UNIV. BAND' },   // home = 메인 화면 왼쪽 위 로고 글자
+  brand: { name: 'SETLIST-01', sub: 'MOON STUDIO', start: 'P2U', home: 'UNRELEASED-01', homeSub: 'SEIRAN UNIV. BAND', image: '' },   // home = 메인 화면 왼쪽 위 로고 글자 · image = 입장 화면 동그라미 사진/로고
   // 큰 제목: before + [마이크 모양 I] + after  →  SETL🎤ST
   title: { before: 'SETL', after: 'ST', tilt: true },   // tilt: 가운데 I(마이크)가 가끔 기울어지는 효과 (끄려면 false)
   pair: {
