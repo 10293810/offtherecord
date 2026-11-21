@@ -7,6 +7,12 @@
 <meta name="googlebot" content="noindex, nofollow">
 <style>html,body{-webkit-text-size-adjust:none!important;text-size-adjust:none!important}</style>
 <style>/* 위 메뉴 LUVINFO 숨김 · 아래 BGM 사진 안 돌게 */#desk .topnav [data-open=dday]{display:none!important}.mini .mini-cover,.taskbar .mini-cover{animation:none!important}</style>
+<style>/* 폰 · 세로 패드 · 낮은 화면 : 창이 화면을 덮는 시트 대신 양옆 여백 있는 카드로 (위 메뉴 · 아래 메뉴바가 보이게) — 퓨어.kr 처럼 */
+@media (max-width:720px),(max-aspect-ratio:4/5) and (max-width:1100px),(max-height:599px){
+  html.msheet #desk #winlayer .win:not(.passwin){left:max(12px,calc(50% - 340px))!important;right:max(12px,calc(50% - 340px))!important;width:auto!important;margin:0!important;
+    top:72px!important;bottom:calc(var(--tbh,70px) + 10px)!important;height:auto!important;max-height:none!important;border-radius:22px!important}
+  html.msheet #desk .taskbar,html.msheet #desk .topbar{z-index:90!important}
+}</style>
 <title>Setlist</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
@@ -127,6 +133,6 @@
 
 <audio id="audio" preload="none"></audio>
 <script src="data.js?v=202611211610"></script>
-<script src="script.js?v=202611211650"></script>
+<script src="script.js?v=202611211720"></script>
 </body>
 </html>

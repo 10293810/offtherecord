@@ -897,7 +897,7 @@ body.wide .spec{display:block;position:absolute;right:30px;bottom:82px;width:317
 /* =========================================================
    모바일 (폭 720px 이하) — 비율 고정 대신 세로 스크롤
    ========================================================= */
-@media (max-width:720px),(max-aspect-ratio:4/5) and (max-width:1100px){
+@media (max-width:720px),(max-aspect-ratio:4/5) and (max-width:1100px),(max-height:599px){
   body{overflow:auto}
   #intro,#desk{width:100vw;height:100%;zoom:1!important}
   .pi-top{left:20px;right:20px;top:18px}
@@ -967,7 +967,7 @@ body.wide .spec{display:block;position:absolute;right:30px;bottom:82px;width:317
 .lh-item b{font-size:12px}.lh-item .n{font-size:8px}.lh-item small{font-size:8px}
 
 /* 화면 비율이 세로로 더 길 때 남는 공간 */
-@media (min-width:721px) and (min-aspect-ratio:4/5),(min-width:1101px){ .apps-panel{top:auto;bottom:82px} .hero{height:auto;bottom:394px;min-height:390px} }
+@media (min-width:721px) and (min-aspect-ratio:4/5) and (min-height:600px),(min-width:1101px) and (min-height:600px){ .apps-panel{top:auto;bottom:82px} .hero{height:auto;bottom:394px;min-height:390px} }
 
 /* ---------- 메인 글자 · D-DAY 배지 움직임 ---------- */
 .big-title .mic-i{transform-origin:50% 100%}
@@ -1099,7 +1099,7 @@ body.dark .hs-name{color:#fff}
 /* 입장 부드럽게 */
 #intro{will-change:opacity}
 #intro.out{transition:opacity .55s ease}
-@media (max-width:720px),(max-aspect-ratio:4/5) and (max-width:1100px){
+@media (max-width:720px),(max-aspect-ratio:4/5) and (max-width:1100px),(max-height:599px){
   .hero{display:block;position:relative;left:auto;top:auto;width:100%;height:340px;filter:none}
   .apps-panel{top:auto}
   .ht-main{position:absolute;inset:0;border-radius:22px;-webkit-mask:none;mask:none}
