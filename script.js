@@ -4442,20 +4442,20 @@ function syLayout() {
   .sy-pairrow{position:absolute;left:46px;bottom:var(--pb,19px);display:flex;align-items:center;gap:8px;white-space:nowrap}
   .sy-pair{font:700 21px/1 var(--syf);letter-spacing:.01em;color:#1F5546;margin-right:9px}
   .sy-chip{height:22px;padding:0 10px;display:inline-flex;align-items:center;border-radius:99px;border:1.3px solid #49A887;font:700 8.5px var(--syf);letter-spacing:.01em;color:#1F5546}
-  .sy-r{position:absolute;right:34px;top:calc(40px + (100% - 40px - 146px) / 2);width:300px;height:146px}
+  .sy-r{position:absolute;right:34px;top:calc(40px + (100% - 40px - 146px) / 2 - 6px);width:300px;height:146px}
   .sy-nav{position:absolute;right:2px;top:0;display:flex;align-items:center;gap:8px}
   .sy-nav button{width:14px;height:16px;padding:0;border:0;background:none;color:#24413A;font:400 16px/1 var(--syf);cursor:pointer;display:grid;place-items:center}
   .sy-nav button svg{width:11px;height:11px;stroke-width:2.6}
   .sy-dots{display:flex;gap:4px;align-items:center}
   .sy-dots i{width:5px;height:5px;border-radius:99px;background:#BFDCCF;transition:width .25s,background .25s}
   .sy-dots i.on{width:16px;background:#5BBE95}
-  .sy-dd{position:absolute;left:2px;top:30px;font:800 72px/1 var(--syf);letter-spacing:-.025em;background:linear-gradient(180deg,#6FD0A6,#45B285);-webkit-background-clip:text;background-clip:text;color:transparent}
-  .sy-next{position:absolute;left:0;right:0;top:102px;display:flex;justify-content:space-between;align-items:baseline;font:600 10.5px var(--syf);color:#6B7A76}
+  .sy-dd{position:absolute;left:2px;top:24px;font:800 72px/1 var(--syf);letter-spacing:-.025em;background:linear-gradient(180deg,#6FD0A6,#45B285);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .sy-next{position:absolute;left:0;right:0;top:94px;display:flex;justify-content:space-between;align-items:baseline;font:600 10.5px var(--syf);color:#6B7A76}
   .sy-next span b{font-weight:700;color:var(--sy-ink)}
   .sy-next > b{font:700 11px var(--syf);color:#3E9C77}
-  .sy-bar{position:absolute;left:0;right:0;top:120.5px;height:3px;border-radius:99px;background:#DCEDE5;overflow:hidden}
+  .sy-bar{position:absolute;left:0;right:0;top:112.5px;height:3px;border-radius:99px;background:#DCEDE5;overflow:hidden}
   .sy-bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#9BE0C3,#6CCBA6)}
-  .sy-sub{position:absolute;left:0;right:0;top:133px;display:flex;justify-content:space-between;font:500 9.5px var(--syf);letter-spacing:.03em;color:#7F8F8A}
+  .sy-sub{position:absolute;left:0;right:0;top:125px;display:flex;justify-content:space-between;font:500 9.5px var(--syf);letter-spacing:.03em;color:#7F8F8A}
   /* 아이콘 창 */
   #desk .stage .leftcol .apps-panel{position:absolute!important;left:0!important;right:0!important;top:auto!important;bottom:0!important;width:auto!important;height:556px!important;margin:0!important;padding:0!important;border-radius:18px!important;background:rgba(248,251,250,.94)!important;border:1px solid #E3ECE8!important;box-shadow:0 10px 24px rgba(30,70,60,.06)!important;transform:none!important;zoom:1!important;overflow:visible!important}
   #desk .apps-panel .panel-tab{position:absolute!important;left:22px!important;top:-21px!important;height:21px!important;padding:0 6px 0 10px!important;display:flex!important;align-items:center!important;gap:6px!important;border-radius:9px 9px 0 0!important;background:rgba(248,251,250,.94)!important;border:1px solid #E3ECE8!important;border-bottom:0!important;box-shadow:none!important}
