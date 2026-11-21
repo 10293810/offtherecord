@@ -68,6 +68,7 @@ const SITE = {
   // 마우스 커서: 도트 주사기 하나로 고정 (이 값은 지금 안 써요)
   cursor: 'capsule',
   intro: {
+    lock: { password: '0424', title: 'MEMBERS ONLY', text: '비밀번호를 입력해 주세요', wrong: '비밀번호가 달라요' },   // 입장 비밀번호 (비워두면 '' 잠금 없이 바로 입장)
     nav: ['01 · ARCHIVE', '02 · SETLIST', '03 · KEY'],          // 왼쪽 위 메뉴 글자
     live: 'LIVE', liveLine: 'BPM <b>{d}</b> · ROOM 07 · MIC ON',   // 심전도 위 글자
     kicker: '月とナイフ — BACKSTAGE ARCHIVE', vol: 'VOL. 05',

@@ -414,17 +414,23 @@ function jellyTitle(L, G) {
   const sp = (cls, sz) => `<svg class="gt-sp ${cls}" width="${sz}" height="${sz}" viewBox="0 0 24 24"><path d="M12 1.5C12.6 8 16 11.4 22.5 12 16 12.6 12.6 16 12 22.5 11.4 16 8 12.6 1.5 12 8 11.4 11.4 8 12 1.5z"/></svg>`;
   const ini = (A[0] || 'P') + (B[0] || 'U');
   const OUT = (K.outline || word) + ' ♪ ', IMG = /^(data:|https?:|media\/|\.?\/)/.test(PL.image || '') ? PL.image : '';
-  IN.className = 'gx gt';
+  const LK = I.lock || {}, PW = String(LK.password ?? '').trim();
+  let locked = !!PW; try { if (sessionStorage.getItem('gt-pass') === PW) locked = false; } catch (e) {}
+  IN.className = 'gx gt' + (locked ? ' locked' : '');
   IN.innerHTML = `<div class="gt-bg"><i class="gt-blob b1"></i><i class="gt-blob b2"></i><i class="gt-blob b3"></i>
       <svg class="gt-rings" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid meet"><circle cx="500" cy="520" r="470"/><circle class="d" cx="500" cy="520" r="360"/></svg>
       <div class="gt-out"><div>${esc(OUT.repeat(6))}</div></div>
       <i class="gt-cr c1"></i><i class="gt-cr c2"></i><i class="gt-cr c3"></i><i class="gt-cr c4"></i></div>
+    ${locked ? `<form class="gt-gate" autocomplete="off"><div class="gt-lock"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path class="sh" d="M15 21v-6a9 9 0 0 1 18 0v6"/><rect x="10" y="21" width="28" height="21" rx="6" fill="#fff"/><path d="M24 29v5"/></svg></div>
+      <small>${esc(LK.title || 'MEMBERS ONLY')}</small><p>${esc(LK.text || '비밀번호를 입력해 주세요')}</p>
+      <label class="gt-pw"><input type="password" name="pw" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="PASSWORD" aria-label="비밀번호"><button type="submit" aria-label="들어가기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></label>
+      <em class="gt-err"></em></form>` : ''}
     <div class="gt-stage">
       <header class="gt-top"><b class="gt-stk"><i></i>✦ ${esc(S.brand?.home || 'UNRELEASED-01')}</b><span class="gt-est">EST. 2026 · ${esc(S.brand?.homeSub || 'SEIRAN UNIV. BAND')} // ${esc(A)} × ${esc(B)}</span>
         <div class="gt-chips"><span><i></i>${esc(S.online || 'CLUB ROOM OPEN')}</span><span><i></i>OPEN 24H</span></div></header>
       <div class="gt-par p1">${sp('s1', 34)}${sp('s2', 15)}</div><div class="gt-par p2">${sp('s3', 30)}${sp('s4', 13)}</div><div class="gt-par p3">${sp('s5', 26)}${sp('s6', 12)}</div>
       <div class="gt-ball"><i class="gt-str"></i><svg viewBox="-100 -100 200 200"><defs><radialGradient id="gtBall" cx=".36" cy=".3" r=".8"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".55" stop-color="#E4F4EC"/><stop offset="1" stop-color="#BFE3D2"/></radialGradient><clipPath id="gtClip"><circle r="86"/></clipPath></defs>
-        <circle r="86" fill="url(#gtBall)"/><g clip-path="url(#gtClip)" class="gt-grid"><g class="gt-lat">${[-60, -30, 0, 30, 60].map(y => `<ellipse cx="0" cy="${y}" rx="${(86 * Math.sqrt(1 - (y / 86) ** 2)).toFixed(1)}" ry="${(9 * Math.sqrt(1 - (y / 86) ** 2)).toFixed(1)}"/>`).join('')}</g><g class="gt-lon">${Array.from({ length: 6 }, (_, k) => `<ellipse cx="0" cy="0" rx="10" ry="86"${k === 0 ? ' class="hi"' : ''}/>`).join('')}</g></g>
+        <circle r="86" fill="url(#gtBall)"/><g clip-path="url(#gtClip)" class="gt-grid"><g class="gt-lat">${[-64, -43, -22, 0, 22, 43, 64].map(y => `<line x1="-90" x2="90" y1="${y}" y2="${y}"/>`).join('')}</g><g class="gt-lon">${Array.from({ length: 8 }, (_, k) => `<path d="M0 -86"${k === 2 ? ' class="hi"' : ''}/>`).join('')}</g></g>
         <circle r="86" fill="none" stroke="#1E2B26" stroke-width="2.2"/><circle cx="-34" cy="-38" r="14" fill="#fff" opacity=".7"/></svg>${sp('gl', 18)}</div>
       <section class="gt-tk">
         <div class="gt-main">
@@ -628,23 +634,24 @@ body.entered #desk .sy-bar i{animation:barFill 1.4s .45s cubic-bezier(.2,.8,.2,1
 @keyframes gt-rise{from{transform:translateY(16px);opacity:0}}
 /* 반짝이 */
 #intro.gt .gt-par{position:absolute;pointer-events:none}
-#intro.gt .gt-par.p1{left:110px;top:240px}#intro.gt .gt-par.p2{left:1250px;top:170px}#intro.gt .gt-par.p3{left:1300px;top:760px}
+#intro.gt .gt-par.p1{left:96px;top:200px}#intro.gt .gt-par.p2{left:1230px;top:130px}#intro.gt .gt-par.p3{left:1310px;top:700px}
 #intro.gt .gt-sp{position:absolute;fill:#fff;stroke:#3C4F48;stroke-width:1.2;stroke-linejoin:round;animation:gt-tw 3.2s ease-in-out infinite}
 #intro.gt .gt-sp.s2{left:44px;top:42px;animation-delay:-1.1s}#intro.gt .gt-sp.s4{left:38px;top:52px;animation-delay:-2s}#intro.gt .gt-sp.s6{left:-34px;top:44px;animation-delay:-.6s}
 #intro.gt .gt-sp.s3,#intro.gt .gt-sp.s5{animation-delay:-1.6s}
 @keyframes gt-tw{0%,100%{transform:scale(1) rotate(0)}50%{transform:scale(.55) rotate(45deg);opacity:.6}}
 /* 미러볼 */
-#intro.gt .gt-ball{position:absolute;left:1020px;top:150px;width:176px;height:176px;z-index:3;animation:gt-drop 1.3s .5s cubic-bezier(.3,1.4,.5,1) both}
+#intro.gt .gt-ball{position:absolute;left:1000px;top:112px;width:176px;height:176px;z-index:3;animation:gt-drop 1.3s .5s cubic-bezier(.3,1.4,.5,1) both}
 #intro.gt .gt-ball svg{width:100%;height:100%;display:block;filter:drop-shadow(0 18px 24px rgba(20,35,30,.14));animation:gt-bob 5s 1.8s ease-in-out infinite}
 #intro.gt .gt-str{position:absolute;left:50%;bottom:100%;width:1.4px;height:400px;margin-left:-.7px;background:linear-gradient(transparent,rgba(20,35,30,.35))}
-#intro.gt .gt-grid ellipse{fill:none;stroke:#3C4F48;stroke-width:1;opacity:.55}
-#intro.gt .gt-lon ellipse.hi{stroke:var(--m);stroke-width:2.6;opacity:1}
-#intro.gt .gt-lat{transform:rotate(-14deg)}
+#intro.gt .gt-grid line,#intro.gt .gt-grid path{fill:none;stroke:#2E403A;stroke-width:1.1;opacity:.5}
+#intro.gt .gt-grid path.bk{opacity:.13;stroke-dasharray:2 4}
+#intro.gt .gt-grid path.hi{stroke:var(--m);stroke-width:2.6;opacity:1}
+#intro.gt .gt-grid path.hi.bk{opacity:.25}
 #intro.gt .gt-ball svg.gt-sp{width:20px;height:20px;filter:none;left:128px;top:18px;animation:gt-tw 2.4s -.8s ease-in-out infinite}
 @keyframes gt-drop{from{transform:translateY(-420px)}}
 @keyframes gt-bob{50%{transform:translateY(8px) rotate(3deg)}}
 /* 티켓 */
-#intro.gt .gt-tk{position:absolute;left:130px;top:322px;width:1180px;height:420px;border-radius:36px;background:linear-gradient(115deg,rgba(255,255,255,.92),rgba(244,251,247,.86) 55%,rgba(226,245,235,.9));border:1.5px solid #fff;box-shadow:0 30px 70px -24px rgba(20,35,30,.22),0 2px 0 rgba(255,255,255,.9) inset;-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);animation:gt-tk 1.1s .25s cubic-bezier(.2,.9,.25,1) both}
+#intro.gt .gt-tk{position:absolute;left:130px;top:250px;width:1180px;height:420px;border-radius:36px;background:linear-gradient(115deg,rgba(255,255,255,.92),rgba(244,251,247,.86) 55%,rgba(226,245,235,.9));border:1.5px solid #fff;box-shadow:0 30px 70px -24px rgba(20,35,30,.22),0 2px 0 rgba(255,255,255,.9) inset;-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);animation:gt-tk 1.1s .25s cubic-bezier(.2,.9,.25,1) both}
 @keyframes gt-tk{from{transform:translateY(80px) scale(.96);opacity:0;filter:blur(8px)}}
 #intro.gt .gt-main{position:absolute;left:0;top:0;bottom:0;width:860px}
 #intro.gt .gt-tab{position:absolute;left:60px;top:-22px;height:44px;padding:0 22px;border-radius:99px;background:#16201C;color:#fff;display:inline-flex;align-items:center;gap:10px;font:900 14px 'Inter',sans-serif;letter-spacing:.03em;animation:gt-rise .6s .9s both}
@@ -730,6 +737,30 @@ body.entered #desk .sy-bar i{animation:barFill 1.4s .45s cubic-bezier(.2,.8,.2,1
 @keyframes gt-down{to{transform:translateY(80px);opacity:0}}
 @keyframes gt-up{to{transform:translateY(-480px)}}
 #intro.gt.out{opacity:0;pointer-events:none;transition:opacity .7s ease!important}
+/* 잠금 화면 : 배경만 보이고 가운데 비밀번호 칸 */
+#intro.gt.locked .gt-stage{display:none!important}
+#intro.gt .gt-gate{position:absolute;left:50%;top:50%;width:340px;margin:0;transform:translate(-50%,-50%);padding:34px 30px 26px;border-radius:30px;background:rgba(255,255,255,.72);border:1.5px solid #fff;box-shadow:0 30px 60px -26px rgba(20,35,30,.28);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);display:flex;flex-direction:column;align-items:center;text-align:center;z-index:5;animation:gt-gin .9s .2s cubic-bezier(.2,.9,.25,1) both}
+@keyframes gt-gin{from{transform:translate(-50%,-44%) scale(.96);opacity:0;filter:blur(6px)}}
+#intro.gt .gt-lock{width:64px;height:64px;border-radius:20px;background:linear-gradient(135deg,#6FD0A6,#3FAE84);color:#16201C;display:grid;place-items:center;box-shadow:0 12px 24px -8px rgba(47,156,116,.55);animation:gt-bob 4s 1.2s ease-in-out infinite}
+#intro.gt .gt-lock svg{width:36px;height:36px;overflow:visible}
+#intro.gt .gt-lock .sh{transition:transform .45s cubic-bezier(.3,1.6,.5,1);transform-origin:33px 21px}
+#intro.gt .gt-gate small{margin-top:18px;font:900 11px 'Inter',sans-serif;letter-spacing:.18em;color:var(--m)}
+#intro.gt .gt-gate p{margin:6px 0 18px;font:800 16px 'Pretendard',sans-serif;color:var(--ink)}
+#intro.gt .gt-pw{position:relative;display:flex;width:100%;height:54px;border-radius:99px;background:#fff;border:1.5px solid var(--ln);box-shadow:0 4px 12px rgba(20,35,30,.05);transition:border-color .2s,box-shadow .2s}
+#intro.gt .gt-pw:focus-within{border-color:#8FD9B8;box-shadow:0 0 0 4px rgba(63,174,132,.14)}
+#intro.gt .gt-pw input{flex:1;min-width:0;border:0;outline:0;background:none;padding:0 0 0 22px;font:800 16px 'Inter',sans-serif;letter-spacing:.2em;color:var(--ink)}
+#intro.gt .gt-pw input::placeholder{font-size:11px;letter-spacing:.2em;color:#A9B8B2}
+#intro.gt .gt-pw button{flex:none;width:44px;height:44px;margin:4px;border:0;border-radius:50%;background:#16201C;color:#fff;display:grid;place-items:center;cursor:pointer;transition:transform .2s}
+#intro.gt .gt-pw button:hover{transform:translateX(2px)}
+#intro.gt .gt-pw button svg{width:18px;height:18px}
+#intro.gt .gt-err{height:16px;margin-top:10px;font:700 12px 'Pretendard',sans-serif;font-style:normal;color:#E0606A}
+#intro.gt .gt-gate.no{animation:gt-shake .42s}
+#intro.gt .gt-gate.no .gt-pw{border-color:#F2A3A9}
+@keyframes gt-shake{20%,60%{transform:translate(calc(-50% - 9px),-50%)}40%,80%{transform:translate(calc(-50% + 9px),-50%)}}
+#intro.gt .gt-gate.ok .gt-lock .sh{transform:translateY(-6px) rotate(18deg)}
+#intro.gt .gt-gate.ok .gt-lock{animation:gt-rdy .5s}
+#intro.gt .gt-gate.bye{transition:opacity .45s,transform .45s;opacity:0;transform:translate(-50%,-56%) scale(.94)}
+#intro.gt.m .gt-gate{width:min(340px,calc(100% - 32px))}
 /* 휴대폰 · 세로 화면 : 티켓을 세로로 */
 #intro.gt.m .gt-stage{position:absolute;inset:0;width:auto;height:auto;transform:none!important;overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:84px 16px 70px}
 #intro.gt.m .gt-top{position:absolute;left:18px;right:18px;top:18px;height:44px}
@@ -773,14 +804,16 @@ body.entered #desk .sy-bar i{animation:barFill 1.4s .45s cubic-bezier(.2,.8,.2,1
     const m = isMobile(); IN.classList.toggle('m', m);
     if (!m) { const W = IN.clientWidth || innerWidth, H = IN.clientHeight || innerHeight, k = Math.min(W / 1440, H / 900); stage.style.transform = `translate(${(W - 1440 * k) / 2}px,${(H - 900 * k) / 2}px) scale(${k})`; }
     else stage.style.transform = '';
+    if (IN.classList.contains('locked')) return;
     h1.style.setProperty('--tfs', '104px'); const W = tt.clientWidth - 8, w = h1.scrollWidth;
     h1.style.setProperty('--tfs', Math.min(m ? 72 : 112, 104 * W / Math.max(1, w)).toFixed(1) + 'px');
   };
   fitT(); addEventListener('resize', fitT); document.fonts && document.fonts.ready.then(fitT); setTimeout(fitT, 400); setTimeout(fitT, 1200);
   // 미러볼이 빙글빙글 (세로줄 너비가 바뀌면서 돌아가 보여요)
-  const lon = $$('.gt-lon ellipse', IN); let rot = 0, rl = 0;
-  const spin = now => { if (!IN.isConnected) return; if (rl) rot += (now - rl) / 1000 * .55; rl = now;
-    lon.forEach((e, k) => { const ph = rot + k * Math.PI / lon.length, c = Math.cos(ph); e.setAttribute('rx', Math.max(.5, Math.abs(c) * 86).toFixed(1)); e.style.opacity = e.classList.contains('hi') ? (Math.sin(ph) > 0 ? 1 : .15) : ''; });
+  const lon = $$('.gt-lon path', IN); let rot = 0, rl = 0;
+  const spin = now => { if (!IN.isConnected) return; if (rl) rot += Math.min(.05, (now - rl) / 1000) * .32; rl = now;   // 천천히 (멍하게 보기 좋게)
+    lon.forEach((e, k) => { const ph = rot + k * Math.PI * 2 / lon.length, x = Math.sin(ph) * 86, rx = Math.abs(x).toFixed(1);
+      e.setAttribute('d', `M0 -86 A${rx} 86 0 0 ${x >= 0 ? 1 : 0} 0 86`); e.classList.toggle('bk', Math.cos(ph) < 0); });
     requestAnimationFrame(spin); };
   requestAnimationFrame(spin);
   // 마우스 따라 살짝 움직이는 배경 (PC)
@@ -798,9 +831,19 @@ body.entered #desk .sy-bar i{animation:barFill 1.4s .45s cubic-bezier(.2,.8,.2,1
     IN.classList.toggle('ready', r); hit.disabled = !r;
   }
   setP(0);
-  const begin = () => { fitT(); if (t0) return; document.documentElement.classList.remove('fonts-wait'); t0 = performance.now() + 1400; requestAnimationFrame(step); };
+  const begin = () => { fitT(); if (IN.classList.contains('locked')) return; if (t0) return; document.documentElement.classList.remove('fonts-wait'); t0 = performance.now() + 1400; requestAnimationFrame(step); };
   if (document.fonts && document.fonts.load) { Promise.all(['900 40px "Pretendard"', '700 14px "Pretendard"'].map(f => document.fonts.load(f).catch(() => {}))).then(begin); setTimeout(begin, 900); } else begin();
   function step(now) { if (leaving) return; if (now < t0) return requestAnimationFrame(step); const p = Math.max(0, Math.min(100, (now - t0) / dur * 100)); setP(p); if (p < 100) requestAnimationFrame(step); else done = true; }
+  // 비밀번호 : 맞으면 자물쇠가 열리고 입장 화면이 나와요 (이 창을 닫기 전까진 다시 안 물어봐요)
+  const gate = $('.gt-gate', IN);
+  if (gate) { const inp = $('input', gate), err = $('.gt-err', gate);
+    setTimeout(() => { try { inp.focus({ preventScroll: true }); } catch (e) {} }, 900);
+    inp.addEventListener('input', () => { gate.classList.remove('no'); err.textContent = ''; try { SFX.key(); } catch (e) {} });
+    gate.addEventListener('submit', e => { e.preventDefault(); if (gate.classList.contains('ok')) return;
+      if (inp.value.trim() !== PW) { gate.classList.remove('no'); void gate.offsetWidth; gate.classList.add('no'); err.textContent = LK.wrong || '비밀번호가 달라요'; inp.select(); try { SFX.wrong(); } catch (e) {} return; }
+      try { sessionStorage.setItem('gt-pass', PW); } catch (e) {} try { SFX.unlock(); } catch (e) {} inp.blur();
+      gate.classList.add('ok'); setTimeout(() => gate.classList.add('bye'), 520);
+      setTimeout(() => { gate.remove(); IN.classList.remove('locked'); fitT(); begin(); setTimeout(fitT, 300); }, 950); }); }
   let hv = 0; hit.addEventListener('pointerenter', () => { if (!done || leaving || Date.now() - hv < 400) return; hv = Date.now(); try { SFX.hover(); } catch (e) {} });
   hit.addEventListener('click', () => {
     if (!done || leaving) return; leaving = true; bt.textContent = K.admitted || 'WELCOME';
@@ -4939,6 +4982,9 @@ const SFX = (() => {
   const live = () => ac && ac.state === 'running';
   return { wake: () => SFX_VOL && ctx(),
     hover: () => go((a, t) => tick(a, t, SFX_VOL * .45)),
+    key: () => go((a, t) => tick(a, t, SFX_VOL * .35)),
+    wrong: () => go((a, t) => { [0, .13].forEach(d => { const o = a.createOscillator(), g = a.createGain(), lp = a.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 900; o.type = 'triangle'; o.frequency.setValueAtTime(330, t + d); o.frequency.exponentialRampToValueAtTime(220, t + d + .12); g.gain.setValueAtTime(0, t + d); g.gain.linearRampToValueAtTime(SFX_VOL * .5, t + d + .01); g.gain.exponentialRampToValueAtTime(.0001, t + d + .16); o.connect(lp); lp.connect(g); g.connect(a.destination); o.start(t + d); o.stop(t + d + .2); }); }),
+    unlock: () => go((a, t) => { tick(a, t, SFX_VOL); tick(a, t + .07, SFX_VOL * .8); bell(a, t + .16, 1046.5, SFX_VOL * .2, 1.1); bell(a, t + .28, 1568, SFX_VOL * .15, 1.4); }),
     ready: () => { if (live()) go((a, t) => { bell(a, t, 1174.7, SFX_VOL * .14, .8); }); },
     tear: () => go((a, t) => { tear(a, t, SFX_VOL * 1.1); bell(a, t + .18, 784, SFX_VOL * .2, 1.2); bell(a, t + .3, 1174.7, SFX_VOL * .16, 1.4); bell(a, t + .42, 1568, SFX_VOL * .12, 1.6); }),
     tap: () => go((a, t) => tick(a, t, SFX_VOL * .9)), open: () => go((a, t) => { bell(a, t, 880, SFX_VOL * .22, .9); bell(a, t + .11, 1318.5, SFX_VOL * .17, 1.1); }) };
