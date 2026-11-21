@@ -4841,7 +4841,7 @@ html:not(.sy-owner) .sy-write,html:not(.sy-owner) #desk .top-r .sq.sy-write{disp
   #desk .stage .leftcol .apps{grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:16px 0!important}
   #desk .apps .app-tile:nth-child(n+33){display:flex!important}
   #desk .apps-panel{flex-direction:column!important}
-  #desk .m7-mq{display:block!important;margin:18px 4px 0;height:30px;border-radius:99px;background:#fff;border:1px solid #E1EAE6;overflow:hidden;white-space:nowrap;font:800 10px/30px 'Pretendard',sans-serif;letter-spacing:.14em;color:#2F5A4E;-webkit-mask:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+  #desk .m7-mq{display:none!important;margin:18px 4px 0;height:30px;border-radius:99px;background:#fff;border:1px solid #E1EAE6;overflow:hidden;white-space:nowrap;font:800 10px/30px 'Pretendard',sans-serif;letter-spacing:.14em;color:#2F5A4E;-webkit-mask:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
   #desk .m7-mq > div{display:inline-flex;animation:mqRun 26s linear infinite}
   #desk .m7-mq span{padding-right:0}
 }
