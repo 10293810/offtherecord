@@ -407,23 +407,46 @@ function jellyTitle(L, G) {
   const ring = `${chip}  ✦  ${A} × ${B}  ✦  OPEN 24H  ✦  `;
   // 주사기 눈금 (0 ~ 5.0 mL)
   const ticks = Array.from({ length: 51 }, (_, k) => `<i class="${k % 10 ? (k % 5 ? '' : 'h') : 'l'}">${k % 10 ? '' : `<em>${(k / 10).toFixed(1)}</em>`}</i>`).join('');
-  IN.className = 'gx';
-  IN.innerHTML = `<i class="gx-glow"></i>
-    <header class="gx-head"><b>${esc(S.brand?.home || 'SYRINGE-01')}<span>✦</span>${esc(S.brand?.homeSub || 'ARCH CLINIC')}</b>
-      <nav>${(K.nav || ['HOME', 'CATEGORY', 'NOTICE', 'LUVINFO']).map(t => `<span>${esc(t)}</span>`).join('')}</nav><i class="gx-menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 9h12M6 15h12"/></svg></i></header>
-    <div class="gx-title"><span class="gx-word">${titleHTML(word)}</span></div>
-    <section class="gx-panel"><i class="gx-hl"></i>
-      <div class="gx-left">
-        <div class="gx-eye"><span class="on"><i></i>${esc(K.online || 'NOW ADMITTING')}</span><span>${esc(PL.passNo || 'No. PU-0424')}</span></div>
-        <h1>${esc(A)}<em>×</em>${esc(B)}</h1>
-        <p>${esc(chip)} <b>✦</b> ${esc(K.sub || 'FRONT ROW × LEAD VOCAL')}</p>
-        <div class="gx-meter"><div class="gx-mt"><b class="gx-stat">${esc(STAT[0])}</b><span class="gx-ml"><em>0.0</em> / 5.0 ${esc(K.unit || 'VOL')}</span><span class="gx-pct">0%</span></div>
-          <div class="gx-track"><i class="gx-bar"></i></div><div class="gx-ticks">${ticks}</div></div>
-      </div>
-      <div class="gx-card">
-        <button class="en-hit gx-enter" disabled><span class="gx-fill"></span><b class="gx-bt">LOADING 0</b><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></i></button>
-      </div>
-    </section>`;
+  // 바코드 : 글자로 정해지는 줄무늬 (매번 같은 모양)
+  const bars = (seed, n) => { let h = 0; for (const ch of String(seed)) h = (h * 31 + ch.charCodeAt(0)) >>> 0; let o = ''; for (let k = 0; k < n; k++) { h = (h * 1103515245 + 12345) >>> 0; const w = 1 + (h >>> 16) % 3; o += `<i style="width:${w}px;animation-delay:${(k * .012).toFixed(3)}s"></i>`; } return o; };
+  const cut = word.startsWith('UN') && word.length > 4 ? 2 : Math.ceil(word.length / 2);
+  const letters = (t, d0) => [...t].map((c, k) => `<span style="animation-delay:${(d0 + k * .045).toFixed(3)}s">${esc(c)}</span>`).join('');
+  const sp = (cls, sz) => `<svg class="gt-sp ${cls}" width="${sz}" height="${sz}" viewBox="0 0 24 24"><path d="M12 1.5C12.6 8 16 11.4 22.5 12 16 12.6 12.6 16 12 22.5 11.4 16 8 12.6 1.5 12 8 11.4 11.4 8 12 1.5z"/></svg>`;
+  const ini = (A[0] || 'P') + (B[0] || 'U');
+  const OUT = (K.outline || word) + ' ♪ ', IMG = /^(data:|https?:|media\/|\.?\/)/.test(PL.image || '') ? PL.image : '';
+  IN.className = 'gx gt';
+  IN.innerHTML = `<div class="gt-bg"><i class="gt-blob b1"></i><i class="gt-blob b2"></i><i class="gt-blob b3"></i>
+      <svg class="gt-rings" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid meet"><circle cx="500" cy="520" r="470"/><circle class="d" cx="500" cy="520" r="360"/></svg>
+      <div class="gt-out"><div>${esc(OUT.repeat(6))}</div></div>
+      <i class="gt-cr c1"></i><i class="gt-cr c2"></i><i class="gt-cr c3"></i><i class="gt-cr c4"></i></div>
+    <div class="gt-stage">
+      <header class="gt-top"><b class="gt-stk"><i></i>✦ ${esc(S.brand?.home || 'UNRELEASED-01')}</b><span class="gt-est">EST. 2026 · ${esc(S.brand?.homeSub || 'SEIRAN UNIV. BAND')} // ${esc(A)} × ${esc(B)}</span>
+        <div class="gt-chips"><span><i></i>${esc(S.online || 'CLUB ROOM OPEN')}</span><span><i></i>OPEN 24H</span></div></header>
+      <div class="gt-par p1">${sp('s1', 34)}${sp('s2', 15)}</div><div class="gt-par p2">${sp('s3', 30)}${sp('s4', 13)}</div><div class="gt-par p3">${sp('s5', 26)}${sp('s6', 12)}</div>
+      <div class="gt-ball"><i class="gt-str"></i><svg viewBox="-100 -100 200 200"><defs><radialGradient id="gtBall" cx=".36" cy=".3" r=".8"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".55" stop-color="#E4F4EC"/><stop offset="1" stop-color="#BFE3D2"/></radialGradient><clipPath id="gtClip"><circle r="86"/></clipPath></defs>
+        <circle r="86" fill="url(#gtBall)"/><g clip-path="url(#gtClip)" class="gt-grid"><g class="gt-lat">${[-60, -30, 0, 30, 60].map(y => `<ellipse cx="0" cy="${y}" rx="${(86 * Math.sqrt(1 - (y / 86) ** 2)).toFixed(1)}" ry="${(9 * Math.sqrt(1 - (y / 86) ** 2)).toFixed(1)}"/>`).join('')}</g><g class="gt-lon">${Array.from({ length: 6 }, (_, k) => `<ellipse cx="0" cy="0" rx="10" ry="86"${k === 0 ? ' class="hi"' : ''}/>`).join('')}</g></g>
+        <circle r="86" fill="none" stroke="#1E2B26" stroke-width="2.2"/><circle cx="-34" cy="-38" r="14" fill="#fff" opacity=".7"/></svg>${sp('gl', 18)}</div>
+      <section class="gt-tk">
+        <div class="gt-main">
+          <span class="gt-tab"><i></i>${esc(K.online || 'NOW REHEARSING')}</span>
+          <p class="gt-kick">${esc(S.clinic?.kicker || 'SEIRAN UNIV. · LIGHT MUSIC CLUB')}<em>·</em>OPEN 24H</p>
+          <span class="gt-on"><i></i>ON AIR</span>
+          <div class="gt-vin"><div class="gt-disc"><i class="gt-lbl"${IMG ? ` style="background-image:url('${esc(IMG)}')"` : ''}>${IMG ? '' : `<b>${esc(ini)}</b><small>SIDE A</small>`}</i></div>
+            <span class="gt-bub"><i></i>${esc(K.bubble || '조용히 들어와 주세요 ♪')}</span></div>
+          <div class="gt-tt"><h1 class="gx-word"><b>${letters(word.slice(0, cut), .55)}</b><em>${letters(word.slice(cut), .55 + cut * .045)}</em></h1>
+            <p><span>✦</span>${esc(A)} × ${esc(B)} // ${esc(K.sub || 'FRONT ROW × LEAD VOCAL')}<code>${esc(K.tag || 'off the record')}</code></p></div>
+        </div>
+        <div class="gt-perf"></div>
+        <div class="gt-stub">
+          <div class="gt-adm"><small>ADMIT ONE</small><strong>${esc((K.stub || 'OTR').slice(0, 1))}<em>${esc((K.stub || 'OTR').slice(1, -1))}</em>${esc((K.stub || 'OTR').slice(-1))}</strong></div>
+          <div class="gt-lot"><small>SEAT</small><b>${esc(PL.passNo || 'TICKET No. 0424')}</b></div>
+          <div class="gt-meter"><div class="gt-mt"><b class="gx-stat">${esc(STAT[0])}</b><span class="gx-ml">${esc(K.unit || 'VOL')} <em>0.0</em></span><span class="gx-pct">0%</span></div><div class="gt-track"><i></i></div></div>
+          <div class="gt-bc">${bars(A + B + (PL.passNo || ''), 64)}</div>
+          <button class="en-hit gx-enter" disabled><span class="gx-fill"></span><i class="gt-shine"></i><b class="gx-bt">LOADING 0</b><i class="gt-arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></i></button>
+        </div>
+      </section>
+      <footer class="gt-foot"><span>✦ ${esc(S.brand?.homeSub || 'SEIRAN UNIV. BAND')}</span><b>© 2026 <strong>${esc(word)}</strong> · ${esc(A)} × ${esc(B)}</b><span class="r">FREE // OPEN 24H<i class="gt-bc sm">${bars(word, 34)}</i></span></footer>
+    </div>`;
   const css = document.createElement('style');
   css.textContent = `
 .tcap-w{display:inline-block;height:.72em;vertical-align:baseline;margin:0 .03em 0 .035em;position:relative}
@@ -568,90 +591,202 @@ body.entered #desk .sy-bar i{animation:barFill 1.4s .45s cubic-bezier(.2,.8,.2,1
 .dz-card:hover,.rmz .rm-item:hover{transform:translateY(-2px);box-shadow:0 12px 22px -10px rgba(49,172,189,.35)!important}
 .m7-mq{display:none}
 @media (prefers-reduced-motion:reduce){.tcap .tc-cap,.tcap .tc-slosh,body.entered #desk .apps .app-tile,body.entered #desk .sy-hero,body.entered #desk .stage .leftcol .apps-panel,.m7-mq > div{animation:none!important}}
-#intro.gx{position:fixed;inset:0;z-index:50;overflow:hidden;background:linear-gradient(180deg,#A9E2C8 0%,#7FD0AE 42%,#58BE95 100%)!important;color:#123C33;font-family:'Inter','IBM Plex Sans KR',sans-serif;--g:#3FAE84;--d:#123C33;--gr:#6D8079;--ln:#E2EEE8}
-#intro.gx::before{content:'';position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.35) 1px,transparent 1.5px);background-size:22px 22px;-webkit-mask:linear-gradient(180deg,#000,transparent 60%);mask:linear-gradient(180deg,#000,transparent 60%);pointer-events:none}
-#intro.gx *{box-sizing:border-box}
-#intro.gx .gx-glow{position:absolute;left:50%;top:-180px;width:1200px;height:620px;margin-left:-600px;border-radius:50%;background:radial-gradient(closest-side,rgba(255,255,255,.75),rgba(255,255,255,0));pointer-events:none}
-#intro.gx .gx-head{position:absolute;left:40px;right:40px;top:0;height:64px;display:flex;align-items:center;gap:30px;border-bottom:1px solid rgba(255,255,255,.55);color:var(--d)}
-#intro.gx .gx-head > b{font:800 13px 'Inter',sans-serif;letter-spacing:.04em;display:flex;align-items:center;gap:8px}
-#intro.gx .gx-head > b span{color:#fff}
-#intro.gx .gx-head nav{margin-left:auto;display:flex;gap:30px;font:700 11.5px 'Inter',sans-serif;letter-spacing:.08em;color:rgba(18,60,51,.75)}
-#intro.gx .gx-menu{width:36px;height:36px;border-radius:50%;background:#fff;display:grid;place-items:center;box-shadow:0 4px 12px rgba(18,60,51,.1)}
-#intro.gx .gx-menu svg{width:16px;height:16px}
-#intro.gx .gx-title{position:absolute;left:0;right:0;top:88px;display:flex;justify-content:center;pointer-events:none}
-#intro.gx .gx-word{display:inline-block;font:900 var(--tfs,240px)/.9 'Pretendard',sans-serif;letter-spacing:-.05em;padding-right:.04em;white-space:nowrap;background:linear-gradient(180deg,#FFFFFF 30%,#E4F8EE 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 16px 30px rgba(18,60,51,.16));animation:gx-up 1s cubic-bezier(.2,.7,.2,1) both}
-@keyframes gx-up{from{transform:translateY(70px);opacity:0}to{transform:none;opacity:1}}
-@keyframes gx-rot{to{transform:rotate(360deg)}}
-#intro.gx .gx-panel{position:absolute;left:24px;right:24px;top:296px;bottom:24px;border-radius:40px;background:rgba(246,252,249,.78);-webkit-backdrop-filter:blur(22px) saturate(1.2);backdrop-filter:blur(22px) saturate(1.2);border:1px solid rgba(255,255,255,.9);box-shadow:0 -10px 50px rgba(18,60,51,.1);animation:gx-in .9s .15s cubic-bezier(.2,.7,.2,1) both}
-@keyframes gx-in{from{transform:translateY(90px);opacity:0}to{transform:none;opacity:1}}
-#intro.gx .gx-hl{position:absolute;left:8%;right:40%;top:-1px;height:2px;background:linear-gradient(90deg,transparent,#fff,transparent);filter:blur(.5px)}
-#intro.gx .gx-left{position:absolute;left:64px;right:520px;top:56px;bottom:52px;display:flex;flex-direction:column}
-#intro.gx .gx-eye{display:flex;gap:8px}
-#intro.gx .gx-eye span{height:30px;padding:0 14px;border-radius:99px;background:#fff;border:1px solid var(--ln);display:inline-flex;align-items:center;gap:7px;font:800 10.5px 'Inter',sans-serif;letter-spacing:.1em;color:var(--gr)}
-#intro.gx .gx-eye span.on{background:var(--d);border-color:var(--d);color:#fff}
-#intro.gx .gx-eye i{width:7px;height:7px;border-radius:50%;background:#7FE0B6;box-shadow:0 0 0 3px rgba(127,224,182,.25);animation:gx-bl 1.6s infinite}
-@keyframes gx-bl{50%{opacity:.3}}
-#intro.gx .gx-left h1{margin:26px 0 0;font:900 112px/.92 'Inter',sans-serif;letter-spacing:-.06em;color:var(--d);white-space:nowrap}
-#intro.gx .gx-left h1 em{font-style:normal;font-weight:300;color:var(--g);margin:0 .06em;font-size:.7em;vertical-align:.12em;letter-spacing:0}
-#intro.gx .gx-left p{margin:18px 0 0 4px;font:700 14px 'Inter',sans-serif;letter-spacing:.06em;color:var(--gr)}
-#intro.gx .gx-left p b{color:var(--g)}
-#intro.gx .gx-meter{margin-top:auto}
-#intro.gx .gx-mt{display:flex;align-items:baseline;gap:18px;margin-bottom:12px}
-#intro.gx .gx-stat{font:800 12px 'Inter',sans-serif;letter-spacing:.14em;color:var(--d)}
-#intro.gx .gx-ml{margin-left:auto;font:700 12px 'Inter',sans-serif;color:var(--gr);letter-spacing:.04em}
-#intro.gx .gx-ml em{font-style:normal;font-weight:900;color:var(--g);font-size:16px}
-#intro.gx .gx-pct{font:900 22px/1 'Inter',sans-serif;color:var(--d);min-width:62px;text-align:right;letter-spacing:-.02em}
-#intro.gx .gx-track{position:relative;height:4px;border-radius:99px;background:#DCEDE5}
-#intro.gx .gx-bar{position:absolute;left:0;top:0;bottom:0;width:var(--lp,0%);border-radius:99px;background:linear-gradient(90deg,#9BE3C3,#3FAE84);box-shadow:0 0 8px rgba(63,174,132,.35)}
-#intro.gx .gx-bar::after{display:none}
-#intro.gx .gx-ticks{position:relative;display:flex;justify-content:space-between;height:26px;margin-top:8px;padding:0 1px}
-#intro.gx .gx-ticks i{position:relative;width:1px;height:6px;background:rgba(18,60,51,.25)}
-#intro.gx .gx-ticks i.h{height:9px;background:rgba(18,60,51,.35)}
-#intro.gx .gx-ticks i.l{height:12px;background:rgba(18,60,51,.55)}
-#intro.gx .gx-ticks em{position:absolute;top:14px;left:50%;transform:translateX(-50%);font:700 9.5px 'Inter',sans-serif;font-style:normal;color:var(--gr)}
-#intro.gx .gx-card{position:absolute;right:44px;bottom:52px;width:430px;display:flex;flex-direction:column}
-#intro.gx .en-hit.gx-enter{position:relative!important;left:auto!important;top:auto!important;width:100%!important;height:120px!important;margin-top:0!important;border-radius:30px!important;border:1px solid #fff!important;background:#E6F3ED!important;box-shadow:0 14px 34px rgba(18,60,51,.1);overflow:hidden;display:flex!important;align-items:center;padding:0 18px 0 36px!important;z-index:2}
-#intro.gx .gx-fill{position:absolute;left:0;top:0;bottom:0;width:var(--lp,0%);background:linear-gradient(90deg,#8FDDBA,#3FAE84);transition:width .15s linear}
-#intro.gx .gx-bt{position:relative;white-space:nowrap;font:900 40px/1 'Inter',sans-serif;letter-spacing:-.04em;color:var(--d)}
-#intro.gx .gx-enter i{position:relative;margin-left:auto;width:84px;height:84px;border-radius:22px;background:#fff;color:var(--g);display:grid;place-items:center;box-shadow:0 4px 12px rgba(18,60,51,.14);transition:transform .25s}
-#intro.gx .gx-enter i svg{width:32px;height:32px}
-#intro.gx.ready .en-hit.gx-enter{background:linear-gradient(135deg,#52C496,#2F9C74)!important;box-shadow:0 14px 30px rgba(47,156,116,.35);cursor:pointer}
-#intro.gx.ready .gx-bt{color:#fff;font-size:52px}
-#intro.gx.ready .en-hit.gx-enter:hover i{transform:translateX(4px)}
-#intro.gx.ready .en-hit.gx-enter:active{transform:scale(.985)}
-#intro.gx.leaving .gx-panel{animation:gx-outd .9s cubic-bezier(.6,0,.3,1) forwards}
-#intro.gx.leaving .gx-word{animation:gx-outu .9s cubic-bezier(.6,0,.3,1) forwards}
-#intro.gx.leaving .gx-head{transition:opacity .5s;opacity:0}
-@keyframes gx-outd{to{transform:translateY(115%)}}
-@keyframes gx-outu{to{transform:translateY(-140%)}}
-#intro.gx.out{opacity:0;pointer-events:none;transition:opacity .7s ease!important}
-@media (max-width:720px),(max-aspect-ratio:4/5) and (max-width:1100px),(max-height:599px){
-  #intro.gx .gx-head{left:18px;right:18px;height:56px}
-  #intro.gx .gx-head nav{display:none}
-  #intro.gx .gx-head > b{margin-right:auto}
-  #intro.gx .gx-title{top:74px}
-  #intro.gx .gx-panel{left:10px;right:10px;top:auto;bottom:12px;border-radius:28px;padding:20px 14px 14px}
-  #intro.gx .gx-left{position:relative;left:auto;right:auto;top:auto;bottom:auto;padding:0 6px}
-  #intro.gx .gx-eye span{height:26px;font-size:9px;padding:0 10px}
-  #intro.gx .gx-left h1{font-size:15vw;margin-top:14px}
-  #intro.gx .gx-left p{font-size:10px;margin-top:10px}
-  #intro.gx .gx-meter{margin-top:18px}
-  #intro.gx .gx-ticks em{font-size:8px}
-  #intro.gx .gx-pct{font-size:18px}
-  #intro.gx .gx-card{position:relative;right:auto;top:auto;bottom:auto;width:auto;margin-top:16px}
-  #intro.gx .en-hit.gx-enter{height:76px!important;border-radius:22px!important;padding:0 10px 0 24px!important}
-  #intro.gx .gx-bt{font-size:26px}#intro.gx.ready .gx-bt{font-size:34px}
-  #intro.gx .gx-enter i{width:56px;height:56px;border-radius:16px}
-}
+#intro.gt{position:fixed;inset:0;z-index:50;overflow:hidden;background:#EDF3F0!important;background-image:none!important;color:#14231E;font-family:'Pretendard','Inter',sans-serif;--ink:#14231E;--m:#3FAE84;--m2:#6FD0A6;--mut:#6E7E78;--ln:#DCE8E2;cursor:default}
+#intro.gt *{box-sizing:border-box}
+#intro.gt .gt-bg{position:absolute;inset:0;pointer-events:none}
+#intro.gt .gt-bg::before{content:'';position:absolute;inset:0;background-image:radial-gradient(rgba(20,35,30,.16) 1px,transparent 1.4px);background-size:24px 24px;opacity:.55}
+#intro.gt .gt-blob{position:absolute;border-radius:50%;filter:blur(60px);opacity:.75;animation:gt-blob 14s ease-in-out infinite alternate}
+#intro.gt .gt-blob.b1{left:-8%;top:-12%;width:46vw;height:40vw;background:#BFEBD6}
+#intro.gt .gt-blob.b2{right:-10%;bottom:6%;width:40vw;height:34vw;background:#CFEFE2;animation-delay:-5s}
+#intro.gt .gt-blob.b3{left:38%;top:30%;width:30vw;height:26vw;background:#E2F7EC;animation-delay:-9s}
+@keyframes gt-blob{to{transform:translate(4vw,3vh) scale(1.08)}}
+#intro.gt .gt-rings{position:absolute;left:50%;top:50%;width:min(110vh,110vw);height:min(110vh,110vw);transform:translate(-50%,-50%)}
+#intro.gt .gt-rings circle{fill:none;stroke:rgba(20,35,30,.13);stroke-width:1.2;stroke-dasharray:3000;stroke-dashoffset:3000;animation:gt-draw 2.6s .2s cubic-bezier(.6,.1,.2,1) forwards}
+#intro.gt .gt-rings circle.d{stroke-dasharray:2 7;stroke-dashoffset:0;opacity:0;animation:gt-fade 1.4s 1s forwards,gt-spin 90s linear infinite;transform-origin:500px 520px}
+@keyframes gt-draw{to{stroke-dashoffset:0}}
+@keyframes gt-fade{to{opacity:1}}
+@keyframes gt-spin{to{transform:rotate(360deg)}}
+#intro.gt .gt-out{position:absolute;left:0;right:0;bottom:-3vh;overflow:hidden;white-space:nowrap}
+#intro.gt .gt-out div{display:inline-block;font:900 min(26vh,22vw)/1 'Pretendard',sans-serif;letter-spacing:-.04em;color:transparent;-webkit-text-stroke:1.4px rgba(20,35,30,.12);animation:gt-mq 80s linear infinite}
+@keyframes gt-mq{to{transform:translateX(-50%)}}
+#intro.gt .gt-cr{position:absolute;width:22px;height:22px;opacity:.5}
+#intro.gt .gt-cr::before,#intro.gt .gt-cr::after{content:'';position:absolute;background:var(--ink)}
+#intro.gt .gt-cr::before{left:10px;top:0;width:1.4px;height:22px}#intro.gt .gt-cr::after{top:10px;left:0;height:1.4px;width:22px}
+#intro.gt .gt-cr.c1{left:22px;top:22px}#intro.gt .gt-cr.c2{right:22px;top:22px}#intro.gt .gt-cr.c3{left:22px;bottom:22px}#intro.gt .gt-cr.c4{right:22px;bottom:22px}
+#intro.gt .gt-stage{position:absolute;left:0;top:0;width:1440px;height:900px;transform-origin:0 0}
+/* 위 줄 */
+#intro.gt .gt-top{position:absolute;left:64px;right:64px;top:44px;height:52px;display:flex;align-items:center;gap:22px}
+#intro.gt .gt-stk{display:inline-flex;align-items:center;gap:9px;height:44px;padding:0 20px 0 16px;border-radius:12px;background:#16201C;color:#fff;font:900 16px/1 'Pretendard',sans-serif;letter-spacing:-.01em;transform:rotate(-4deg);box-shadow:4px 5px 0 rgba(20,35,30,.12);animation:gt-stk .9s .35s cubic-bezier(.3,1.6,.5,1) both}
+#intro.gt .gt-stk i{width:7px;height:7px;border-radius:50%;background:#fff}
+@keyframes gt-stk{from{transform:translateY(-70px) rotate(-22deg);opacity:0}}
+#intro.gt .gt-est{font:700 11px 'Inter',sans-serif;letter-spacing:.08em;color:var(--mut);animation:gt-rise .7s .6s both}
+#intro.gt .gt-chips{margin-left:auto;display:flex;gap:10px}
+#intro.gt .gt-chips span{height:36px;padding:0 16px;border-radius:99px;background:rgba(255,255,255,.85);display:inline-flex;align-items:center;gap:8px;font:800 11px 'Inter',sans-serif;letter-spacing:.08em;box-shadow:0 4px 14px rgba(20,35,30,.05);animation:gt-rise .7s both}
+#intro.gt .gt-chips span:nth-child(1){animation-delay:.5s}#intro.gt .gt-chips span:nth-child(2){animation-delay:.6s}
+#intro.gt .gt-chips i,#intro.gt .gt-tab i,#intro.gt .gt-on i{width:7px;height:7px;border-radius:50%;background:var(--m);box-shadow:0 0 0 3px rgba(63,174,132,.2);animation:gt-bl 1.6s infinite}
+@keyframes gt-bl{50%{opacity:.35}}
+@keyframes gt-rise{from{transform:translateY(16px);opacity:0}}
+/* 반짝이 */
+#intro.gt .gt-par{position:absolute;pointer-events:none}
+#intro.gt .gt-par.p1{left:110px;top:240px}#intro.gt .gt-par.p2{left:1250px;top:170px}#intro.gt .gt-par.p3{left:1300px;top:760px}
+#intro.gt .gt-sp{position:absolute;fill:#fff;stroke:#3C4F48;stroke-width:1.2;stroke-linejoin:round;animation:gt-tw 3.2s ease-in-out infinite}
+#intro.gt .gt-sp.s2{left:44px;top:42px;animation-delay:-1.1s}#intro.gt .gt-sp.s4{left:38px;top:52px;animation-delay:-2s}#intro.gt .gt-sp.s6{left:-34px;top:44px;animation-delay:-.6s}
+#intro.gt .gt-sp.s3,#intro.gt .gt-sp.s5{animation-delay:-1.6s}
+@keyframes gt-tw{0%,100%{transform:scale(1) rotate(0)}50%{transform:scale(.55) rotate(45deg);opacity:.6}}
+/* 미러볼 */
+#intro.gt .gt-ball{position:absolute;left:1020px;top:150px;width:176px;height:176px;z-index:3;animation:gt-drop 1.3s .5s cubic-bezier(.3,1.4,.5,1) both}
+#intro.gt .gt-ball svg{width:100%;height:100%;display:block;filter:drop-shadow(0 18px 24px rgba(20,35,30,.14));animation:gt-bob 5s 1.8s ease-in-out infinite}
+#intro.gt .gt-str{position:absolute;left:50%;bottom:100%;width:1.4px;height:400px;margin-left:-.7px;background:linear-gradient(transparent,rgba(20,35,30,.35))}
+#intro.gt .gt-grid ellipse{fill:none;stroke:#3C4F48;stroke-width:1;opacity:.55}
+#intro.gt .gt-lon ellipse.hi{stroke:var(--m);stroke-width:2.6;opacity:1}
+#intro.gt .gt-lat{transform:rotate(-14deg)}
+#intro.gt .gt-ball svg.gt-sp{width:20px;height:20px;filter:none;left:128px;top:18px;animation:gt-tw 2.4s -.8s ease-in-out infinite}
+@keyframes gt-drop{from{transform:translateY(-420px)}}
+@keyframes gt-bob{50%{transform:translateY(8px) rotate(3deg)}}
+/* 티켓 */
+#intro.gt .gt-tk{position:absolute;left:130px;top:322px;width:1180px;height:420px;border-radius:36px;background:linear-gradient(115deg,rgba(255,255,255,.92),rgba(244,251,247,.86) 55%,rgba(226,245,235,.9));border:1.5px solid #fff;box-shadow:0 30px 70px -24px rgba(20,35,30,.22),0 2px 0 rgba(255,255,255,.9) inset;-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);animation:gt-tk 1.1s .25s cubic-bezier(.2,.9,.25,1) both}
+@keyframes gt-tk{from{transform:translateY(80px) scale(.96);opacity:0;filter:blur(8px)}}
+#intro.gt .gt-main{position:absolute;left:0;top:0;bottom:0;width:860px}
+#intro.gt .gt-tab{position:absolute;left:60px;top:-22px;height:44px;padding:0 22px;border-radius:99px;background:#16201C;color:#fff;display:inline-flex;align-items:center;gap:10px;font:900 14px 'Inter',sans-serif;letter-spacing:.03em;animation:gt-rise .6s .9s both}
+#intro.gt .gt-tab i{background:var(--m2)}
+#intro.gt .gt-kick{position:absolute;left:62px;top:48px;margin:0;font:800 12.5px 'Inter',sans-serif;letter-spacing:.08em;color:var(--mut)}
+#intro.gt .gt-kick em{font-style:normal;margin:0 10px}
+#intro.gt .gt-on{position:absolute;right:46px;top:40px;height:34px;padding:0 15px;border-radius:99px;background:#fff;border:1px solid var(--ln);display:inline-flex;align-items:center;gap:8px;font:900 11.5px 'Inter',sans-serif;letter-spacing:.06em}
+#intro.gt .gt-on i{background:#F06A6A;box-shadow:0 0 0 3px rgba(240,106,106,.2)}
+#intro.gt .gt-vin{position:absolute;left:56px;top:118px;width:196px;height:196px;animation:gt-pop .8s .7s cubic-bezier(.3,1.5,.5,1) both}
+@keyframes gt-pop{from{transform:scale(.3) rotate(-40deg);opacity:0}}
+#intro.gt .gt-disc{position:absolute;inset:0;border-radius:50%;background:repeating-radial-gradient(circle at 50% 50%,#1B2622 0 2px,#26332E 2px 4px);border:7px solid #fff;box-shadow:0 14px 28px -8px rgba(20,35,30,.4);animation:gt-spin 6s linear infinite}
+#intro.gt .gt-disc::after{content:'';position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 20deg,transparent 0 8%,rgba(255,255,255,.18) 12%,transparent 18% 58%,rgba(255,255,255,.12) 62%,transparent 68%)}
+#intro.gt .gt-lbl{position:absolute;left:50%;top:50%;width:84px;height:84px;margin:-42px 0 0 -42px;border-radius:50%;background:linear-gradient(135deg,#8FE0BD,#3FAE84) center/cover;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;font-style:normal;z-index:1}
+#intro.gt .gt-lbl::after{content:'';position:absolute;width:9px;height:9px;border-radius:50%;background:#EDF3F0}
+#intro.gt .gt-lbl b{font:900 22px/1 'Pretendard',sans-serif;letter-spacing:-.02em;margin-bottom:22px}
+#intro.gt .gt-lbl small{position:absolute;bottom:16px;font:800 7px 'Inter',sans-serif;letter-spacing:.14em;opacity:.85}
+#intro.gt .gt-bub{position:absolute;left:50%;top:calc(100% + 14px);transform:translateX(-50%);white-space:nowrap;height:42px;padding:0 18px;border-radius:99px;background:#fff;border:2px solid #16201C;box-shadow:0 4px 0 #16201C;display:inline-flex;align-items:center;gap:8px;font:800 14px 'Pretendard',sans-serif;animation:gt-bub .7s 1.5s cubic-bezier(.3,1.6,.5,1) both}
+#intro.gt .gt-bub::before{content:'';position:absolute;left:50%;top:-9px;width:13px;height:13px;margin-left:-6.5px;background:#fff;border-left:2px solid #16201C;border-top:2px solid #16201C;transform:rotate(45deg)}
+#intro.gt .gt-bub i{width:7px;height:7px;border-radius:50%;background:var(--m)}
+@keyframes gt-bub{from{transform:translateX(-50%) scale(.4);opacity:0}}
+#intro.gt .gt-tt{position:absolute;left:290px;right:40px;top:132px}
+#intro.gt .gt-tt h1{margin:0;font:900 var(--tfs,104px)/1.02 'Pretendard',sans-serif;letter-spacing:-.055em;white-space:nowrap;display:inline-block;padding-right:.04em}
+#intro.gt .gt-tt h1 b{color:var(--ink)}
+#intro.gt .gt-tt h1 em{font-style:normal;background:linear-gradient(180deg,#7ED9B2,#3FAE84);-webkit-background-clip:text;background-clip:text;color:transparent}
+#intro.gt .gt-tt h1 span{display:inline-block;animation:gt-ch .7s cubic-bezier(.2,1.3,.4,1) both}
+#intro.gt .gt-tt h1 em span{background:inherit;-webkit-background-clip:text;background-clip:text}
+@keyframes gt-ch{from{transform:translateY(.5em) rotate(6deg);opacity:0}}
+#intro.gt .gt-tt p{margin:16px 0 0 4px;display:flex;white-space:nowrap;align-items:center;gap:10px;font:800 17px 'Pretendard',sans-serif;letter-spacing:-.01em;color:#24332D;animation:gt-rise .7s 1.2s both}
+#intro.gt .gt-tt p span{color:var(--m);font-size:20px}
+#intro.gt .gt-tt code{flex:none;white-space:nowrap;margin-left:6px;height:34px;padding:0 12px;border-radius:7px;background:#16201C;color:#fff;display:inline-flex;align-items:center;font:800 15px 'Pretendard',sans-serif}
+#intro.gt .gt-perf{position:absolute;left:860px;top:30px;bottom:30px;border-left:2px dashed #CFDDD6}
+#intro.gt .gt-perf::before,#intro.gt .gt-perf::after{content:'';position:absolute;left:-14px;width:26px;height:26px;border-radius:50%;background:#EDF3F0;box-shadow:inset 0 0 0 1.5px #fff}
+#intro.gt .gt-perf::before{top:-44px}#intro.gt .gt-perf::after{bottom:-44px}
+#intro.gt .gt-stub{position:absolute;left:862px;right:0;top:0;bottom:0;padding:44px 40px 40px 44px;display:flex;flex-direction:column}
+#intro.gt .gt-adm{display:flex;justify-content:space-between;align-items:flex-start}
+#intro.gt .gt-stub small{font:800 11px 'Inter',sans-serif;letter-spacing:.12em;color:var(--mut)}
+#intro.gt .gt-adm strong{font:900 72px/.85 'Pretendard',sans-serif;letter-spacing:-.06em}
+#intro.gt .gt-adm strong em{font-style:normal;color:var(--m)}
+#intro.gt .gt-lot{display:flex;justify-content:space-between;align-items:baseline;margin-top:14px}
+#intro.gt .gt-lot b{font:800 11.5px 'Inter',sans-serif;letter-spacing:.06em}
+#intro.gt .gt-meter{margin-top:auto}
+#intro.gt .gt-mt{display:flex;align-items:baseline;gap:10px;margin-bottom:8px}
+#intro.gt .gx-stat{font:800 10.5px 'Inter',sans-serif;letter-spacing:.12em;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#intro.gt .gx-ml{margin-left:auto;font:700 10.5px 'Inter',sans-serif;color:var(--mut);white-space:nowrap}
+#intro.gt .gx-ml em{font-style:normal;font-weight:900;color:var(--m)}
+#intro.gt .gx-pct{font:900 14px/1 'Inter',sans-serif;min-width:40px;text-align:right}
+#intro.gt .gt-track{height:3px;border-radius:99px;background:#DCEBE4;overflow:hidden}
+#intro.gt .gt-track i{display:block;height:100%;width:var(--lp,0%);background:linear-gradient(90deg,#9BE3C3,#3FAE84)}
+#intro.gt .gt-bc{display:flex;gap:2px;height:30px;margin:18px 0 22px;overflow:hidden}
+#intro.gt .gt-bc i{flex:none;height:100%;background:#16201C;transform-origin:bottom;animation:gt-bar .4s 1s both}
+#intro.gt .gt-bc i:nth-child(3n){opacity:.85}
+@keyframes gt-bar{from{transform:scaleY(0)}}
+#intro.gt .en-hit.gx-enter{position:relative!important;left:auto!important;top:auto!important;width:100%!important;height:70px!important;margin:0!important;padding:0 0 0 0!important;border-radius:99px!important;border:0!important;background:#DDEBE4!important;overflow:hidden;display:flex!important;align-items:center;justify-content:center;gap:10px;color:var(--ink);box-shadow:none;transition:transform .2s,box-shadow .3s}
+#intro.gt .gx-fill{position:absolute;left:0;top:0;bottom:0;width:var(--lp,0%);background:linear-gradient(90deg,#B4E9D1,#7FD3AE)}
+#intro.gt .gx-bt{position:relative;font:900 22px/1 'Inter',sans-serif;letter-spacing:-.01em;white-space:nowrap}
+#intro.gt .gt-arr{position:relative;width:22px;height:22px;display:none}
+#intro.gt .gt-arr svg{width:100%;height:100%}
+#intro.gt .gt-shine{position:absolute;top:0;bottom:0;left:-40%;width:30%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.55),transparent);opacity:0}
+#intro.gt.ready .en-hit.gx-enter{background:linear-gradient(135deg,#5FCC9E,#2F9C74)!important;color:#fff;cursor:pointer;box-shadow:0 16px 30px -8px rgba(47,156,116,.55);animation:gt-rdy .5s cubic-bezier(.3,1.6,.5,1)}
+#intro.gt.ready .gx-fill{opacity:0}
+#intro.gt.ready .gt-arr{display:block}
+#intro.gt.ready .gt-shine{opacity:1;animation:gt-shine 2.6s 1s ease-in-out infinite}
+#intro.gt.ready .en-hit.gx-enter:hover{transform:translateY(-2px);box-shadow:0 20px 36px -8px rgba(47,156,116,.6)}
+#intro.gt.ready .en-hit.gx-enter:hover .gt-arr{transform:translate(2px,-2px)}
+#intro.gt.ready .en-hit.gx-enter:active{transform:scale(.97)}
+@keyframes gt-rdy{50%{transform:scale(1.04)}}
+@keyframes gt-shine{0%{left:-40%}45%,100%{left:120%}}
+/* 아래 줄 */
+#intro.gt .gt-foot{position:absolute;left:70px;right:70px;bottom:52px;display:flex;align-items:center;justify-content:space-between;font:800 11.5px 'Inter',sans-serif;letter-spacing:.08em;animation:gt-rise .8s 1.3s both}
+#intro.gt .gt-foot > b{height:40px;padding:0 22px;border-radius:99px;background:rgba(255,255,255,.8);display:inline-flex;align-items:center;gap:6px;font:600 13px 'Inter',sans-serif;letter-spacing:0;color:var(--mut)}
+#intro.gt .gt-foot > b strong{color:var(--ink);font-weight:900}
+#intro.gt .gt-foot .r{display:flex;align-items:center;gap:14px}
+#intro.gt .gt-foot .gt-bc.sm{height:20px;margin:0;gap:1.5px}
+/* 나갈 때 : 티켓 반쪽이 찢어져 나가요 */
+#intro.gt.leaving .gt-stub{animation:gt-tear .8s cubic-bezier(.5,0,.3,1) forwards}
+#intro.gt.leaving .gt-main,#intro.gt.leaving .gt-perf{animation:gt-down .8s .15s cubic-bezier(.6,0,.3,1) forwards}
+#intro.gt.leaving .gt-tk{background:transparent;border-color:transparent;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none;transition:all .25s}
+#intro.gt.leaving .gt-main{background:linear-gradient(115deg,rgba(255,255,255,.92),rgba(244,251,247,.86));border-radius:36px 0 0 36px}
+#intro.gt.leaving .gt-stub{background:linear-gradient(115deg,rgba(244,251,247,.9),rgba(226,245,235,.92));border-radius:0 36px 36px 0}
+#intro.gt.leaving .gt-ball{animation:gt-up .9s .1s cubic-bezier(.6,0,.3,1) forwards}
+#intro.gt.leaving .gt-top,#intro.gt.leaving .gt-foot,#intro.gt.leaving .gt-par{transition:opacity .5s;opacity:0}
+@keyframes gt-tear{30%{transform:translate(14px,6px) rotate(4deg)}to{transform:translate(180px,260px) rotate(24deg);opacity:0}}
+@keyframes gt-down{to{transform:translateY(80px);opacity:0}}
+@keyframes gt-up{to{transform:translateY(-480px)}}
+#intro.gt.out{opacity:0;pointer-events:none;transition:opacity .7s ease!important}
+/* 휴대폰 · 세로 화면 : 티켓을 세로로 */
+#intro.gt.m .gt-stage{position:absolute;inset:0;width:auto;height:auto;transform:none!important;overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:84px 16px 70px}
+#intro.gt.m .gt-top{position:absolute;left:18px;right:18px;top:18px;height:44px}
+#intro.gt.m .gt-est,#intro.gt.m .gt-chips span:nth-child(2){display:none}
+#intro.gt.m .gt-stk{height:36px;font-size:13px;padding:0 14px 0 12px}
+#intro.gt.m .gt-chips span{height:30px;font-size:9.5px;padding:0 12px}
+#intro.gt.m .gt-par.p1{left:14px;top:80px}#intro.gt.m .gt-par.p2{left:auto;right:56px;top:96px}#intro.gt.m .gt-par.p3{left:auto;right:40px;top:auto;bottom:90px}
+#intro.gt.m .gt-ball{left:auto;right:16px;top:58px;width:64px;height:64px}
+@media (min-width:600px){#intro.gt.m .gt-ball{right:8%;top:62px;width:92px;height:92px}}
+#intro.gt.m .gt-tk{position:relative;left:auto;top:auto;width:100%;max-width:440px;height:auto;border-radius:28px;flex:none}
+#intro.gt.m .gt-main{position:relative;width:auto;padding:44px 22px 22px;display:flex;flex-direction:column;align-items:center;text-align:center}
+#intro.gt.m .gt-tab{left:22px;top:-18px;height:36px;font-size:11.5px;padding:0 16px}
+#intro.gt.m .gt-kick{position:static;font-size:10px}
+#intro.gt.m .gt-on{display:none}
+#intro.gt.m .gt-vin{position:relative;left:auto;top:auto;width:120px;height:120px;margin:18px 0 62px}
+#intro.gt.m .gt-lbl{width:52px;height:52px;margin:-26px 0 0 -26px}#intro.gt.m .gt-lbl b{font-size:14px;margin-bottom:12px}#intro.gt.m .gt-lbl small{display:none}
+#intro.gt.m .gt-disc{border-width:5px}
+#intro.gt.m .gt-bub{height:34px;font-size:12px;padding:0 14px}
+#intro.gt.m .gt-tt{position:relative;left:auto;right:auto;top:auto;width:100%}
+#intro.gt.m .gt-tt p{justify-content:center;flex-wrap:wrap;font-size:12px;margin:8px 0 0;gap:6px}
+#intro.gt.m .gt-tt code{height:26px;font-size:11.5px;margin:0}
+#intro.gt.m .gt-perf{position:relative;left:auto;top:auto;bottom:auto;margin:0 22px;border-left:0;border-top:2px dashed #CFDDD6}
+#intro.gt.m .gt-perf::before,#intro.gt.m .gt-perf::after{top:-14px;bottom:auto}
+#intro.gt.m .gt-perf::before{left:-36px}#intro.gt.m .gt-perf::after{left:auto;right:-36px}
+#intro.gt.m .gt-stub{position:relative;left:auto;padding:20px 22px 22px}
+#intro.gt.m .gt-adm strong{font-size:44px}
+#intro.gt.m .gt-meter{margin-top:16px}
+#intro.gt.m .gt-bc{height:22px;margin:14px 0 16px}
+#intro.gt.m .en-hit.gx-enter{height:58px!important}
+#intro.gt.m .gx-bt{font-size:18px}
+#intro.gt.m .gt-foot{position:absolute;left:16px;right:16px;bottom:16px;justify-content:center}
+#intro.gt.m .gt-foot > span{display:none}
+#intro.gt.m .gt-foot > b{height:32px;font-size:11px;padding:0 16px}
+#intro.gt.m.leaving .gt-stub{animation-name:gt-down}
+#intro.gt.m.leaving .gt-main,#intro.gt.m.leaving .gt-stub{border-radius:28px}
 `;
   document.head.appendChild(css);
-  const word$ = $('.gx-word', IN), ttl = $('.gx-title', IN);
-  const fitT = () => { word$.style.setProperty('--tfs', '240px'); const W = ttl.clientWidth - (isMobile() ? 36 : 64), w = word$.offsetWidth; word$.style.setProperty('--tfs', Math.min(isMobile() ? 120 : 280, 240 * W / Math.max(1, w)).toFixed(1) + 'px');
-    const pn = $('.gx-panel', IN); if (!pn) return;
-    if (!isMobile()) { ttl.style.top = ''; pn.style.top = ''; pn.style.bottom = ''; return; }
-    const th = ttl.offsetHeight, ph = pn.offsetHeight, ov = Math.round(th * -.04), H = innerHeight, st = Math.max(66, Math.round((H - (th + ph - ov)) / 2) + 10);
-    const pt = Math.min(st + th - ov, H - ph - 12); ttl.style.top = Math.max(60, pt - th + ov) + 'px'; pn.style.top = pt + 'px'; pn.style.bottom = 'auto'; };
+  const stage = $('.gt-stage', IN), h1 = $('.gt-tt h1', IN), tt = $('.gt-tt', IN);
+  // 1440×900 시안을 화면에 맞게 줄이고 늘려요 · 큰 글씨는 칸에 맞게
+  const fitT = () => {
+    const m = isMobile(); IN.classList.toggle('m', m);
+    if (!m) { const W = IN.clientWidth || innerWidth, H = IN.clientHeight || innerHeight, k = Math.min(W / 1440, H / 900); stage.style.transform = `translate(${(W - 1440 * k) / 2}px,${(H - 900 * k) / 2}px) scale(${k})`; }
+    else stage.style.transform = '';
+    h1.style.setProperty('--tfs', '104px'); const W = tt.clientWidth - 8, w = h1.scrollWidth;
+    h1.style.setProperty('--tfs', Math.min(m ? 72 : 112, 104 * W / Math.max(1, w)).toFixed(1) + 'px');
+  };
   fitT(); addEventListener('resize', fitT); document.fonts && document.fonts.ready.then(fitT); setTimeout(fitT, 400); setTimeout(fitT, 1200);
+  // 미러볼이 빙글빙글 (세로줄 너비가 바뀌면서 돌아가 보여요)
+  const lon = $$('.gt-lon ellipse', IN); let rot = 0, rl = 0;
+  const spin = now => { if (!IN.isConnected) return; if (rl) rot += (now - rl) / 1000 * .55; rl = now;
+    lon.forEach((e, k) => { const ph = rot + k * Math.PI / lon.length, c = Math.cos(ph); e.setAttribute('rx', Math.max(.5, Math.abs(c) * 86).toFixed(1)); e.style.opacity = e.classList.contains('hi') ? (Math.sin(ph) > 0 ? 1 : .15) : ''; });
+    requestAnimationFrame(spin); };
+  requestAnimationFrame(spin);
+  // 마우스 따라 살짝 움직이는 배경 (PC)
+  const par = [[$('.gt-ball', IN), 14], [$('.gt-par.p1', IN), 22], [$('.gt-par.p2', IN), 18], [$('.gt-par.p3', IN), 26], [$('.gt-out', IN), -10], [$('.gt-rings', IN), 6]];
+  IN.addEventListener('pointermove', e => { if (IN.classList.contains('m') || IN.classList.contains('leaving')) return; const x = e.clientX / innerWidth - .5, y = e.clientY / innerHeight - .5;
+    par.forEach(([el, k]) => { if (!el) return; el.style.translate = `${(x * k).toFixed(1)}px ${(y * k).toFixed(1)}px`; }); });
   const hit = $('.en-hit', IN), bt = $('.gx-bt', IN), stat = $('.gx-stat', IN), pct = $('.gx-pct', IN), ml = $('.gx-ml em', IN);
   const dur = (I.seconds || 2.6) * 1000; let t0 = 0, done = false, leaving = false;
   function setP(p) {
@@ -659,15 +794,18 @@ body.entered #desk .sy-bar i{animation:barFill 1.4s .45s cubic-bezier(.2,.8,.2,1
     IN.style.setProperty('--lp', p + '%'); pct.textContent = n + '%'; ml.textContent = (p / 20).toFixed(1);
     bt.textContent = r ? (K.enter || 'ENTER') : 'LOADING ' + n;
     stat.textContent = r ? STAT[STAT.length - 1] : STAT[Math.min(STAT.length - 2, Math.floor(p / 100 * (STAT.length - 1)))];
+    if (r && !IN.classList.contains('ready')) try { SFX.ready && SFX.ready(); } catch (e) {}
     IN.classList.toggle('ready', r); hit.disabled = !r;
   }
   setP(0);
-  const begin = () => { fitT(); if (t0) return; document.documentElement.classList.remove('fonts-wait'); t0 = performance.now() + 450; requestAnimationFrame(step); };
+  const begin = () => { fitT(); if (t0) return; document.documentElement.classList.remove('fonts-wait'); t0 = performance.now() + 1400; requestAnimationFrame(step); };
   if (document.fonts && document.fonts.load) { Promise.all(['900 40px "Pretendard"', '700 14px "Pretendard"'].map(f => document.fonts.load(f).catch(() => {}))).then(begin); setTimeout(begin, 900); } else begin();
   function step(now) { if (leaving) return; if (now < t0) return requestAnimationFrame(step); const p = Math.max(0, Math.min(100, (now - t0) / dur * 100)); setP(p); if (p < 100) requestAnimationFrame(step); else done = true; }
+  let hv = 0; hit.addEventListener('pointerenter', () => { if (!done || leaving || Date.now() - hv < 400) return; hv = Date.now(); try { SFX.hover(); } catch (e) {} });
   hit.addEventListener('click', () => {
-    if (!done || leaving) return; leaving = true; bt.textContent = K.admitted || 'ADMITTED';
-    setTimeout(() => IN.classList.add('leaving'), 200);
+    if (!done || leaving) return; leaving = true; bt.textContent = K.admitted || 'WELCOME';
+    try { SFX.tear(); } catch (e) {}
+    setTimeout(() => IN.classList.add('leaving'), 160);
     setTimeout(() => { document.body.classList.add('entered'); startToasts(); IN.classList.add('out'); }, 1050);
     setTimeout(() => IN.remove(), 2000);
   });
@@ -4442,20 +4580,20 @@ function syLayout() {
   .sy-pairrow{position:absolute;left:46px;bottom:var(--pb,19px);display:flex;align-items:center;gap:8px;white-space:nowrap}
   .sy-pair{font:700 21px/1 var(--syf);letter-spacing:.01em;color:#1F5546;margin-right:9px}
   .sy-chip{height:22px;padding:0 10px;display:inline-flex;align-items:center;border-radius:99px;border:1.3px solid #49A887;font:700 8.5px var(--syf);letter-spacing:.01em;color:#1F5546}
-  .sy-r{position:absolute;right:34px;top:calc(40px + (100% - 40px - 146px) / 2 - 6px);width:300px;height:146px}
+  .sy-r{position:absolute;right:34px;top:calc(40px + (100% - 40px - 146px) / 2);width:300px;height:146px}
   .sy-nav{position:absolute;right:2px;top:0;display:flex;align-items:center;gap:8px}
   .sy-nav button{width:14px;height:16px;padding:0;border:0;background:none;color:#24413A;font:400 16px/1 var(--syf);cursor:pointer;display:grid;place-items:center}
   .sy-nav button svg{width:11px;height:11px;stroke-width:2.6}
   .sy-dots{display:flex;gap:4px;align-items:center}
   .sy-dots i{width:5px;height:5px;border-radius:99px;background:#BFDCCF;transition:width .25s,background .25s}
   .sy-dots i.on{width:16px;background:#5BBE95}
-  .sy-dd{position:absolute;left:2px;top:24px;font:800 72px/1 var(--syf);letter-spacing:-.025em;background:linear-gradient(180deg,#6FD0A6,#45B285);-webkit-background-clip:text;background-clip:text;color:transparent}
-  .sy-next{position:absolute;left:0;right:0;top:94px;display:flex;justify-content:space-between;align-items:baseline;font:600 10.5px var(--syf);color:#6B7A76}
+  .sy-dd{position:absolute;left:2px;top:18px;font:800 72px/1 var(--syf);letter-spacing:-.025em;background:linear-gradient(180deg,#6FD0A6,#45B285);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .sy-next{position:absolute;left:0;right:0;top:88px;display:flex;justify-content:space-between;align-items:baseline;font:600 10.5px var(--syf);color:#6B7A76}
   .sy-next span b{font-weight:700;color:var(--sy-ink)}
   .sy-next > b{font:700 11px var(--syf);color:#3E9C77}
-  .sy-bar{position:absolute;left:0;right:0;top:112.5px;height:3px;border-radius:99px;background:#DCEDE5;overflow:hidden}
+  .sy-bar{position:absolute;left:0;right:0;top:106.5px;height:3px;border-radius:99px;background:#DCEDE5;overflow:hidden}
   .sy-bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#9BE0C3,#6CCBA6)}
-  .sy-sub{position:absolute;left:0;right:0;top:125px;display:flex;justify-content:space-between;font:500 9.5px var(--syf);letter-spacing:.03em;color:#7F8F8A}
+  .sy-sub{position:absolute;left:0;right:0;top:119px;display:flex;justify-content:space-between;font:500 9.5px var(--syf);letter-spacing:.03em;color:#7F8F8A}
   /* 아이콘 창 */
   #desk .stage .leftcol .apps-panel{position:absolute!important;left:0!important;right:0!important;top:auto!important;bottom:0!important;width:auto!important;height:556px!important;margin:0!important;padding:0!important;border-radius:18px!important;background:rgba(248,251,250,.94)!important;border:1px solid #E3ECE8!important;box-shadow:0 10px 24px rgba(30,70,60,.06)!important;transform:none!important;zoom:1!important;overflow:visible!important}
   #desk .apps-panel .panel-tab{position:absolute!important;left:22px!important;top:-21px!important;height:21px!important;padding:0 6px 0 10px!important;display:flex!important;align-items:center!important;gap:6px!important;border-radius:9px 9px 0 0!important;background:rgba(248,251,250,.94)!important;border:1px solid #E3ECE8!important;border-bottom:0!important;box-shadow:none!important}
@@ -4792,7 +4930,18 @@ const SFX = (() => {
     [[1, 1], [2, .12]].forEach(([m, k]) => { const o = a.createOscillator(), g = a.createGain(); o.type = 'sine'; o.frequency.setValueAtTime(f * m, t);
       g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(v * k, t + .025); g.gain.exponentialRampToValueAtTime(.0001, t + dur / m); o.connect(g); g.connect(lp); o.start(t); o.stop(t + dur + .05); }); };
   const go = fn => { if (!SFX_VOL) return; const a = ctx(); if (a) fn(a, a.currentTime + .005); };
-  return { wake: () => SFX_VOL && ctx(), tap: () => go((a, t) => tick(a, t, SFX_VOL * .9)), open: () => go((a, t) => { bell(a, t, 880, SFX_VOL * .22, .9); bell(a, t + .11, 1318.5, SFX_VOL * .17, 1.1); }) };
+  const tear = (a, t, v) => {   // 찌익 : 종이가 찢어지는 짧은 소리 (거친 잡음이 아래로 훑어 내려가요)
+    const n = Math.floor(a.sampleRate * .32), buf = a.createBuffer(1, n, a.sampleRate), d = buf.getChannelData(0);
+    for (let i = 0; i < n; i++) { const k = i / n, grain = Math.random() < .35 ? 1 : .25; d[i] = (Math.random() * 2 - 1) * grain * Math.pow(1 - k, 1.6) * Math.min(1, k * 40); }
+    const s = a.createBufferSource(), bp = a.createBiquadFilter(), g = a.createGain(); s.buffer = buf; bp.type = 'bandpass'; bp.Q.value = 1.4;
+    bp.frequency.setValueAtTime(4200, t); bp.frequency.exponentialRampToValueAtTime(1300, t + .3); g.gain.value = v;
+    s.connect(bp); bp.connect(g); g.connect(a.destination); s.start(t); };
+  const live = () => ac && ac.state === 'running';
+  return { wake: () => SFX_VOL && ctx(),
+    hover: () => go((a, t) => tick(a, t, SFX_VOL * .45)),
+    ready: () => { if (live()) go((a, t) => { bell(a, t, 1174.7, SFX_VOL * .14, .8); }); },
+    tear: () => go((a, t) => { tear(a, t, SFX_VOL * 1.1); bell(a, t + .18, 784, SFX_VOL * .2, 1.2); bell(a, t + .3, 1174.7, SFX_VOL * .16, 1.4); bell(a, t + .42, 1568, SFX_VOL * .12, 1.6); }),
+    tap: () => go((a, t) => tick(a, t, SFX_VOL * .9)), open: () => go((a, t) => { bell(a, t, 880, SFX_VOL * .22, .9); bell(a, t + .11, 1318.5, SFX_VOL * .17, 1.1); }) };
 })();
 // 반짝 : 링 + 빛줄기 8개 + 가운데 별 (민트 · 흰색)
 const FX = (() => {
@@ -4817,7 +4966,7 @@ let fxDown = null;
 addEventListener('pointerdown', e => { fxDown = e.button === 0 ? { x: e.clientX, y: e.clientY } : null; if (fxDown) SFX.wake(); }, true);
 addEventListener('pointerup', e => { if (!fxDown) return; const moved = Math.hypot(e.clientX - fxDown.x, e.clientY - fxDown.y) >= 8; fxDown = null; if (moved) return;
   try { const t = e.target, big = !!(t && t.closest && t.closest('.app-tile,[data-open],[data-ci],.gx-enter,.en-hit'));
-    FX.burst(e.clientX, e.clientY, big ? 1.5 : 1); big ? SFX.open() : SFX.tap(); } catch (err) {} }, true);
+    FX.burst(e.clientX, e.clientY, big ? 1.5 : 1); if (t.closest && t.closest('#intro .gx-enter')) return; big ? SFX.open() : SFX.tap(); } catch (err) {} }, true);
 /* =========================================================
    ✎ EDIT (나만 보이는 편집) — 주소 끝에 ?owner 를 한 번 붙여서 들어오면 이 브라우저에선 계속 보여요 (?guest 로 끄기)
    · 사진 자리를 누르면 사진 넣기 / 바꾸기 / 빼기 (이 브라우저에 저장)
