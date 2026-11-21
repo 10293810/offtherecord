@@ -11,11 +11,20 @@ let SYE_ON = OWNER && (() => { try { return localStorage.getItem('syEdit') === '
 /* 이 브라우저에 남은 수정본(draft) 정리 : 홈페이지 내용과 같거나, 예전에 올라가 있던 내용 그대로인 칸은 지워서
    새로 바뀐 data.js 가 가려지지 않게 해요 (내가 직접 고친 칸만 남아요) */
 const SITE0 = OWNER ? JSON.parse(JSON.stringify(SITE)) : null;   // 처음 불러온 data.js 그대로 (비교용)
+const SYE_BASE = {"brand":{"name":"SETLIST-01","sub":"MOON STUDIO","start":"P2U","home":"SYRINGE-01","homeSub":"ARCH CLINIC"},"online":"PROTOCOL ONLINE","venue":"ARCH MEDICAL CENTER","credit":{"top":"© ↳ PpLE","bottom":"Syringe."},"clinic":{"kicker":"ARCH CLINIC · RESIDENCE","title":"UNRELEASED","chips":["LOVE DISORDER CLINIC +","5.0 mL · STERILE // OPEN 24H"],"tab":"INFIRMARY · OPEN 24H","nav":"LUVINFO"},"spec":{"sub":"DRAWING Nº SY-01 · ARCH CLINIC","title":"SPEC SHEET","cells":[["GUIDE","PURE"],["SENTINEL","UXI"],["SINCE P2U","D+{d}"],["TODAY","{today}"],["DRAWN BY","↳ PpLE"],["SCALE","1 : 1"]]},"pairs":[{"a":"PURE","b":"UXI","since":"2026-04-24","passNo":"No. PU-0424","status":"BONDED","barcode":"A-CLASS GUIDE × S-CLASS SENTINEL","image":"","imageBack":"","note":"맨 앞줄 오른쪽, 앵콜 마지막 소절"},{"a":"PAIR","b":"TWO","since":"2026-02-14","passNo":"No. PT-0214","status":"ON STAGE","barcode":"GUITAR × DRUM","image":"","imageBack":"","note":"두 번째 페어 메모를 적어주세요"},{"a":"PAIR","b":"THREE","since":"2025-12-25","passNo":"No. PT-1225","status":"ENCORE","barcode":"BASS × KEYBOARD","image":"","imageBack":"","note":"세 번째 페어 메모를 적어주세요"}],"pair":{"a":"PURE","b":"UXI","aRole":"FRONT ROW · No.1 FAN","bRole":"LEAD VOCAL · 月とナイフ","pill":"MIDNIGHT ENCORE LIVE ✦","since":"2026-04-24","nextGoal":200,"passNo":"No. PU-0424","status":"BONDED","barcode":"A-CLASS GUIDE × S-CLASS SENTINEL","image":""},"pairLabels":{"first":"ADMITTED","pair":"PAIR","status":"STATUS","together":"TOGETHER FOR","flip":"뒤집기"},"intro":{"nav":["01 · ARCHIVE","02 · SETLIST","03 · KEY"],"live":"LIVE","liveLine":"BPM <b>{d}</b> · ROOM 07 · MIC ON","kicker":"月とナイフ — BACKSTAGE ARCHIVE","vol":"VOL. 05","title":["OFF THE","RECORD"],"roles":["LEAD VOCAL","FRONT ROW"],"pill":"ENCORE NIGHT ✦","tune":["TUNING · ","FILLING THE KEY","READY ✦"],"marquee":"OFF THE RECORD ✦ 月とナイフ LIVE TOUR 2026 ✦ HANA × REN ✦ LEAVING BEFORE THE ENCORE IS NOT ALLOWED ✦","onair":["SOUNDCHECK","· ON AIR"],"gate":["ENTRANCE","STAND BY","OPEN","WELCOME"],"buttons":["LOADING","ENTER","ADMITTED"],"entry":{"brand":"UNRELEASED","sub":"moon studio","room":"ROOM 0101","gate":["STAND BY","OPEN","OPENING"],"load":["UNLOCKING ROOM 0101","READY — 자물쇠를 눌러 주세요"]},"clinic":{"nav":["HOME","CATEGORY","NOTICE","LUVINFO"],"online":"NOW ADMITTING","status":["READING CHART","CHECKING PULSE","SYMPTOM: LOVE","NO CURE FOUND","ADMISSION READY"]},"seconds":2.6},"extraApps":[{"id":"gallery","name":"Gallery","type":"grid","items":[["제목 1","10.26",""],["제목 2","10.23",""],["제목 3","10.20",""],["제목 4","10.17",""],["제목 5","10.14",""],["제목 6","10.11",""]]},{"id":"letters","name":"Letters","type":"grid","items":[["편지 1","10.26",""],["편지 2","10.23",""],["편지 3","10.20",""]]},{"id":"lockbox","name":"Lock Box","type":"list","rows":[["항목 1","10.25"],["항목 2","10.23"],["항목 3","10.21"]]},{"id":"setlist","name":"Setlist","type":"grid","items":[["곡 1","10.26",""],["곡 2","10.23",""],["곡 3","10.20",""]]},{"id":"camera","name":"Camera","type":"grid","items":[["사진 1","10.26",""],["사진 2","10.23",""],["사진 3","10.20",""]]},{"id":"calendar","name":"Calendar","type":"list","rows":[["일정 1","10.25"],["일정 2","10.23"],["일정 3","10.21"]]},{"id":"archive","name":"Archive","type":"list","rows":[["기록 1","10.25"],["기록 2","10.23"],["기록 3","10.21"]]},{"id":"about","name":"Profile","icon":"idcard","type":"about","no":"NO. 2026-HANA","title":"PROFILE","sub":"ABOUT // SELF INTRO","handle":"@handle","info":[["STATUS","여기에 상태를 적어요"],["TYPE","여기에 타입을 적어요"]],"infoNote":"*짧은 메모가 들어가요","table":[["항목 1","메모가 들어가요"],["항목 2","메모가 들어가요"],["항목 3","-"],["항목 4","메모가 들어가요\n두 줄도 돼요"]],"ng":["NG","주의할 점 제목","주의할 점 설명이 들어가요"],"valid":"VALID UNTIL: PERMANENT","org":"MOON STUDIO","stamp":"APPROVED"},{"id":"list","name":"List","icon":"list","type":"inventory","chip":"LOCKED","title":"INVENTORY","sub":"LIST // DATABASE","intro":"여기에 리스트 설명이 들어가요. 짧게 적어주세요.","groups":[["그룹 이름 1","@handle",["항목","항목","항목"]],["그룹 이름 2","@handle",["항목"]],["그룹 이름 3","@handle",["항목","항목"]]]},{"id":"linked","name":"Linked","icon":"link","type":"linked","title":"LINKED","sub":"DOSSIERS","tag":"LINKED DOSSIERS","no":"NO. 2026-10-29","banner":{"img":"","link":""},"crewTitle":"CREW BANNER","crewSub":"♥ 맞배너","crew":[["처방전","TEAM","@name","",""],["처방전","TEAM","@name","",""],["처방전","TEAM","@name","",""],["처방전","TEAM","@name","",""]]},{"id":"ooc","name":"OOC","type":"ooc","room":"ROOM 04","sub":"ARCHIVE // COPY & PASTE","hint":"분류를 누르면 OOC가 나와요. COPY를 누르면 바로 복사돼요.","cats":[{"k":"HELLO","n":"인사","items":["(( 안녕하세요! 오늘도 잘 부탁드려요 ))","(( 늦은 시간에 인사드려요, 편하게 이어 주세요 ))","(( 처음 뵙겠습니다! 잘 부탁드려요 ))"]},{"k":"LATE","n":"늦은 답장","items":["(( 답이 늦어 죄송해요! 천천히 이어갈게요 ))","(( 오늘은 답이 조금 느릴 수 있어요 ))"]},{"k":"AWAY","n":"자리 비움","items":["(( 잠깐 자리 비울게요, 금방 올게요! ))","(( 밥 먹고 올게요 ))","(( 오늘은 여기까지 할게요, 내일 이어가요 ))"]},{"k":"THANKS","n":"감사","items":["(( 오늘도 함께해 주셔서 감사해요 ))","(( 덕분에 너무 즐거웠어요! ))"]},{"k":"BYE","n":"마무리","items":["(( 수고하셨어요! 좋은 밤 보내세요 ))","(( 다음에 또 이어가요, 감사합니다 ))"]},{"k":"ETC","n":"기타","items":["(( 여기에 OOC 문구가 들어가요 ))"]}]},{"id":"prompt","name":"Prompt","type":"prompt","room":"ROOM 05","sub":"BACKGROUND + OUTFIT","hint":"세로 · 가로 사진이 섞여도 각자 모양에 맞게 보여요.","cats":[{"k":"DAILY","n":"일상","items":[{"t":"하늘색 오후","image":"","images":["","",""],"bg":"cozy cafe by the window, soft afternoon sunlight, pale blue walls, potted plants, light bokeh","fit":"oversized sky blue knit sweater, pleated white skirt, loafers, small silver earrings"},{"t":"새벽 옥상","wide":true,"image":"","images":["","",""],"bg":"rooftop at dawn, pale blue sky, city lights fading, light haze, calm and lonely atmosphere","fit":"white hoodie, mint windbreaker over it, wide denim pants, canvas sneakers"},{"t":"여기에 제목","image":"","images":["","",""],"bg":"여기에 배경 프롬프트가 들어가요.","fit":"여기에 의상 프롬프트가 들어가요."}]},{"k":"STAGE","n":"무대","items":[{"t":"유리 라이브하우스","wide":true,"image":"","images":["","",""],"bg":"small live house stage, glass panels, mint spotlight, scattered confetti, empty seats, wide angle","fit":"cropped mint stage jacket, glossy pastel fabric, silver zipper details, white wide pants"},{"t":"앵콜 무대","image":"","images":["","",""],"bg":"concert stage after encore, blue laser lights, floating sparkles, smoky air, audience lightsticks","fit":"sheer white blouse, sky blue corset vest, star hair pins, platform boots"}]},{"k":"SEASON","n":"계절","items":[{"t":"눈 오는 밤","wide":true,"image":"","images":["","",""],"bg":"snowy street at night, warm shop lights, falling snow, quiet blue tone, soft glow","fit":"long cream coat, mint muffler, knitted gloves, white earmuffs"}]}]},{"id":"album","name":"Album","type":"grid","items":[["사진 1","11.04",""],["사진 2","11.02",""],["사진 3","10.30",""]]},{"id":"guestbook","name":"Guest Book","type":"list","rows":[["방명록 1","11.04"],["방명록 2","11.02"],["방명록 3","10.30"]]},{"id":"diary","name":"Diary","type":"list","rows":[["일기 1","11.04"],["일기 2","11.02"],["일기 3","10.30"]]},{"id":"shop","name":"Shop","type":"grid","items":[["상품 1","11.04",""],["상품 2","11.02",""],["상품 3","10.30",""]]},{"id":"stickers","name":"Stickers","type":"grid","items":[["스티커 1","11.04",""],["스티커 2","11.02",""],["스티커 3","10.30",""]]},{"id":"radio","name":"Radio","type":"list","rows":[["방송 1","11.04"],["방송 2","11.02"],["방송 3","10.30"]]},{"id":"mail","name":"Mail","type":"list","rows":[["항목 1","11.15"],["항목 2","11.12"],["항목 3","11.09"]]},{"id":"map","name":"Map","type":"list","rows":[["항목 1","11.15"],["항목 2","11.12"],["항목 3","11.09"]]},{"id":"settings","name":"Settings","type":"list","rows":[["항목 1","11.15"],["항목 2","11.12"],["항목 3","11.09"]]},{"id":"notes","name":"Notes","type":"list","rows":[["항목 1","11.15"],["항목 2","11.12"],["항목 3","11.09"]]},{"id":"wishlist","name":"Wishlist","type":"list","rows":[["항목 1","11.15"],["항목 2","11.12"],["항목 3","11.09"]]},{"id":"video","name":"Video","type":"list","rows":[["항목 1","11.15"],["항목 2","11.12"],["항목 3","11.09"]]},{"id":"xgame","name":"Game","type":"list","rows":[["항목 1","11.15"],["항목 2","11.12"],["항목 3","11.09"]]},{"id":"search","name":"Search","type":"list","rows":[["항목 1","11.15"],["항목 2","11.12"],["항목 3","11.09"]]},{"id":"weather","name":"Weather","type":"list","rows":[["항목 1","11.15"],["항목 2","11.12"],["항목 3","11.09"]]},{"id":"contacts","name":"Contacts","type":"list","rows":[["항목 1","11.15"],["항목 2","11.12"],["항목 3","11.09"]]},{"id":"cloud","name":"Cloud","type":"list","rows":[["항목 1","11.15"],["항목 2","11.12"],["항목 3","11.09"]]},{"id":"alarm","name":"Alarm","type":"list","rows":[["항목 1","11.15"],["항목 2","11.12"],["항목 3","11.09"]]},{"id":"wallet","name":"Wallet","type":"list","rows":[["항목 1","11.15"],["항목 2","11.12"],["항목 3","11.09"]]},{"id":"library","name":"Library","type":"list","rows":[["항목 1","11.15"],["항목 2","11.12"],["항목 3","11.09"]]},{"id":"stats","name":"Stats","type":"list","rows":[["항목 1","11.15"],["항목 2","11.12"],["항목 3","11.09"]]},{"id":"scan","name":"Scan","type":"list","rows":[["항목 1","11.15"],["항목 2","11.12"],["항목 3","11.09"]]},{"id":"pharmacy","name":"Pharmacy","type":"list","rows":[["항목 1","11.15"],["항목 2","11.12"],["항목 3","11.09"]]},{"id":"vitals","name":"Vitals","type":"list","rows":[["항목 1","11.15"],["항목 2","11.12"],["항목 3","11.09"]]}]};   // 테마 바꾸기 전 내용 (예전 수정본 정리용)
 const SYE_OLD = {"brand":["u0o6ul"],"title":["7wm8ks"],"pair":["190n3mn"],"pairs":["1j5zkc8"],"pairLabels":["19meff0"],"heroTicket":["13a3uc3"],"studio":["664do9"],"online":["a8ojfi"],"residence":["1nlav7m"],"venue":["18rnmsz"],"passLabel":["1s1xibj"],"footer":["1cdq8b0"],"marquee":["1s3ogt5"],"credit":["1e5wm5l"],"clinic":["1w7fn05"],"cursor":["137so3u"],"intro":["f97by8","1otue6n"],"extraApps":["o2njmk","jn7ybg"],"home":["17d8bm0"],"blueprint":["kmzeet"],"spec":["8qfz1i"],"bgm":["1f2r0ez"],"memberOpen":["efwnq4"],"members":["qy5fs2"],"characters":["l3g4mc"],"chat":["9d0puz"],"toasts":["cfmjcw"],"monitor":["wej6ae"],"pedal":["1owetwf"],"memo":["krlcuc"],"records":["htrjpy"],"notice":["zs1qpn"],"neighbors":["7r54zp"],"internet":["12mqh9x"],"game":["924z6h"],"links":["1s1qu8y"]};
 const SYE_DRAFT = OWNER ? (() => { try {
   const d = JSON.parse(localStorage.getItem('sye-draft') || 'null'); if (!d || typeof d !== 'object') return null;
   const hs = t => { let x = 2166136261; for (let i = 0; i < t.length; i++) { x ^= t.charCodeAt(i); x = Math.imul(x, 16777619); } return (x >>> 0).toString(36); };
   let ch = false;
+  // 내가 안 고친 칸(예전 내용 그대로인 칸)은 새 홈페이지 내용으로 : 예전 내용(SYE_BASE) · 내 수정본 · 지금 내용을 한 칸씩 비교해요
+  const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+  const m3 = (b, mine, now) => { if (same(mine, b)) return now; if (same(mine, now)) return now;
+    if (mine && now && b && typeof mine === 'object' && typeof now === 'object' && typeof b === 'object' && Array.isArray(mine) === Array.isArray(now) && Array.isArray(b) === Array.isArray(now)) {
+      if (Array.isArray(mine)) { if (mine.length !== b.length || now.length !== b.length) return mine; return mine.map((x, i) => m3(b[i], x, now[i])); }
+      const r = {}; new Set([...Object.keys(now), ...Object.keys(mine)]).forEach(k => { r[k] = !(k in mine) ? now[k] : !(k in now) ? mine[k] : (k in b) ? m3(b[k], mine[k], now[k]) : mine[k]; }); return r; }
+    return mine; };
+  Object.keys(d).forEach(k => { if (k in SYE_BASE && k in SITE) { const v = m3(SYE_BASE[k], d[k], SITE[k]); if (!same(v, d[k])) { d[k] = v; ch = true; } } });
   Object.keys(d).forEach(k => { if (!(k in SITE)) return; const j = JSON.stringify(d[k]); if (j === JSON.stringify(SITE[k]) || (SYE_OLD[k] || []).includes(hs(j))) { delete d[k]; ch = true; } });
   if (ch) localStorage.setItem('sye-draft', JSON.stringify(d));
   return Object.keys(d).length ? d : null;
@@ -407,8 +416,8 @@ function jellyTitle(L, G) {
       <div class="gx-left">
         <div class="gx-eye"><span class="on"><i></i>${esc(K.online || 'NOW ADMITTING')}</span><span>${esc(PL.passNo || 'No. PU-0424')}</span></div>
         <h1>${esc(A)}<em>×</em>${esc(B)}</h1>
-        <p>${esc(chip)} <b>✦</b> A-CLASS GUIDE × S-CLASS SENTINEL</p>
-        <div class="gx-meter"><div class="gx-mt"><b class="gx-stat">${esc(STAT[0])}</b><span class="gx-ml"><em>0.0</em> / 5.0 mL</span><span class="gx-pct">0%</span></div>
+        <p>${esc(chip)} <b>✦</b> ${esc(K.sub || 'FRONT ROW × LEAD VOCAL')}</p>
+        <div class="gx-meter"><div class="gx-mt"><b class="gx-stat">${esc(STAT[0])}</b><span class="gx-ml"><em>0.0</em> / 5.0 ${esc(K.unit || 'VOL')}</span><span class="gx-pct">0%</span></div>
           <div class="gx-track"><i class="gx-bar"></i></div><div class="gx-ticks">${ticks}</div></div>
       </div>
       <div class="gx-card">
@@ -2313,7 +2322,9 @@ function charLayout() {
   const maxW = deskW() - 40; if (H * 1.32 + gap > maxW) H = Math.floor((maxW - gap) / 1.32);
   const W1 = Math.round(H * .70), W2 = Math.round(H * .62);
   const x1 = Math.max(12, Math.round((deskW() - W1 - gap - W2) / 2)), y = Math.round(72 + (deskH() - 72 - 72 - H) / 2);
-  return { solo: Math.max(12, Math.round((deskW() - W1) / 2)), list: { x: x1, y, w: W1, h: H, abs: true }, det: { x: x1 + W1 + gap, y, w: W2, h: H, abs: true } };
+  // 한 창처럼 : 상세 창은 목록 창과 같은 자리 · 같은 크기로 위에 열려요 (OOC · 프로필 창처럼 창 하나 크기)  — 예전: 목록 옆에 따로
+  const solo = Math.max(12, Math.round((deskW() - W1) / 2));
+  return { solo, list: { x: solo, y, w: W1, h: H, abs: true }, det: { x: solo, y, w: W1, h: H, abs: true } };
 }
 // ARCH 목록 (그룹별 줄 + 속성 뱃지 카드)
 function rosterHTML(W, list, isOn) {
@@ -2329,7 +2340,7 @@ let pairOv = null, cxAnim = true;   // 페어 목록 창 위에 띄운 페어 (�
 function cxShift() {
   const L = charLayout(), a = wins.get('chars'); if (!L || !a) return;
   const side = wins.get('chardet') || wins.get('agent'), wz = +a.el.dataset.wz || 1;
-  const x = side ? L.list.x : L.solo, from = parseFloat(a.el.style.left) || 0, to = x / wz;
+  const x = L.solo, from = parseFloat(a.el.style.left) || 0, to = x / wz;
   if (Math.abs(from - to) < 1) return;
   a.el.style.left = to + 'px';   // 자리는 바로 옮기고, 보이는 움직임은 transform 으로 (가볍게)
   a.el.animate([{ transform: `translateX(${(from - to) * wz}px)` }, { transform: 'none' }], { duration: 560, easing: 'cubic-bezier(.22,.9,.25,1)' });
@@ -4746,25 +4757,50 @@ const tovApply = root => {
 };
 tovApply(document.body);
 new MutationObserver(ms => ms.forEach(m => m.addedNodes.forEach(x => tovApply(x)))).observe(document.body, { childList: true, subtree: true });
-/* ---------- 클릭 효과음 (작게~중간 · 부드러운 소리, 파일 없이 브라우저에서 만들어요) ---------- */
-const SFX_VOL = 0.22;   // 효과음 크기 (0 = 끄기 · 0.4 정도면 꽤 커요)
+/* ---------- 클릭 효과 : 반짝(민트) + 효과음 (작게~중간) ----------
+   · SFX_VOL : 효과음 크기 (0 = 끄기 · 0.2 = 작게~중간 · 0.4 = 꽤 커요)
+   · 앱 아이콘 · 창 열기 = '띠링' / 그 밖의 클릭 = '딸깍' (파일 없이 브라우저에서 만들어요) */
+const SFX_VOL = 0.2, FX_ON = true;
 const SFX = (() => {
-  let ac = null;
+  let ac = null, noise = null;
   const ctx = () => { if (!ac) { const A = window.AudioContext || window.webkitAudioContext; if (!A) return null; try { ac = new A(); } catch (e) { return null; } } if (ac.state === 'suspended') ac.resume(); return ac; };
-  const tone = (f1, f2, dur, g, delay = 0) => { if (!SFX_VOL) return; const a = ctx(); if (!a) return; const t = a.currentTime + delay, o = a.createOscillator(), v = a.createGain();
-    o.type = 'sine'; o.frequency.setValueAtTime(f1, t); o.frequency.exponentialRampToValueAtTime(f2, t + dur);
-    v.gain.setValueAtTime(0.0001, t); v.gain.exponentialRampToValueAtTime(g * SFX_VOL, t + .008); v.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-    o.connect(v); v.connect(a.destination); o.start(t); o.stop(t + dur + .03); };
-  return {
-    tap: () => tone(1250, 950, .06, .45),                                   // 버튼 · 글자 : 톡
-    open: () => { tone(880, 880, .12, .42); tone(1318, 1318, .18, .32, .07); },   // 앱 열기 : 띵-똥
-    close: () => tone(740, 440, .1, .38)                                    // 닫기 : 툭
-  };
+  const nz = a => { if (noise) return noise; const n = Math.floor(a.sampleRate * .05); noise = a.createBuffer(1, n, a.sampleRate); const d = noise.getChannelData(0); for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / n, 4); return noise; };
+  const tick = (a, t, v) => {   // 딸깍 : 아주 짧은 마찰음 + 떨어지는 몸통음
+    const s = a.createBufferSource(), hp = a.createBiquadFilter(), g = a.createGain(); s.buffer = nz(a); hp.type = 'highpass'; hp.frequency.value = 1800;
+    g.gain.setValueAtTime(v, t); g.gain.exponentialRampToValueAtTime(.0001, t + .012); s.connect(hp); hp.connect(g); g.connect(a.destination); s.start(t); s.stop(t + .02);
+    const o = a.createOscillator(), g2 = a.createGain(); o.type = 'triangle'; o.frequency.setValueAtTime(1350 * (1 + (Math.random() - .5) * .1), t); o.frequency.exponentialRampToValueAtTime(520, t + .02);
+    g2.gain.setValueAtTime(v * .55, t); g2.gain.exponentialRampToValueAtTime(.0001, t + .024); o.connect(g2); g2.connect(a.destination); o.start(t); o.stop(t + .03); };
+  const bell = (a, t, f, v, dur) => {   // 띠링 : 부드럽게 울리고 잔잔하게 사라지는 소리
+    const lp = a.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 2600; lp.connect(a.destination);
+    [[1, 1], [2, .12]].forEach(([m, k]) => { const o = a.createOscillator(), g = a.createGain(); o.type = 'sine'; o.frequency.setValueAtTime(f * m, t);
+      g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(v * k, t + .025); g.gain.exponentialRampToValueAtTime(.0001, t + dur / m); o.connect(g); g.connect(lp); o.start(t); o.stop(t + dur + .05); }); };
+  const go = fn => { if (!SFX_VOL) return; const a = ctx(); if (a) fn(a, a.currentTime + .005); };
+  return { wake: () => SFX_VOL && ctx(), tap: () => go((a, t) => tick(a, t, SFX_VOL * .9)), open: () => go((a, t) => { bell(a, t, 880, SFX_VOL * .22, .9); bell(a, t + .11, 1318.5, SFX_VOL * .17, 1.1); }) };
 })();
-document.addEventListener('click', e => { try { const t = e.target; if (!t || !t.closest) return;
-  if (t.closest('.app-tile,[data-open]')) SFX.open();
-  else if (t.closest('[data-a=close],.fx,.cc,.sye-tb [data-tb=x]')) SFX.close();
-  else if (t.closest('button,a,[role=button],.sye-t,[data-ci],[data-slot],label')) SFX.tap(); } catch (err) {} }, true);
+// 반짝 : 링 + 빛줄기 8개 + 가운데 별 (민트 · 흰색)
+const FX = (() => {
+  if (!FX_ON) return { burst() {} };
+  const cv = document.createElement('canvas'); cv.setAttribute('aria-hidden', 'true'); cv.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:2147483000';
+  document.body.appendChild(cv); const c = cv.getContext('2d'); let W = 0, H = 0, raf = 0, last = 0; const L = [];
+  const size = () => { const D = Math.min(devicePixelRatio || 1, 2); W = innerWidth; H = innerHeight; cv.width = W * D; cv.height = H * D; c.setTransform(D, 0, 0, D, 0, 0); }; size(); addEventListener('resize', size);
+  const MINT = '#3FAE84', SOFT = '#9EE0C5', EDGE = '#2E8F6B', out = k => 1 - Math.pow(1 - k, 3), back = k => 1 + 3.2 * Math.pow(k - 1, 3) + 2.2 * Math.pow(k - 1, 2);
+  const star = r => { const q = r * .2; c.beginPath(); c.moveTo(0, -r); c.quadraticCurveTo(q, -q, r, 0); c.quadraticCurveTo(q, q, 0, r); c.quadraticCurveTo(-q, q, -r, 0); c.quadraticCurveTo(-q, -q, 0, -r); c.closePath(); };
+  const draw = f => { const k = Math.min(1, f.t / .5), s = f.s; c.save(); c.translate(f.x, f.y);
+    c.globalAlpha = (1 - k) * .85; c.beginPath(); c.arc(0, 0, (6 + 28 * out(k)) * s, 0, Math.PI * 2); c.lineWidth = Math.max(.01, 2 * s * (1 - k)); c.strokeStyle = SOFT; c.stroke(); c.globalAlpha = 1;
+    for (let i = 0; i < 8; i++) { const lg = i % 2 === 0, head = 8 * s + (lg ? 30 : 20) * s * out(k), tail = head - (lg ? 13 : 8) * s * (1 - k); if (head - tail < .5) continue; const mid = tail + (head - tail) * .35, w = (lg ? 2.4 : 1.7) * s * (1 - k * .6);
+      c.save(); c.rotate(f.r + i * Math.PI / 4); c.beginPath(); c.moveTo(tail, 0); c.lineTo(mid, -w); c.lineTo(head, 0); c.lineTo(mid, w); c.closePath(); c.fillStyle = lg ? MINT : SOFT; c.fill(); c.restore(); }
+    const R = 9 * s * Math.max(0, k < .35 ? back(k / .35) : 1 - out((k - .35) / .65)); if (R > .4) { c.rotate(f.r * k); star(R); c.lineWidth = Math.max(1.1, R * .16); c.strokeStyle = EDGE; c.stroke(); c.fillStyle = '#fff'; c.fill(); }
+    c.restore(); };
+  const loop = now => { const dt = Math.max(0, Math.min(.05, (now - last) / 1000)); last = now; c.clearRect(0, 0, W, H);
+    for (let i = L.length - 1; i >= 0; i--) { L[i].t += dt; if (L[i].t >= .5) L.splice(i, 1); else draw(L[i]); } raf = L.length ? requestAnimationFrame(loop) : 0; if (!raf) c.clearRect(0, 0, W, H); };
+  return { burst(x, y, s) { L.push({ x, y, s: s || 1, t: 0, r: Math.random() * Math.PI / 4 }); if (!raf) { last = performance.now(); raf = requestAnimationFrame(loop); } } };
+})();
+// 끌기(창 옮기기 등)는 빼고, 제자리 클릭 · 탭에만
+let fxDown = null;
+addEventListener('pointerdown', e => { fxDown = e.button === 0 ? { x: e.clientX, y: e.clientY } : null; if (fxDown) SFX.wake(); }, true);
+addEventListener('pointerup', e => { if (!fxDown) return; const moved = Math.hypot(e.clientX - fxDown.x, e.clientY - fxDown.y) >= 8; fxDown = null; if (moved) return;
+  try { const t = e.target, big = !!(t && t.closest && t.closest('.app-tile,[data-open],[data-ci],.gx-enter,.en-hit'));
+    FX.burst(e.clientX, e.clientY, big ? 1.5 : 1); big ? SFX.open() : SFX.tap(); } catch (err) {} }, true);
 /* =========================================================
    ✎ EDIT (나만 보이는 편집) — 주소 끝에 ?owner 를 한 번 붙여서 들어오면 이 브라우저에선 계속 보여요 (?guest 로 끄기)
    · 사진 자리를 누르면 사진 넣기 / 바꾸기 / 빼기 (이 브라우저에 저장)

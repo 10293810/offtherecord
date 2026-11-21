@@ -10,7 +10,7 @@
 
 const SITE = {
   /* ---------- 기본 정보 ---------- */
-  brand: { name: 'SETLIST-01', sub: 'MOON STUDIO', start: 'P2U', home: 'UNRELEASED-01', homeSub: 'MOON STUDIO' },   // home = 메인 화면 왼쪽 위 로고 글자
+  brand: { name: 'SETLIST-01', sub: 'MOON STUDIO', start: 'P2U', home: 'UNRELEASED-01', homeSub: 'SEIRAN UNIV. BAND' },   // home = 메인 화면 왼쪽 위 로고 글자
   // 큰 제목: before + [마이크 모양 I] + after  →  SETL🎤ST
   title: { before: 'SETL', after: 'ST', tilt: true },   // tilt: 가운데 I(마이크)가 가끔 기울어지는 효과 (끄려면 false)
   pair: {
@@ -21,7 +21,7 @@ const SITE = {
     pill: 'MIDNIGHT ENCORE LIVE ✦',
     since: '2026-04-24',             // 사귄 날(1일) — D+ 계산 기준
     nextGoal: 200,                   // 다음 기념일 D+
-    passNo: 'No. PU-0424',
+    passNo: 'TICKET No. 0424',
     status: 'BONDED',
     barcode: 'FRONT ROW × LEAD VOCAL',
     image: ''                        // 메인 오른쪽 카드 커플 이미지
@@ -30,11 +30,11 @@ const SITE = {
   //  - image: 앞면 이미지 / imageBack: 사진을 눌러 뒤집었을 때 나오는 뒷면 이미지 (비우면 글자 카드)
   //  - nextGoal 을 비우면 다음 100일 단위가 자동으로 잡혀요
   pairs: [
-    { a: 'PURE', b: 'UXI', since: '2026-04-24', passNo: 'No. PU-0424', status: 'BONDED', barcode: 'FRONT ROW × LEAD VOCAL', image: '', imageBack: '', note: '맨 앞줄 오른쪽, 앵콜 마지막 소절' },
+    { a: 'PURE', b: 'UXI', since: '2026-04-24', passNo: 'TICKET No. 0424', status: 'BONDED', barcode: 'FRONT ROW × LEAD VOCAL', image: '', imageBack: '', note: '맨 앞줄 오른쪽, 앵콜 마지막 소절' },
     { a: 'PAIR', b: 'TWO', since: '2026-02-14', passNo: 'No. PT-0214', status: 'ON STAGE', barcode: 'GUITAR × DRUM', image: '', imageBack: '', note: '두 번째 페어 메모를 적어주세요' },
     { a: 'PAIR', b: 'THREE', since: '2025-12-25', passNo: 'No. PT-1225', status: 'ENCORE', barcode: 'BASS × KEYBOARD', image: '', imageBack: '', note: '세 번째 페어 메모를 적어주세요' }
   ],
-  pairLabels: { first: 'ADMITTED', pair: 'PAIR', status: 'STATUS', together: 'TOGETHER FOR', flip: '뒤집기' },
+  pairLabels: { first: 'FIRST LIVE', pair: 'PAIR', status: 'STATUS', together: 'TOGETHER FOR', flip: '뒤집기' },
   // 메인 카드(티켓) 글자 — DATE(오늘 날짜)와 DOORS(지금 시각)는 자동으로 바뀌어요
   heroTicket: {
     tour: '2026 月とナイフ LIVE TOUR — THE MIDNIGHT ENCORE PROTOCOL',
@@ -45,9 +45,9 @@ const SITE = {
     admit: 'ADMIT ONE'
   },
   studio: 'STUDIO · ON AIR 24H',
-  online: 'STUDIO ONLINE',
+  online: 'CLUB ROOM OPEN',
   residence: 'MOON STUDIO · BACKSTAGE',
-  venue: 'MOON STUDIO · UNRELEASED',
+  venue: 'SEIRAN FESTIVAL · LIVE STAGE',
   passLabel: 'PAIR INFORMATION',
   footer: 'MOON STUDIO',
   marquee: 'OFF THE RECORD ✦ MOON LIVE HOUSE ✦ 月とナイフ LIVE TOUR 2026 ✦ HANA × REN ✦ LEAVING BEFORE THE ENCORE IS NOT ALLOWED ✦',
@@ -56,10 +56,10 @@ const SITE = {
   /* ---------- 메인 화면 위 배너 (SYRINGE) ---------- */
   // 페어 이름(PURE × UXI)과 D+ 숫자는 위 pairs 에서 자동으로 가져와요 (‹ › 로 넘기면 같이 바뀌어요)
   clinic: {
-    kicker: 'MOON STUDIO · B-SIDE',                            // 큰 글씨 위 한 줄
+    kicker: 'SEIRAN UNIV. · LIGHT MUSIC CLUB',                            // 큰 글씨 위 한 줄
     title: 'UNRELEASED',                                          // 메인 큰 글씨 (길면 자동으로 작아져요)
-    chips: ['NOT FOR RELEASE +', 'TRACK 00 · DEMO // REC 24H'],   // 페어 이름 옆 알약들
-    tab: 'RECORDING · ON AIR 24H',                                  // 배너 오른쪽 위 알약 (옆 날짜는 오늘 날짜로 자동)
+    chips: ['CAMPUS BAND +', 'CLUB ROOM 402 // AFTER CLASS'],   // 페어 이름 옆 알약들
+    tab: 'REHEARSAL · OPEN 24H',                                  // 배너 오른쪽 위 알약 (옆 날짜는 오늘 날짜로 자동)
     nav: 'LUVINFO'                                                // 위 메뉴 네 번째 글자 (누르면 D-DAY)
   },
 
@@ -78,10 +78,10 @@ const SITE = {
     marquee: 'OFF THE RECORD ✦ 月とナイフ LIVE TOUR 2026 ✦ HANA × REN ✦ LEAVING BEFORE THE ENCORE IS NOT ALLOWED ✦',
     onair: ['SOUNDCHECK', '· ON AIR'],
     gate: ['ENTRANCE', 'STAND BY', 'OPEN', 'WELCOME'],
-    buttons: ['LOADING', 'ENTER', 'ADMITTED'],
+    buttons: ['LOADING', 'ENTER', 'ON STAGE'],
     // 입장 화면 (자물쇠) 글자
     entry: { brand: 'UNRELEASED', sub: 'moon studio', room: 'ROOM 0101', gate: ['STAND BY', 'OPEN', 'OPENING'], load: ['UNLOCKING ROOM 0101', 'READY — 자물쇠를 눌러 주세요'] },
-    clinic: { nav: ['HOME', 'CATEGORY', 'NOTICE'], online: 'NOW RECORDING', status: ['TUNING UP', 'SOUNDCHECK', 'TRACK: UNRELEASED', 'NO FINAL MIX', 'READY TO PLAY'] },   // 입장 화면 위 메뉴 · 알약 · 바뀌는 글자
+    clinic: { nav: ['HOME', 'CATEGORY', 'NOTICE'], online: 'NOW REHEARSING', sub: 'FRONT ROW × LEAD VOCAL', unit: 'VOL', status: ['TUNING UP', 'SOUNDCHECK', 'CLUB ROOM 402', 'ENCORE READY', 'READY TO PLAY'] },   // 입장 화면 위 메뉴 · 알약 · 바뀌는 글자
     seconds: 2.6                                                 // 열쇠가 다 차오르는 시간(초)
   },
 
@@ -234,9 +234,9 @@ const SITE = {
 
   // 설계도 아래 SPEC SHEET 카드 — {d} = 자동 D+ 숫자, {today} = 오늘 날짜
   spec: {
-    sub: 'TRACK Nº UR-01 · MOON STUDIO',
+    sub: 'SETLIST Nº 01 · SEIRAN UNIV. BAND',
     title: 'SPEC SHEET',
-    cells: [['FRONT ROW', 'PURE'], ['LEAD VOCAL', 'UXI'], ['SINCE P2U', 'D+{d}'], ['TODAY', '{today}'], ['RECORDED BY', '↳ PpLE'], ['TAKE', '01']]
+    cells: [['FRONT ROW', 'PURE'], ['LEAD VOCAL', 'UXI'], ['SINCE P2U', 'D+{d}'], ['TODAY', '{today}'], ['ARRANGED BY', '↳ PpLE'], ['TRACK', '01']]
   },
 
   /* ---------- 음악 (Player · 하단 BGM) ---------- */
