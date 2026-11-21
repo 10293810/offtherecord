@@ -435,7 +435,7 @@ function jellyTitle(L, G) {
       <header class="gt-top"><b class="gt-stk"><i></i>✦ ${esc(S.brand?.home || 'UNRELEASED-01')}</b><span class="gt-est">EST. 2026 · ${esc(S.brand?.homeSub || 'SEIRAN UNIV. BAND')} // ${esc(A)} × ${esc(B)}</span>
         <div class="gt-chips"><span><i></i>${esc(S.online || 'CLUB ROOM OPEN')}</span><span><i></i>OPEN 24H</span></div></header>
       <div class="gt-par p1">${sp('s1', 34)}${sp('s2', 15)}</div><div class="gt-par p2">${sp('s3', 30)}${sp('s4', 13)}</div><div class="gt-par p3">${sp('s5', 26)}${sp('s6', 12)}</div>
-      <div class="gt-ball"><i class="gt-str"></i><div class="gt-db"><svg class="gt-fb" viewBox="-100 -100 200 200"><defs><radialGradient id="gtSh" cx=".36" cy=".3" r=".75"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/><stop offset=".85" stop-color="#2F7A60" stop-opacity=".10"/><stop offset="1" stop-color="#2F7A60" stop-opacity=".28"/></radialGradient></defs><circle r="88" fill="#E9F7F0"/><g class="gt-fc"></g><circle r="88" fill="url(#gtSh)"/><circle r="87.5" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="1"/></svg><i class="gt-glint g1"></i><i class="gt-glint g2"></i><i class="gt-glint g3"></i></div><i class="gt-halo"></i>${sp('gl', 18)}</div>
+      <div class="gt-ball"><i class="gt-str"></i><div class="gt-db gt-bubble"><i class="gt-film"></i><i class="gt-hl"></i><i class="gt-hl2"></i></div><span class="gt-bstar"><svg viewBox="0 0 24 24"><defs><linearGradient id="gtSg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff"/><stop offset=".5" stop-color="#CFF0E1"/><stop offset="1" stop-color="#7FD7B1"/></linearGradient></defs><path d="M12 1.5C12.6 8 16 11.4 22.5 12 16 12.6 12.6 16 12 22.5 11.4 16 8 12.6 1.5 12 8 11.4 11.4 8 12 1.5z" fill="url(#gtSg)" stroke="#fff" stroke-width=".6"/></svg></span><i class="gt-halo"></i>${sp('gl', 18)}</div>
       <section class="gt-tk">
         <div class="gt-main">
           <span class="gt-tab"><i></i>${esc(K.online || 'NOW REHEARSING')}</span>
@@ -646,9 +646,16 @@ body.entered #desk .sy-bar i{animation:barFill 1.4s .45s cubic-bezier(.2,.8,.2,1
 @keyframes gt-tw{0%,100%{transform:scale(1) rotate(0)}50%{transform:scale(.55) rotate(45deg);opacity:.6}}
 /* 미러볼 */
 #intro.gt .gt-ball{position:absolute;left:1000px;top:112px;width:176px;height:176px;z-index:3;animation:gt-drop 1.3s .5s cubic-bezier(.3,1.4,.5,1) both}
-#intro.gt .gt-db{position:absolute;inset:0;border-radius:50%;overflow:hidden;animation:gt-bob 5s 1.8s ease-in-out infinite;box-shadow:0 24px 40px -18px rgba(47,120,95,.45),inset 0 0 0 1px rgba(255,255,255,.6)}
-#intro.gt .gt-fb{width:100%;height:100%;display:block}
-#intro.gt .gt-fc path{stroke:#fff;stroke-width:.9;stroke-opacity:.85;stroke-linejoin:round}
+#intro.gt .gt-db{position:absolute;inset:0;border-radius:50%;overflow:hidden;animation:gt-bob 5s 1.8s ease-in-out infinite;
+  background:radial-gradient(circle at 50% 50%,rgba(236,248,242,.8) 0 40%,rgba(204,238,222,.85) 72%,rgba(140,208,178,.9) 100%),radial-gradient(circle at 50% 120%,rgba(127,205,170,.35),transparent 60%);
+  box-shadow:0 26px 40px -22px rgba(47,120,95,.4),inset 0 0 0 1px rgba(255,255,255,.95),inset 0 -12px 26px rgba(95,180,150,.18);-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px)}
+#intro.gt .gt-film{position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 210deg,rgba(255,226,236,0),rgba(255,214,228,.85) 8%,rgba(255,238,200,.75) 16%,rgba(214,246,232,.6) 26%,rgba(190,228,255,.85) 36%,rgba(255,226,236,0) 46%,rgba(255,226,236,0) 70%,rgba(190,228,255,.6) 80%,rgba(255,226,236,0) 92%);-webkit-mask:radial-gradient(circle,transparent 52%,#000 82%,rgba(0,0,0,.55) 100%);mask:radial-gradient(circle,transparent 52%,#000 82%,rgba(0,0,0,.55) 100%);opacity:1;filter:blur(2px);animation:gt-film 14s linear infinite}
+#intro.gt .gt-hl{position:absolute;left:17%;top:12%;width:36%;height:20%;border-radius:50%;background:radial-gradient(ellipse,#fff 0 30%,rgba(255,255,255,0) 72%);transform:rotate(-32deg);filter:blur(.6px)}
+#intro.gt .gt-hl2{position:absolute;right:20%;bottom:15%;width:12%;height:6%;border-radius:50%;background:rgba(255,255,255,.7);transform:rotate(-32deg);filter:blur(1px)}
+#intro.gt .gt-bstar{position:absolute;right:-14%;top:-8%;width:34%;z-index:2;filter:drop-shadow(0 8px 10px rgba(47,120,95,.3));animation:gt-bst 3.6s ease-in-out infinite}
+#intro.gt .gt-bstar svg{width:100%;height:auto;display:block}
+@keyframes gt-film{to{transform:rotate(360deg)}}
+@keyframes gt-bst{0%,100%{transform:rotate(0) scale(1)}50%{transform:rotate(14deg) scale(.86)}}
 #intro.gt .gt-glint{position:absolute;width:16px;height:16px;background:radial-gradient(circle,#fff 0 18%,transparent 55%);border-radius:50%;animation:gt-glint 2.6s ease-in-out infinite}
 #intro.gt .gt-glint::before,#intro.gt .gt-glint::after{content:'';position:absolute;left:50%;top:50%;background:#fff;border-radius:2px;transform:translate(-50%,-50%)}
 #intro.gt .gt-glint::before{width:2px;height:16px}#intro.gt .gt-glint::after{width:16px;height:2px}
@@ -834,7 +841,6 @@ body.entered #desk .sy-bar i{animation:barFill 1.4s .45s cubic-bezier(.2,.8,.2,1
       const shine = Math.max(0, Math.sin(t * 1.3 + f.tw)); e.setAttribute('fill-opacity', (.55 + .45 * z).toFixed(2)); e.style.filter = shine > .97 ? 'brightness(1.12)' : ''; }); };
   const lon = []; let rot = 0, rl = 0;
   const spin = now => { if (!IN.isConnected) return; if (rl) rot += Math.min(.05, (now - rl) / 1000) * .32; rl = now;   // 천천히 (멍하게 보기 좋게)
-    drawBall(rot, now / 1000);
     lon.forEach((e, k) => { const ph = rot + k * Math.PI * 2 / lon.length, x = Math.sin(ph) * 86, rx = Math.abs(x).toFixed(1);
       e.setAttribute('d', `M0 -86 A${rx} 86 0 0 ${x >= 0 ? 1 : 0} 0 86`); e.classList.toggle('bk', Math.cos(ph) < 0); });
     requestAnimationFrame(spin); };
