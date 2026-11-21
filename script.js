@@ -1268,6 +1268,13 @@ function openWin(id, def) {
     const T = 70, Bm = 72, cx = Math.round((deskW() - ww) / 2) + n * 26, cy = Math.round(T + Math.max(0, (deskH() - T - Bm - hh) / 2)) + n * 22;
     el.style.left = Math.max(12, Math.min(cx, deskW() - ww - 12)) / wz2 + 'px'; el.style.top = Math.max(64, Math.min(cy, deskH() - hh - 64)) / wz2 + 'px';
   }
+  // CATEGORY(Records) · NOTICE 창은 위 메뉴 버튼 바로 밑에 붙어서 열려요 (화면 크기와 상관없이)
+  if (!isMobile() && /^(records|notice)$/.test(id)) {
+    const btn = $(`#desk .topnav [data-open="${id}"]`), dk = $('#desk');
+    if (btn && dk) { const br = btn.getBoundingClientRect(), dr = dk.getBoundingClientRect(), k = (dr.width / deskW()) || 1, wz2 = +el.dataset.wz || 1, ww = el.offsetWidth * wz2;
+      const x = Math.max(12, Math.min((br.left - dr.left) / k - 14, deskW() - ww - 12)), y = (br.bottom - dr.top) / k + 12;
+      el.style.left = x / wz2 + 'px'; el.style.top = y / wz2 + 'px'; }
+  }
   // 옮겨 둔 자리 기억 (다시 열면 그 자리에서) · 크기 조절 손잡이 · 휴대폰은 아래에서 올라오는 시트
   if (!isMobile() && id !== 'pass') {
     const sp = WPOS[id], wz2 = +el.dataset.wz || 1;
