@@ -1959,7 +1959,7 @@ const DEFS = {
     cls: 'hub lha', title: 'Link Hub', x: 645, y: 108, w: 348, h: 600, noBtns: true, head: `<span class="cw-drag"></span>`,
     render(b) {
       const L = S.links || [];
-      b.innerHTML = `<div class="lha-w"><div class="lha-hd"><span class="lha-num">${pad(L.length)}</span><div><small>LINK HUB</small><b>LINKS</b><em>RECORD SHELF // TAP TO GO</em></div><button type="button" class="lha-x" data-a="close" title="닫기">${ic('x')}</button></div><div class="lha-dash"></div>
+      b.innerHTML = `<div class="lha-w"><div class="lha-hd"><span class="lha-num">06</span><div><small>LINK HUB</small><b>LINKS</b><em>RECORD SHELF // TAP TO GO</em></div><button type="button" class="lha-x" data-a="close" title="닫기">${ic('x')}</button></div><div class="lha-dash"></div>
         <div class="lha-gr">${L.map((l, i) => `<a class="lha-it c${i % 6}" href="${esc(l.url)}" target="_blank" rel="noopener"><span class="lha-sl"><i class="lha-vn"></i><span class="lha-cv">${ph(l.image, { cls: 'th', seed: l.name + i })}<em>Nº${pad(i + 1)}</em></span></span><b>${esc(l.name)}</b><p>${esc(l.desc)}</p></a>`).join('')}</div>
         <div class="lha-f"><span>✦ ${esc(S.brand.start)} PERSONAL DIRECTORY</span><span>${L.length} LINKS</span></div></div>`;
       b.addEventListener('click', e => { if (SYE_ON && e.target.closest('.lha-it')) e.preventDefault(); }, true);   // 편집 중에는 링크로 안 넘어가요 (사진 넣기 · 글자 고치기)
@@ -6182,8 +6182,7 @@ html body #desk .taskbar{background-color:rgba(253,254,254,.94)!important}
 #desk .win.cxwin .cx-card{border-radius:16px!important;box-shadow:0 12px 20px -12px rgba(34,78,92,.45)!important}
 #desk .win.cxwin .cp-card{border-color:#D3EFF3!important}
 `; document.head.appendChild(st); })();
-/* 창 제목 옆 큰 숫자(01 · 02 …) 빼기 */
-(() => { const st = document.createElement('style'); st.textContent = `.dz-num,.lha-num{display:none!important}.dz-head,.lha-hd{gap:0!important}#desk .win.cxwin .cx-top2 h3{color:#31ACBD!important}#desk .win.cxwin .cx-meta span{color:#7C979E!important}#desk .win.cxwin .cx-scroll .ph:not(:has(img)){background:linear-gradient(160deg,#BDEBE0 0%,#7FD3C2 55%,#4DB8AE 100%)!important}#desk .win.cxwin .cx-scroll .ph:not(:has(img))::before,#desk .win.cxwin .cx-scroll .ph:not(:has(img))::after{opacity:.35}`; document.head.appendChild(st); })();
+(() => { const st = document.createElement('style'); st.textContent = `#desk .win.cxwin .cx-top2 h3{color:#31ACBD!important}#desk .win.cxwin .cx-meta span{color:#7C979E!important}#desk .win.cxwin .cx-scroll .ph:not(:has(img)){background:linear-gradient(160deg,#BDEBE0 0%,#7FD3C2 55%,#4DB8AE 100%)!important}#desk .win.cxwin .cx-scroll .ph:not(:has(img))::before,#desk .win.cxwin .cx-scroll .ph:not(:has(img))::after{opacity:.35}`; document.head.appendChild(st); })();
 /* Profile ~ ETC. (dz · cx 창) · 캐릭터 상세 · Link Hub : 초록 민트와 틸의 중간 · 파스텔 민트로 색만 바꿔요
    (이 창들에 쓰인 CSS 규칙을 복사해서 초록 · 청록 계열 색만 골라 바꿔 붙여요 — 사진 색은 그대로) */
 (() => {
