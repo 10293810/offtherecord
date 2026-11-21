@@ -6159,11 +6159,18 @@ html body #desk .taskbar{background-color:rgba(253,254,254,.94)!important}
 #desk .win.cxwin{border-radius:24px!important;background:#F3FCFD!important;background-image:linear-gradient(rgba(49,172,189,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(49,172,189,.06) 1px,transparent 1px)!important;background-size:22px 22px!important;border:1.5px solid #D3EFF3!important;box-shadow:0 22px 50px -14px rgba(34,78,92,.35),inset 0 1px 0 #fff!important;overflow:hidden}
 #desk .win.cxwin::before{content:'';position:absolute;left:28px;right:28px;top:0;height:4px;border-radius:0 0 4px 4px;background:linear-gradient(90deg,#5FD3BC,#31ACBD)!important;z-index:3}
 #desk .win.cxwin > .win-h{background:transparent!important;border:0!important;padding:14px 14px 0 16px!important;height:auto!important;min-height:44px}
-#desk .win.cxwin .cxh-tabs{gap:6px!important}
-#desk .win.cxwin .cxh-tabs .btab{height:28px!important;padding:0 11px!important;border-radius:99px!important;background:#fff!important;border:1.5px solid #D3EFF3!important;box-shadow:none!important;color:#31ACBD!important;font:800 11px 'Inter',sans-serif!important;letter-spacing:.06em}
-#desk .win.cxwin .cxh-tabs .btab.on{background:linear-gradient(90deg,#6BCFA6,#31ACBD)!important;border-color:transparent!important;color:#fff!important}
-#desk .win.cxwin .cxh-tabs .btab .fav{background:transparent!important;color:inherit!important;box-shadow:none!important}#desk .win.cxwin .cxh-tabs .btab.on .fav,#desk .win.cxwin .cxh-tabs .btab.on .fav *{color:#fff!important;stroke:#fff!important}
-#desk .win.cxwin .cxh-tabs .btab small,#desk .win.cxwin .cxh-tabs .btab em{color:inherit!important;opacity:.75}
+#desk .win.cxwin .cxh-tabs{gap:2px!important;padding:3px!important;border-radius:99px!important;background:rgba(255,255,255,.75)!important;box-shadow:inset 0 0 0 1px #DDF0F2,0 2px 8px -4px rgba(34,78,92,.18)!important;flex:none!important;width:auto!important}
+#desk .win.cxwin .cxh-tabs .btab{height:28px!important;padding:0 12px 0 10px!important;border-radius:99px!important;background:transparent!important;border:0!important;box-shadow:none!important;color:#8AA7AD!important;font:800 10.5px 'Inter',sans-serif!important;letter-spacing:.08em;gap:6px!important;transition:background .2s,color .2s}
+#desk .win.cxwin .cxh-tabs .btab:hover{color:#31ACBD!important}
+#desk .win.cxwin .cxh-tabs .btab.on{background:#fff!important;color:#2A9FAE!important;box-shadow:0 3px 10px -3px rgba(49,172,189,.35),0 0 0 1px #D3EFF3!important}
+#desk .win.cxwin .cxh-tabs .btab .fav{width:16px!important;height:16px!important;background:transparent!important;color:inherit!important;box-shadow:none!important;border:0!important}
+#desk .win.cxwin .cxh-tabs .btab .fav svg{width:13px!important;height:13px!important}
+#desk .win.cxwin .cxh-tabs .btab.on .fav,#desk .win.cxwin .cxh-tabs .btab.on .fav *{color:#2A9FAE!important;stroke:#2A9FAE!important}
+#desk .win.cxwin .cxh-tabs .btab small,#desk .win.cxwin .cxh-tabs .btab em{min-width:16px;height:16px;padding:0 4px;border-radius:99px;background:#EEF8F9;color:#7FA7AE!important;font:800 9px/16px 'Inter',sans-serif!important;opacity:1!important;text-align:center}
+#desk .win.cxwin .cxh-tabs .btab.on small,#desk .win.cxwin .cxh-tabs .btab.on em{background:linear-gradient(90deg,#6BCFA6,#31ACBD);color:#fff!important}
+#desk .win.cxwin .rs-card{border:0!important;border-radius:16px!important;background:transparent!important;box-shadow:0 12px 20px -12px rgba(34,78,92,.45)!important}
+#desk .win.cxwin .rs-card.on{box-shadow:0 0 0 2.5px #5FD3BC,0 12px 20px -12px rgba(34,78,92,.45)!important}
+#desk .win.cxwin .rs-card .ov{background:linear-gradient(transparent,rgba(20,60,64,.55))!important}
 #desk .win.cxwin .win-b{background:transparent!important}
 #desk .win.cxwin .cx{background:transparent!important}
 .cx .cxz-head{padding:10px 18px 10px!important;cursor:default;animation:none}
