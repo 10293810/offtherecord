@@ -5904,7 +5904,7 @@ requestAnimationFrame(() => setTimeout(startDesk, 50));
 })();
 /* 메인 화면 배경 : 비밀번호 화면과 같은 점무늬 + 민트 번짐 (조금 더 연하게 · 동그라미 · 큰 글씨 없이) */
 (() => { const st = document.createElement('style'); st.textContent = `
-html body #desk,html.m7 body #desk{background-color:#F9FAFA!important;background-image:radial-gradient(rgba(20,35,30,.09) 1px,transparent 1.4px),radial-gradient(44% 40% at 0% 0%,rgba(214,242,228,.85),rgba(214,242,228,0) 72%),radial-gradient(44% 40% at 100% 100%,rgba(214,242,228,.85),rgba(214,242,228,0) 72%),radial-gradient(30% 28% at 52% 48%,rgba(238,250,244,.6),rgba(238,250,244,0) 72%)!important;background-size:24px 24px,100% 100%,100% 100%,100% 100%!important;background-repeat:repeat,no-repeat,no-repeat,no-repeat!important}`; document.head.appendChild(st); })();
+html body #desk,html.m7 body #desk{background-color:#F9FAFA!important;background-image:linear-gradient(rgba(20,35,30,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(20,35,30,.045) 1px,transparent 1px),radial-gradient(44% 40% at 0% 0%,rgba(214,242,228,.85),rgba(214,242,228,0) 72%),radial-gradient(44% 40% at 100% 100%,rgba(214,242,228,.85),rgba(214,242,228,0) 72%),radial-gradient(30% 28% at 52% 48%,rgba(238,250,244,.6),rgba(238,250,244,0) 72%)!important;background-size:24px 24px,24px 24px,100% 100%,100% 100%,100% 100%!important;background-repeat:repeat,repeat,no-repeat,no-repeat,no-repeat!important}`; document.head.appendChild(st); })();
 /* 휴대폰 : 캐릭터 · 페어 상세 창 — 목록 창과 같은 자리에 꽉 찬 시트 + 위 이름 카드 + 가운데 큰 사진(아래로 스르륵) + 오른쪽 아래 동그라미 + 아래 노래 바 */
 (() => { const st = document.createElement('style'); st.textContent = `
 @media (max-width:720px),(max-aspect-ratio:4/5) and (max-width:1100px),(max-height:599px){
