@@ -1232,7 +1232,7 @@ let Zi = 10, focused = null;
 const deskW = () => $('#desk').offsetWidth || BASE_W;
 const deskH = () => $('#desk').offsetHeight || BASE_H;
 // CATEGORY(Records) · NOTICE · 폴더 창은 원래 자리(위 메뉴 아래)에서 열리고 뒤 화면도 흐려지지 않아요 (퓨어.kr 처럼)
-const PLAIN_WIN = /^(records|notice|folder)$/;
+const PLAIN_WIN = /^(records|notice|folder|player)$/;
 function openWin(id, def) {
   if (wins.has(id)) { const w = wins.get(id); w.el.classList.remove('min'); focusWin(id); return w; }
   const el = document.createElement('div');
@@ -1275,10 +1275,15 @@ function openWin(id, def) {
       const x = Math.max(12, Math.min((br.left - dr.left) / k - 14, deskW() - ww - 12)), y = (br.bottom - dr.top) / k + 12;
       el.style.left = x / wz2 + 'px'; el.style.top = y / wz2 + 'px'; }
   }
+  // 음악 플레이어는 오른쪽 위에 세로로 길게 붙어서 열려요 (퓨어.kr 처럼 · 뒤 화면은 그대로)
+  if (!isMobile() && id === 'player') {
+    const wz2 = +el.dataset.wz || 1, ww = el.offsetWidth * wz2;
+    el.style.left = Math.max(12, deskW() - ww - 24) / wz2 + 'px'; el.style.top = 60 / wz2 + 'px';
+  }
   // 옮겨 둔 자리 기억 (다시 열면 그 자리에서) · 크기 조절 손잡이 · 휴대폰은 아래에서 올라오는 시트
   if (!isMobile() && id !== 'pass') {
     const sp = WPOS[id], wz2 = +el.dataset.wz || 1;
-    if (sp && !def.abs && !/^(records|notice)$/.test(id)) { el.style.left = Math.max(-el.offsetWidth + 80, Math.min(sp.x, (deskW() - 60) / wz2)) + 'px'; el.style.top = Math.max(64 / wz2, Math.min(sp.y, (deskH() - 90) / wz2)) + 'px'; if (sp.w) el.style.width = sp.w + 'px'; if (sp.h) el.style.height = sp.h + 'px'; }
+    if (sp && !def.abs && !/^(records|notice|player)$/.test(id)) { el.style.left = Math.max(-el.offsetWidth + 80, Math.min(sp.x, (deskW() - 60) / wz2)) + 'px'; el.style.top = Math.max(64 / wz2, Math.min(sp.y, (deskH() - 90) / wz2)) + 'px'; if (sp.w) el.style.width = sp.w + 'px'; if (sp.h) el.style.height = sp.h + 'px'; }
     if (!def.abs && !/rmzw|cydet/.test(def.cls || '')) { const g = document.createElement('i'); g.className = 'wgrip'; g.title = '크기 조절'; el.appendChild(g); gripify(el, g, id); }
   }
   if (isMobile() && id !== 'pass') { const g = document.createElement('i'); g.className = 'sh-grab'; el.prepend(g); sheetDrag(el, g, id); }
@@ -1799,7 +1804,7 @@ const DEFS = {
 
   /* ----- Player ----- */
   player: () => openWin('player', {
-    cls: 'teal', icon: 'music', title: 'MUSIC PLAYER', task: 'Player', x: 686, y: 53, w: 334, h: 699,
+    cls: 'teal', icon: 'music', title: 'MUSIC PLAYER', task: 'Player', x: 686, y: 53, w: 336, h: 738,
     render(b) {
       b.innerHTML = `<div class="mplayer"><div class="mp-art"></div>
         <div class="mp-np"><small>NOW PLAYING</small><h4></h4><p></p></div>
