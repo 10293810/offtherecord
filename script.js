@@ -6409,14 +6409,14 @@ html.sye-editing #winlayer .cxwin [data-ci] .cx-ov,html.sye-editing #winlayer .c
   .fl-tt b{font:900 10.5px/1 'Montserrat','IBM Plex Sans KR',sans-serif;letter-spacing:.14em;color:#1E2A27;white-space:nowrap}
   .fl-tt small{font:600 9.5px/1 'IBM Plex Sans KR',sans-serif;color:#7C8B86;letter-spacing:.04em;white-space:nowrap}
   .fl-tt small i{font-style:normal;color:var(--tc);margin:0 1px}
-  .fl-deco{flex:1;align-self:center;height:8px;margin:0 2px 0 6px;opacity:.55;min-width:20px}
+  .fl-deco{flex:none;width:64px;margin-left:auto!important;align-self:center;height:6px;margin:0 2px 0 6px;opacity:.55}
   .fl-red .fl-deco{background:repeating-linear-gradient(-45deg,var(--tc) 0 3px,transparent 3px 7px);-webkit-mask:linear-gradient(90deg,transparent,#000 70%);mask:linear-gradient(90deg,transparent,#000 70%)}
   .fl-silver .fl-deco{background:repeating-linear-gradient(90deg,var(--tc) 0 1px,transparent 1px 6px) bottom/100% 5px no-repeat,repeating-linear-gradient(90deg,var(--tc) 0 1px,transparent 1px 30px) bottom/100% 8px no-repeat;-webkit-mask:linear-gradient(90deg,transparent,#000 60%);mask:linear-gradient(90deg,transparent,#000 60%)}
-  .fl-crown .fl-deco{height:10px;background:radial-gradient(circle,var(--tc) 0 1.6px,transparent 2px) 100% 50%/14px 10px repeat-x;-webkit-mask:linear-gradient(90deg,transparent,#000 70%);mask:linear-gradient(90deg,transparent,#000 70%);opacity:.7}
+  .fl-crown .fl-deco{height:7px;background:radial-gradient(circle,var(--tc) 0 1.2px,transparent 1.6px) 100% 50%/9px 7px repeat-x;-webkit-mask:linear-gradient(90deg,transparent,#000 70%);mask:linear-gradient(90deg,transparent,#000 70%);opacity:.7}
   .fl-black .fl-deco{background:radial-gradient(circle,var(--tc) 0 1px,transparent 1.4px) 0 0/5px 4px;-webkit-mask:linear-gradient(90deg,transparent,#000 65%);mask:linear-gradient(90deg,transparent,#000 65%);opacity:.45}
-  .fl-none .fl-deco{height:7px;background:repeating-linear-gradient(270deg,var(--tc) 0 5px,transparent 5px 9px);border-radius:2px;-webkit-mask:linear-gradient(90deg,transparent,#000 70%);mask:linear-gradient(90deg,transparent,#000 70%);opacity:.4}
+  .fl-none .fl-deco{height:5px;background:repeating-linear-gradient(270deg,var(--tc) 0 5px,transparent 5px 9px);border-radius:2px;-webkit-mask:linear-gradient(90deg,transparent,#000 70%);mask:linear-gradient(90deg,transparent,#000 70%);opacity:.4}
   .fl-em,.fl-tt small{display:none!important}
-  .fl-th em{flex:none;font:800 10.5px/1 'DM Mono',monospace;font-style:normal;letter-spacing:.08em;color:var(--tc)}
+  .fl-th em{flex:none;font:800 8.5px/1 'DM Mono',monospace;font-style:normal;letter-spacing:.08em;color:var(--tc)}
   .fl-silver .fl-th em{color:#7E8B94}
   .fl-team .cx-card::after{content:'';position:absolute;left:14px;right:14px;bottom:0;height:3px;border-radius:3px 3px 0 0;background:var(--tc);z-index:3}
   .fl-team .cx-card.on{outline-color:var(--tc)!important}
