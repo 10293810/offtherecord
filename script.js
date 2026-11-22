@@ -607,7 +607,7 @@ body.entered #desk .sy-bar i{animation:barFill 1.4s .45s cubic-bezier(.2,.8,.2,1
 #intro.gt{position:fixed;inset:0;z-index:50;overflow:hidden;background:#FEFEFE!important;background-image:none!important;color:#14231E;font-family:'Pretendard','Inter',sans-serif;--ink:#14231E;--m:#3FAE84;--m2:#6FD0A6;--mut:#6E7E78;--ln:#DCE8E2;cursor:default}
 #intro.gt *{box-sizing:border-box}
 #intro.gt .gt-bg{position:absolute;inset:0;pointer-events:none}
-#intro.gt .gt-bg::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(20,35,30,.032) 1px,transparent 1px),linear-gradient(90deg,rgba(20,35,30,.032) 1px,transparent 1px);background-size:24px 24px}
+#intro.gt .gt-bg::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle,rgba(60,72,90,.13) 1px,transparent 1.5px);background-size:18px 18px;background-position:9px 9px}
 #intro.gt .gt-blob{position:absolute;border-radius:50%;filter:blur(60px);opacity:.7;animation:gt-blob 14s ease-in-out infinite alternate}
 #intro.gt .gt-blob.b1{left:-10%;top:-14%;width:42vw;height:36vw;background:#C6EDDA}
 #intro.gt .gt-blob.b2{right:-10%;bottom:-14%;width:42vw;height:36vw;background:#C6EDDA;animation-name:gt-blob2}
@@ -6037,7 +6037,7 @@ requestAnimationFrame(() => setTimeout(startDesk, 50));
 })();
 /* 메인 화면 배경 : 비밀번호 화면과 같은 점무늬 + 민트 번짐 (조금 더 연하게 · 동그라미 · 큰 글씨 없이) */
 (() => { const st = document.createElement('style'); st.textContent = `
-html body #desk,html.m7 body #desk{background-color:#FEFEFE!important;background-image:linear-gradient(rgba(20,35,30,.032) 1px,transparent 1px),linear-gradient(90deg,rgba(20,35,30,.032) 1px,transparent 1px),radial-gradient(44% 40% at 0% 0%,rgba(214,242,228,.85),rgba(214,242,228,0) 72%),radial-gradient(44% 40% at 100% 100%,rgba(214,242,228,.85),rgba(214,242,228,0) 72%),radial-gradient(30% 28% at 52% 48%,rgba(238,250,244,.6),rgba(238,250,244,0) 72%)!important;background-size:24px 24px,24px 24px,100% 100%,100% 100%,100% 100%!important;background-repeat:repeat,repeat,no-repeat,no-repeat,no-repeat!important}`; document.head.appendChild(st); })();
+html body #desk,html.m7 body #desk{background-color:#FEFEFE!important;background-image:radial-gradient(circle,rgba(60,72,90,.13) 1px,transparent 1.5px),radial-gradient(44% 40% at 0% 0%,rgba(214,242,228,.85),rgba(214,242,228,0) 72%),radial-gradient(44% 40% at 100% 100%,rgba(214,242,228,.85),rgba(214,242,228,0) 72%),radial-gradient(30% 28% at 52% 48%,rgba(238,250,244,.6),rgba(238,250,244,0) 72%)!important;background-size:18px 18px,100% 100%,100% 100%,100% 100%!important;background-repeat:repeat,no-repeat,no-repeat,no-repeat!important;background-position:9px 9px,0 0,0 0,0 0!important}`; document.head.appendChild(st); })();
 /* 휴대폰 : 캐릭터 · 페어 상세 창 — 목록 창과 같은 자리에 꽉 찬 시트 + 위 이름 카드 + 가운데 큰 사진(아래로 스르륵) + 오른쪽 아래 동그라미 + 아래 노래 바 */
 (() => { const st = document.createElement('style'); st.textContent = `
 @media (max-width:720px),(max-aspect-ratio:4/5) and (max-width:1100px),(max-height:599px){
