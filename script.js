@@ -4793,7 +4793,7 @@ function syLayout() {
   #desk .apps-panel .panel-tab{position:absolute!important;left:22px!important;top:-21px!important;height:21px!important;padding:0 6px 0 10px!important;display:flex!important;align-items:center!important;gap:6px!important;border-radius:9px 9px 0 0!important;background:rgba(252,254,253,.94)!important;border:1px solid #E3ECE8!important;border-bottom:0!important;box-shadow:none!important}
   #desk .apps-panel .panel-tab i{display:none!important}
   #desk .apps-panel .panel-tab span{font:800 7.5px var(--syf)!important;letter-spacing:.14em!important;color:#1E2A27!important;background:none!important;-webkit-text-fill-color:currentColor!important}
-  #desk .apps-panel .panel-tab .sy-cnt{min-width:15px;height:15px;padding:0 3px;box-sizing:border-box;border-radius:99px;background:#1E2A27;color:#fff;font:800 7px/15px var(--syf);text-align:center}
+  #desk .apps-panel .panel-tab .sy-cnt{display:none!important;min-width:15px;height:15px;padding:0 3px;box-sizing:border-box;border-radius:99px;background:#1E2A27;color:#fff;font:800 7px/15px var(--syf);text-align:center}
   #desk .stage .leftcol .apps{position:absolute!important;inset:26px 2px 20px!important;width:auto!important;height:auto!important;display:grid!important;grid-template-columns:repeat(11,minmax(0,1fr))!important;justify-content:stretch!important;grid-template-rows:repeat(6,auto)!important;align-content:space-between!important;gap:0 0!important;padding:0!important;margin:0!important;transform:none!important}
   #desk .apps .app-tile{display:flex!important;flex-direction:column!important;align-items:center!important;gap:calc(6px * var(--sy-ts,1))!important;padding:0!important;margin:0!important;background:none!important;border:0!important;font:600 calc(8.5px * var(--sy-ts,1))/1.15 var(--syf)!important;letter-spacing:-.01em!important;color:#4A5753!important;text-align:center!important;white-space:normal!important;word-break:keep-all!important;overflow-wrap:anywhere;max-width:100%;padding:0 2px!important;box-sizing:border-box}
   #desk .apps .app-tile .cjk{font:800 1em/1.15 'Noto Sans JP','IBM Plex Sans KR',sans-serif;letter-spacing:0}
@@ -4984,7 +4984,7 @@ html:not(.sy-owner) .sy-write,html:not(.sy-owner) #desk .top-r .sq.sy-write{disp
   #desk .apps-panel .panel-tab{left:-1px!important;top:-25px!important;height:26px!important;padding:0 8px 0 14px!important;border-radius:12px 12px 0 0!important;background:rgba(252,254,253,.96)!important;border:1px solid #E3ECE8!important;border-bottom:0!important;gap:7px!important}
   #desk .apps-panel .panel-tab svg,#desk .apps-panel .panel-tab i{display:none!important}
   #desk .apps-panel .panel-tab span{font:800 9.5px 'Pretendard',sans-serif!important;letter-spacing:.16em!important;color:#1E2A27!important}
-  #desk .apps-panel .panel-tab .sy-cnt{display:inline-block!important;min-width:17px;height:17px;padding:0 4px;box-sizing:border-box;border-radius:99px;background:#1E2A27;color:#fff;font:800 8.5px/17px 'Pretendard',sans-serif;text-align:center}
+  #desk .apps-panel .panel-tab .sy-cnt{display:none!important;min-width:17px;height:17px;padding:0 4px;box-sizing:border-box;border-radius:99px;background:#1E2A27;color:#fff;font:800 8.5px/17px 'Pretendard',sans-serif;text-align:center}
   #desk .stage .leftcol .apps{grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:16px 0!important}
   #desk .apps .app-tile:nth-child(n+33){display:flex!important}
   #desk .apps-panel{flex-direction:column!important}
