@@ -4360,7 +4360,7 @@ html.fonts-wait .en-stage{opacity:0}
 .cx-grid .cx-card .cx-ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .cx-grid .cx-card .cx-ov{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:34px 12px 11px;background:linear-gradient(transparent,rgba(20,42,36,.72));color:#fff;pointer-events:none;display:flex;flex-direction:column;gap:2px}
 .cx-grid .cx-card .cx-ov small{display:block!important;margin:0!important;font:700 9px/1.3 'DM Mono',monospace!important;letter-spacing:.1em!important;color:rgba(255,255,255,.88)!important}
-.cx-grid .cx-card .cx-ov .cx-nm{display:block!important;margin:0!important;font:800 14.5px/1.25 'IBM Plex Sans KR',sans-serif!important;color:#fff!important;word-break:keep-all;white-space:nowrap!important;overflow:hidden!important;text-overflow:clip!important}
+.cx-grid .cx-card .cx-ov .cx-nm{display:block!important;margin:0!important;font:800 14.5px/1.25 'IBM Plex Sans KR',sans-serif!important;color:#fff!important;word-break:keep-all;white-space:normal!important;overflow:visible!important;overflow-wrap:anywhere}
 .cx-grid .cx-card .cx-ov .cx-en{display:block;font:500 10px/1.3 'DM Mono',monospace;font-style:normal;color:rgba(255,255,255,.82)}
 .win.cydet.float .cf-stage .cy-pv{width:min(calc(100% - 70px),360px,calc((100cqh - 18px) * 4 / 5.6))!important}
 .win.cydet.float .cf-stage:not(:has(.cf-side)) .cy-pv{width:min(calc(100% - 20px),380px,calc((100cqh - 18px) * 4 / 5.6))!important}
@@ -5146,23 +5146,26 @@ const FX = (() => {
       const e = [[1, 0], [-1, 0], [0, 1], [0, -1]].some(([dx, dy]) => !inside(x + .5 + dx, y + .5 + dy)), top = !inside(x + .5, y - .5) || !inside(x + .5, y - 1.5);
       pts.push([x - w / 2, y - h / 2, e ? EDGE : top ? LITE : PINK]); } return pts; };
   const E = (x, y, cx, cy, rx, ry) => ((x - cx) / rx) ** 2 + ((y - cy) / ry) ** 2 <= 1;
-  const PAW = grid(20, 19, (x, y) => E(x, y, 3.8, 8.6, 2.3, 2.9) || E(x, y, 7.8, 4.2, 2.5, 3.1) || E(x, y, 12.2, 4.2, 2.5, 3.1) || E(x, y, 16.2, 8.6, 2.3, 2.9) || E(x, y, 10, 14.4, 5.2, 3.8) || E(x, y, 7.4, 12.9, 2.7, 2.7) || E(x, y, 12.6, 12.9, 2.7, 2.7));
-  [[6.5, 2.5], [10.5, 2.5], [2.5, 7], [14.5, 7], [7.5, 11.5], [8.5, 11.5], [7.5, 12.5]].forEach(([x, y]) => PAW.push([x - 10, y - 9.5, '#fff']));   // 젤리 반짝
+  // 커서 냥발의 젤리 모양 그대로 (도트)
+  const PAW_MAP = ["        P      P        ", "      PPLPP  PPLPP      ", "      hhBLP  hhBLP      ", "      PBBBP  PBBBP      ", "      PBBBP  PBBBP      ", "      PBBBP  PBBBP      ", " PP   PPBPP  PPBPP   PP ", "PhLP    P      P    hLLP", "PBBLP              PLBBP", "PBBBP              PBBBP", "PBBBP              PBBBP", "PPBP    PPPPPPPP    PBPP", "  P    PLLLLLLLLP    P  ", "      PLhhBBBBBBLP      ", "      PBhBBBBBBBBP      ", "      PBBBBBBBBBBP      ", "      PBBBBBBBBBBP      ", "      PBBBBBBBBBBP      ", "      PBBBBBBBBBBP      ", "       PBBBBBBBBP       ", "        PPPPPPPP        "], PAW = []; PAW_MAP.forEach((r, y) => [...r].forEach((ch, x) => { if (ch !== ' ') PAW.push([x - 12, y - 10.5, ch === 'P' ? EDGE : ch === 'L' ? LITE : ch === 'h' ? '#fff' : PINK]); }));
   const MINI = grid(9, 9, (x, y) => E(x, y, 1.6, 4, 1.1, 1.4) || E(x, y, 3.5, 1.9, 1.2, 1.5) || E(x, y, 5.5, 1.9, 1.2, 1.5) || E(x, y, 7.4, 4, 1.1, 1.4) || E(x, y, 4.5, 6.8, 2.5, 1.9));
   const HEART = [[1, 0], [2, 0], [4, 0], [5, 0], [0, 1], [1, 1], [2, 1], [3, 1], [4, 1], [5, 1], [6, 1], [1, 2], [2, 2], [3, 2], [4, 2], [5, 2], [2, 3], [3, 3], [4, 3], [3, 4]].map(([x, y]) => [x - 3.5, y - 2.5, y === 0 || x === 0 || x === 6 || y === 4 ? EDGE : PINK]);
   const dots = (pts, cs) => pts.forEach(([x, y, col]) => { c.fillStyle = col; c.fillRect(x * cs, y * cs, cs + .35, cs + .35); });
-  const draw = f => { const k = Math.min(1, f.t / DUR), s = f.s; c.save(); c.translate(f.x, f.y);
-    c.globalAlpha = (1 - k) * .8; c.beginPath(); c.arc(0, 0, (6 + 26 * out(k)) * s, 0, Math.PI * 2); c.lineWidth = Math.max(.01, 1.6 * s * (1 - k)); c.strokeStyle = RING; c.stroke();
-    f.bits.forEach((b, i) => { const p = out(k), d = (10 + b.d * p) * s, x = Math.cos(b.a) * d, y = Math.sin(b.a) * d + 10 * s * k * k;
-      c.save(); c.globalAlpha = Math.max(0, 1 - Math.pow(k, 1.6)); c.translate(x, y); c.rotate(b.rot + k * b.spin); const cs = b.r * s * (1 - k * .3);
-      if (b.kind === 0) dots(MINI, cs); else if (b.kind === 1) dots(HEART, cs); else { c.fillStyle = MINT; c.fillRect(-cs, -cs, cs * 2, cs * 2); } c.restore(); });
-    const R = s * Math.max(0, k < .3 ? back(k / .3) : 1 - out((k - .3) / .7) * .85), A = Math.max(0, k < .55 ? 1 : 1 - (k - .55) / .45);
-    if (R > .05 && A > 0) { c.globalAlpha = A; c.rotate(f.r + out(k) * Math.PI / 10); const cs = 1.12 * R;
-      c.shadowColor = 'rgba(233,143,168,.45)'; c.shadowBlur = 5 * s; dots(PAW, cs); c.shadowBlur = 0; }
+  const SPARK = [[0, -2], [0, -1], [-2, 0], [-1, 0], [0, 0], [1, 0], [2, 0], [0, 1], [0, 2]];
+  const px = (pts, cs, col) => pts.forEach(([x, y, cc]) => { c.fillStyle = col || cc; c.fillRect(Math.round(x * cs), Math.round(y * cs), Math.ceil(cs), Math.ceil(cs)); });
+  // 도트 냥발이 톡 찍혀서 살짝 떠오르며 사라지고 · 도트 점 링이 퍼지고 · 작은 하트 · 반짝이가 튀어요 (돌리지 않아서 도트가 깔끔해요)
+  const draw = f => { const k = Math.min(1, f.t / DUR), s = f.s; c.save(); c.translate(Math.round(f.x), Math.round(f.y));
+    const rr = (7 + 20 * out(k)) * s, n = 10; c.globalAlpha = Math.max(0, 1 - k * 1.25);
+    for (let i = 0; i < n; i++) { const a = f.r + i * Math.PI * 2 / n; c.fillStyle = i % 2 ? MINT : RING; const d = Math.max(1, Math.round(2 * s * (1 - k * .5))); c.fillRect(Math.round(Math.cos(a) * rr) - d / 2, Math.round(Math.sin(a) * rr) - d / 2, d, d); }
+    f.bits.forEach((b, i) => { const p = out(k), d = (8 + b.d * p) * s, x = Math.cos(b.a) * d, y = Math.sin(b.a) * d - 6 * s * p;
+      c.save(); c.globalAlpha = Math.max(0, 1 - Math.pow(k, 1.4)); c.translate(Math.round(x), Math.round(y)); const cs = Math.max(1, Math.round(b.r * s));
+      if (b.kind === 1) px(HEART, cs); else px(SPARK, cs, b.kind === 0 ? MINT : '#F6CE72'); c.restore(); });
+    const R = Math.max(0, k < .28 ? back(k / .28) : 1 - out((k - .28) / .72) * .6), A = Math.max(0, k < .5 ? 1 : 1 - (k - .5) / .5);
+    if (R > .05 && A > 0) { c.globalAlpha = A; c.translate(0, -7 * s * out(k)); c.scale(R * s * .95, R * s * .95); PAW.forEach(([x, y, col]) => { c.fillStyle = col; c.fillRect(x, y, 1.04, 1.04); }); }
     c.restore(); };
   const loop = now => { const dt = Math.max(0, Math.min(.05, (now - last) / 1000)); last = now; c.clearRect(0, 0, W, H);
     for (let i = L.length - 1; i >= 0; i--) { L[i].t += dt; if (L[i].t >= DUR) L.splice(i, 1); else draw(L[i]); } raf = L.length ? requestAnimationFrame(loop) : 0; if (!raf) c.clearRect(0, 0, W, H); };
-  const mk = () => { const r0 = Math.random() * Math.PI * 2; return Array.from({ length: 7 }, (_, i) => ({ a: r0 + i * Math.PI * 2 / 7 + (Math.random() - .5) * .5, d: 16 + Math.random() * 12, r: .7 + Math.random() * .25, rot: (Math.random() - .5) * .8, spin: (Math.random() - .5) * 2, kind: i % 3, })); };
+  const mk = () => { const r0 = -Math.PI / 2 + (Math.random() - .5) * .6; return Array.from({ length: 5 }, (_, i) => ({ a: r0 + (i - 2) * .75 + (Math.random() - .5) * .25, d: 12 + Math.random() * 8, r: i === 2 ? 1.6 : 1.2, kind: i === 2 ? 1 : i % 2 ? 0 : 2 })); };
   return { burst(x, y, s) { L.push({ x, y, s: s || 1, t: 0, r: (Math.random() - .5) * .5, bits: mk() }); if (!raf) { last = performance.now(); raf = requestAnimationFrame(loop); } }, _draw: f => draw(f), _mk: mk, _c: () => c };
 })();
 // 끌기(창 옮기기 등)는 빼고, 제자리 클릭 · 탭에만
@@ -6394,6 +6397,9 @@ html.sye-editing #winlayer .cxwin [data-ci] .cx-ov,html.sye-editing #winlayer .c
 /* ---------- FRONTLINE 소속팀 나누기 · 카드 이름 한 줄 맞추기 ---------- */
 (() => {
   const st = document.createElement('style'); st.textContent = `
+  .cx-grid .cx-card{container-type:inline-size}
+  .cx-grid .cx-card .cx-ov{padding-left:10px!important;padding-right:8px!important}
+  .cx-grid .cx-card .cx-ov .cx-nm{font-size:clamp(10px,10cqw,16px)!important}
   .mp-tab{position:relative}
   .mp-tab .mp-dx{position:absolute;top:2px;right:4px;width:16px;height:16px;border-radius:50%;background:#fff;border:1px solid #DCE8E2;color:#8A9894;font:700 11px/14px sans-serif;text-align:center;font-style:normal;cursor:pointer}
   .mp-tab.mp-add{border:1.5px dashed #9EDBC2!important;background:transparent!important;display:grid!important;place-items:center!important;padding:0!important;min-width:0}
@@ -6413,24 +6419,17 @@ html.sye-editing #winlayer .cxwin [data-ci] .cx-ov,html.sye-editing #winlayer .c
   .fl-tt b{font:900 10.5px/1 'Montserrat','IBM Plex Sans KR',sans-serif;letter-spacing:.14em;color:#1E2A27;white-space:nowrap}
   .fl-tt small{font:600 9.5px/1 'IBM Plex Sans KR',sans-serif;color:#7C8B86;letter-spacing:.04em;white-space:nowrap}
   .fl-tt small i{font-style:normal;color:var(--tc);margin:0 1px}
-  .fl-deco{flex:none;width:64px;margin-left:auto!important;align-self:center;height:6px;margin:0 2px 0 6px;opacity:.55}
-  .fl-red .fl-deco{background:repeating-linear-gradient(-45deg,var(--tc) 0 3px,transparent 3px 7px);-webkit-mask:linear-gradient(90deg,transparent,#000 70%);mask:linear-gradient(90deg,transparent,#000 70%)}
+  .fl-deco{flex:none;width:34px;margin-left:auto!important;align-self:center;height:5px;margin:0 2px 0 6px;opacity:.55}
+  .fl-red .fl-deco{background:repeating-linear-gradient(-45deg,var(--tc) 0 2px,transparent 2px 5px);-webkit-mask:linear-gradient(90deg,transparent,#000 70%);mask:linear-gradient(90deg,transparent,#000 70%)}
   .fl-silver .fl-deco{background:repeating-linear-gradient(90deg,var(--tc) 0 1px,transparent 1px 6px) bottom/100% 5px no-repeat,repeating-linear-gradient(90deg,var(--tc) 0 1px,transparent 1px 30px) bottom/100% 8px no-repeat;-webkit-mask:linear-gradient(90deg,transparent,#000 60%);mask:linear-gradient(90deg,transparent,#000 60%)}
-  .fl-crown .fl-deco{height:7px;background:radial-gradient(circle,var(--tc) 0 1.2px,transparent 1.6px) 100% 50%/9px 7px repeat-x;-webkit-mask:linear-gradient(90deg,transparent,#000 70%);mask:linear-gradient(90deg,transparent,#000 70%);opacity:.7}
+  .fl-crown .fl-deco{height:5px;background:radial-gradient(circle,var(--tc) 0 1px,transparent 1.3px) 100% 50%/7px 5px repeat-x;-webkit-mask:linear-gradient(90deg,transparent,#000 70%);mask:linear-gradient(90deg,transparent,#000 70%);opacity:.7}
   .fl-black .fl-deco{background:radial-gradient(circle,var(--tc) 0 1px,transparent 1.4px) 0 0/5px 4px;-webkit-mask:linear-gradient(90deg,transparent,#000 65%);mask:linear-gradient(90deg,transparent,#000 65%);opacity:.45}
-  .fl-none .fl-deco{height:5px;background:repeating-linear-gradient(270deg,var(--tc) 0 5px,transparent 5px 9px);border-radius:2px;-webkit-mask:linear-gradient(90deg,transparent,#000 70%);mask:linear-gradient(90deg,transparent,#000 70%);opacity:.4}
+  .fl-none .fl-deco{height:4px;background:repeating-linear-gradient(270deg,var(--tc) 0 5px,transparent 5px 9px);border-radius:2px;-webkit-mask:linear-gradient(90deg,transparent,#000 70%);mask:linear-gradient(90deg,transparent,#000 70%);opacity:.4}
   .fl-em,.fl-tt small{display:none!important}
-  .fl-th em{flex:none;font:800 8.5px/1 'DM Mono',monospace;font-style:normal;letter-spacing:.08em;color:var(--tc)}
+  .fl-th em{flex:none;font:800 7.5px/1 'DM Mono',monospace;font-style:normal;letter-spacing:.08em;color:var(--tc)}
   .fl-silver .fl-th em{color:#7E8B94}
   .fl-team .cx-card::after{content:'';position:absolute;left:14px;right:14px;bottom:0;height:3px;border-radius:3px 3px 0 0;background:var(--tc);z-index:3}
   .fl-team .cx-card.on{outline-color:var(--tc)!important}
   .cx-grid .cx-card .cx-ov .cx-en{white-space:nowrap!important;overflow:hidden}`;
   document.head.appendChild(st);
-  // 이름이 카드보다 길면 글씨를 조금씩 줄여서 한 줄에 다 보이게 해요
-  const fit = () => document.querySelectorAll('.cx-card .cx-ov .cx-nm, .cx-card .cx-ov .cx-en').forEach(el => {
-    el.style.removeProperty('font-size'); let f = parseFloat(getComputedStyle(el).fontSize), n = 0;
-    if (el.scrollWidth <= el.clientWidth) return; while (el.scrollWidth > el.clientWidth && f > 8 && n++ < 40) { f -= .5; el.style.setProperty('font-size', f + 'px', 'important'); } el.style.setProperty('font-size', (f - .5) + 'px', 'important'); });
-  let q = 0; const later = () => { if (q) return; q = requestAnimationFrame(() => { q = 0; fit(); }); };
-  new MutationObserver(later).observe(document.body, { childList: true, subtree: true });
-  addEventListener('resize', later); document.fonts && document.fonts.ready.then(later);
 })();
