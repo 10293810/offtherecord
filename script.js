@@ -2884,18 +2884,20 @@ let agentWho = 0, agentKey = '';
 function drawAgent(rec) {
   const cn = charNow(); if (!cn) return; const { w: W } = cn, m0 = cn.m, b = rec.body;
   const key = charSel.w + '/' + charSel.i; if (key !== agentKey) { agentKey = key; agentWho = 0; }
-  const duo = Array.isArray(m0.duo) ? m0.duo : []; if (agentWho > duo.length) agentWho = 0;
-  const m = agentWho ? duo[agentWho - 1] : m0;
+  // 캐릭터 하나 = 칸 두 개 : 01 채팅하는 캐릭터 · 02 내 페르소나 (캐릭터마다 따로)
+  const duo = Array.isArray(m0.duo) ? m0.duo : []; if (agentWho > 1) agentWho = 0;
+  const P = duo[0] || { name: '페르소나', tag: 'PERSONA', level: '[ PERSONA FILE ]', quote: OWNER && SYE_ON ? '‘위의 02 칸을 눌러 이 캐릭터의 페르소나를 만들어요.’' : '‘아직 페르소나가 없어요.’', gallery: [], sections: [], _empty: true };
+  const m = agentWho ? P : m0;
   rec.el.classList.toggle('dark', m.theme === 'dark');
   $('.mcode', rec.el).textContent = `${W.term || 'TERMINAL'} · ${m.code || ''}`;
   $('.mf', rec.el).textContent = `FILE 0${agentTab === 'gallery' ? 2 : 1} / 02`;
   const ft = $('.ft', rec.el); if (ft) ft.textContent = W.footer || S.venue;
-  const strip = [m0, ...duo].map((x, k) => [x, k]), addDuo = OWNER && SYE_ON;
+  const strip = [[m0, 0], [P, 1]], LBL = ['01 · CHARACTER', '02 · PERSONA'];
   let body;
   if (agentTab === 'gallery') { const G = m.gallery || []; body = `<div class="mp-gal"><div class="mp-gal-h">${esc(m.name)} · GALLERY<small>${G.length} PHOTOS</small></div><div class="g">${G.map((g, i) => ph(g, { seed: m.name + i, icon: 'heart' })).join('')}</div></div>`; }
   else body = `<div class="mp-hero ph ${V(m.name)} ${m.theme === 'dark' ? '' : 'lt'}" data-slot="${esc(SPATH(pv(m.hero, m.card)))}">${SRC(pv(m.hero, m.card)) ? `<img src="${esc(SRC(pv(m.hero, m.card)))}" alt="">` : `<span class="ph-ic">${ic('idcard')}</span>`}${m.badge ? `<span class="ent">${esc(m.badge)}</span>` : ''}
       <div class="cap"><small>${esc(m.level || '')}</small><h3>${esc(m.name)}</h3><p>${esc(m.quote || '')}</p></div></div>${(m.sections || []).map(agentSecHTML).join('')}`;
-  b.innerHTML = `<div class="mp-tabs" style="grid-template-columns:repeat(${Math.min(strip.length, 4)},minmax(0,1fr))${addDuo ? ' 38px' : ''}">${strip.map(([x, k]) => `<button class="mp-tab ${k === agentWho ? 'on' : ''}" data-whok="${k}">${ph(pv(x.avatar, x.card), { cls: 'av', seed: x.name })}<span><b>${esc(x.name)}</b><small>${esc(x.tag || '')}</small></span>${addDuo && k ? `<i class="mp-dx" data-duo-del="${k}" title="이 상대 캐릭터 지우기">×</i>` : ''}</button>`).join('')}${addDuo ? `<button class="mp-tab mp-add" data-duo-add="1" title="이 캐릭터의 상대 캐릭터 추가"><b>+</b></button>` : ''}</div>
+  b.innerHTML = `<div class="mp-tabs" style="grid-template-columns:repeat(2,minmax(0,1fr))">${strip.map(([x, k]) => `<button class="mp-tab ${k === agentWho ? 'on' : ''}${x._empty ? ' empty' : ''}" data-whok="${k}"${x._empty && OWNER && SYE_ON ? ' data-duo-add="1"' : ''}>${ph(pv(x.avatar, x.card), { cls: 'av', seed: x.name })}<span><b>${esc(x.name)}</b><small>${LBL[k]}</small></span></button>`).join('')}</div>
     <div class="mp-body"><div class="mp-sub"><button class="${agentTab === 'profile' ? 'on' : ''}" data-tab="profile"><i>01</i>PROFILE</button><button class="${agentTab === 'gallery' ? 'on' : ''}" data-tab="gallery"><i>02</i>GALLERY</button>
     <span class="r">${m.bgm != null ? `<button data-song="${m.bgm}">♪ BGM</button>` : ''}${m.song != null ? `<button data-song="${m.song}">♪ CHARACTER SONG</button>` : ''}</span></div>
     <div class="mp-scroll">${body}</div></div>`;
@@ -5775,7 +5777,7 @@ html:not(.sye-editing) .cx-add,html:not(.sye-editing) .cd-tags .ed{display:none!
     if (t === 'pair') o = { badge: 'NEW', name: `새 페어 ${n}`, en: 'NEW PAIR', quote: '페어 한 줄 소개를 적어 주세요', tags: '태그 X 태그', status: 'ING', since: new Date().toISOString().slice(0, 10), next: 100, photo: '', back: '', memo: '페어 메모를 적어 주세요',
       a: { name: '캐릭터 A', sub: 'A', avatar: '', link: '' }, b: { name: '캐릭터 B', sub: 'B', avatar: '', link: '' } };
     else if (world.style === 'roster' && (world.member || [])[0]) { o = JSON.parse(JSON.stringify(world.member[0])); Object.assign(o, { name: `새 캐릭터 ${n}`, en: `New Character ${n}`, quote: '‘한 줄 소개를 적어 주세요.’', card: '', avatar: '', hero: '', gallery: ['', '', ''] });
-      o.duo = [Object.assign(JSON.parse(JSON.stringify(o)), { name: '상대 캐릭터 1', en: 'Partner', tag: 'PARTNER', group: undefined, attr: undefined, attrColor: undefined })]; delete o.duo[0].duo; }
+      o.duo = [Object.assign(JSON.parse(JSON.stringify(o)), { name: '페르소나', en: 'Persona', tag: 'PERSONA', level: '[ PERSONA FILE ]', badge: '', group: undefined, attr: undefined, attrColor: undefined })]; delete o.duo[0].duo; }
     else o = { dept: '소속', name: `새 캐릭터 ${n}`, en: `New Character ${n}`, quote: '한 줄 소개를 적어 주세요', tags: ['#태그'],
       spec: [['AGE', '00'], ['HEIGHT', '000'], ['BIRTH', '00.00'], ['LOVER', '연인 이름']], card: '', photo: '', theme: { title: 'CHARACTER SONG', src: '' },
       profile: { rows: [['좋아하는 것', '내용'], ['싫어하는 것', '내용'], ['특징', '내용']], personality: '성격을 적어 주세요.', memo: '짧은 메모를 적어 주세요.' },
@@ -5790,9 +5792,9 @@ html:not(.sye-editing) .cx-add,html:not(.sye-editing) .cd-tags .ed{display:none!
       idbAll().then(all => Promise.all(Object.keys(all).filter(k => k.startsWith(base)).map(k => { const rest = k.slice(base.length), n = parseInt(rest, 10), tail = rest.slice(String(n).length);
         if (n === del - 1) return idbDel(k); if (n > del - 1) return idbDel(k).then(() => idbPut(base + (n - 1) + tail, all[k])); }))).catch(() => {}).then(() => { agentWho = 0; commit('상대 캐릭터를 지웠어요', w, null); }); return; }
     const o = JSON.parse(JSON.stringify(m)); delete o.duo; delete o.group; delete o.attr; delete o.attrColor;
-    Object.assign(o, { name: `상대 캐릭터 ${duo.length + 1}`, en: 'Partner', tag: 'PARTNER', code: '', badge: o.badge || '', quote: '‘한 줄 소개를 적어 주세요.’', card: '', avatar: '', hero: '', gallery: ['', '', ''] });
+    Object.assign(o, { name: '페르소나', en: 'Persona', tag: 'PERSONA', level: '[ PERSONA FILE ]', code: '', badge: '', quote: '‘이 캐릭터의 상대, 내 페르소나예요. 한 줄 소개를 적어 주세요.’', card: '', avatar: '', hero: '', gallery: ['', '', ''] });
     duo.push(o); agentWho = duo.length; agentKey = w + '/' + i;
-    commit('상대 캐릭터를 만들었어요 · 글자를 눌러 고치고, 사진 자리를 눌러 사진을 넣어요', w, null);
+    commit('페르소나를 만들었어요 · 글자를 눌러 고치고, 사진 자리를 눌러 사진을 넣어요', w, null);
   });
   /* ---------- TALK 대화방 추가 · 수정 · 삭제 ---------- */
   const tRooms = () => {

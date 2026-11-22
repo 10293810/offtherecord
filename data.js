@@ -2313,6 +2313,7 @@ const SITE = {
         "member": [
           {
             "group": "prima",
+            "duo": [{"name": "페르소나 A", "en": "Persona", "tag": "PERSONA", "theme": "light", "badge": "", "level": "[ PERSONA FILE ]", "quote": "‘캐릭터 A의 상대, 내 페르소나예요. 한 줄 소개를 적어 주세요.’", "card": "", "avatar": "", "hero": "", "gallery": ["", "", ""], "sections": [{"type": "table", "title": "PERSONA PROFILE", "rows": [["NAME", "이름"], ["RELATION", "캐릭터 A와의 관계"], ["AGE", "00"]]}]}],
             "name": "캐릭터 A",
             "en": "Agent A",
             "attr": "무속성",
@@ -2370,6 +2371,7 @@ const SITE = {
           },
           {
             "group": "prima",
+            "duo": [{"name": "페르소나 B", "en": "Persona", "tag": "PERSONA", "theme": "light", "badge": "", "level": "[ PERSONA FILE ]", "quote": "‘캐릭터 B의 상대, 내 페르소나예요. 한 줄 소개를 적어 주세요.’", "card": "", "avatar": "", "hero": "", "gallery": ["", "", ""], "sections": [{"type": "table", "title": "PERSONA PROFILE", "rows": [["NAME", "이름"], ["RELATION", "캐릭터 B와의 관계"], ["AGE", "00"]]}]}],
             "name": "캐릭터 B",
             "en": "Agent B",
             "attr": "전기 속성",
@@ -2478,6 +2480,7 @@ const SITE = {
           },
           {
             "group": "v1",
+            "duo": [{"name": "페르소나 C", "en": "Persona", "tag": "PERSONA", "theme": "light", "badge": "", "level": "[ PERSONA FILE ]", "quote": "‘캐릭터 C의 상대, 내 페르소나예요. 한 줄 소개를 적어 주세요.’", "card": "", "avatar": "", "hero": "", "gallery": ["", "", ""], "sections": [{"type": "table", "title": "PERSONA PROFILE", "rows": [["NAME", "이름"], ["RELATION", "캐릭터 C와의 관계"], ["AGE", "00"]]}]}],
             "name": "캐릭터 C",
             "en": "Agent C",
             "attr": "불 속성",
@@ -2525,6 +2528,7 @@ const SITE = {
           },
           {
             "group": "v1",
+            "duo": [{"name": "페르소나 D", "en": "Persona", "tag": "PERSONA", "theme": "light", "badge": "", "level": "[ PERSONA FILE ]", "quote": "‘캐릭터 D의 상대, 내 페르소나예요. 한 줄 소개를 적어 주세요.’", "card": "", "avatar": "", "hero": "", "gallery": ["", "", ""], "sections": [{"type": "table", "title": "PERSONA PROFILE", "rows": [["NAME", "이름"], ["RELATION", "캐릭터 D와의 관계"], ["AGE", "00"]]}]}],
             "name": "캐릭터 D",
             "en": "Agent D",
             "attr": "바람 속성",
