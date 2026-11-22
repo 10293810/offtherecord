@@ -949,20 +949,10 @@ Object.assign(P, {
   scan: '<path d="M3 8V5a2 2 0 012-2h3M16 3h3a2 2 0 012 2v3M21 16v3a2 2 0 01-2 2h-3M8 21H5a2 2 0 01-2-2v-3M7 12h10"/>',
   pharmacy: '<path d="M10.5 20.5l10-10a4.95 4.95 0 00-7-7l-10 10a4.95 4.95 0 007 7z"/><path d="M8.5 8.5l7 7"/>',
   vitals: '<path d="M3 12h4l3-8 4 16 3-8h4"/>',
-  playlist: '<path d="M4 6h11M4 11h11M4 16h7"/><path d="M17 18.5V9l4-1.5"/><circle cx="15.5" cy="18.5" r="2"/>',
-  metronome: '<path d="M9 3h6l4 18H5z"/><path d="M12 15l5-9M8 17h8"/>',
-  snapshot: '<rect x="4" y="3" width="16" height="18" rx="1.5"/><rect x="7" y="6" width="10" height="9" rx=".5"/>',
-  backstage: '<rect x="5" y="6" width="14" height="15" rx="2"/><path d="M10 3h4v4h-4zM8.5 15h7M8.5 18h4"/><circle cx="12" cy="11" r="1.8"/>',
-  tourbus: '<rect x="3" y="5" width="18" height="12" rx="2.5"/><path d="M3 11h18M8 5v6M14 5v6"/><circle cx="7.5" cy="18.5" r="1.6"/><circle cx="16.5" cy="18.5" r="1.6"/>',
-  ampli: '<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="12" cy="13.5" r="4"/><circle cx="12" cy="13.5" r="1.2"/><path d="M6.5 7h.01M9.5 7h.01M17 7h1"/>',
-  guitarpick: '<path d="M12 21C8 17 4.5 12 4.5 8.5 4.5 5 8 3 12 3s7.5 2 7.5 5.5C19.5 12 16 17 12 21z"/>',
-  gigposter: '<rect x="5" y="3" width="14" height="18" rx="1"/><path d="M8 7h8M8 10h5"/><path d="M8 17l3-3 2 2 3-3"/>',
-  encorestar: '<path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8L3.5 9.7l5.9-.9z"/>',
-  fanclub: '<path d="M12 20s-7-4.4-7-9.5A3.8 3.8 0 0112 8.3a3.8 3.8 0 017 2.2C19 15.6 12 20 12 20z"/><path d="M12 8.3V5M9.5 4.5L12 5l2.5-.5"/>',
   syplus: '<path d="M12 5v14M5 12h14"/>'
 });
 const GRID_APPS = APPS.concat(EXTRA_APPS, [{ id: 'notice', name: 'Notice', icon: 'bell', t: 'soft' }],
-  (S.extraApps || []).map(x => ({ id: 'x-' + x.id, name: x.name, icon: x.icon || x.id, t: x.color || EXTRA_T[x.id] || 'soft' }))).slice(0, 70);
+  (S.extraApps || []).map(x => ({ id: 'x-' + x.id, name: x.name, icon: x.icon || x.id, t: x.color || EXTRA_T[x.id] || 'soft' }))).slice(0, 60);
 // D-DAY 바로 옆으로 : Profile · List · Linked · OOC · Prompt (나머지는 한 칸씩 뒤로)
 { const FRONT = ['x-about', 'x-list', 'x-linked', 'x-ooc', 'x-prompt'], mv = FRONT.map(id => GRID_APPS.find(a => a.id === id)).filter(Boolean);
   mv.forEach(a => GRID_APPS.splice(GRID_APPS.indexOf(a), 1)); GRID_APPS.splice(GRID_APPS.findIndex(a => a.id === 'dday') + 1, 0, ...mv); }
@@ -4762,11 +4752,11 @@ function syLayout() {
   #desk .apps-panel .panel-tab i{display:none!important}
   #desk .apps-panel .panel-tab span{font:800 7.5px var(--syf)!important;letter-spacing:.14em!important;color:#1E2A27!important;background:none!important;-webkit-text-fill-color:currentColor!important}
   #desk .apps-panel .panel-tab .sy-cnt{min-width:15px;height:15px;padding:0 3px;box-sizing:border-box;border-radius:99px;background:#1E2A27;color:#fff;font:800 7px/15px var(--syf);text-align:center}
-  #desk .stage .leftcol .apps{position:absolute!important;inset:16px 28px 13px!important;width:auto!important;height:auto!important;display:grid!important;grid-template-columns:repeat(10,calc(62px * var(--sy-ts,1)))!important;justify-content:space-between!important;grid-template-rows:repeat(7,auto)!important;align-content:space-between!important;gap:0 0!important;padding:0!important;margin:0!important;transform:none!important}
-  #desk .apps .app-tile{display:flex!important;flex-direction:column!important;align-items:center!important;gap:calc(3.3px * var(--sy-ts,1))!important;padding:0!important;margin:0!important;background:none!important;border:0!important;font:600 calc(8.1px * var(--sy-ts,1))/1.15 var(--syf)!important;letter-spacing:-.01em!important;color:#3E4B47!important;text-align:center!important;white-space:nowrap!important;word-break:keep-all!important}
+  #desk .stage .leftcol .apps{position:absolute!important;inset:26px 29.3px 20px!important;width:auto!important;height:auto!important;display:grid!important;grid-template-columns:repeat(10,calc(62px * var(--sy-ts,1)))!important;justify-content:space-between!important;grid-template-rows:repeat(6,auto)!important;align-content:space-between!important;gap:0 0!important;padding:0!important;margin:0!important;transform:none!important}
+  #desk .apps .app-tile{display:flex!important;flex-direction:column!important;align-items:center!important;gap:calc(6px * var(--sy-ts,1))!important;padding:0!important;margin:0!important;background:none!important;border:0!important;font:600 calc(8.5px * var(--sy-ts,1))/1.15 var(--syf)!important;letter-spacing:-.01em!important;color:#4A5753!important;text-align:center!important;white-space:normal!important;word-break:keep-all!important}
   #desk .apps .app-tile .cjk{font:800 1em/1.15 'Noto Sans JP','IBM Plex Sans KR',sans-serif;letter-spacing:0}
-  #desk .apps .app-ic.tilebox{width:calc(45.5px * var(--sy-ts,1))!important;height:calc(45.5px * var(--sy-ts,1))!important;border-radius:calc(11px * var(--sy-ts,1))!important;background:#fff!important;border:1px solid #E4ECE8!important;box-shadow:0 4px 10px rgba(30,70,60,.07),inset 0 -2px 0 rgba(30,70,60,.03)!important;color:#45AE86!important;display:grid!important;place-items:center!important}
-  #desk .apps .app-ic.tilebox svg{width:calc(19px * var(--sy-ts,1))!important;height:calc(19px * var(--sy-ts,1))!important;stroke-width:1.8!important}
+  #desk .apps .app-ic.tilebox{width:calc(50px * var(--sy-ts,1))!important;height:calc(50px * var(--sy-ts,1))!important;border-radius:calc(11.5px * var(--sy-ts,1))!important;background:#fff!important;border:1px solid #E4ECE8!important;box-shadow:0 4px 10px rgba(30,70,60,.07),inset 0 -2px 0 rgba(30,70,60,.03)!important;color:#45AE86!important;display:grid!important;place-items:center!important}
+  #desk .apps .app-ic.tilebox svg{width:calc(19px * var(--sy-ts,1))!important;height:calc(19px * var(--sy-ts,1))!important;stroke-width:1.7!important}
   #desk .apps .app-ic.tilebox.sy1{background:linear-gradient(160deg,#94E2C2,#6CCBA6)!important;border:0!important;color:#fff!important;box-shadow:0 6px 14px rgba(80,190,145,.28),inset 0 1px 0 rgba(255,255,255,.4)!important}
   #desk .apps .app-ic.tilebox.sy2{background:linear-gradient(160deg,#2C4A43,#1A2E29)!important;border:0!important;color:#fff!important;box-shadow:0 6px 14px rgba(20,45,40,.25)!important}
   #desk .apps .app-ic.tilebox.sy3{background:linear-gradient(160deg,#1E2422,#0E1110)!important;border:0!important;color:#fff!important;box-shadow:0 6px 14px rgba(10,20,18,.3)!important}
