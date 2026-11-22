@@ -2254,6 +2254,7 @@ const SITE = {
           {
             "group": "prima",
             "name": "캐릭터 A",
+            "duo": [{"name": "파트너 A", "en": "Partner", "tag": "PARTNER", "theme": "light", "badge": "", "level": "[ PARTNER FILE ]", "quote": "‘캐릭터 A의 상대 캐릭터예요. 한 줄 소개를 적어 주세요.’", "card": "", "avatar": "", "hero": "", "gallery": ["", "", ""], "sections": [{"type": "table", "title": "PARTNER PROFILE", "rows": [["NAME", "이름"], ["RELATION", "캐릭터 A와의 관계"], ["AGE", "00"]]}]}],
             "en": "Agent A",
             "attr": "무속성",
             "attrColor": "#7fb8c8",
@@ -2311,6 +2312,7 @@ const SITE = {
           {
             "group": "prima",
             "name": "캐릭터 B",
+            "duo": [{"name": "파트너 B", "en": "Partner", "tag": "PARTNER", "theme": "light", "badge": "", "level": "[ PARTNER FILE ]", "quote": "‘캐릭터 B의 상대 캐릭터예요. 한 줄 소개를 적어 주세요.’", "card": "", "avatar": "", "hero": "", "gallery": ["", "", ""], "sections": [{"type": "table", "title": "PARTNER PROFILE", "rows": [["NAME", "이름"], ["RELATION", "캐릭터 B와의 관계"], ["AGE", "00"]]}]}],
             "en": "Agent B",
             "attr": "전기 속성",
             "attrColor": "#e8b93a",
@@ -2419,6 +2421,7 @@ const SITE = {
           {
             "group": "v1",
             "name": "캐릭터 C",
+            "duo": [{"name": "파트너 C", "en": "Partner", "tag": "PARTNER", "theme": "light", "badge": "", "level": "[ PARTNER FILE ]", "quote": "‘캐릭터 C의 상대 캐릭터예요. 한 줄 소개를 적어 주세요.’", "card": "", "avatar": "", "hero": "", "gallery": ["", "", ""], "sections": [{"type": "table", "title": "PARTNER PROFILE", "rows": [["NAME", "이름"], ["RELATION", "캐릭터 C와의 관계"], ["AGE", "00"]]}]}],
             "en": "Agent C",
             "attr": "불 속성",
             "attrColor": "#e5534b",
@@ -2466,6 +2469,7 @@ const SITE = {
           {
             "group": "v1",
             "name": "캐릭터 D",
+            "duo": [{"name": "파트너 D", "en": "Partner", "tag": "PARTNER", "theme": "light", "badge": "", "level": "[ PARTNER FILE ]", "quote": "‘캐릭터 D의 상대 캐릭터예요. 한 줄 소개를 적어 주세요.’", "card": "", "avatar": "", "hero": "", "gallery": ["", "", ""], "sections": [{"type": "table", "title": "PARTNER PROFILE", "rows": [["NAME", "이름"], ["RELATION", "캐릭터 D와의 관계"], ["AGE", "00"]]}]}],
             "en": "Agent D",
             "attr": "바람 속성",
             "attrColor": "#4cbf7a",

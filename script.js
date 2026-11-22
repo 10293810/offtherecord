@@ -37,26 +37,28 @@ const slotTok = (path, val) => { const t = '⁣' + SLOTS.size + '⁣'; SLOTS.set
 const SRC = v => { const x = SLOTS.get(v); return x ? (SLOT_URL[x.path] || x.val || '') : (v || ''); };
 const SPATH = v => (SLOTS.get(v) || {}).path || '';
 const pv = (...vs) => vs.find(v => v && SRC(v)) || vs.find(v => SLOTS.has(v)) || '';
-(function tz(o, p) {
+function SYE_TZ(o, p) {
   for (const k of Object.keys(o)) { const v = o[k], pp = p.concat(k);
     if (typeof v === 'string' && !Array.isArray(o) && /^(image|imageBack|photo|card|hero|avatar|cover|thumb|banner|img|back|front)$/.test(k)) o[k] = slotTok(pp.join('.'), v);
     else if (Array.isArray(v) && /^(gallery|images)$/.test(k) && v.every(x => typeof x === 'string')) v.forEach((x, i) => { v[i] = slotTok(pp.concat(i).join('.'), x); });
     else if (typeof v === 'string' && k === 'src' && pp[0] === 'notice') o[k] = slotTok(pp.join('.'), v);
-    else if (v && typeof v === 'object' && k !== 'intro') tz(v, pp); }
-})(S, []);
+    else if (v && typeof v === 'object' && k !== 'intro') SYE_TZ(v, pp); }
+}
+SYE_TZ(S, []);
 /* 글자 바로 고치기 (제작자 전용) : 글자마다 '어느 칸인지' 보이지 않는 표시를 붙여 두고, 편집 모드에서 누르면 그 자리에서 고쳐요 */
 const TXT_PATH = [];
 const UN = s => typeof s === 'string' ? s.replace(/⁤[​‌‍⁠]*⁢?|⁡/g, '') : s;
-if (OWNER) (function tt(o, p, pk) {
+function SYE_TT(o, p, pk) {
   const DENY = /^(id|key|type|icon|src|url|href|link|color|attrColor|since|date|theme|style|side|group|cursor|from|app|zone|zones|k|cls|mode|word|before|after|code)$/;
   const ok = v => v && !/[⁣<>{}\n\r]/.test(v) && !/^[a-z0-9_\-.]+$/.test(v) && !/^#[0-9a-f]{3,8}$/i.test(v) && !/^(https?:|data:|blob:|\.{0,2}\/)/.test(v) && !/^[\d\s.:\-\/+%x×]+$/i.test(v);
   for (const k of Object.keys(o)) {
     if (!p.length && (k === 'intro' || k === 'cursor')) continue;
     const v = o[k], key = Array.isArray(o) ? pk : k, pp = p.concat(Array.isArray(o) ? +k : k);
     if (typeof v === 'string') { if (!DENY.test(key) && ok(v)) { o[k] = '⁤' + TXT_PATH.length.toString(4).replace(/[0-3]/g, d => '​‌‍⁠'[d]) + '⁢' + v + '⁡'; TXT_PATH.push(pp); } }
-    else if (v && typeof v === 'object' && !DENY.test(key)) tt(v, pp, key);
+    else if (v && typeof v === 'object' && !DENY.test(key)) SYE_TT(v, pp, key);
   }
-})(S, [], '');
+}
+if (OWNER) SYE_TT(S, [], '');
 if (OWNER && navigator.clipboard && navigator.clipboard.writeText) { const w0 = navigator.clipboard.writeText.bind(navigator.clipboard); try { navigator.clipboard.writeText = t => w0(UN(t)); } catch (e) {} }
 const SYE_FAST = (() => { try { const f = sessionStorage.getItem('sye-fast') === '1'; sessionStorage.removeItem('sye-fast'); return f; } catch (e) { return false; } })();
 if (OWNER && SYE_FAST && S.intro) S.intro.seconds = .3;
@@ -2871,18 +2873,23 @@ function agentSecHTML(x) {
   if (x.type === 'protocol') return `<div class="mp-sec ag-w"><h4>⚠ ${esc(x.title || '')}</h4><p>${x.text || ''}</p></div>`;
   return '';
 }
+// ARCH 프로필 : 위 동그라미 줄 = 이 캐릭터 + 이 캐릭터의 상대(duo) 캐릭터들 (목록의 다른 캐릭터가 아니에요)
+let agentWho = 0, agentKey = '';
 function drawAgent(rec) {
-  const cn = charNow(); if (!cn) return; const { w: W, m } = cn, b = rec.body;
+  const cn = charNow(); if (!cn) return; const { w: W } = cn, m0 = cn.m, b = rec.body;
+  const key = charSel.w + '/' + charSel.i; if (key !== agentKey) { agentKey = key; agentWho = 0; }
+  const duo = Array.isArray(m0.duo) ? m0.duo : []; if (agentWho > duo.length) agentWho = 0;
+  const m = agentWho ? duo[agentWho - 1] : m0;
   rec.el.classList.toggle('dark', m.theme === 'dark');
   $('.mcode', rec.el).textContent = `${W.term || 'TERMINAL'} · ${m.code || ''}`;
   $('.mf', rec.el).textContent = `FILE 0${agentTab === 'gallery' ? 2 : 1} / 02`;
   const ft = $('.ft', rec.el); if (ft) ft.textContent = W.footer || S.venue;
-  const strip = (W.member || []).map((x, i) => [x, i]).filter(([x]) => (x.group || '') === (m.group || ''));
+  const strip = [m0, ...duo].map((x, k) => [x, k]), addDuo = OWNER && SYE_ON;
   let body;
   if (agentTab === 'gallery') { const G = m.gallery || []; body = `<div class="mp-gal"><div class="mp-gal-h">${esc(m.name)} · GALLERY<small>${G.length} PHOTOS</small></div><div class="g">${G.map((g, i) => ph(g, { seed: m.name + i, icon: 'heart' })).join('')}</div></div>`; }
   else body = `<div class="mp-hero ph ${V(m.name)} ${m.theme === 'dark' ? '' : 'lt'}" data-slot="${esc(SPATH(pv(m.hero, m.card)))}">${SRC(pv(m.hero, m.card)) ? `<img src="${esc(SRC(pv(m.hero, m.card)))}" alt="">` : `<span class="ph-ic">${ic('idcard')}</span>`}${m.badge ? `<span class="ent">${esc(m.badge)}</span>` : ''}
       <div class="cap"><small>${esc(m.level || '')}</small><h3>${esc(m.name)}</h3><p>${esc(m.quote || '')}</p></div></div>${(m.sections || []).map(agentSecHTML).join('')}`;
-  b.innerHTML = `<div class="mp-tabs" style="grid-template-columns:repeat(${Math.min(strip.length, 4)},1fr)">${strip.map(([x, i]) => `<button class="mp-tab ${i === charSel.i ? 'on' : ''}" data-who="${i}">${ph(pv(x.avatar, x.card), { cls: 'av', seed: x.name })}<span><b>${esc(x.name)}</b><small>${esc(x.tag || '')}</small></span></button>`).join('')}</div>
+  b.innerHTML = `<div class="mp-tabs" style="grid-template-columns:repeat(${Math.min(strip.length, 4)},minmax(0,1fr))${addDuo ? ' 38px' : ''}">${strip.map(([x, k]) => `<button class="mp-tab ${k === agentWho ? 'on' : ''}" data-whok="${k}">${ph(pv(x.avatar, x.card), { cls: 'av', seed: x.name })}<span><b>${esc(x.name)}</b><small>${esc(x.tag || '')}</small></span>${addDuo && k ? `<i class="mp-dx" data-duo-del="${k}" title="이 상대 캐릭터 지우기">×</i>` : ''}</button>`).join('')}${addDuo ? `<button class="mp-tab mp-add" data-duo-add="1" title="이 캐릭터의 상대 캐릭터 추가"><b>+</b></button>` : ''}</div>
     <div class="mp-body"><div class="mp-sub"><button class="${agentTab === 'profile' ? 'on' : ''}" data-tab="profile"><i>01</i>PROFILE</button><button class="${agentTab === 'gallery' ? 'on' : ''}" data-tab="gallery"><i>02</i>GALLERY</button>
     <span class="r">${m.bgm != null ? `<button data-song="${m.bgm}">♪ BGM</button>` : ''}${m.song != null ? `<button data-song="${m.song}">♪ CHARACTER SONG</button>` : ''}</span></div>
     <div class="mp-scroll">${body}</div></div>`;
@@ -2898,7 +2905,9 @@ function openAgent() {
       b.style.cssText = 'display:flex;flex-direction:column;overflow:hidden';
       drawAgent(rec);
       b.addEventListener('click', e => {
-        const w = e.target.closest('[data-who]'); if (w) { charSel = { ...charSel, i: +w.dataset.who }; agentTab = 'profile'; drawAgent(rec); if (wins.get('chars')) openChars(); focusWin('agent'); return; }
+        const dd = e.target.closest('[data-duo-del]'); if (dd) { e.stopPropagation(); if (confirm('이 상대 캐릭터를 지울까요?')) dispatchEvent(new CustomEvent('sye-duo', { detail: { w: charSel.w, i: charSel.i, del: +dd.dataset.duoDel } })); return; }
+        const da = e.target.closest('[data-duo-add]'); if (da) { dispatchEvent(new CustomEvent('sye-duo', { detail: { w: charSel.w, i: charSel.i } })); return; }
+        const w = e.target.closest('[data-whok]'); if (w) { agentWho = +w.dataset.whok; agentTab = 'profile'; drawAgent(rec); focusWin('agent'); return; }
         const t = e.target.closest('[data-tab]'); if (t) { agentTab = t.dataset.tab; drawAgent(rec); return; }
         const sg = e.target.closest('[data-song]'); if (sg) load(+sg.dataset.song);
       });
@@ -5706,7 +5715,26 @@ html:not(.sye-editing) .cx-add,html:not(.sye-editing) .cd-tags .ed{display:none!
     const del = FF.querySelector('.del'); if (del) { let armed = false; del.onclick = () => { if (!armed) { armed = true; del.textContent = '한 번 더 누르면 삭제'; return; } fDelete(w, t, i); }; }
     FS = { w, t, i, o }; fm.classList.add('on');
   }
-  function commit(msg, w) { pend(); try { localStorage.setItem('sye-draft', JSON.stringify(RAW)); sessionStorage.setItem('sye-fast', '1'); sessionStorage.setItem('sye-reopen', w); } catch (e) { alert('저장 공간이 부족해서 저장하지 못했어요'); return; } toast(msg); setTimeout(() => location.reload(), 500); }
+  function commit(msg, w, sel) { pend(); try { localStorage.setItem('sye-draft', JSON.stringify(RAW)); } catch (e) { alert('저장 공간이 부족해서 저장하지 못했어요'); return; }
+    toast(msg); fClose();
+    // 새로고침 없이 그 자리에서 바로 바뀌어요 (혹시 실패하면 예전처럼 다시 불러와요)
+    liveChars(w, sel).catch(err => { console.error(err); try { sessionStorage.setItem('sye-fast', '1'); sessionStorage.setItem('sye-reopen', w); } catch (e) {} setTimeout(() => location.reload(), 400); });
+  }
+  function liveChars(w, sel) {
+    const c = JSON.parse(JSON.stringify(RAW.characters || {})); SYE_TZ(c, ['characters']); SYE_TT(c, ['characters'], 'characters');
+    SLOTS.forEach(x => { if (x.path.startsWith('characters.')) PV[x.path] = x.val; });
+    return idbAll().catch(() => ({})).then(all => {
+      Object.keys(SLOT_URL).filter(k => k.startsWith('characters.') && !(k in all)).forEach(k => setURL(k, null));
+      Object.keys(all).filter(k => k.startsWith('characters.')).forEach(k => setURL(k, all[k]));
+      S.characters = c;
+      if (sel) { charSel = sel; charTabKey = sel.t; charView = 'photo'; charTab = 'profile'; }
+      const ok = charSel && ((((c.worlds || {})[charSel.w] || {})[charSel.t]) || [])[charSel.i];
+      if (!ok) { charSel = null; closeWin('chardet'); closeWin('agent'); }
+      if (wins.get('chars')) openChars();
+      if (ok && (sel || wins.get('chardet') || wins.get('agent'))) openCharDetail();
+      paint();
+    });
+  }
   function fDelete(w, t, i) {
     const list = W()[w][t]; list.splice(i, 1);
     const base = `characters.worlds.${w}.${t}.`; idbAll().then(all => Promise.all(Object.keys(all).filter(k => k.startsWith(base)).map(k => { const rest = k.slice(base.length), n = parseInt(rest, 10), tail = rest.slice(String(n).length);
@@ -5744,15 +5772,26 @@ html:not(.sye-editing) .cx-add,html:not(.sye-editing) .cd-tags .ed{display:none!
     let o;
     if (t === 'pair') o = { badge: 'NEW', name: `새 페어 ${n}`, en: 'NEW PAIR', quote: '페어 한 줄 소개를 적어 주세요', tags: '태그 X 태그', status: 'ING', since: new Date().toISOString().slice(0, 10), next: 100, photo: '', back: '', memo: '페어 메모를 적어 주세요',
       a: { name: '캐릭터 A', sub: 'A', avatar: '', link: '' }, b: { name: '캐릭터 B', sub: 'B', avatar: '', link: '' } };
-    else if (world.style === 'roster' && (world.member || [])[0]) { o = JSON.parse(JSON.stringify(world.member[0])); Object.assign(o, { name: `새 캐릭터 ${n}`, en: `New Character ${n}`, quote: '‘한 줄 소개를 적어 주세요.’', card: '', avatar: '', hero: '', gallery: ['', '', ''] }); }
+    else if (world.style === 'roster' && (world.member || [])[0]) { o = JSON.parse(JSON.stringify(world.member[0])); Object.assign(o, { name: `새 캐릭터 ${n}`, en: `New Character ${n}`, quote: '‘한 줄 소개를 적어 주세요.’', card: '', avatar: '', hero: '', gallery: ['', '', ''] });
+      o.duo = [Object.assign(JSON.parse(JSON.stringify(o)), { name: '상대 캐릭터 1', en: 'Partner', tag: 'PARTNER', group: undefined, attr: undefined, attrColor: undefined })]; delete o.duo[0].duo; }
     else o = { dept: '소속', name: `새 캐릭터 ${n}`, en: `New Character ${n}`, quote: '한 줄 소개를 적어 주세요', tags: ['#태그'],
       spec: [['AGE', '00'], ['HEIGHT', '000'], ['BIRTH', '00.00'], ['LOVER', '연인 이름']], card: '', photo: '', theme: { title: 'CHARACTER SONG', src: '' },
       profile: { rows: [['좋아하는 것', '내용'], ['싫어하는 것', '내용'], ['특징', '내용']], personality: '성격을 적어 주세요.', memo: '짧은 메모를 적어 주세요.' },
       prompts: [{ title: '기본 외형', text: '프롬프트를 적어요' }], gallery: ['', '', ''], music: [{ title: '노래 제목', artist: '가수', src: '' }], talk: [] };
     list.push(o);
-    try { sessionStorage.setItem('sye-reopen-sel', JSON.stringify({ t, i: list.length - 1 })); } catch (e) {}
-    commit((t === 'pair' ? '새 페어' : '새 캐릭터') + '를 만들었어요 · 글자를 눌러 고치고, 사진 자리를 눌러 사진을 넣어요', w);
+    commit((t === 'pair' ? '새 페어' : '새 캐릭터') + '를 만들었어요 · 글자를 눌러 고치고, 사진 자리를 눌러 사진을 넣어요', w, { w, t, i: list.length - 1 });
   }
+  // ARCH : 상대(duo) 캐릭터 추가 · 지우기
+  addEventListener('sye-duo', e => { const { w, i, del } = e.detail || {}, world = W()[w], m = world && (world.member || [])[i]; if (!m) return;
+    const duo = Array.isArray(m.duo) ? m.duo : (m.duo = []);
+    if (del) { duo.splice(del - 1, 1); const base = `characters.worlds.${w}.member.${i}.duo.`;
+      idbAll().then(all => Promise.all(Object.keys(all).filter(k => k.startsWith(base)).map(k => { const rest = k.slice(base.length), n = parseInt(rest, 10), tail = rest.slice(String(n).length);
+        if (n === del - 1) return idbDel(k); if (n > del - 1) return idbDel(k).then(() => idbPut(base + (n - 1) + tail, all[k])); }))).catch(() => {}).then(() => { agentWho = 0; commit('상대 캐릭터를 지웠어요', w, null); }); return; }
+    const o = JSON.parse(JSON.stringify(m)); delete o.duo; delete o.group; delete o.attr; delete o.attrColor;
+    Object.assign(o, { name: `상대 캐릭터 ${duo.length + 1}`, en: 'Partner', tag: 'PARTNER', code: '', badge: o.badge || '', quote: '‘한 줄 소개를 적어 주세요.’', card: '', avatar: '', hero: '', gallery: ['', '', ''] });
+    duo.push(o); agentWho = duo.length; agentKey = w + '/' + i;
+    commit('상대 캐릭터를 만들었어요 · 글자를 눌러 고치고, 사진 자리를 눌러 사진을 넣어요', w, null);
+  });
   /* ---------- TALK 대화방 추가 · 수정 · 삭제 ---------- */
   const tRooms = () => {
     const c = RAW.chat || (RAW.chat = {});
@@ -6351,6 +6390,10 @@ html.sye-editing #winlayer .cxwin [data-ci] .cx-ov,html.sye-editing #winlayer .c
 /* ---------- FRONTLINE 소속팀 나누기 · 카드 이름 한 줄 맞추기 ---------- */
 (() => {
   const st = document.createElement('style'); st.textContent = `
+  .mp-tab{position:relative}
+  .mp-tab .mp-dx{position:absolute;top:2px;right:4px;width:16px;height:16px;border-radius:50%;background:#fff;border:1px solid #DCE8E2;color:#8A9894;font:700 11px/14px sans-serif;text-align:center;font-style:normal;cursor:pointer}
+  .mp-tab.mp-add{border:1.5px dashed #9EDBC2!important;background:transparent!important;display:grid!important;place-items:center!important;padding:0!important;min-width:0}
+  .mp-tab.mp-add b{color:#7FD7B1!important;font:800 18px/1 sans-serif!important}
   .fl-team{margin:0 0 22px}
   .fl-team:last-child{margin-bottom:4px}
   .fl-th{display:flex;align-items:center;gap:10px;margin:0 2px 12px;padding-bottom:10px;border-bottom:1px solid color-mix(in srgb,var(--tc) 30%,#E3ECE8);position:relative}
