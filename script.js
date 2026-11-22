@@ -2642,6 +2642,24 @@ function rosterHTML(W, list, isOn) {
     return `<div class="rs-sec"><b>${esc(g.name)}</b><span style="color:${esc(g.color || '')}">${esc(g.cls || '')}</span></div><div class="rs-ln" style="background:linear-gradient(90deg,${esc(g.color || '#8EB2B7')},transparent 78%)"></div>
       <div class="rs-grid">${ms.map(([m, i]) => `<button class="rs-card ${isOn(i) ? 'on' : ''}" data-ci="${i}">${ph(pv(m.card, m.hero), { seed: m.name + i })}<div class="ov"><b>${esc(m.name)}</b>${m.attr ? `<i style="background:${esc(m.attrColor || '#55C7D7')}">${esc(m.attr)}</i>` : ''}</div></button>`).join('')}</div>`; }).join('');
 }
+// FRONTLINE : 소속팀(카드 위 작은 글씨 = 소속)별로 나눠서 보여줘요 · 팀이 없는 캐릭터는 맨 아래 무소속
+const FL_TEAMS = [
+  { key: 'RED ZONE', ko: '레드 존', color: '#E0565B', match: /red\s*zone|레드\s*존/i },
+  { key: 'SILVER SLOT', ko: '실버 슬롯', color: '#93A3AE', match: /silver\s*slot|실버\s*슬롯/i },
+  { key: 'CROWN GATE', ko: '크라운 게이트', color: '#D3A23E', match: /crown\s*gate|크라운\s*게이트/i },
+  { key: 'BLACK VEIL', ko: '블랙 베일', color: '#2B3236', match: /black\s*veil|블랙\s*베일/i },
+  { key: 'NO AFFILIATION', ko: '무소속', color: '#3FAE84', match: null }];
+function teamsOf(W) { return W && (W.teams || (W === (S.characters?.worlds || {}).frontline || /frontline/i.test(W.name || '') ? FL_TEAMS : null)); }
+function cxCardHTML(m, i, isOn) { return `<button class="cx-card ${isOn(i) ? 'on' : ''}" data-ci="${i}">
+          ${ph(m.card, { cls: 'cx-ph', seed: m.name + i })}
+          <span class="cx-ov"><small>${esc(m.dept)}</small><span class="cx-nm">${esc(m.name)}</span>${m.en ? `<em class="cx-en">${esc(m.en)}</em>` : ''}</span></button>`; }
+function teamsHTML(W, list, isOn) {
+  const T = teamsOf(W).map(t => ({ ...t, match: t.match instanceof RegExp ? t.match : (t.match ? new RegExp(t.match, 'i') : null) })), last = T.find(t => !t.match) || T[T.length - 1];
+  const pick = m => T.find(t => t.match && t.match.test(m.dept || '')) || last;
+  return T.map(t => { const ms = list.map((m, i) => [m, i]).filter(([m]) => pick(m) === t); if (!ms.length) return '';
+    return `<section class="fl-team" style="--tc:${esc(t.color)}"><div class="fl-th"><i class="fl-em"></i><b>${esc(t.key)}</b><span>${esc(t.ko || '')}</span><em>${String(ms.length).padStart(2, '0')}</em></div>
+      <div class="cx-grid">${ms.map(([m, i]) => cxCardHTML(m, i, isOn)).join('')}</div></section>`; }).join('');
+}
 function charNow() { if (!charSel) return null; const w = (S.characters?.worlds || {})[charSel.w]; const m = w && (w[charSel.t] || [])[charSel.i]; return m ? { w, m } : null; }
 let pairOv = null, cxAnim = true;   // 페어 목록 창 위에 띄운 페어 (번호)
 // 캐릭터 목록 창 : 혼자일 땐 가운데, 옆 창(상세)이 열리면 왼쪽으로 밀려나요
@@ -2675,6 +2693,7 @@ function openChars(wid) {
           <div class="cp-ph">${ph(m.photo, { seed: m.name + i, label: 'PAIR · 16:9' })}${m.since ? `<em class="cp-d">D+${pairDays(m.since)}</em>` : ''}<div class="cp-ov"><b>${esc(A.name || '')}<i>×</i>${esc(B.name || '')}</b><small>${esc(m.en || '')}</small></div></div>
           <div class="cp-f"><span>${esc(m.status || '')}</span><b>페어 프로필 →</b></div></button>`; }).join('')}</div>`
         : W.style === 'roster' ? rosterHTML(W, list, isOn)
+        : teamsOf(W) ? teamsHTML(W, list, isOn)
         : `<div class="cx-grid">${list.map((m, i) => `<button class="cx-card ${isOn(i) ? 'on' : ''}" data-ci="${i}">
           ${ph(m.card, { cls: 'cx-ph', seed: m.name + i })}
           <span class="cx-ov"><small>${esc(m.dept)}</small><span class="cx-nm">${esc(m.name)}</span>${m.en ? `<em class="cx-en">${esc(m.en)}</em>` : ''}</span></button>`).join('')}</div>`}</div>
@@ -4326,7 +4345,7 @@ html.fonts-wait .en-stage{opacity:0}
 .cx-grid .cx-card .cx-ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .cx-grid .cx-card .cx-ov{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:34px 12px 11px;background:linear-gradient(transparent,rgba(20,42,36,.72));color:#fff;pointer-events:none;display:flex;flex-direction:column;gap:2px}
 .cx-grid .cx-card .cx-ov small{display:block!important;margin:0!important;font:700 9px/1.3 'DM Mono',monospace!important;letter-spacing:.1em!important;color:rgba(255,255,255,.88)!important}
-.cx-grid .cx-card .cx-ov .cx-nm{display:block!important;margin:0!important;font:800 14.5px/1.25 'IBM Plex Sans KR',sans-serif!important;color:#fff!important;word-break:keep-all;white-space:normal!important;overflow:visible!important;overflow-wrap:anywhere}
+.cx-grid .cx-card .cx-ov .cx-nm{display:block!important;margin:0!important;font:800 14.5px/1.25 'IBM Plex Sans KR',sans-serif!important;color:#fff!important;word-break:keep-all;white-space:nowrap!important;overflow:hidden!important;text-overflow:clip!important}
 .cx-grid .cx-card .cx-ov .cx-en{display:block;font:500 10px/1.3 'DM Mono',monospace;font-style:normal;color:rgba(255,255,255,.82)}
 .win.cydet.float .cf-stage .cy-pv{width:min(calc(100% - 70px),360px,calc((100cqh - 18px) * 4 / 5.6))!important}
 .win.cydet.float .cf-stage:not(:has(.cf-side)) .cy-pv{width:min(calc(100% - 20px),380px,calc((100cqh - 18px) * 4 / 5.6))!important}
@@ -6321,4 +6340,26 @@ html.sye-editing #winlayer .cxwin [data-ci] .cx-ov,html.sye-editing #winlayer .c
 @media (max-width:720px),(max-aspect-ratio:4/5) and (max-width:1100px),(max-height:599px){#desk .dfx-cr,#desk .dfx-sp:nth-of-type(n+3){display:none}}
 @media (prefers-reduced-motion:reduce){#desk .dfx-b,#desk .dfx-sp{animation:none}}
 `; document.head.appendChild(st);
+})();
+
+/* ---------- FRONTLINE 소속팀 나누기 · 카드 이름 한 줄 맞추기 ---------- */
+(() => {
+  const st = document.createElement('style'); st.textContent = `
+  .fl-team{margin:0 0 20px}
+  .fl-team:last-child{margin-bottom:4px}
+  .fl-th{display:flex;align-items:center;gap:8px;margin:0 2px 10px;padding-bottom:8px;border-bottom:1.5px solid color-mix(in srgb,var(--tc) 28%,transparent);position:relative}
+  .fl-th::after{content:'';position:absolute;left:0;bottom:-1.5px;width:46px;height:1.5px;background:var(--tc)}
+  .fl-em{flex:none;width:9px;height:9px;transform:rotate(45deg);border-radius:2px;background:var(--tc);box-shadow:0 0 0 3px color-mix(in srgb,var(--tc) 18%,transparent)}
+  .fl-th b{font:900 12.5px/1 'Montserrat','IBM Plex Sans KR',sans-serif;letter-spacing:.14em;color:#1E2A27}
+  .fl-th span{font:600 10.5px/1 'IBM Plex Sans KR',sans-serif;color:#7C8B86}
+  .cx-grid .cx-card .cx-ov .cx-en{white-space:nowrap!important;overflow:hidden}
+  .fl-th em{margin-left:auto;font:800 10px/1 'DM Mono',monospace;font-style:normal;letter-spacing:.08em;color:var(--tc)}`;
+  document.head.appendChild(st);
+  // 이름이 카드보다 길면 글씨를 조금씩 줄여서 한 줄에 다 보이게 해요
+  const fit = () => document.querySelectorAll('.cx-card .cx-ov .cx-nm, .cx-card .cx-ov .cx-en').forEach(el => {
+    el.style.removeProperty('font-size'); let f = parseFloat(getComputedStyle(el).fontSize), n = 0;
+    if (el.scrollWidth <= el.clientWidth) return; while (el.scrollWidth > el.clientWidth && f > 8 && n++ < 40) { f -= .5; el.style.setProperty('font-size', f + 'px', 'important'); } el.style.setProperty('font-size', (f - .5) + 'px', 'important'); });
+  let q = 0; const later = () => { if (q) return; q = requestAnimationFrame(() => { q = 0; fit(); }); };
+  new MutationObserver(later).observe(document.body, { childList: true, subtree: true });
+  addEventListener('resize', later); document.fonts && document.fonts.ready.then(later);
 })();
