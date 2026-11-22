@@ -5134,7 +5134,7 @@ const SFX = (() => {
     tear: () => go((a, t) => { tear(a, t, SFX_VOL * 1.1); bell(a, t + .18, 784, SFX_VOL * .2, 1.2); bell(a, t + .3, 1174.7, SFX_VOL * .16, 1.4); bell(a, t + .42, 1568, SFX_VOL * .12, 1.6); }),
     tap: () => go((a, t) => tick(a, t, SFX_VOL * .9)), open: () => go((a, t) => { bell(a, t, 880, SFX_VOL * .22, .9); bell(a, t + .11, 1318.5, SFX_VOL * .17, 1.1); }) };
 })();
-// 클로버 톡 : 누른 자리에 커서 끝의 도트 클로버가 톡 튀어나와 살짝 떠오르며 사라지고, 민트 · 노랑 · 분홍 반짝이가 퍼져요
+// 반짝 : 누른 자리에 작은 민트 반짝이가 톡 떴다 사라지고, 민트 · 노랑 · 분홍 반짝이 6개가 동그랗게 퍼져요
 const FX = (() => {
   if (!FX_ON) return { burst() {} };
   const cv = document.createElement('canvas'); cv.setAttribute('aria-hidden', 'true'); cv.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:2147483000';
@@ -5154,7 +5154,7 @@ const FX = (() => {
     for (let i = 0; i < 6; i++) { const a = f.r - Math.PI / 2 + i * Math.PI / 3, d = (9 + 17 * out(k)) * s, x = Math.round(Math.cos(a) * d), y = Math.round(Math.sin(a) * d), cs = Math.max(1, Math.round(1.6 * s));
       c.fillStyle = SPC[i % 3]; PLUS.forEach(([px, py]) => c.fillRect(x + px * cs - cs / 2, y + py * cs - cs / 2, cs, cs)); }
     const R = k < .3 ? back(k / .3) : 1 - out((k - .3) / .7) * .45, A = k < .5 ? 1 : Math.max(0, 1 - (k - .5) / .5);
-    if (R > .05 && A > 0) { const w = spr.width * .5 * .95 * R * s, h = spr.height * .5 * .95 * R * s; c.globalAlpha = A; c.drawImage(spr, -w / 2, -h / 2 - 7 * s * out(k), w, h); }
+    if (R > .05 && A > 0) { const cs = Math.max(1, Math.round(1.8 * s * R)); c.globalAlpha = A; c.fillStyle = '#7FD7B1'; PLUS.forEach(([px, py]) => c.fillRect(px * cs - cs / 2, py * cs - cs / 2, cs, cs)); c.fillStyle = '#fff'; c.fillRect(-cs / 2, -cs / 2, cs, cs); }
     c.restore(); };
   const loop = now => { const dt = Math.max(0, Math.min(.05, (now - last) / 1000)); last = now; c.clearRect(0, 0, W, H);
     for (let i = L.length - 1; i >= 0; i--) { L[i].t += dt; if (L[i].t >= DUR) L.splice(i, 1); else draw(L[i]); } raf = L.length ? requestAnimationFrame(loop) : 0; if (!raf) c.clearRect(0, 0, W, H); };
