@@ -6449,15 +6449,18 @@ html.sye-editing #winlayer .cxwin [data-ci] .cx-ov,html.sye-editing #winlayer .c
   };
   const remap = txt => txt.replace(/rgba?\(\s*(\d+),\s*(\d+),\s*(\d+)(\s*,\s*[\d.]+)?\s*\)/g, (m, r, g, b, a) => { const c = shift(r, g, b); return c ? (a ? `rgba(${c.join(', ')}${a})` : `rgb(${c.join(', ')})`) : m; })
     .replace(/#([0-9a-f]{6}|[0-9a-f]{3})\b/gi, (m, hx) => { if (hx.length === 3) hx = hx.split('').map(x => x + x).join(''); const c = shift(parseInt(hx.slice(0, 2), 16), parseInt(hx.slice(2, 4), 16), parseInt(hx.slice(4, 6), 16)); return c ? '#' + c.map(v => v.toString(16).padStart(2, '0')).join('') : m; });
+  // 색만 그 자리에서 바꿔요 (규칙을 맨 뒤로 복사하면 크기 · 칸 규칙 순서가 뒤집혀서 모바일 아이콘이 커졌어요)
+  const mine = new WeakMap();          // 규칙마다 내가 칠한 값 (다른 색 스크립트가 나중에 바꾸면 다시 칠해요)
   const run = () => {
-    const out = [];
     const walk = rules => { for (const r of rules) {
-      if (r.cssRules && (r.type === 4 || r.type === 12)) { const save = out.length; walk(r.cssRules); const got = out.splice(save); if (got.length) out.push(`@media ${r.conditionText || r.media.mediaText}{${got.join('')}}`); continue; }
-      if (r.selectorText && /rgb|#[0-9a-f]{3}/i.test(r.style.cssText)) { const t = remap(r.style.cssText); if (t !== r.style.cssText) out.push(`${r.selectorText}{${t}}`); }
+      if (r.cssRules && (r.type === 4 || r.type === 12)) { walk(r.cssRules); continue; }
+      if (!r.style || !r.selectorText) continue;
+      if (!/rgb|#[0-9a-f]{3}/i.test(r.style.cssText)) continue;
+      const st = r.style, props = []; for (let i = 0; i < st.length; i++) props.push(st[i]);
+      let m = mine.get(r); if (!m) mine.set(r, m = {});
+      for (const pr of props) { const v = st.getPropertyValue(pr); if (m[pr] === v) continue; const t = remap(v); if (t !== v) st.setProperty(pr, t, st.getPropertyPriority(pr)); m[pr] = st.getPropertyValue(pr); }
     } };
-    for (const sh of document.styleSheets) { if (sh.ownerNode && sh.ownerNode.id === 'pure-pal') continue; try { walk(sh.cssRules); } catch (e) {} }
-    let st = document.getElementById('pure-pal'); if (!st) { st = document.createElement('style'); st.id = 'pure-pal'; }
-    st.textContent = out.join('\n'); document.head.appendChild(st);
+    for (const sh of document.styleSheets) { try { walk(sh.cssRules); } catch (e) {} }
   };
-  run(); setTimeout(run, 50); addEventListener('load', () => setTimeout(run, 50));
+  run(); [50, 400, 1200, 3000].forEach(t => setTimeout(run, t)); addEventListener('load', () => { setTimeout(run, 50); setTimeout(run, 600); });
 })();
