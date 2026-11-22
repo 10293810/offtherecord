@@ -2644,11 +2644,17 @@ function rosterHTML(W, list, isOn) {
 }
 // FRONTLINE : 소속팀(카드 위 작은 글씨 = 소속)별로 나눠서 보여줘요 · 팀이 없는 캐릭터는 맨 아래 무소속
 const FL_TEAMS = [
-  { key: 'RED ZONE', ko: '레드 존', color: '#E0565B', match: /red\s*zone|레드\s*존/i },
-  { key: 'SILVER SLOT', ko: '실버 슬롯', color: '#93A3AE', match: /silver\s*slot|실버\s*슬롯/i },
-  { key: 'CROWN GATE', ko: '크라운 게이트', color: '#D3A23E', match: /crown\s*gate|크라운\s*게이트/i },
-  { key: 'BLACK VEIL', ko: '블랙 베일', color: '#2B3236', match: /black\s*veil|블랙\s*베일/i },
-  { key: 'NO AFFILIATION', ko: '무소속', color: '#3FAE84', match: null }];
+  { key: 'RED ZONE', ko: '레드 존', tag: 'HIGH RISK', slug: 'red', color: '#E0565B', match: /red\s*zone|레드\s*존/i },
+  { key: 'SILVER SLOT', ko: '실버 슬롯', tag: 'PRECISION', slug: 'silver', color: '#97A4AD', match: /silver\s*slot|실버\s*슬롯/i },
+  { key: 'CROWN GATE', ko: '크라운 게이트', tag: 'SPOTLIGHT', slug: 'crown', color: '#CFA046', match: /crown\s*gate|크라운\s*게이트/i },
+  { key: 'BLACK VEIL', ko: '블랙 베일', tag: 'CLASSIFIED', slug: 'black', color: '#23282B', match: /black\s*veil|블랙\s*베일/i },
+  { key: 'NO AFFILIATION', ko: '무소속', tag: 'INDEPENDENT', slug: 'none', color: '#3FAE84', match: null }];
+const FL_IC = {
+  red: '<path d="M12 3.8L21.2 19.6H2.8z"/><path d="M12 9.8v4.6M12 16.9v.2"/>',
+  silver: '<circle cx="12" cy="12" r="6.8"/><path d="M12 2.8v5M12 16.2v5M2.8 12h5M16.2 12h5"/><circle cx="12" cy="12" r=".9"/>',
+  crown: '<path d="M3.6 17.5h16.8l1-9.5-5 3.8L12 5l-4.4 6.8-5-3.8z"/><path d="M4.5 20.5h15"/>',
+  black: '<path d="M2.8 12s3.4-5.8 9.2-5.8 9.2 5.8 9.2 5.8-3.4 5.8-9.2 5.8S2.8 12 2.8 12z"/><circle cx="12" cy="12" r="2.4"/><path d="M4 4l16 16"/>',
+  none: '<circle cx="12" cy="12" r="8.4"/><path d="M12 7.2V12l3.2 2"/>' };
 function teamsOf(W) { return W && (W.teams || (W === (S.characters?.worlds || {}).frontline || /frontline/i.test(W.name || '') ? FL_TEAMS : null)); }
 function cxCardHTML(m, i, isOn) { return `<button class="cx-card ${isOn(i) ? 'on' : ''}" data-ci="${i}">
           ${ph(m.card, { cls: 'cx-ph', seed: m.name + i })}
@@ -2657,7 +2663,7 @@ function teamsHTML(W, list, isOn) {
   const T = teamsOf(W).map(t => ({ ...t, match: t.match instanceof RegExp ? t.match : (t.match ? new RegExp(t.match, 'i') : null) })), last = T.find(t => !t.match) || T[T.length - 1];
   const pick = m => T.find(t => t.match && t.match.test(m.dept || '')) || last;
   return T.map(t => { const ms = list.map((m, i) => [m, i]).filter(([m]) => pick(m) === t); if (!ms.length) return '';
-    return `<section class="fl-team" style="--tc:${esc(t.color)}"><div class="fl-th"><i class="fl-em"></i><b>${esc(t.key)}</b><span>${esc(t.ko || '')}</span><em>${String(ms.length).padStart(2, '0')}</em></div>
+    return `<section class="fl-team fl-${esc(t.slug || 'x')}" style="--tc:${esc(t.color)}"><div class="fl-th"><span class="fl-em"><svg viewBox="0 0 24 24">${FL_IC[t.slug] || FL_IC.none}</svg></span><div class="fl-tt"><b>${esc(t.key)}</b><small>${esc(t.ko || '')}${t.tag ? ` <i>·</i> ${esc(t.tag)}` : ''}</small></div><span class="fl-deco"></span><em>${String(ms.length).padStart(2, '0')}</em></div>
       <div class="cx-grid">${ms.map(([m, i]) => cxCardHTML(m, i, isOn)).join('')}</div></section>`; }).join('');
 }
 function charNow() { if (!charSel) return null; const w = (S.characters?.worlds || {})[charSel.w]; const m = w && (w[charSel.t] || [])[charSel.i]; return m ? { w, m } : null; }
@@ -6345,15 +6351,32 @@ html.sye-editing #winlayer .cxwin [data-ci] .cx-ov,html.sye-editing #winlayer .c
 /* ---------- FRONTLINE 소속팀 나누기 · 카드 이름 한 줄 맞추기 ---------- */
 (() => {
   const st = document.createElement('style'); st.textContent = `
-  .fl-team{margin:0 0 20px}
+  .fl-team{margin:0 0 22px}
   .fl-team:last-child{margin-bottom:4px}
-  .fl-th{display:flex;align-items:center;gap:8px;margin:0 2px 10px;padding-bottom:8px;border-bottom:1.5px solid color-mix(in srgb,var(--tc) 28%,transparent);position:relative}
-  .fl-th::after{content:'';position:absolute;left:0;bottom:-1.5px;width:46px;height:1.5px;background:var(--tc)}
-  .fl-em{flex:none;width:9px;height:9px;transform:rotate(45deg);border-radius:2px;background:var(--tc);box-shadow:0 0 0 3px color-mix(in srgb,var(--tc) 18%,transparent)}
-  .fl-th b{font:900 12.5px/1 'Montserrat','IBM Plex Sans KR',sans-serif;letter-spacing:.14em;color:#1E2A27}
-  .fl-th span{font:600 10.5px/1 'IBM Plex Sans KR',sans-serif;color:#7C8B86}
-  .cx-grid .cx-card .cx-ov .cx-en{white-space:nowrap!important;overflow:hidden}
-  .fl-th em{margin-left:auto;font:800 10px/1 'DM Mono',monospace;font-style:normal;letter-spacing:.08em;color:var(--tc)}`;
+  .fl-th{display:flex;align-items:center;gap:10px;margin:0 2px 12px;padding-bottom:10px;border-bottom:1px solid color-mix(in srgb,var(--tc) 30%,#E3ECE8);position:relative}
+  .fl-th::after{content:'';position:absolute;left:0;bottom:-1px;width:54px;height:2px;border-radius:2px;background:var(--tc)}
+  .fl-em{flex:none;width:28px;height:28px;border-radius:9px;display:grid;place-items:center;background:var(--tc);box-shadow:0 4px 10px color-mix(in srgb,var(--tc) 32%,transparent),inset 0 1px 0 rgba(255,255,255,.35)}
+  .fl-silver .fl-em{background:linear-gradient(150deg,#D9E0E5,#97A4AD 55%,#7E8B94)}
+  .fl-crown .fl-em{background:linear-gradient(150deg,#F4DC94,#CFA046 55%,#B5862E)}
+  .fl-black .fl-em{background:linear-gradient(150deg,#4A5257,#23282B 60%,#121517)}
+  .fl-red .fl-em{background:linear-gradient(150deg,#F28B86,#E0565B 55%,#C8403F)}
+  .fl-none .fl-em{background:linear-gradient(150deg,#8FDDBB,#3FAE84 60%,#2F946E)}
+  .fl-em svg{width:15px;height:15px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .fl-tt{display:flex;flex-direction:column;gap:4px;min-width:0}
+  .fl-tt b{font:900 13px/1 'Montserrat','IBM Plex Sans KR',sans-serif;letter-spacing:.14em;color:#1E2A27;white-space:nowrap}
+  .fl-tt small{font:600 9.5px/1 'IBM Plex Sans KR',sans-serif;color:#7C8B86;letter-spacing:.04em;white-space:nowrap}
+  .fl-tt small i{font-style:normal;color:var(--tc);margin:0 1px}
+  .fl-deco{flex:1;align-self:center;height:8px;margin:0 2px 0 6px;opacity:.55;min-width:20px}
+  .fl-red .fl-deco{background:repeating-linear-gradient(-45deg,var(--tc) 0 3px,transparent 3px 7px);-webkit-mask:linear-gradient(90deg,transparent,#000 70%);mask:linear-gradient(90deg,transparent,#000 70%)}
+  .fl-silver .fl-deco{background:repeating-linear-gradient(90deg,var(--tc) 0 1px,transparent 1px 6px) bottom/100% 5px no-repeat,repeating-linear-gradient(90deg,var(--tc) 0 1px,transparent 1px 30px) bottom/100% 8px no-repeat;-webkit-mask:linear-gradient(90deg,transparent,#000 60%);mask:linear-gradient(90deg,transparent,#000 60%)}
+  .fl-crown .fl-deco{height:10px;background:radial-gradient(circle,var(--tc) 0 1.6px,transparent 2px) 100% 50%/14px 10px repeat-x;-webkit-mask:linear-gradient(90deg,transparent,#000 70%);mask:linear-gradient(90deg,transparent,#000 70%);opacity:.7}
+  .fl-black .fl-deco{background:radial-gradient(circle,var(--tc) 0 1px,transparent 1.4px) 0 0/5px 4px;-webkit-mask:linear-gradient(90deg,transparent,#000 65%);mask:linear-gradient(90deg,transparent,#000 65%);opacity:.45}
+  .fl-none .fl-deco{height:7px;background:repeating-linear-gradient(270deg,var(--tc) 0 5px,transparent 5px 9px);border-radius:2px;-webkit-mask:linear-gradient(90deg,transparent,#000 70%);mask:linear-gradient(90deg,transparent,#000 70%);opacity:.4}
+  .fl-th em{flex:none;font:800 10.5px/1 'DM Mono',monospace;font-style:normal;letter-spacing:.08em;color:var(--tc)}
+  .fl-silver .fl-th em{color:#7E8B94}
+  .fl-team .cx-card::after{content:'';position:absolute;left:14px;right:14px;bottom:0;height:3px;border-radius:3px 3px 0 0;background:var(--tc);z-index:3}
+  .fl-team .cx-card.on{outline-color:var(--tc)!important}
+  .cx-grid .cx-card .cx-ov .cx-en{white-space:nowrap!important;overflow:hidden}`;
   document.head.appendChild(st);
   // 이름이 카드보다 길면 글씨를 조금씩 줄여서 한 줄에 다 보이게 해요
   const fit = () => document.querySelectorAll('.cx-card .cx-ov .cx-nm, .cx-card .cx-ov .cx-en').forEach(el => {
