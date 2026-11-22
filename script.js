@@ -6464,3 +6464,5 @@ html.sye-editing #winlayer .cxwin [data-ci] .cx-ov,html.sye-editing #winlayer .c
   };
   run(); [50, 400, 1200, 3000].forEach(t => setTimeout(run, t)); addEventListener('load', () => { setTimeout(run, 50); setTimeout(run, 600); });
 })();
+/* APPLICATIONS 옆 : 숫자 대신 작은 민트 점 (상단 칩의 점과 같은 느낌) */
+(() => { const st = document.createElement('style'); st.textContent = `#desk .apps-panel .panel-tab .sy-cnt{display:inline-block!important;font-size:0!important;color:transparent!important;min-width:0!important;width:6px!important;height:6px!important;padding:0!important;border-radius:50%!important;background:#7FD7B1!important;box-shadow:0 0 0 3px rgba(127,215,177,.22)!important;margin-left:2px!important;vertical-align:middle!important}`; document.head.appendChild(st); })();
