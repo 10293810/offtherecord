@@ -6372,6 +6372,7 @@ html.sye-editing #winlayer .cxwin [data-ci] .cx-ov,html.sye-editing #winlayer .c
   .fl-crown .fl-deco{height:10px;background:radial-gradient(circle,var(--tc) 0 1.6px,transparent 2px) 100% 50%/14px 10px repeat-x;-webkit-mask:linear-gradient(90deg,transparent,#000 70%);mask:linear-gradient(90deg,transparent,#000 70%);opacity:.7}
   .fl-black .fl-deco{background:radial-gradient(circle,var(--tc) 0 1px,transparent 1.4px) 0 0/5px 4px;-webkit-mask:linear-gradient(90deg,transparent,#000 65%);mask:linear-gradient(90deg,transparent,#000 65%);opacity:.45}
   .fl-none .fl-deco{height:7px;background:repeating-linear-gradient(270deg,var(--tc) 0 5px,transparent 5px 9px);border-radius:2px;-webkit-mask:linear-gradient(90deg,transparent,#000 70%);mask:linear-gradient(90deg,transparent,#000 70%);opacity:.4}
+  .fl-em,.fl-tt small{display:none!important}
   .fl-th em{flex:none;font:800 10.5px/1 'DM Mono',monospace;font-style:normal;letter-spacing:.08em;color:var(--tc)}
   .fl-silver .fl-th em{color:#7E8B94}
   .fl-team .cx-card::after{content:'';position:absolute;left:14px;right:14px;bottom:0;height:3px;border-radius:3px 3px 0 0;background:var(--tc);z-index:3}
