@@ -6363,7 +6363,7 @@ html.sye-editing #winlayer .cxwin [data-ci] .cx-ov,html.sye-editing #winlayer .c
   .fl-none .fl-em{background:linear-gradient(150deg,#8FDDBB,#3FAE84 60%,#2F946E)}
   .fl-em svg{width:15px;height:15px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
   .fl-tt{display:flex;flex-direction:column;gap:4px;min-width:0}
-  .fl-tt b{font:900 13px/1 'Montserrat','IBM Plex Sans KR',sans-serif;letter-spacing:.14em;color:#1E2A27;white-space:nowrap}
+  .fl-tt b{font:900 10.5px/1 'Montserrat','IBM Plex Sans KR',sans-serif;letter-spacing:.14em;color:#1E2A27;white-space:nowrap}
   .fl-tt small{font:600 9.5px/1 'IBM Plex Sans KR',sans-serif;color:#7C8B86;letter-spacing:.04em;white-space:nowrap}
   .fl-tt small i{font-style:normal;color:var(--tc);margin:0 1px}
   .fl-deco{flex:1;align-self:center;height:8px;margin:0 2px 0 6px;opacity:.55;min-width:20px}
