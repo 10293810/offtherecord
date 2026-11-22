@@ -4326,7 +4326,7 @@ html.fonts-wait .en-stage{opacity:0}
 .cx-grid .cx-card .cx-ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .cx-grid .cx-card .cx-ov{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:34px 12px 11px;background:linear-gradient(transparent,rgba(20,42,36,.72));color:#fff;pointer-events:none;display:flex;flex-direction:column;gap:2px}
 .cx-grid .cx-card .cx-ov small{display:block!important;margin:0!important;font:700 9px/1.3 'DM Mono',monospace!important;letter-spacing:.1em!important;color:rgba(255,255,255,.88)!important}
-.cx-grid .cx-card .cx-ov .cx-nm{display:block!important;margin:0!important;font:800 14.5px/1.25 'IBM Plex Sans KR',sans-serif!important;color:#fff!important;word-break:keep-all}
+.cx-grid .cx-card .cx-ov .cx-nm{display:block!important;margin:0!important;font:800 14.5px/1.25 'IBM Plex Sans KR',sans-serif!important;color:#fff!important;word-break:keep-all;white-space:normal!important;overflow:visible!important;overflow-wrap:anywhere}
 .cx-grid .cx-card .cx-ov .cx-en{display:block;font:500 10px/1.3 'DM Mono',monospace;font-style:normal;color:rgba(255,255,255,.82)}
 .win.cydet.float .cf-stage .cy-pv{width:min(calc(100% - 70px),360px,calc((100cqh - 18px) * 4 / 5.6))!important}
 .win.cydet.float .cf-stage:not(:has(.cf-side)) .cy-pv{width:min(calc(100% - 20px),380px,calc((100cqh - 18px) * 4 / 5.6))!important}
