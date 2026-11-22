@@ -888,6 +888,8 @@ body.entered #desk .sy-bar i{animation:barFill 1.4s .45s cubic-bezier(.2,.8,.2,1
     setTimeout(() => { document.body.classList.add('entered'); startToasts(); IN.classList.add('out'); }, 1050);
     setTimeout(() => IN.remove(), 2000);
   });
+  // 주인 모드에서 글 · 사진을 저장하고 다시 불러올 땐 입장 화면 없이 바로 메인으로 (고치던 창은 다시 열려요)
+  if (OWNER && SYE_FAST) { leaving = true; IN.style.display = 'none'; document.body.classList.add('entered'); IN.classList.add('out'); try { startToasts(); } catch (e) {} setTimeout(() => IN.remove(), 30); }
 })();
 
 /* =========================================================
