@@ -5114,18 +5114,18 @@ const FX = (() => {
   const mini = (r, col) => { c.lineCap = 'round'; c.lineWidth = Math.max(.8, r * .28); c.strokeStyle = col; c.beginPath(); for (let i = 0; i < 3; i++) { const t = i * Math.PI / 3; c.moveTo(Math.sin(t) * r, -Math.cos(t) * r); c.lineTo(-Math.sin(t) * r, Math.cos(t) * r); } c.stroke(); };
   const draw = f => { const k = Math.min(1, f.t / DUR), s = f.s; c.save(); c.translate(f.x, f.y);
     // 얇은 얼음 링
-    c.globalAlpha = (1 - k) * .8; c.beginPath(); c.arc(0, 0, (7 + 30 * out(k)) * s, 0, Math.PI * 2); c.lineWidth = Math.max(.01, 1.6 * s * (1 - k)); c.strokeStyle = SOFT; c.stroke();
+    c.globalAlpha = (1 - k) * .8; c.beginPath(); c.arc(0, 0, (6 + 26 * out(k)) * s, 0, Math.PI * 2); c.lineWidth = Math.max(.01, 1.6 * s * (1 - k)); c.strokeStyle = SOFT; c.stroke();
     // 흩날리는 작은 눈 결정 (밖으로 퍼지다 살짝 내려앉아요)
-    f.bits.forEach((b, i) => { const p = out(k), d = (10 + b.d * p) * s, x = Math.cos(b.a) * d, y = Math.sin(b.a) * d + 14 * s * k * k;
+    f.bits.forEach((b, i) => { const p = out(k), d = (10 + b.d * p) * s, x = Math.cos(b.a) * d, y = Math.sin(b.a) * d + 10 * s * k * k;
       c.save(); c.globalAlpha = Math.max(0, 1 - Math.pow(k, 1.6)) * (.75 + .25 * Math.sin(k * 18 + i)); c.translate(x, y); c.rotate(b.rot + k * b.spin);
       if (b.dot) { c.beginPath(); c.arc(0, 0, b.r * s * .55, 0, Math.PI * 2); c.fillStyle = b.col; c.fill(); } else mini(b.r * s * (1 - k * .3), b.col); c.restore(); });
     // 가운데 큰 눈송이 : 톡 튀어나와 30° 돌면서 작아져요
-    const R = 13 * s * Math.max(0, k < .3 ? back(k / .3) : 1 - out((k - .3) / .7) * .85), A = Math.max(0, k < .55 ? 1 : 1 - (k - .55) / .45);
+    const R = 10 * s * Math.max(0, k < .3 ? back(k / .3) : 1 - out((k - .3) / .7) * .85), A = Math.max(0, k < .55 ? 1 : 1 - (k - .55) / .45);
     if (R > .5 && A > 0) { c.globalAlpha = A; c.rotate(f.r + out(k) * Math.PI / 6); c.shadowColor = 'rgba(166,230,207,.9)'; c.shadowBlur = 6 * s; flake(R, Math.max(1, R * .095), MINT, '#fff'); c.shadowBlur = 0; c.globalAlpha = A * .9; flake(R * .96, Math.max(.4, R * .03), '#fff', '#fff'); }
     c.restore(); };
   const loop = now => { const dt = Math.max(0, Math.min(.05, (now - last) / 1000)); last = now; c.clearRect(0, 0, W, H);
     for (let i = L.length - 1; i >= 0; i--) { L[i].t += dt; if (L[i].t >= DUR) L.splice(i, 1); else draw(L[i]); } raf = L.length ? requestAnimationFrame(loop) : 0; if (!raf) c.clearRect(0, 0, W, H); };
-  const mk = () => { const r0 = Math.random() * Math.PI * 2; return Array.from({ length: 7 }, (_, i) => ({ a: r0 + i * Math.PI * 2 / 7 + (Math.random() - .5) * .5, d: 22 + Math.random() * 16, r: 2.6 + Math.random() * 1.8, rot: Math.random() * Math.PI, spin: (Math.random() - .5) * 4, dot: i % 3 === 2, col: i % 2 ? MINT : SOFT })); };
+  const mk = () => { const r0 = Math.random() * Math.PI * 2; return Array.from({ length: 7 }, (_, i) => ({ a: r0 + i * Math.PI * 2 / 7 + (Math.random() - .5) * .5, d: 16 + Math.random() * 12, r: 2.2 + Math.random() * 1.4, rot: Math.random() * Math.PI, spin: (Math.random() - .5) * 4, dot: i % 3 === 2, col: i % 2 ? MINT : SOFT })); };
   return { burst(x, y, s) { L.push({ x, y, s: s || 1, t: 0, r: Math.random() * Math.PI / 3, bits: mk() }); if (!raf) { last = performance.now(); raf = requestAnimationFrame(loop); } }, _draw: (f) => draw(f), _mk: mk, _c: () => c };
 })();
 // 끌기(창 옮기기 등)는 빼고, 제자리 클릭 · 탭에만
