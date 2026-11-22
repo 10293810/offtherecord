@@ -6464,5 +6464,7 @@ html.sye-editing #winlayer .cxwin [data-ci] .cx-ov,html.sye-editing #winlayer .c
   };
   run(); [50, 400, 1200, 3000].forEach(t => setTimeout(run, t)); addEventListener('load', () => { setTimeout(run, 50); setTimeout(run, 600); });
 })();
-/* APPLICATIONS 옆 : 숫자 대신 작은 민트 점 (상단 칩의 점과 같은 느낌) */
-(() => { const st = document.createElement('style'); st.textContent = `#desk .apps-panel .panel-tab .sy-cnt{display:inline-block!important;font-size:0!important;color:transparent!important;min-width:0!important;width:6px!important;height:6px!important;padding:0!important;border-radius:50%!important;background:#7FD7B1!important;box-shadow:0 0 0 3px rgba(127,215,177,.22)!important;margin-left:2px!important;vertical-align:middle!important}`; document.head.appendChild(st); })();
+/* APPLICATIONS 옆 : 숫자 대신 작은 민트 점 (상단 칩의 점과 같은 느낌) — 색 정리에 안 옅어지게 점에 직접 칠해요 */
+(() => { const st = document.createElement('style'); st.textContent = `#desk .apps-panel .panel-tab .sy-cnt{display:inline-block!important;font-size:0!important;color:transparent!important;min-width:0!important;width:6px!important;height:6px!important;padding:0!important;border-radius:50%!important;margin-left:2px!important;vertical-align:middle!important}`; document.head.appendChild(st);
+  const paint = () => document.querySelectorAll('.apps-panel .panel-tab .sy-cnt').forEach(e => { e.style.setProperty('background', '#7FD7B1', 'important'); e.style.setProperty('box-shadow', '0 0 0 3px rgba(127,215,177,.22)', 'important'); });
+  paint(); [100, 800, 2500].forEach(t => setTimeout(paint, t)); addEventListener('load', () => setTimeout(paint, 100)); })();
