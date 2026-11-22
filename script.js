@@ -6424,3 +6424,34 @@ html.sye-editing #winlayer .cxwin [data-ci] .cx-ov,html.sye-editing #winlayer .c
   .cx-grid .cx-card .cx-ov .cx-en{white-space:nowrap!important;overflow:hidden}`;
   document.head.appendChild(st);
 })();
+/* ---------- 색감 정리 (퓨어.kr 처럼) : 바탕 · 선은 차분한 쿨그레이 · 글씨는 깊은 먹색 · 포인트는 맑은 민트 하나 ----------
+   (모든 CSS 규칙의 초록 · 청록 계열 색을 밝기에 따라 세 갈래로 다시 칠해요 — 사진 색은 그대로) */
+(() => {
+  if (window.__noPurePal) return;
+  const toHsl = (r, g, b) => { r /= 255; g /= 255; b /= 255; const mx = Math.max(r, g, b), mn = Math.min(r, g, b), l = (mx + mn) / 2; let h = 0, s = 0;
+    if (mx !== mn) { const d = mx - mn; s = l > .5 ? d / (2 - mx - mn) : d / (mx + mn); h = mx === r ? (g - b) / d + (g < b ? 6 : 0) : mx === g ? (b - r) / d + 2 : (r - g) / d + 4; h *= 60; } return [h, s, l]; };
+  const toRgb = (h, s, l) => { const k = n => (n + h / 30) % 12, a = s * Math.min(l, 1 - l), f = n => l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1))); return [f(0), f(8), f(4)].map(x => Math.round(x * 255)); };
+  const HA = 154;                      // 대표 민트 (바탕에 깔던 연한 민트빛 계열)
+  const shift = (r, g, b) => { let [h, s, l] = toHsl(+r, +g, +b);
+    const greenish = h >= 95 && h <= 205;
+    if (!greenish) return null;
+    if (s < .22) { if (l > .97) return null; return toRgb(214, Math.min(s, .1), l); }          // 초록빛 도는 회색 → 차분한 쿨그레이
+    if (l < .3) return toRgb(222, .12, Math.min(l, .11) + .01);                                  // 진한 초록 글씨 · 선 → 먹색
+    if (l >= .84) return toRgb(212, .2, Math.max(l, .9));                                        // 아주 연한 민트 바탕 → 쿨 화이트
+    if (l >= .66) return toRgb(HA, .5, Math.max(l, .8));                                         // 연한 민트 → 파스텔 민트 (대표색)
+    return toRgb(HA, .42, Math.max(.52, Math.min(.62, l + .1)));                                 // 중간 민트 · 청록 → 부드러운 민트 하나 (글씨 · 선용)
+  };
+  const remap = txt => txt.replace(/rgba?\(\s*(\d+),\s*(\d+),\s*(\d+)(\s*,\s*[\d.]+)?\s*\)/g, (m, r, g, b, a) => { const c = shift(r, g, b); return c ? (a ? `rgba(${c.join(', ')}${a})` : `rgb(${c.join(', ')})`) : m; })
+    .replace(/#([0-9a-f]{6}|[0-9a-f]{3})\b/gi, (m, hx) => { if (hx.length === 3) hx = hx.split('').map(x => x + x).join(''); const c = shift(parseInt(hx.slice(0, 2), 16), parseInt(hx.slice(2, 4), 16), parseInt(hx.slice(4, 6), 16)); return c ? '#' + c.map(v => v.toString(16).padStart(2, '0')).join('') : m; });
+  const run = () => {
+    const out = [];
+    const walk = rules => { for (const r of rules) {
+      if (r.cssRules && (r.type === 4 || r.type === 12)) { const save = out.length; walk(r.cssRules); const got = out.splice(save); if (got.length) out.push(`@media ${r.conditionText || r.media.mediaText}{${got.join('')}}`); continue; }
+      if (r.selectorText && /rgb|#[0-9a-f]{3}/i.test(r.style.cssText)) { const t = remap(r.style.cssText); if (t !== r.style.cssText) out.push(`${r.selectorText}{${t}}`); }
+    } };
+    for (const sh of document.styleSheets) { if (sh.ownerNode && sh.ownerNode.id === 'pure-pal') continue; try { walk(sh.cssRules); } catch (e) {} }
+    let st = document.getElementById('pure-pal'); if (!st) { st = document.createElement('style'); st.id = 'pure-pal'; }
+    st.textContent = out.join('\n'); document.head.appendChild(st);
+  };
+  run(); setTimeout(run, 50); addEventListener('load', () => setTimeout(run, 50));
+})();
