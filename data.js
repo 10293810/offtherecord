@@ -1,5 +1,5 @@
 /* =========================================================
-   data.js — 홈페이지 내용 (✎ EDIT → 홈페이지에 저장 · 2026. 11. 22. 오전 2:45:23)
+   data.js — 홈페이지 내용 (✎ EDIT → 홈페이지에 저장 · 2026. 11. 23. 오전 1:26:59)
    - 홈페이지 주소 끝에 ?owner 를 붙여 들어가면 ✎ EDIT 로 바로 고칠 수 있어요.
    - 사진은 media/ 폴더에 있어요.
    ========================================================= */
@@ -2254,7 +2254,6 @@ const SITE = {
           {
             "group": "prima",
             "name": "캐릭터 A",
-            "duo": [{"name": "파트너 A", "en": "Partner", "tag": "PARTNER", "theme": "light", "badge": "", "level": "[ PARTNER FILE ]", "quote": "‘캐릭터 A의 상대 캐릭터예요. 한 줄 소개를 적어 주세요.’", "card": "", "avatar": "", "hero": "", "gallery": ["", "", ""], "sections": [{"type": "table", "title": "PARTNER PROFILE", "rows": [["NAME", "이름"], ["RELATION", "캐릭터 A와의 관계"], ["AGE", "00"]]}]}],
             "en": "Agent A",
             "attr": "무속성",
             "attrColor": "#7fb8c8",
@@ -2312,7 +2311,6 @@ const SITE = {
           {
             "group": "prima",
             "name": "캐릭터 B",
-            "duo": [{"name": "파트너 B", "en": "Partner", "tag": "PARTNER", "theme": "light", "badge": "", "level": "[ PARTNER FILE ]", "quote": "‘캐릭터 B의 상대 캐릭터예요. 한 줄 소개를 적어 주세요.’", "card": "", "avatar": "", "hero": "", "gallery": ["", "", ""], "sections": [{"type": "table", "title": "PARTNER PROFILE", "rows": [["NAME", "이름"], ["RELATION", "캐릭터 B와의 관계"], ["AGE", "00"]]}]}],
             "en": "Agent B",
             "attr": "전기 속성",
             "attrColor": "#e8b93a",
@@ -2421,7 +2419,6 @@ const SITE = {
           {
             "group": "v1",
             "name": "캐릭터 C",
-            "duo": [{"name": "파트너 C", "en": "Partner", "tag": "PARTNER", "theme": "light", "badge": "", "level": "[ PARTNER FILE ]", "quote": "‘캐릭터 C의 상대 캐릭터예요. 한 줄 소개를 적어 주세요.’", "card": "", "avatar": "", "hero": "", "gallery": ["", "", ""], "sections": [{"type": "table", "title": "PARTNER PROFILE", "rows": [["NAME", "이름"], ["RELATION", "캐릭터 C와의 관계"], ["AGE", "00"]]}]}],
             "en": "Agent C",
             "attr": "불 속성",
             "attrColor": "#e5534b",
@@ -2469,7 +2466,6 @@ const SITE = {
           {
             "group": "v1",
             "name": "캐릭터 D",
-            "duo": [{"name": "파트너 D", "en": "Partner", "tag": "PARTNER", "theme": "light", "badge": "", "level": "[ PARTNER FILE ]", "quote": "‘캐릭터 D의 상대 캐릭터예요. 한 줄 소개를 적어 주세요.’", "card": "", "avatar": "", "hero": "", "gallery": ["", "", ""], "sections": [{"type": "table", "title": "PARTNER PROFILE", "rows": [["NAME", "이름"], ["RELATION", "캐릭터 D와의 관계"], ["AGE", "00"]]}]}],
             "en": "Agent D",
             "attr": "바람 속성",
             "attrColor": "#4cbf7a",
@@ -2545,9 +2541,9 @@ const SITE = {
         "no": "CH-04",
         "member": [
           {
-            "dept": "소속",
-            "name": "캐릭터 5",
-            "en": "Character Five",
+            "dept": "RED ZONE",
+            "name": "Yvelyn Sinclair",
+            "en": "이블린 싱클레어",
             "quote": "한 줄 소개가 들어가요",
             "tags": [
               "#태그"
@@ -2751,6 +2747,76 @@ const SITE = {
                 "replies": []
               }
             ]
+          },
+          {
+            "dept": "소속",
+            "name": "새 캐릭터 5",
+            "en": "New Character 5",
+            "quote": "한 줄 소개를 적어 주세요",
+            "tags": [
+              "#태그"
+            ],
+            "spec": [
+              [
+                "AGE",
+                "00"
+              ],
+              [
+                "HEIGHT",
+                "000"
+              ],
+              [
+                "BIRTH",
+                "00.00"
+              ],
+              [
+                "LOVER",
+                "연인 이름"
+              ]
+            ],
+            "card": "",
+            "photo": "",
+            "theme": {
+              "title": "CHARACTER SONG",
+              "src": ""
+            },
+            "profile": {
+              "rows": [
+                [
+                  "좋아하는 것",
+                  "내용"
+                ],
+                [
+                  "싫어하는 것",
+                  "내용"
+                ],
+                [
+                  "특징",
+                  "내용"
+                ]
+              ],
+              "personality": "성격을 적어 주세요.",
+              "memo": "짧은 메모를 적어 주세요."
+            },
+            "prompts": [
+              {
+                "title": "기본 외형",
+                "text": "프롬프트를 적어요"
+              }
+            ],
+            "gallery": [
+              "",
+              "",
+              ""
+            ],
+            "music": [
+              {
+                "title": "노래 제목",
+                "artist": "가수",
+                "src": ""
+              }
+            ],
+            "talk": []
           }
         ],
         "pair": [],
@@ -3699,5 +3765,8 @@ const SITE = {
   ],
 
   // 화면에서 직접 바꾼 글자 (원래 글자 → 바꾼 글자)
-  "textOverrides": {}
+  "textOverrides": {},
+
+  // 사진 위치 · 크기 (사진 자리에서 조절)
+  "imgPos": {}
 };
