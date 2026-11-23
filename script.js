@@ -6754,3 +6754,23 @@ html.sye-editing #winlayer .cxwin [data-ci] .cx-ov,html.sye-editing #winlayer .c
 /* Linked 처방전 띠 : 왼쪽 민트 → 오른쪽 연한 회색 (사진 속 그대로) */
 (() => { const st = document.createElement('style'); st.textContent = '.dz-cct{background:linear-gradient(90deg,var(--rx1) 0%,var(--rx2) 100%)!important}'; document.head.appendChild(st);
   document.documentElement.style.setProperty('--rx1', 'rgb(176, 224, 202)'); document.documentElement.style.setProperty('--rx2', 'rgb(226, 229, 233)'); })();
+
+/* 큰 민트 글씨 (배너 D+ 숫자 · 입장화면 UNRELEASED · PU · OTR 의 T …) : 아이콘 창 큰 숫자(01 · 04)와 같은 연한 민트로 */
+(() => {
+  const R = document.documentElement.style; R.setProperty('--bgm1', 'rgb(195, 233, 217)'); R.setProperty('--bgm2', 'rgb(181, 227, 207)');
+  const mintRgb = s => { const m = (s || '').match(/rgba?\(\s*(\d+),\s*(\d+),\s*(\d+)/); return m && +m[2] > +m[1] + 25 && +m[2] > 150; };
+  const fix = () => {
+    document.querySelectorAll('body *').forEach(e => {
+      if (e.closest('#winlayer') || e.hasAttribute('data-bigm')) return;
+      if (![...e.childNodes].some(n => n.nodeType === 3 && n.textContent.trim())) return;
+      const cs = getComputedStyle(e); if (parseFloat(cs.fontSize) < 18) return;
+      const clip = cs.webkitBackgroundClip || cs.backgroundClip;
+      if (clip === 'text' && cs.backgroundImage !== 'none') {
+        if (!mintRgb(cs.backgroundImage)) return;
+        e.setAttribute('data-bigm', ''); e.style.setProperty('background-image', 'linear-gradient(160deg,var(--bgm1),var(--bgm2) 70%)', 'important');
+      } else if (mintRgb(cs.color)) { e.setAttribute('data-bigm', ''); e.style.setProperty('color', 'var(--bgm2)', 'important'); }
+    });
+  };
+  let t = 0; const go = () => { clearTimeout(t); t = setTimeout(fix, 80); };
+  new MutationObserver(go).observe(document.body, { childList: true, subtree: true }); go(); setTimeout(go, 1500); setTimeout(go, 4000);
+})();
