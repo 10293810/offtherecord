@@ -1,5 +1,5 @@
 /* =========================================================
-   data.js — 홈페이지 내용 (✎ EDIT → 홈페이지에 저장 · 2026. 11. 24. 오전 12:53:52)
+   data.js — 홈페이지 내용 (✎ EDIT → 홈페이지에 저장 · 2026. 11. 24. 오전 1:12:16)
    - 홈페이지 주소 끝에 ?owner 를 붙여 들어가면 ✎ EDIT 로 바로 고칠 수 있어요.
    - 사진은 media/ 폴더에 있어요.
    ========================================================= */
@@ -2025,7 +2025,18 @@ const SITE = {
     "worlds": {
       "seiran": {
         "grades": true,
-        "info": {"en": "Tokyo Seiran University", "est": "1948", "place": "東京都 世田谷区", "type": "私立総合大学", "students": "約 12,000名", "rep": "首都圏 中上位圏", "campus": "世田谷キャンパス", "motto": "自由·知性·創造", "color": "青藍", "nick": "青藍大"},
+        "info": {
+          "en": "Tokyo Seiran University",
+          "est": "1948",
+          "place": "東京都 世田谷区",
+          "type": "私立総合大学",
+          "students": "約 12,000名",
+          "rep": "首都圏 中上位圏",
+          "campus": "世田谷キャンパス",
+          "motto": "自由·知性·創造",
+          "color": "青藍",
+          "nick": "青藍大"
+        },
         "name": "東京青藍大学",
         "no": "CH-03",
         "member": [
@@ -2131,7 +2142,8 @@ const SITE = {
                 "text": "리뷰 내용을 적어주세요.",
                 "replies": []
               }
-            ]
+            ],
+            "year": "3年生"
           },
           {
             "dept": "言語学部",
@@ -2235,7 +2247,8 @@ const SITE = {
                 "text": "리뷰 내용을 적어주세요.",
                 "replies": []
               }
-            ]
+            ],
+            "year": "1年生"
           },
           {
             "dept": "デザイン学部",
@@ -2339,7 +2352,8 @@ const SITE = {
                 "text": "리뷰 내용을 적어주세요.",
                 "replies": []
               }
-            ]
+            ],
+            "year": "4年生"
           },
           {
             "dept": "소속",
@@ -2409,7 +2423,8 @@ const SITE = {
                 "src": ""
               }
             ],
-            "talk": []
+            "talk": [],
+            "year": "2年生"
           },
           {
             "dept": "소속",
@@ -2542,7 +2557,64 @@ const SITE = {
         "style": "roster",
         "term": "ARCH TERMINAL",
         "footer": "ARCH CENTER",
-        "groups": [{"key": "prima", "name": "ARCH-PRIMA", "cls": "SS-CLASS", "color": "#5093D1", "clsColor": "#5296D5"}, {"key": "v1", "name": "VANGUARD 1팀", "cls": "S-CLASS", "color": "#D15644", "clsColor": "#D65745"}, {"key": "v2", "name": "VANGUARD 2팀", "cls": "S-CLASS", "color": "#DD68A0", "clsColor": "#D65745"}, {"key": "agent", "name": "AGENT", "cls": "A-B CLASS", "color": "#E19C3B", "clsColor": "#E7A03C"}, {"key": "acolyte", "name": "ACOLYTE", "cls": "C-CLASS", "color": "#7F898A", "clsColor": "#818C8D"}, {"key": "hsupport", "name": "HARMONY DIV.", "cls": "SUPPORT", "color": "#95A1A2", "clsColor": "#98A5A6"}, {"key": "hrst", "name": "HARMONY DIV.", "cls": "R.S.T. (긴급제압팀)", "color": "#64C678", "clsColor": "#98A5A6"}, {"key": "hcore", "name": "HARMONY DIV.", "cls": "CORE", "color": "#AB9BD2", "clsColor": "#AB9BD2"}],
+        "groups": [
+          {
+            "key": "prima",
+            "name": "ARCH-PRIMA",
+            "cls": "SS-CLASS",
+            "color": "#5093D1",
+            "clsColor": "#5296D5"
+          },
+          {
+            "key": "v1",
+            "name": "VANGUARD 1팀",
+            "cls": "S-CLASS",
+            "color": "#D15644",
+            "clsColor": "#D65745"
+          },
+          {
+            "key": "v2",
+            "name": "VANGUARD 2팀",
+            "cls": "S-CLASS",
+            "color": "#DD68A0",
+            "clsColor": "#D65745"
+          },
+          {
+            "key": "agent",
+            "name": "AGENT",
+            "cls": "A-B CLASS",
+            "color": "#E19C3B",
+            "clsColor": "#E7A03C"
+          },
+          {
+            "key": "acolyte",
+            "name": "ACOLYTE",
+            "cls": "C-CLASS",
+            "color": "#7F898A",
+            "clsColor": "#818C8D"
+          },
+          {
+            "key": "hsupport",
+            "name": "HARMONY DIV.",
+            "cls": "SUPPORT",
+            "color": "#95A1A2",
+            "clsColor": "#98A5A6"
+          },
+          {
+            "key": "hrst",
+            "name": "HARMONY DIV.",
+            "cls": "R.S.T. (긴급제압팀)",
+            "color": "#64C678",
+            "clsColor": "#98A5A6"
+          },
+          {
+            "key": "hcore",
+            "name": "HARMONY DIV.",
+            "cls": "CORE",
+            "color": "#AB9BD2",
+            "clsColor": "#AB9BD2"
+          }
+        ],
         "member": [
           {
             "group": "prima",
@@ -3291,6 +3363,76 @@ const SITE = {
             "dept": "소속",
             "name": "새 캐릭터 6",
             "en": "New Character 6",
+            "quote": "한 줄 소개를 적어 주세요",
+            "tags": [
+              "#태그"
+            ],
+            "spec": [
+              [
+                "AGE",
+                "00"
+              ],
+              [
+                "HEIGHT",
+                "000"
+              ],
+              [
+                "BIRTH",
+                "00.00"
+              ],
+              [
+                "LOVER",
+                "연인 이름"
+              ]
+            ],
+            "card": "",
+            "photo": "",
+            "theme": {
+              "title": "CHARACTER SONG",
+              "src": ""
+            },
+            "profile": {
+              "rows": [
+                [
+                  "좋아하는 것",
+                  "내용"
+                ],
+                [
+                  "싫어하는 것",
+                  "내용"
+                ],
+                [
+                  "특징",
+                  "내용"
+                ]
+              ],
+              "personality": "성격을 적어 주세요.",
+              "memo": "짧은 메모를 적어 주세요."
+            },
+            "prompts": [
+              {
+                "title": "기본 외형",
+                "text": "프롬프트를 적어요"
+              }
+            ],
+            "gallery": [
+              "",
+              "",
+              ""
+            ],
+            "music": [
+              {
+                "title": "노래 제목",
+                "artist": "가수",
+                "src": ""
+              }
+            ],
+            "talk": []
+          },
+          {
+            "dept": "소속",
+            "name": "새 캐릭터 7",
+            "en": "New Character 7",
             "quote": "한 줄 소개를 적어 주세요",
             "tags": [
               "#태그"
