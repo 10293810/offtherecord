@@ -1,5 +1,5 @@
 /* =========================================================
-   data.js — 홈페이지 내용 (✎ EDIT → 홈페이지에 저장 · 2026. 11. 24. 오전 2:26:19)
+   data.js — 홈페이지 내용 (✎ EDIT → 홈페이지에 저장 · 2026. 11. 24. 오전 2:28:30)
    - 홈페이지 주소 끝에 ?owner 를 붙여 들어가면 ✎ EDIT 로 바로 고칠 수 있어요.
    - 사진은 media/ 폴더에 있어요.
    ========================================================= */
@@ -3161,77 +3161,6 @@ const SITE = {
           },
           {
             "avatar": "",
-            "dept": "CROWN GATE",
-            "name": "새 캐릭터 5",
-            "en": "New Character 5",
-            "quote": "한 줄 소개를 적어 주세요",
-            "tags": [
-              "#태그"
-            ],
-            "spec": [
-              [
-                "AGE",
-                "00"
-              ],
-              [
-                "HEIGHT",
-                "000"
-              ],
-              [
-                "BIRTH",
-                "00.00"
-              ],
-              [
-                "LOVER",
-                "연인 이름"
-              ]
-            ],
-            "card": "",
-            "photo": "",
-            "theme": {
-              "title": "CHARACTER SONG",
-              "src": ""
-            },
-            "profile": {
-              "rows": [
-                [
-                  "좋아하는 것",
-                  "내용"
-                ],
-                [
-                  "싫어하는 것",
-                  "내용"
-                ],
-                [
-                  "특징",
-                  "내용"
-                ]
-              ],
-              "personality": "성격을 적어 주세요.",
-              "memo": "짧은 메모를 적어 주세요."
-            },
-            "prompts": [
-              {
-                "title": "기본 외형",
-                "text": "프롬프트를 적어요"
-              }
-            ],
-            "gallery": [
-              "",
-              "",
-              ""
-            ],
-            "music": [
-              {
-                "title": "노래 제목",
-                "artist": "가수",
-                "src": ""
-              }
-            ],
-            "talk": []
-          },
-          {
-            "avatar": "",
             "dept": "RED ZONE",
             "name": "Héloïse de Belmont",
             "en": "엘로이즈 드 벨몽",
@@ -3257,7 +3186,7 @@ const SITE = {
                 "연인 이름"
               ]
             ],
-            "card": "media/characters_worlds_frontline_member_3_card-mwtj7eu1.jpg",
+            "card": "media/characters_worlds_frontline_member_2_card-mwtjhooe.jpg",
             "photo": "",
             "theme": {
               "title": "CHARACTER SONG",
@@ -3328,7 +3257,7 @@ const SITE = {
                 "연인 이름"
               ]
             ],
-            "card": "media/characters_worlds_frontline_member_4_card-mwtjezuq.jpg",
+            "card": "media/characters_worlds_frontline_member_3_card-mwtjhooe.jpg",
             "photo": "",
             "theme": {
               "title": "CHARACTER SONG",
@@ -3399,78 +3328,7 @@ const SITE = {
                 "연인 이름"
               ]
             ],
-            "card": "media/characters_worlds_frontline_member_5_card-mwtj7eu1.jpg",
-            "photo": "",
-            "theme": {
-              "title": "CHARACTER SONG",
-              "src": ""
-            },
-            "profile": {
-              "rows": [
-                [
-                  "좋아하는 것",
-                  "내용"
-                ],
-                [
-                  "싫어하는 것",
-                  "내용"
-                ],
-                [
-                  "특징",
-                  "내용"
-                ]
-              ],
-              "personality": "성격을 적어 주세요.",
-              "memo": "짧은 메모를 적어 주세요."
-            },
-            "prompts": [
-              {
-                "title": "기본 외형",
-                "text": "프롬프트를 적어요"
-              }
-            ],
-            "gallery": [
-              "",
-              "",
-              ""
-            ],
-            "music": [
-              {
-                "title": "노래 제목",
-                "artist": "가수",
-                "src": ""
-              }
-            ],
-            "talk": []
-          },
-          {
-            "avatar": "",
-            "dept": "소속",
-            "name": "새 캐릭터 7",
-            "en": "New Character 7",
-            "quote": "한 줄 소개를 적어 주세요",
-            "tags": [
-              "#태그"
-            ],
-            "spec": [
-              [
-                "AGE",
-                "00"
-              ],
-              [
-                "HEIGHT",
-                "000"
-              ],
-              [
-                "BIRTH",
-                "00.00"
-              ],
-              [
-                "LOVER",
-                "연인 이름"
-              ]
-            ],
-            "card": "",
+            "card": "media/characters_worlds_frontline_member_4_card-mwtjhooe.jpg",
             "photo": "",
             "theme": {
               "title": "CHARACTER SONG",
