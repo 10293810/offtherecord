@@ -6550,3 +6550,17 @@ html.sye-editing #winlayer .cxwin [data-ci] .cx-ov,html.sye-editing #winlayer .c
 .sye-fm form.cf .ff .del{color:#D9506A;background:#FFF7F9;border-color:#F6DDE3}
 @media (max-width:520px){.sye-fm form.cf .frow{grid-template-columns:1fr}}
 `; document.head.appendChild(st); })();
+
+/* 입장화면 비눗방울 : 살짝 비치는 투명 방울 (무지개빛 테두리 · 하이라이트는 그대로) · 카드에 안 걸치는 빈 자리로 */
+(() => { const st = document.createElement('style'); st.textContent = `
+#intro.gt .gt-ball{left:812px!important;top:44px!important;width:158px!important;height:158px!important}
+#intro.gt .gt-db{background:radial-gradient(circle at 50% 50%,rgba(255,255,255,.03) 0 48%,rgba(255,255,255,.16) 66%,rgba(214,240,231,.5) 86%,rgba(178,224,208,.78) 100%),radial-gradient(circle at 32% 26%,rgba(255,255,255,.3),transparent 45%),radial-gradient(circle at 70% 82%,rgba(160,215,196,.22),transparent 50%)!important;
+  box-shadow:0 24px 36px -24px rgba(47,120,95,.32),0 0 0 1px rgba(160,212,194,.35),inset 0 0 0 1.5px rgba(255,255,255,.95),inset 0 -12px 24px rgba(120,195,170,.2),inset 0 10px 18px rgba(255,255,255,.25)!important;-webkit-backdrop-filter:blur(.6px) saturate(1.08)!important;backdrop-filter:blur(.6px) saturate(1.08)!important}
+#intro.gt .gt-hl{opacity:1}
+#intro.gt .gt-film{filter:blur(1.2px)!important}
+#intro.gt .gt-hl2{opacity:.8}
+#intro.gt .gt-ball::after{content:'';position:absolute;left:-46px;top:96px;width:38px;height:38px;border-radius:50%;background:radial-gradient(circle at 34% 30%,rgba(255,255,255,.9) 0 9%,transparent 16%),radial-gradient(circle,rgba(255,255,255,.02) 0 50%,rgba(214,240,231,.55) 86%,rgba(178,224,208,.8) 100%);box-shadow:0 0 0 1px rgba(160,212,194,.35),inset 0 0 0 1.2px rgba(255,255,255,.95);animation:gt-bob 4.2s 2.2s ease-in-out infinite reverse;pointer-events:none}
+#intro.gt.m .gt-ball{left:auto!important;right:50px!important;top:168px!important;width:52px!important;height:52px!important}
+#intro.gt.m .gt-ball::after{left:-22px;top:40px;width:16px;height:16px}
+@media (min-width:600px){#intro.gt.m .gt-ball{right:16%!important;top:170px!important;width:72px!important;height:72px!important}}
+`; document.head.appendChild(st); })();
