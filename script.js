@@ -6750,3 +6750,7 @@ html.sye-editing #winlayer .cxwin [data-ci] .cx-ov,html.sye-editing #winlayer .c
   const start = () => { const wl = document.getElementById('winlayer'); if (!wl) return setTimeout(start, 300); new MutationObserver(go).observe(wl, { childList: true, subtree: true }); go(); };
   start();
 })();
+
+/* Linked 처방전 띠 : 왼쪽 민트 → 오른쪽 연한 회색 (사진 속 그대로) */
+(() => { const st = document.createElement('style'); st.textContent = '.dz-cct{background:linear-gradient(90deg,var(--rx1) 0%,var(--rx2) 100%)!important}'; document.head.appendChild(st);
+  document.documentElement.style.setProperty('--rx1', 'rgb(176, 224, 202)'); document.documentElement.style.setProperty('--rx2', 'rgb(226, 229, 233)'); })();
