@@ -1,5 +1,5 @@
 /* =========================================================
-   data.js — 홈페이지 내용 (✎ EDIT → 홈페이지에 저장 · 2026. 11. 24. 오전 1:20:22)
+   data.js — 홈페이지 내용 (✎ EDIT → 홈페이지에 저장 · 2026. 11. 24. 오전 1:33:51)
    - 홈페이지 주소 끝에 ?owner 를 붙여 들어가면 ✎ EDIT 로 바로 고칠 수 있어요.
    - 사진은 media/ 폴더에 있어요.
    ========================================================= */
@@ -2147,8 +2147,8 @@ const SITE = {
           },
           {
             "dept": "言語学部",
-            "name": "캐릭터 2",
-            "en": "Character Two",
+            "name": "한사랑",
+            "en": "Han Sarang",
             "quote": "한 줄 소개가 들어가요",
             "tags": [
               "#태그"
@@ -2171,7 +2171,7 @@ const SITE = {
                 "연인 이름"
               ]
             ],
-            "card": "",
+            "card": "media/characters_worlds_seiran_member_1_card-mwthjg5c.jpg",
             "photo": "",
             "theme": {
               "title": "CHARACTER SONG",
@@ -2248,12 +2248,12 @@ const SITE = {
                 "replies": []
               }
             ],
-            "year": "1年生"
+            "year": "3年生"
           },
           {
             "dept": "デザイン学部",
-            "name": "캐릭터 3",
-            "en": "Character Three",
+            "name": "한하나",
+            "en": "Han Hana",
             "quote": "한 줄 소개가 들어가요",
             "tags": [
               "#태그"
@@ -2276,7 +2276,7 @@ const SITE = {
                 "연인 이름"
               ]
             ],
-            "card": "",
+            "card": "media/characters_worlds_seiran_member_2_card-mwthjg5c.jpg",
             "photo": "",
             "theme": {
               "title": "CHARACTER SONG",
@@ -2427,9 +2427,9 @@ const SITE = {
             "year": "2年生"
           },
           {
-            "dept": "소속",
-            "name": "새 캐릭터 5",
-            "en": "New Character 5",
+            "dept": "人文学部",
+            "name": "연유이",
+            "en": "Yeon Yui",
             "quote": "한 줄 소개를 적어 주세요",
             "tags": [
               "#태그"
@@ -2494,7 +2494,8 @@ const SITE = {
                 "src": ""
               }
             ],
-            "talk": []
+            "talk": [],
+            "year": "3年生"
           }
         ],
         "pair": [
@@ -4449,5 +4450,16 @@ const SITE = {
   "textOverrides": {},
 
   // 사진 위치 · 크기 (사진 자리에서 조절)
-  "imgPos": {}
+  "imgPos": {
+    "characters.worlds.seiran.member.2.card": [
+      50,
+      50,
+      1.1
+    ],
+    "characters.worlds.seiran.member.1.card": [
+      50,
+      50,
+      1.1
+    ]
+  }
 };
