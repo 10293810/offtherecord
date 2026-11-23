@@ -6722,3 +6722,6 @@ html.sye-editing #winlayer .cxwin [data-ci] .cx-ov,html.sye-editing #winlayer .c
 .sye-fm .pic-row input{flex:1;min-width:0}
 .sye-fm .pic-th{flex:none;width:52px;height:52px;border-radius:12px;object-fit:cover;border:1px solid #E3E9ED;box-shadow:0 2px 6px rgba(20,30,40,.08)}
 `; document.head.appendChild(st); })();
+/* 전체 화면 왼쪽 위 · 오른쪽 아래 모서리 : 아주 연한 민트 그라데이션 (색 정리에 안 바뀌게 변수로 칠해요) */
+(() => { const st = document.createElement('style'); st.textContent = 'html body #desk,html.m7 body #desk{background-image:radial-gradient(circle,rgba(60,72,90,.13) 1px,transparent 1.5px),radial-gradient(46% 42% at 0% 0%,var(--glow),transparent 72%),radial-gradient(46% 42% at 100% 100%,var(--glow),transparent 72%)!important;background-size:18px 18px,100% 100%,100% 100%!important;background-repeat:repeat,no-repeat,no-repeat!important;background-position:9px 9px,0 0,0 0!important}'; document.head.appendChild(st);
+  const d = () => { const e = document.getElementById('desk'); if (e) e.style.setProperty('--glow', 'rgba(214,243,230,.55)'); else setTimeout(d, 100); }; d(); })();
