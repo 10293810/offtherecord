@@ -6724,4 +6724,7 @@ html.sye-editing #winlayer .cxwin [data-ci] .cx-ov,html.sye-editing #winlayer .c
 `; document.head.appendChild(st); })();
 /* 전체 화면 왼쪽 위 · 오른쪽 아래 모서리 : 아주 연한 민트 그라데이션 (색 정리에 안 바뀌게 변수로 칠해요) */
 (() => { const st = document.createElement('style'); st.textContent = 'html body #desk,html.m7 body #desk{background-image:radial-gradient(circle,rgba(60,72,90,.13) 1px,transparent 1.5px),radial-gradient(46% 42% at 0% 0%,var(--glow),transparent 72%),radial-gradient(46% 42% at 100% 100%,var(--glow),transparent 72%)!important;background-size:18px 18px,100% 100%,100% 100%!important;background-repeat:repeat,no-repeat,no-repeat!important;background-position:9px 9px,0 0,0 0!important}'; document.head.appendChild(st);
-  const d = () => { const e = document.getElementById('desk'); if (e) e.style.setProperty('--glow', 'rgba(218,244,232,.38)'); else setTimeout(d, 100); }; d(); })();
+  const d = () => { const e = document.getElementById('desk'); if (e) e.style.setProperty('--glow', 'rgba(214,243,230,.55)'); else setTimeout(d, 100); }; d(); })();
+/* 입장화면 · 비밀번호 화면 모서리도 같은 아주 연한 민트 */
+(() => { const st = document.createElement('style'); st.textContent = '#intro.gt .gt-blob.b1,#intro.gt .gt-blob.b2{background:var(--glowb)!important;opacity:.6!important}'; document.head.appendChild(st);
+  const d = () => { const e = document.getElementById('intro'); if (e) e.style.setProperty('--glowb', 'rgb(210,242,227)'); else if (document.readyState !== 'complete') setTimeout(d, 60); }; d(); })();
