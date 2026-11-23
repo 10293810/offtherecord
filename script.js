@@ -2671,14 +2671,12 @@ function teamsOf(W) { return W && (W.teams || (W === (S.characters?.worlds || {}
 function cxCardHTML(m, i, isOn) { return `<button class="cx-card ${isOn(i) ? 'on' : ''}" data-ci="${i}">
           ${ph(m.card, { cls: 'cx-ph', seed: m.name + i })}
           <span class="cx-ov"><small>${esc(m.dept)}</small><span class="cx-nm">${esc(m.name)}</span>${m.en ? `<em class="cx-en">${esc(m.en)}</em>` : ''}</span></button>`; }
-// 東京青藍大学 : 학년별 (1年生 ~ 4年生 · 학년 없으면 맨 아래) + 위에 학교 소개 카드
+// 東京青藍大学 : 학년별 (1年生 ~ 4年生 · 학년 없으면 맨 아래)
 const GR_Y = [['1年生', 'FRESHMAN', '#8DB4E2'], ['2年生', 'SOPHOMORE', '#5B8FCF'], ['3年生', 'JUNIOR', '#3769AE'], ['4年生', 'SENIOR', '#20457E']];
 function gradesHTML(W, list, isOn) {
-  const I = W.info, card = I ? `<div class="sr-info"><div class="sr-ib"><span class="sr-crest">青</span><div class="sr-it"><b>${esc(W.name)}</b><small>${esc(I.en || '')}</small></div><em>EST. ${esc(I.est || '')}</em></div>
-    <div class="sr-chips">${[I.place, I.campus, I.type, I.students].filter(Boolean).map(x => `<i>${esc(x)}</i>`).join('')}</div>${I.motto ? `<div class="sr-motto"><span>校訓</span>${esc(I.motto)}</div>` : ''}</div>` : '';
-  const Y = [...GR_Y, ['学年未設定', 'UNSET', '#A7B1BA']];
-  return card + Y.map(([y, en, c], k) => { const ms = list.map((m, i) => [m, i]).filter(([m]) => k < 4 ? m.year === y : !GR_Y.some(g => g[0] === m.year)); if (!ms.length) return '';
-    return `<section class="sr-yr" style="--yc:${c}"><div class="sr-yh"><span class="sr-yn">${k < 4 ? k + 1 : '–'}</span><div class="sr-yt"><b>${esc(y)}</b><small>${en}</small></div><span class="sr-yl"></span><em>${String(ms.length).padStart(2, '0')}<i>名</i></em></div>
+  const Y = [...GR_Y, ['学年未設定', '', '#A7B1BA']];
+  return Y.map(([y, en, c], k) => { const ms = list.map((m, i) => [m, i]).filter(([m]) => k < 4 ? m.year === y : !GR_Y.some(g => g[0] === m.year)); if (!ms.length) return '';
+    return `<section class="sr-yr" style="--yc:${c}"><div class="sr-yh"><b class="sr-yt">${esc(y)}</b><span class="sr-yl"></span><em>${String(ms.length).padStart(2, '0')}</em></div>
       <div class="cx-grid">${ms.map(([m, i]) => cxCardHTML(m, i, isOn)).join('')}</div></section>`; }).join('');
 }
 function teamsHTML(W, list, isOn) {
@@ -6614,7 +6612,7 @@ html.sye-editing #winlayer .cxwin [data-ci] .cx-ov,html.sye-editing #winlayer .c
 .sr-yh{display:flex;align-items:center;gap:10px;margin:0 2px 12px}
 .sr-yn{flex:none;width:28px;height:28px;border-radius:9px;display:grid;place-items:center;background:var(--yc);color:#fff;font:900 14px 'Inter',sans-serif;box-shadow:0 4px 10px color-mix(in srgb,var(--yc) 35%,transparent),inset 0 1px 0 rgba(255,255,255,.35)}
 .sr-yt{display:flex;flex-direction:column;gap:2px}
-.sr-yt b{font:800 14px 'Noto Sans JP','IBM Plex Sans KR',sans-serif;color:#18212A;letter-spacing:.02em}
+.sr-yh b.sr-yt{font:800 15px 'Noto Sans JP','IBM Plex Sans KR',sans-serif;color:#18212A;letter-spacing:.02em}
 .sr-yt small{font:800 9px 'Inter',sans-serif;letter-spacing:.16em;color:var(--yc)}
 .sr-yl{flex:1;height:2px;border-radius:2px;margin-left:4px;background:linear-gradient(90deg,var(--yc),color-mix(in srgb,var(--yc) 25%,transparent) 60%,transparent)}
 .sr-yh em{font:900 13px 'Inter',sans-serif;font-style:normal;color:var(--yc)}
