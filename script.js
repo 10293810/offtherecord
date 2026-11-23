@@ -2702,7 +2702,7 @@ function jaDept(v) { const t = String(v).trim().replace(/\s+/g, ''); const m = /
   const J = JP_DEPT[stem] || JP_DEPT[stem.replace(/학$/, '')]; if (!J) return '';
   return J + ({ '학부': '学部', '부': '学部', '학과': '学科', '과': '学科', '대학원': '大学院', '대학': '学部' }[suf] || '学部'); }
 // 東京青藍大学 : 학년별 (1年生 ~ 4年生 · 학년 없으면 맨 아래)
-const GR_Y = [['1年生', 'FRESHMAN', '#C6DAF1'], ['2年生', 'SOPHOMORE', '#86AEDE'], ['3年生', 'JUNIOR', '#4878BC'], ['4年生', 'SENIOR', '#1F4079']];
+const GR_Y = [['1年生', 'FRESHMAN', '#CADDF3'], ['2年生', 'SOPHOMORE', '#A6C4E8'], ['3年生', 'JUNIOR', '#82A9DC'], ['4年生', 'SENIOR', '#5F8ECE']];   // 같은 청람색 · 학년마다 같은 간격으로 조금씩 진하게
 function gradesHTML(W, list, isOn) {
   const Y = [...GR_Y, ['学年未設定', '', '#A7B1BA']];
   return Y.map(([y, en, c], k) => { const ms = list.map((m, i) => [m, i]).filter(([m]) => k < 4 ? m.year === y : !GR_Y.some(g => g[0] === m.year)); if (!ms.length) return '';
