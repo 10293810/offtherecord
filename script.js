@@ -2671,6 +2671,16 @@ function teamsOf(W) { return W && (W.teams || (W === (S.characters?.worlds || {}
 function cxCardHTML(m, i, isOn) { return `<button class="cx-card ${isOn(i) ? 'on' : ''}" data-ci="${i}">
           ${ph(m.card, { cls: 'cx-ph', seed: m.name + i })}
           <span class="cx-ov"><small>${esc(m.dept)}</small><span class="cx-nm">${esc(m.name)}</span>${m.en ? `<em class="cx-en">${esc(m.en)}</em>` : ''}</span></button>`; }
+// 東京青藍大学 : 학년별 (1年生 ~ 4年生 · 학년 없으면 맨 아래) + 위에 학교 소개 카드
+const GR_Y = [['1年生', 'FRESHMAN', '#8DB4E2'], ['2年生', 'SOPHOMORE', '#5B8FCF'], ['3年生', 'JUNIOR', '#3769AE'], ['4年生', 'SENIOR', '#20457E']];
+function gradesHTML(W, list, isOn) {
+  const I = W.info, card = I ? `<div class="sr-info"><div class="sr-ib"><span class="sr-crest">青</span><div class="sr-it"><b>${esc(W.name)}</b><small>${esc(I.en || '')}</small></div><em>EST. ${esc(I.est || '')}</em></div>
+    <div class="sr-chips">${[I.place, I.campus, I.type, I.students].filter(Boolean).map(x => `<i>${esc(x)}</i>`).join('')}</div>${I.motto ? `<div class="sr-motto"><span>校訓</span>${esc(I.motto)}</div>` : ''}</div>` : '';
+  const Y = [...GR_Y, ['学年未設定', 'UNSET', '#A7B1BA']];
+  return card + Y.map(([y, en, c], k) => { const ms = list.map((m, i) => [m, i]).filter(([m]) => k < 4 ? m.year === y : !GR_Y.some(g => g[0] === m.year)); if (!ms.length) return '';
+    return `<section class="sr-yr" style="--yc:${c}"><div class="sr-yh"><span class="sr-yn">${k < 4 ? k + 1 : '–'}</span><div class="sr-yt"><b>${esc(y)}</b><small>${en}</small></div><span class="sr-yl"></span><em>${String(ms.length).padStart(2, '0')}<i>名</i></em></div>
+      <div class="cx-grid">${ms.map(([m, i]) => cxCardHTML(m, i, isOn)).join('')}</div></section>`; }).join('');
+}
 function teamsHTML(W, list, isOn) {
   const T = teamsOf(W).map(t => ({ ...t, match: t.match instanceof RegExp ? t.match : (t.match ? new RegExp(t.match, 'i') : null) })), last = T.find(t => !t.match) || T[T.length - 1];
   const pick = m => T.find(t => t.match && t.match.test(m.dept || '')) || last;
@@ -2711,6 +2721,7 @@ function openChars(wid) {
           <div class="cp-ph">${ph(m.photo, { seed: m.name + i, label: 'PAIR · 16:9' })}${m.since ? `<em class="cp-d">D+${pairDays(m.since)}</em>` : ''}<div class="cp-ov"><b>${esc(A.name || '')}<i>×</i>${esc(B.name || '')}</b><small>${esc(m.en || '')}</small></div></div>
           <div class="cp-f"><span>${esc(m.status || '')}</span><b>페어 프로필 →</b></div></button>`; }).join('')}</div>`
         : W.style === 'roster' ? rosterHTML(W, list, isOn)
+        : W.grades ? gradesHTML(W, list, isOn)
         : teamsOf(W) ? teamsHTML(W, list, isOn)
         : `<div class="cx-grid">${list.map((m, i) => `<button class="cx-card ${isOn(i) ? 'on' : ''}" data-ci="${i}">
           ${ph(m.card, { cls: 'cx-ph', seed: m.name + i })}
@@ -5092,7 +5103,7 @@ function syTheme() {
   for (const sh of document.styleSheets) { let rs; try { rs = sh.cssRules; } catch (e) { continue; } if (rs) walk(rs, false); }
   // 창 안에서 글자 · 그림이 직접 쓰는 색 (style · fill · stroke)
   const fix = el => { if (!(el instanceof Element) || el.closest('.sy-hero,.apps-panel')) return;
-    [el, ...el.querySelectorAll('[style],[fill],[stroke],stop')].forEach(e => { if (e.closest('.rs-blk,.fl-team,[data-keepc]')) return;   // ARCH 그룹 · 속성 색은 그대로
+    [el, ...el.querySelectorAll('[style],[fill],[stroke],stop')].forEach(e => { if (e.closest('.rs-blk,.fl-team,.sr-yr,.sr-info,[data-keepc]')) return;   // ARCH 그룹 · 속성 색은 그대로
       const st = e.getAttribute('style'); if (st) { const n = syMapStr(st); if (n !== st) e.setAttribute('style', n); }
       ['fill', 'stroke', 'stop-color'].forEach(a => { const v = e.getAttribute(a); if (v) { const n = syMapStr(v); if (n !== v) e.setAttribute(a, n); } });
     }); };
@@ -5673,7 +5684,7 @@ html:not(.sye-editing) .cx-add,html:not(.sye-editing) .cd-tags .ed{display:none!
     const rowsOf = rs => (rs || []).map(r => Array.isArray(r) ? r.join(' : ') : r).join('\n');
     const pic = (label, name, has) => `<label class="pic"><span>${label}</span><input type="file" name="${name}" accept="image/*"><small>${has ? '바꿀 때만 골라요 · ' : ''}여기서 고르면 저장할 때 같이 들어가요 (나중에 사진 자리를 눌러서 바꿔도 돼요)</small></label>`;
     if (!isP) { const P = o.profile || {};
-      h += `<div class="sec">기본 (이것만 적어도 돼요)</div>` + fld('이름 *', 'name', o.name) + fld('영어 이름', 'en', o.en) + (world.style === 'roster' ? fld('그룹', 'rgroup', (g => g ? g.name + ' · ' + g.cls : '')((world.groups || []).find(g => g.key === o.group)), 'select', '목록에서 들어갈 줄', ['', ...(world.groups || []).map(g => g.name + ' · ' + g.cls)]) + fld('속성', 'el', rsElOf(o), 'select', '고르면 뱃지 색이 알아서 바뀌어요', Object.keys(RS_EL)) : '') + (teamsOf(world) ? fld('소속팀', 'dept', o.dept || (teamsOf(world).find(x => !x.match) || {}).key, 'select', '고른 팀 칸에 들어가요 · 카드 위 작은 글씨', [...teamsOf(world).map(x => x.key), ...(o.dept && !teamsOf(world).some(x => x.key === o.dept) ? [o.dept] : [])]) : fld('소속 · 학부', 'dept', o.dept, 'text', '카드 위 작은 글씨')) + fld('한 줄 소개', 'quote', o.quote) + fld('태그', 'tags', (o.tags || []).join(', '), 'text', '쉼표로 나눠요 · 예) #다정, #고양이상')
+      h += `<div class="sec">기본 (이것만 적어도 돼요)</div>` + fld('이름 *', 'name', o.name) + fld('영어 이름', 'en', o.en) + (world.style === 'roster' ? fld('그룹', 'rgroup', (g => g ? g.name + ' · ' + g.cls : '')((world.groups || []).find(g => g.key === o.group)), 'select', '목록에서 들어갈 줄', ['', ...(world.groups || []).map(g => g.name + ' · ' + g.cls)]) + fld('속성', 'el', rsElOf(o), 'select', '고르면 뱃지 색이 알아서 바뀌어요', Object.keys(RS_EL)) : '') + (world.grades ? fld('학년', 'year', o.year || '', 'select', '목록에서 학년별로 나눠서 보여줘요', ['', ...GR_Y.map(g => g[0])]) : '') + (teamsOf(world) ? fld('소속팀', 'dept', o.dept || (teamsOf(world).find(x => !x.match) || {}).key, 'select', '고른 팀 칸에 들어가요 · 카드 위 작은 글씨', [...teamsOf(world).map(x => x.key), ...(o.dept && !teamsOf(world).some(x => x.key === o.dept) ? [o.dept] : [])]) : fld('소속 · 학부', 'dept', o.dept, 'text', '카드 위 작은 글씨')) + fld('한 줄 소개', 'quote', o.quote) + fld('태그', 'tags', (o.tags || []).join(', '), 'text', '쉼표로 나눠요 · 예) #다정, #고양이상')
         + pic(o.card ? '카드 사진 바꾸기' : '카드 사진', 'pic', !!o.card)
         + `<details class="more"><summary>더 적기 · 프로필 · 프롬프트 · 노래 (안 적어도 돼요)</summary>`
         + fld('사진 옆 작은 칸', 'spec', rowsOf(o.spec || [['AGE', ''], ['HEIGHT', ''], ['BIRTH', ''], ['LOVER', '']]), 'area', '', 4)
@@ -5732,7 +5743,7 @@ html:not(.sye-editing) .cx-add,html:not(.sye-editing) .cd-tags .ed{display:none!
         if (!card) { card = document.createElement('div'); card.className = 'fcard'; k.before(card); } card.append(k); }); };
     pack(FB);
     const duoRow = (a, b) => { const A = F.elements[a], B = F.elements[b]; const la = A && A.closest('label'), lb = B && B.closest('label'); if (!la || !lb || la.parentElement !== lb.parentElement) return; const r = document.createElement('div'); r.className = 'frow'; la.before(r); r.append(la, lb); };
-    duoRow('name', 'en'); duoRow('rgroup', 'el'); duoRow('alink', 'aname'); duoRow('blink', 'bname');
+    duoRow('name', 'en'); duoRow('rgroup', 'el'); duoRow('year', 'dept'); duoRow('alink', 'aname'); duoRow('blink', 'bname');
     FS = { w, t, i, o }; fm.classList.add('on');
   }
   function commit(msg, w, sel) { pend(); try { localStorage.setItem('sye-draft', JSON.stringify(RAW)); } catch (e) { alert('저장 공간이 부족해서 저장하지 못했어요'); return; }
@@ -5766,6 +5777,7 @@ html:not(.sye-editing) .cx-add,html:not(.sye-editing) .cd-tags .ed{display:none!
     if (!v('name')) { toast('이름을 적어 주세요'); return; }
     if (!isP) {
       ['name', 'en', 'dept', 'quote'].forEach(k => { o[k] = v(k); });
+      if (W()[w].grades) { if (v('year')) o.year = v('year'); else delete o.year; }
       if (W()[w].style === 'roster') { const gk = ((W()[w].groups || []).find(g => g.name + ' · ' + g.cls === v('rgroup')) || {}).key; if (gk) o.group = gk; delete o.grade; o.el = v('el') || '무속성'; o.attr = rsBadge(o.el, ''); o.attrColor = RS_EL[o.el]; }
       o.tags = v('tags').split(',').map(x => x.trim()).filter(Boolean);
       o.spec = lines(v('spec')).map(kv);
@@ -6581,4 +6593,30 @@ html.sye-editing #winlayer .cxwin [data-ci] .cx-ov,html.sye-editing #winlayer .c
 .sye-fm .re-r.talk .re-x{position:absolute;right:8px;top:6px;width:24px!important;height:24px!important;border-radius:50%!important;font-size:13px!important;line-height:1!important;padding:0}
 .sye-fm .rowed:has(.re-r.talk) .re-add{width:100%;margin-top:10px}
 @media (max-width:520px){.sye-fm .re-r.talk{grid-template-columns:1fr 1fr}.sye-fm .re-r.talk .rc:nth-child(3){grid-column:1 / -1}.sye-fm .re-r.talk .rc:nth-child(5),.sye-fm .re-r.talk .rc:nth-child(6){grid-column:1 / -1}}
+`; document.head.appendChild(st); })();
+
+/* 東京青藍大学 목록 : 학교 소개 카드 + 학년별 줄 (청람색 진하기로 학년 구분) */
+(() => { const st = document.createElement('style'); st.textContent = `
+.sr-info{position:relative;margin:2px 0 20px;padding:16px 18px 14px;border-radius:16px;color:#fff;overflow:hidden;background:linear-gradient(135deg,#2C5590 0%,#3D6DB0 55%,#6E98D2 100%);box-shadow:0 14px 26px -16px rgba(32,69,126,.7)}
+.sr-info::before{content:'';position:absolute;right:-30px;top:-40px;width:170px;height:170px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.16),transparent 65%)}
+.sr-info::after{content:'';position:absolute;inset:0;background:radial-gradient(circle,rgba(255,255,255,.12) 1px,transparent 1.4px) 0 0/12px 12px;-webkit-mask:linear-gradient(90deg,transparent 40%,#000);mask:linear-gradient(90deg,transparent 40%,#000);pointer-events:none}
+.sr-ib{position:relative;z-index:1;display:flex;align-items:center;gap:12px}
+.sr-crest{flex:none;width:38px;height:38px;border-radius:11px;display:grid;place-items:center;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.35);font:700 19px 'Noto Serif JP','Noto Serif CJK JP',serif}
+.sr-it{display:flex;flex-direction:column;gap:2px;min-width:0}
+.sr-it b{font:800 17px 'Noto Sans JP','IBM Plex Sans KR',sans-serif;letter-spacing:.04em}
+.sr-it small{font:700 10px 'Inter',sans-serif;letter-spacing:.14em;opacity:.8;text-transform:uppercase}
+.sr-ib em{margin-left:auto;font:800 10px 'Inter',sans-serif;font-style:normal;letter-spacing:.14em;padding:5px 9px;border-radius:999px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.3);white-space:nowrap}
+.sr-chips{position:relative;z-index:1;display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.sr-chips i{font:700 10.5px 'Noto Sans JP','IBM Plex Sans KR',sans-serif;font-style:normal;padding:4px 9px;border-radius:999px;background:rgba(255,255,255,.14);color:#fff}
+.sr-motto{position:relative;z-index:1;margin-top:10px;font:700 12px 'Noto Serif JP','Noto Serif CJK JP',serif;letter-spacing:.3em;opacity:.95}
+.sr-motto span{font:800 9px 'Noto Sans JP',sans-serif;letter-spacing:.12em;margin-right:8px;padding:2px 6px;border-radius:4px;background:#fff;color:#2C5590;vertical-align:1px}
+.sr-yr{margin:0 0 22px}
+.sr-yh{display:flex;align-items:center;gap:10px;margin:0 2px 12px}
+.sr-yn{flex:none;width:28px;height:28px;border-radius:9px;display:grid;place-items:center;background:var(--yc);color:#fff;font:900 14px 'Inter',sans-serif;box-shadow:0 4px 10px color-mix(in srgb,var(--yc) 35%,transparent),inset 0 1px 0 rgba(255,255,255,.35)}
+.sr-yt{display:flex;flex-direction:column;gap:2px}
+.sr-yt b{font:800 14px 'Noto Sans JP','IBM Plex Sans KR',sans-serif;color:#18212A;letter-spacing:.02em}
+.sr-yt small{font:800 9px 'Inter',sans-serif;letter-spacing:.16em;color:var(--yc)}
+.sr-yl{flex:1;height:2px;border-radius:2px;margin-left:4px;background:linear-gradient(90deg,var(--yc),color-mix(in srgb,var(--yc) 25%,transparent) 60%,transparent)}
+.sr-yh em{font:900 13px 'Inter',sans-serif;font-style:normal;color:var(--yc)}
+.sr-yh em i{font:800 9px 'Noto Sans JP',sans-serif;font-style:normal;margin-left:2px;opacity:.8}
 `; document.head.appendChild(st); })();

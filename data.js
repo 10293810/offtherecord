@@ -2024,6 +2024,8 @@ const SITE = {
     ],
     "worlds": {
       "seiran": {
+        "grades": true,
+        "info": {"en": "Tokyo Seiran University", "est": "1948", "place": "東京都 世田谷区", "type": "私立総合大学", "students": "約 12,000名", "rep": "首都圏 中上位圏", "campus": "世田谷キャンパス", "motto": "自由·知性·創造", "color": "青藍", "nick": "青藍大"},
         "name": "東京青藍大学",
         "no": "CH-03",
         "member": [
