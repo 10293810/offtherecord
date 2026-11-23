@@ -2732,10 +2732,10 @@ function openChars(wid) {
   if (wid && wid !== charWorld) { charWorld = wid; charTabKey = 'member'; pairOv = null; }
   if (!wins.get('chars') || wid) cxAnim = true;
   const render = b => {
-    // 캐릭터를 눌러도 목록이 맨 위로 튀지 않게 : 다시 그리기 전 스크롤 위치를 기억했다가 그대로 둬요
-    const keepSc = [b, ...b.querySelectorAll('.cx-scroll, .cx')].map(x => [x, x.scrollTop]), keepKey = charWorld + '/' + charTabKey;
-    const sameList = b._scKey === keepKey; b._scKey = keepKey;
-    const restoreSc = () => { if (!sameList) return; keepSc.forEach(([x, t], k) => { const y = k === 0 ? b : b.querySelectorAll('.cx-scroll, .cx')[k - 1]; if (y && t) y.scrollTop = t; }); };
+    // 캐릭터 · 페어를 눌러도 목록이 맨 위로 튀지 않게 : 목록 스크롤 위치를 기억했다가 그대로 둬요 (페어를 열었다 닫아도)
+    const keepKey = charWorld + '/' + charTabKey, scNow = b.querySelector('.cx-scroll');
+    if (b._scKey !== keepKey) { b._scKey = keepKey; b._scTop = 0; } else if (scNow) b._scTop = scNow.scrollTop;
+    const restoreSc = () => { const y = b.querySelector('.cx-scroll'); if (y && b._scTop) y.scrollTop = b._scTop; };
     const W = cworld(), list = W[charTabKey] || [];
     const today = new Date(), isPair = charTabKey === 'pair';
     const isOn = i => charSel && charSel.w === charWorld && charSel.t === charTabKey && charSel.i === i;
