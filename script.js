@@ -6563,8 +6563,12 @@ html.sye-editing #winlayer .cxwin [data-ci] .cx-ov,html.sye-editing #winlayer .c
     if (l >= .66) return toRgb(HA, .46, Math.max(l, .8));                                         // 연한 민트 → 파스텔 민트 (대표색)
     return toRgb(HA, .46, .56 + Math.max(0, Math.min(1, (l - .3) / .36)) * .12);                   // 중간 민트 → 파스텔 민트 (원래 진했던 건 조금 더 진하게 남겨서 구분돼요 · 글씨 · 선용)
   };
-  const remap = txt => txt.replace(/rgba?\(\s*(\d+),\s*(\d+),\s*(\d+)(\s*,\s*[\d.]+)?\s*\)/g, (m, r, g, b, a) => { const c = shift(r, g, b); return c ? (a ? `rgba(${c.join(', ')}${a})` : `rgb(${c.join(', ')})`) : m; })
-    .replace(/#([0-9a-f]{6}|[0-9a-f]{3})\b/gi, (m, hx) => { if (hx.length === 3) hx = hx.split('').map(x => x + x).join(''); const c = shift(parseInt(hx.slice(0, 2), 16), parseInt(hx.slice(2, 4), 16), parseInt(hx.slice(4, 6), 16)); return c ? '#' + c.map(v => v.toString(16).padStart(2, '0')).join('') : m; });
+  // 글씨용 민트 : 파스텔은 흰 바탕 위 글씨로 쓰면 번쩍여 보여서, 글씨(color)만 차분하게 한 톤 진한 민트로
+  const shiftText = (r, g, b) => { const [h, s, l] = toHsl(+r, +g, +b); if (!(h >= 95 && h <= 205) || s < .22 || l < .3 || l >= .84) return shift(r, g, b); return toRgb(HA, .36, .43 + Math.max(0, Math.min(1, (l - .3) / .54)) * .06); };
+  let SHIFT = shift;
+  const remapT = txt => { SHIFT = shiftText; try { return remap(txt); } finally { SHIFT = shift; } };
+  const remap = txt => txt.replace(/rgba?\(\s*(\d+),\s*(\d+),\s*(\d+)(\s*,\s*[\d.]+)?\s*\)/g, (m, r, g, b, a) => { const c = SHIFT(r, g, b); return c ? (a ? `rgba(${c.join(', ')}${a})` : `rgb(${c.join(', ')})`) : m; })
+    .replace(/#([0-9a-f]{6}|[0-9a-f]{3})\b/gi, (m, hx) => { if (hx.length === 3) hx = hx.split('').map(x => x + x).join(''); const c = SHIFT(parseInt(hx.slice(0, 2), 16), parseInt(hx.slice(2, 4), 16), parseInt(hx.slice(4, 6), 16)); return c ? '#' + c.map(v => v.toString(16).padStart(2, '0')).join('') : m; });
   // 색만 그 자리에서 바꿔요 (규칙을 맨 뒤로 복사하면 크기 · 칸 규칙 순서가 뒤집혀서 모바일 아이콘이 커졌어요)
   const mine = new WeakMap();          // 규칙마다 내가 칠한 값 (다른 색 스크립트가 나중에 바꾸면 다시 칠해요)
   const run = () => {
@@ -6574,7 +6578,7 @@ html.sye-editing #winlayer .cxwin [data-ci] .cx-ov,html.sye-editing #winlayer .c
       if (!/rgb|#[0-9a-f]{3}/i.test(r.style.cssText)) continue;
       const st = r.style, props = []; for (let i = 0; i < st.length; i++) props.push(st[i]);
       let m = mine.get(r); if (!m) mine.set(r, m = {});
-      for (const pr of props) { const v = st.getPropertyValue(pr); if (m[pr] === v) continue; const t = remap(v); if (t !== v) st.setProperty(pr, t, st.getPropertyPriority(pr)); m[pr] = st.getPropertyValue(pr); }
+      for (const pr of props) { const v = st.getPropertyValue(pr); if (m[pr] === v) continue; const t = (pr === 'color' || pr === '-webkit-text-fill-color') ? remapT(v) : remap(v); if (t !== v) st.setProperty(pr, t, st.getPropertyPriority(pr)); m[pr] = st.getPropertyValue(pr); }
     } };
     for (const sh of document.styleSheets) { try { walk(sh.cssRules); } catch (e) {} }
   };
