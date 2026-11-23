@@ -962,7 +962,7 @@ Object.assign(P, {
   syplus: '<path d="M12 5v14M5 12h14"/>'
 });
 const GRID_APPS = APPS.concat(EXTRA_APPS, [{ id: 'notice', name: 'Notice', icon: 'bell', t: 'soft' }],
-  (S.extraApps || []).map(x => ({ id: 'x-' + x.id, name: x.name, icon: x.icon || x.id, t: x.color || EXTRA_T[x.id] || 'soft' }))).slice(0, 66);
+  (S.extraApps || []).map(x => ({ id: 'x-' + x.id, name: x.name, icon: x.icon || x.id, t: x.color || EXTRA_T[x.id] || 'soft' }))).slice(0, 72);
 // D-DAY 바로 옆으로 : Profile · List · Linked · OOC · Prompt (나머지는 한 칸씩 뒤로)
 { const FRONT = ['x-about', 'x-list', 'x-linked', 'x-ooc', 'x-prompt'], mv = FRONT.map(id => GRID_APPS.find(a => a.id === id)).filter(Boolean);
   mv.forEach(a => GRID_APPS.splice(GRID_APPS.indexOf(a), 1)); GRID_APPS.splice(GRID_APPS.findIndex(a => a.id === 'dday') + 1, 0, ...mv); }
@@ -4796,7 +4796,7 @@ function syLayout() {
   #desk .apps-panel .panel-tab i{display:none!important}
   #desk .apps-panel .panel-tab span{font:800 7.5px var(--syf)!important;letter-spacing:.14em!important;color:#1E2A27!important;background:none!important;-webkit-text-fill-color:currentColor!important}
   #desk .apps-panel .panel-tab .sy-cnt{display:none!important;min-width:15px;height:15px;padding:0 3px;box-sizing:border-box;border-radius:99px;background:#1E2A27;color:#fff;font:800 7px/15px var(--syf);text-align:center}
-  #desk .stage .leftcol .apps{position:absolute!important;inset:26px 2px 20px!important;width:auto!important;height:auto!important;display:grid!important;grid-template-columns:repeat(11,minmax(0,1fr))!important;justify-content:stretch!important;grid-template-rows:repeat(6,auto)!important;align-content:space-between!important;gap:0 0!important;padding:0!important;margin:0!important;transform:none!important}
+  #desk .stage .leftcol .apps{position:absolute!important;inset:26px 2px 20px!important;width:auto!important;height:auto!important;display:grid!important;grid-template-columns:repeat(12,minmax(0,1fr))!important;justify-content:stretch!important;grid-template-rows:repeat(6,auto)!important;align-content:space-between!important;gap:0 0!important;padding:0!important;margin:0!important;transform:none!important}
   #desk .apps .app-tile{display:flex!important;flex-direction:column!important;align-items:center!important;gap:calc(6px * var(--sy-ts,1))!important;padding:0!important;margin:0!important;background:none!important;border:0!important;font:600 calc(8.5px * var(--sy-ts,1))/1.15 var(--syf)!important;letter-spacing:-.01em!important;color:#4A5753!important;text-align:center!important;white-space:normal!important;word-break:keep-all!important;overflow-wrap:anywhere;max-width:100%;padding:0 2px!important;box-sizing:border-box}
   #desk .apps .app-tile .cjk{font:800 1em/1.15 'Noto Sans JP','IBM Plex Sans KR',sans-serif;letter-spacing:0}
   #desk .apps .app-ic.tilebox{width:calc(50px * var(--sy-ts,1))!important;height:calc(50px * var(--sy-ts,1))!important;border-radius:calc(11.5px * var(--sy-ts,1))!important;background:#fff!important;border:1px solid #E4ECE8!important;box-shadow:0 4px 10px rgba(30,70,60,.07),inset 0 -2px 0 rgba(30,70,60,.03)!important;color:#45AE86!important;display:grid!important;place-items:center!important}
