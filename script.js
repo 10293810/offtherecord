@@ -2702,7 +2702,7 @@ function jaDept(v) { const t = String(v).trim().replace(/\s+/g, ''); const m = /
   const J = JP_DEPT[stem] || JP_DEPT[stem.replace(/학$/, '')]; if (!J) return '';
   return J + ({ '학부': '学部', '부': '学部', '학과': '学科', '과': '学科', '대학원': '大学院', '대학': '学部' }[suf] || '学部'); }
 // 東京青藍大学 : 학년별 (1年生 ~ 4年生 · 학년 없으면 맨 아래)
-const GR_Y = [['1年生', 'FRESHMAN', '#8DB4E2'], ['2年生', 'SOPHOMORE', '#5B8FCF'], ['3年生', 'JUNIOR', '#3769AE'], ['4年生', 'SENIOR', '#20457E']];
+const GR_Y = [['1年生', 'FRESHMAN', '#C6DAF1'], ['2年生', 'SOPHOMORE', '#86AEDE'], ['3年生', 'JUNIOR', '#4878BC'], ['4年生', 'SENIOR', '#1F4079']];
 function gradesHTML(W, list, isOn) {
   const Y = [...GR_Y, ['学年未設定', '', '#A7B1BA']];
   return Y.map(([y, en, c], k) => { const ms = list.map((m, i) => [m, i]).filter(([m]) => k < 4 ? m.year === y : !GR_Y.some(g => g[0] === m.year)); if (!ms.length) return '';
@@ -6533,7 +6533,7 @@ html.sye-editing #winlayer .cxwin [data-ci] .cx-ov,html.sye-editing #winlayer .c
   .fl-em,.fl-tt small{display:none!important}
   .fl-th em{flex:none;font:800 9px/1 'DM Mono',monospace;font-style:normal;letter-spacing:.08em;color:var(--tc)}
   .fl-silver .fl-th em{color:#7E8B94}
-  .fl-team .cx-card.on{outline-color:var(--tc)!important}
+  
   .cx-grid .cx-card .cx-ov .cx-en{white-space:nowrap!important;overflow:hidden}`;
   document.head.appendChild(st);
 })();
@@ -6693,7 +6693,7 @@ html.sye-editing #winlayer .cxwin [data-ci] .cx-ov,html.sye-editing #winlayer .c
 .sr-yh b.sr-yt{font:800 15px 'Noto Sans JP','IBM Plex Sans KR',sans-serif;color:#18212A;letter-spacing:.02em}
 .sr-yt small{font:800 9px 'Inter',sans-serif;letter-spacing:.16em;color:var(--yc)}
 .sr-yl{flex:1;height:2px;border-radius:2px;margin-left:4px;background:linear-gradient(90deg,var(--yc),color-mix(in srgb,var(--yc) 25%,transparent) 60%,transparent)}
-.sr-yh em{font:900 13px 'Inter',sans-serif;font-style:normal;color:var(--yc)}
+.sr-yh em{font:900 13px 'Inter',sans-serif;font-style:normal;color:color-mix(in srgb,var(--yc) 70%,#22344A)}
 .sr-yh em i{font:800 9px 'Noto Sans JP',sans-serif;font-style:normal;margin-left:2px;opacity:.8}
 `; document.head.appendChild(st); })();
 
