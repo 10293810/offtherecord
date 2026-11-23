@@ -2643,7 +2643,7 @@ function charLayout() {
   return { solo: Math.max(12, Math.round((deskW() - W1) / 2)), list: { x: x1, y, w: W1, h: H, abs: true }, det: { x: x1 + W1 + gap, y, w: W2, h: H, abs: true } };
 }
 // ARCH 목록 (그룹별 줄 + 속성 뱃지 카드)
-const RS_EL = { '불': '#E0533F', '물': '#3F8FDB', '번개': '#F0C93E', '얼음': '#9ED3CB', '풀': '#6E9F55', '바람': '#56C06E', '무속성': '#9A9EA3' }, RS_GR = ['', 'SS', 'S', 'A', 'B', 'C'];
+const RS_EL = { '불': '#D65745', '물': '#5296D5', '번개': '#EAC645', '얼음': '#9BCACB', '풀': '#79A86B', '바람': '#65C97A', '무속성': '#A6A6A6' }, RS_INK = { '번개': '#3A3320', '얼음': '#24393A', '무속성': '#2E2E2E' }, RS_GR = ['', 'SS', 'S', 'A', 'B', 'C'];
 function rsBadge(el, gr) { return gr ? `${gr}급 ${el}` : el === '무속성' ? '무속성' : `${el} 속성`; }
 function rsElOf(m) { if (m.el && RS_EL[m.el]) return m.el; const a = String(m.attr || ''); return Object.keys(RS_EL).find(k => a.includes(k)) || (/전기/.test(a) ? '번개' : '무속성'); }
 function rsInk(c) { const m = /^#?([0-9a-f]{6})$/i.exec(String(c).trim()); if (!m) return '#fff'; const n = parseInt(m[1], 16), r = n >> 16, g = n >> 8 & 255, b = n & 255; return (r * .299 + g * .587 + b * .114) > 168 ? '#2B2F33' : '#fff'; }
@@ -2652,7 +2652,7 @@ function rosterHTML(W, list, isOn) {
   if (list.some(m => !keys.includes(m.group))) G.push({ key: '__etc', name: 'ETC.', cls: '', color: '#8EB2B7' });
   return G.map(g => { const ms = list.map((m, i) => [m, i]).filter(([m]) => g.key === '__etc' ? !keys.includes(m.group) : m.group === g.key); if (!ms.length) return '';
     return `<div class="rs-blk" style="--gc:${esc(g.color || '#8EB2B7')}"><div class="rs-sec"><b>${esc(g.name)}</b><span>${esc(g.cls || '')}</span></div><div class="rs-ln"></div>
-      <div class="rs-grid">${ms.map(([m, i]) => `<button class="rs-card ${isOn(i) ? 'on' : ''}" data-ci="${i}">${ph(pv(m.card, m.hero), { seed: m.name + i })}<div class="ov"><b>${esc(m.name)}</b>${m.attr ? `<i style="background:${esc(m.attrColor || '#55C7D7')};color:${rsInk(m.attrColor || '#55C7D7')}">${esc(m.attr)}</i>` : ''}</div></button>`).join('')}</div></div>`; }).join('');
+      <div class="rs-grid">${ms.map(([m, i]) => `<button class="rs-card ${isOn(i) ? 'on' : ''}" data-ci="${i}">${ph(pv(m.card, m.hero), { seed: m.name + i })}<div class="ov"><b>${esc(m.name)}</b>${m.attr || m.el ? (() => { const e = rsElOf(m); return `<i style="background:${RS_EL[e]};color:${RS_INK[e] || '#fff'}">${esc(m.attr || rsBadge(e, ''))}</i>`; })() : ''}</div></button>`).join('')}</div></div>`; }).join('');
 }
 // FRONTLINE : 소속팀(카드 위 작은 글씨 = 소속)별로 나눠서 보여줘요 · 팀이 없는 캐릭터는 맨 아래 무소속
 const FL_TEAMS = [
@@ -6505,7 +6505,7 @@ html.sye-editing #winlayer .cxwin [data-ci] .cx-ov,html.sye-editing #winlayer .c
 #desk .win.cxwin .rs-blk .rs-card .ph::after{display:none!important}
 #desk .win.cxwin .rs-card .ov{padding:44px 11px 12px!important;background:linear-gradient(rgba(14,17,22,0),rgba(14,17,22,.82) 55%,rgba(14,17,22,.95))!important}
 #desk .win.cxwin .rs-card .ov b{font:900 15px var(--sans)!important;color:#fff!important;letter-spacing:-.01em;text-shadow:0 1px 6px rgba(0,0,0,.35)}
-#desk .win.cxwin .rs-card .ov i{margin-top:6px!important;font:800 10px var(--sans)!important;padding:4px 10px!important;border-radius:999px!important;box-shadow:none}
+#desk .win.cxwin .rs-card .ov i{margin-top:5px!important;font:800 9px/1.15 var(--sans)!important;padding:3px 8px!important;border-radius:999px!important;box-shadow:none}
 `; document.head.appendChild(st); })();
 
 /* 캐릭터 수정 창 : 깔끔한 카드형 (세이란 · ARCH · FRONTLINE · ETC 공통) */
