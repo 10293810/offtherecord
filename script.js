@@ -5712,8 +5712,10 @@ html:not(.sye-editing) .cx-add,html:not(.sye-editing) .cd-tags .ed{display:none!
     const pic = (label, name, has) => `<label class="pic"><span>${label}</span><input type="file" name="${name}" accept="image/*"><small>${has ? '바꿀 때만 골라요 · ' : ''}여기서 고르면 저장할 때 같이 들어가요 (나중에 사진 자리를 눌러서 바꿔도 돼요)</small></label>`;
     if (!isP) { const P = o.profile || {};
       h += `<div class="sec">기본 (이것만 적어도 돼요)</div>` + fld('이름 *', 'name', o.name) + fld(teamsOf(world) ? '한국어 이름' : world.style === 'roster' ? '코드네임 (영어)' : '영어 이름', 'en', o.en) + (world.style === 'roster' ? fld('그룹', 'rgroup', (g => g ? g.name + ' · ' + g.cls : '')((world.groups || []).find(g => g.key === o.group)), 'select', '목록에서 들어갈 줄', ['', ...(world.groups || []).map(g => g.name + ' · ' + g.cls)]) + fld('속성', 'el', rsElOf(o), 'select', '고르면 뱃지 색이 알아서 바뀌어요', Object.keys(RS_EL)) : '') + (world.grades ? fld('학년', 'year', o.year || '', 'select', '목록에서 학년별로 나눠서 보여줘요', ['', ...GR_Y.map(g => g[0])]) : '') + (teamsOf(world) ? fld('소속팀', 'dept', o.dept || (teamsOf(world).find(x => !x.match) || {}).key, 'select', '고른 팀 칸에 들어가요 · 카드 위 작은 글씨', [...teamsOf(world).map(x => x.key), ...(o.dept && !teamsOf(world).some(x => x.key === o.dept) ? [o.dept] : [])]) : fld('소속 · 학부', 'dept', o.dept, 'text', '카드 위 작은 글씨')) + fld('한 줄 소개', 'quote', o.quote) + fld('태그', 'tags', (o.tags || []).join(', '), 'text', '쉼표로 나눠요 · 예) #다정, #고양이상')
-        + pic(o.card ? '카드 사진 바꾸기' : '카드 사진', 'pic', !!o.card)
+        + pic(o.card ? '목록 카드 사진 바꾸기' : '목록 카드 사진', 'pic', !!o.card)
         + (world.style !== 'roster' ? fld('사진 쓰는 방법', 'picmode', o.picMode === 'sep' ? '목록 · 첫 화면 · 전환 사진 모두 따로' : '목록 · 전환 사진 같게 (첫 화면만 따로)', 'select', '목록 = 카드 사진 · 첫 화면 = 캐릭터 누르면 나오는 큰 사진 · 전환 = PROFILE 눌렀을 때 나오는 작은 네모 사진 · 비어 있는 자리는 목록 사진을 빌려 보여줘요', ['목록 · 전환 사진 같게 (첫 화면만 따로)', '목록 · 첫 화면 · 전환 사진 모두 따로']) : '')
+        + (world.style === 'roster' ? pic(o.hero ? '캐릭터 창 큰 사진 바꾸기' : '캐릭터 창 큰 사진 (안 넣으면 목록 사진)', 'pic_photo', !!o.hero) + pic(o.avatar ? '위 작은 동그라미 사진 바꾸기' : '위 작은 동그라미 사진 (안 넣으면 목록 사진)', 'pic_av', !!o.avatar)
+          : pic(o.photo ? '첫 화면 큰 사진 바꾸기' : '첫 화면 큰 사진 (안 넣으면 목록 사진)', 'pic_photo', !!o.photo) + `<div class="pic-av">${pic(o.avatar ? 'PROFILE 작은 네모 사진 바꾸기' : 'PROFILE 작은 네모 사진 (안 넣으면 목록 사진)', 'pic_av', !!o.avatar)}</div>`)
         + `<details class="more"><summary>더 적기 · 프로필 · 프롬프트 · 노래 (안 적어도 돼요)</summary>`
         + fld('사진 옆 작은 칸', 'spec', rowsOf(o.spec || [['AGE', ''], ['HEIGHT', ''], ['BIRTH', ''], ['LOVER', '']]), 'area', '', 4)
         + fld('프로필 표', 'rows', rowsOf(P.rows || [['좋아하는 것', ''], ['싫어하는 것', ''], ['특징', '']]), 'area', '', 4)
@@ -5772,6 +5774,7 @@ html:not(.sye-editing) .cx-add,html:not(.sye-editing) .cd-tags .ed{display:none!
     pack(FB);
     const duoRow = (a, b) => { const A = F.elements[a], B = F.elements[b]; const la = A && A.closest('label'), lb = B && B.closest('label'); if (!la || !lb || la.parentElement !== lb.parentElement) return; const r = document.createElement('div'); r.className = 'frow'; la.before(r); r.append(la, lb); };
     duoRow('name', 'en'); duoRow('rgroup', 'el'); duoRow('year', 'dept');
+    const pmS = F.elements.picmode, pav = F.querySelector('.pic-av'); if (pmS && pav) { const t2 = () => { pav.style.display = /모두 따로/.test(pmS.value) ? '' : 'none'; }; pmS.addEventListener('change', t2); t2(); }
     // 제안 칩 : 한국어 이름 → 영어 이름 후보 · 세이란 학부 → 일본어 학부 후보 (누르면 넣어져요, 안 누르면 그대로)
     const sug = (inp, get) => { if (!inp) return; const box = document.createElement('div'); box.className = 'fsug'; (inp.closest('label') || inp).append(box);
       const draw = () => { const c = get().filter((x, i, a) => x && x !== inp.value.trim() && a.indexOf(x) === i); box.innerHTML = c.length ? `<span>제안</span>${c.map(x => `<button type="button">${E(x)}</button>`).join('')}` : ''; };
@@ -5838,7 +5841,9 @@ html:not(.sye-editing) .cx-add,html:not(.sye-editing) .cd-tags .ed{display:none!
     }
     if (i == null) list.push(o); else list[i] = o;
     const msg = i == null ? '추가했어요' : '저장했어요', file = F.elements.pic && F.elements.pic.files && F.elements.pic.files[0];
-    if (file && /^image\//.test(file.type)) { const idx = i == null ? list.length - 1 : i; idbPut(`characters.worlds.${w}.${t}.${idx}.${isP ? 'photo' : 'card'}`, file).then(() => commit(msg + ' · 사진도 넣었어요', w), () => commit(msg, w)); }
+    const idx = i == null ? list.length - 1 : i, base = `characters.worlds.${w}.${t}.${idx}.`, roster = W()[w].style === 'roster';
+    const jobs = [[file, isP ? 'photo' : 'card'], [!isP && F.elements.pic_photo?.files?.[0], roster ? 'hero' : 'photo'], [!isP && F.elements.pic_av?.files?.[0], 'avatar']].filter(([f]) => f && /^image\//.test(f.type));
+    if (jobs.length) { jobs.forEach(([, k]) => { if (!(k in o)) o[k] = ''; }); Promise.all(jobs.map(([f, k]) => idbPut(base + k, f))).then(() => commit(msg + ` · 사진 ${jobs.length}장도 넣었어요`, w), () => commit(msg, w)); }
     else commit(msg, w);
   });
   // + 추가 : 따로 창을 띄우지 않고, 같은 모양의 새 카드를 바로 만들어서 열어줘요 → 글자를 눌러 고치고 사진 자리를 눌러 사진을 넣어요
