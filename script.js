@@ -6754,7 +6754,3 @@ html.sye-editing #winlayer .cxwin [data-ci] .cx-ov,html.sye-editing #winlayer .c
 /* Linked 처방전 띠 : 왼쪽 민트 → 오른쪽 연한 회색 (사진 속 그대로) */
 (() => { const st = document.createElement('style'); st.textContent = '.dz-cct{background:linear-gradient(90deg,var(--rx1) 0%,var(--rx2) 100%)!important}'; document.head.appendChild(st);
   document.documentElement.style.setProperty('--rx1', 'rgb(176, 224, 202)'); document.documentElement.style.setProperty('--rx2', 'rgb(226, 229, 233)'); })();
-
-/* 아이콘 창 숫자 · 메인 제목 : 배너 D+ 숫자 같은 밝은 민트로 */
-(() => { const st = document.createElement('style'); st.textContent = '.dz-num{background:linear-gradient(160deg,var(--hd1),var(--hd2) 70%)!important;-webkit-background-clip:text!important;background-clip:text!important}.dz-head b{color:var(--hd2)!important}'; document.head.appendChild(st);
-  document.documentElement.style.setProperty('--hd1', 'rgb(150, 218, 189)'); document.documentElement.style.setProperty('--hd2', 'rgb(117, 204, 166)'); })();
