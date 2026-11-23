@@ -5142,31 +5142,35 @@ const SFX = (() => {
     tear: () => go((a, t) => { tear(a, t, SFX_VOL * 1.1); bell(a, t + .18, 784, SFX_VOL * .2, 1.2); bell(a, t + .3, 1174.7, SFX_VOL * .16, 1.4); bell(a, t + .42, 1568, SFX_VOL * .12, 1.6); }),
     tap: () => go((a, t) => tick(a, t, SFX_VOL * .9)), open: () => go((a, t) => { bell(a, t, 880, SFX_VOL * .22, .9); bell(a, t + .11, 1318.5, SFX_VOL * .17, 1.1); }) };
 })();
-// 반짝 : 누른 자리에 작은 민트 반짝이가 톡 떴다 사라지고, 민트 · 노랑 · 분홍 반짝이 6개가 동그랗게 퍼져요
+// 눈송이 : 얇은 링 + 가운데 큰 눈송이(톡 튀어나와 돌며 사라짐) + 작은 눈 결정 6개가 흩날려요 (민트 · 흰색)
 const FX = (() => {
   if (!FX_ON) return { burst() {} };
   const cv = document.createElement('canvas'); cv.setAttribute('aria-hidden', 'true'); cv.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:2147483000';
-  document.body.appendChild(cv); const c = cv.getContext('2d'); let W = 0, H = 0, raf = 0, last = 0; const L = [], DUR = .75;
-  const size = () => { const D = Math.min(devicePixelRatio || 1, 2); W = innerWidth; H = innerHeight; cv.width = W * D; cv.height = H * D; c.setTransform(D, 0, 0, D, 0, 0); c.imageSmoothingEnabled = false; }; size(); addEventListener('resize', size);
-  const out = k => 1 - Math.pow(1 - k, 3), back = k => 1 + 3.2 * Math.pow(k - 1, 3) + 2.2 * Math.pow(k - 1, 2);
-  const COL = { X: '#3E8C72', y: '#A8E6CC', h: '#F2FCF7', v: '#6FC4A0' };
-  const CLOVER = ["      XXXXX XXXXX      ", "     XXyyyXXXyyyXX     ", "     XyyhhyXyyyyyX     ", "     XyyhyyyyyyyyX     ", "     XyyyyyyyyyyyX     ", " XXXXXXyyyyyyyyyXXXXXX ", "XXyyyXXXyyyyyyyXXXyyyXX", "XyyhhyXXXyyyyyXXXyyhhyX", "XyyhyyyXXXyyyXXXyyyhyyX", "XyyyyyyyXXXyXXXyyyyyyyX", "XXyyyyyyyXXXXXyyyyyyyXX", " XXyyyyyyyX XyyyyyyyXX ", "XXyyyyyyyXXXXXyyyyyyyXX", "XyyyyyyyXXXyXXXyyyyyyyX", "XyyyyyyXXXyyhXXXyyyyyyX", "XyyyyyXXXyyyhyXXXyyyyyX", "XXyyyXXXyyyyyyyXXXyyyXX", " XXXXXXyyyyyyyyyXXXXXX ", "     XyyyyyyyyyyyX     ", "     XyyyyyyyyyyyX     ", "     XyyyyyXyyyyyX     ", "     XXyyyXXXyyyXX     ", "      XXXXX XXXXX      "], CW = CLOVER[0].length, CH = CLOVER.length;
-  // 클로버를 한 번 그려두고 (하얀 스티커 테두리 포함) 크기만 바꿔서 찍어요
-  const spr = document.createElement('canvas'); spr.width = (CW + 4) * 2; spr.height = (CH + 4) * 2; const sc = spr.getContext('2d');
-  const on = (x, y) => y >= 0 && y < CH && x >= 0 && x < CW && CLOVER[y][x] !== ' ';
-  sc.fillStyle = '#fff'; for (let y = -2; y < CH + 2; y++) for (let x = -2; x < CW + 2; x++) { if (on(x, y)) continue; let n = false; for (let dy = -1; dy <= 1 && !n; dy++) for (let dx = -1; dx <= 1; dx++) if (on(x + dx, y + dy)) { n = true; break; } if (n) sc.fillRect((x + 2) * 2, (y + 2) * 2, 2, 2); }
-  CLOVER.forEach((r, y) => [...r].forEach((ch, x) => { if (ch === ' ') return; sc.fillStyle = COL[ch] || COL.y; sc.fillRect((x + 2) * 2, (y + 2) * 2, 2, 2); }));
-  const PLUS = [[0, -2], [0, -1], [-2, 0], [-1, 0], [0, 0], [1, 0], [2, 0], [0, 1], [0, 2]], SPC = ['#A6E6CF', '#F6CE72', '#F8B9C9'];
-  const draw = f => { const k = Math.min(1, f.t / DUR), s = f.s; c.save(); c.translate(Math.round(f.x), Math.round(f.y));
-    c.globalAlpha = Math.max(0, 1 - Math.pow(k, 1.4));
-    for (let i = 0; i < 6; i++) { const a = f.r - Math.PI / 2 + i * Math.PI / 3, d = (9 + 17 * out(k)) * s, x = Math.round(Math.cos(a) * d), y = Math.round(Math.sin(a) * d), cs = Math.max(1, Math.round(1.6 * s));
-      c.fillStyle = SPC[i % 3]; PLUS.forEach(([px, py]) => c.fillRect(x + px * cs - cs / 2, y + py * cs - cs / 2, cs, cs)); }
-    const R = k < .3 ? back(k / .3) : 1 - out((k - .3) / .7) * .45, A = k < .5 ? 1 : Math.max(0, 1 - (k - .5) / .5);
-    if (R > .05 && A > 0) { const cs = Math.max(1, Math.round(1.8 * s * R)); c.globalAlpha = A; c.fillStyle = '#7FD7B1'; PLUS.forEach(([px, py]) => c.fillRect(px * cs - cs / 2, py * cs - cs / 2, cs, cs)); c.fillStyle = '#fff'; c.fillRect(-cs / 2, -cs / 2, cs, cs); }
+  document.body.appendChild(cv); const c = cv.getContext('2d'); let W = 0, H = 0, raf = 0, last = 0; const L = [], DUR = .7;
+  const size = () => { const D = Math.min(devicePixelRatio || 1, 2); W = innerWidth; H = innerHeight; cv.width = W * D; cv.height = H * D; c.setTransform(D, 0, 0, D, 0, 0); }; size(); addEventListener('resize', size);
+  const MINT = '#6CC9A3', SOFT = '#A6E6CF', ICE = '#CFF3EC', out = k => 1 - Math.pow(1 - k, 3), back = k => 1 + 3.2 * Math.pow(k - 1, 3) + 2.2 * Math.pow(k - 1, 2);
+  // 눈송이 모양 : 가지 6개 · 가지마다 V 모양 잔가지 2쌍 · 끝에 작은 마름모
+  const flake = (r, lw, col, fill) => { c.lineCap = 'round'; c.lineJoin = 'round'; c.lineWidth = lw; c.strokeStyle = col;
+    for (let i = 0; i < 6; i++) { c.save(); c.rotate(i * Math.PI / 3); c.beginPath(); c.moveTo(0, 0); c.lineTo(0, -r);
+      [[.38, .24], [.66, .17]].forEach(([p, l]) => { c.moveTo(0, -r * p); c.lineTo(-r * l, -r * (p + l * .95)); c.moveTo(0, -r * p); c.lineTo(r * l, -r * (p + l * .95)); });
+      c.stroke(); const d = r * .1; c.beginPath(); c.moveTo(0, -r - d); c.lineTo(d * .7, -r); c.lineTo(0, -r + d); c.lineTo(-d * .7, -r); c.closePath(); c.fillStyle = col; c.fill(); c.restore(); }
+    c.beginPath(); for (let i = 0; i < 6; i++) { const t = i * Math.PI / 3; c[i ? 'lineTo' : 'moveTo'](Math.sin(t) * r * .2, -Math.cos(t) * r * .2); } c.closePath(); c.fillStyle = fill; c.fill(); c.stroke(); };
+  const mini = (r, col) => { c.lineCap = 'round'; c.lineWidth = Math.max(.8, r * .28); c.strokeStyle = col; c.beginPath(); for (let i = 0; i < 3; i++) { const t = i * Math.PI / 3; c.moveTo(Math.sin(t) * r, -Math.cos(t) * r); c.lineTo(-Math.sin(t) * r, Math.cos(t) * r); } c.stroke(); };
+  const draw = f => { const k = Math.min(1, f.t / DUR), s = f.s; c.save(); c.translate(f.x, f.y);
+    // 얇은 얼음 링
+    c.globalAlpha = (1 - k) * .8; c.beginPath(); c.arc(0, 0, (6 + 26 * out(k)) * s, 0, Math.PI * 2); c.lineWidth = Math.max(.01, 1.6 * s * (1 - k)); c.strokeStyle = SOFT; c.stroke();
+    // 흩날리는 작은 눈 결정 (밖으로 퍼지다 살짝 내려앉아요)
+    f.bits.forEach((b, i) => { const p = out(k), d = (10 + b.d * p) * s, x = Math.cos(b.a) * d, y = Math.sin(b.a) * d + 10 * s * k * k;
+      c.save(); c.globalAlpha = Math.max(0, 1 - Math.pow(k, 1.6)) * (.75 + .25 * Math.sin(k * 18 + i)); c.translate(x, y); c.rotate(b.rot + k * b.spin);
+      if (b.dot) { c.beginPath(); c.arc(0, 0, b.r * s * .55, 0, Math.PI * 2); c.fillStyle = b.col; c.fill(); } else mini(b.r * s * (1 - k * .3), b.col); c.restore(); });
+    // 가운데 큰 눈송이 : 톡 튀어나와 30° 돌면서 작아져요
+    const R = 10 * s * Math.max(0, k < .3 ? back(k / .3) : 1 - out((k - .3) / .7) * .85), A = Math.max(0, k < .55 ? 1 : 1 - (k - .55) / .45);
+    if (R > .5 && A > 0) { c.globalAlpha = A; c.rotate(f.r + out(k) * Math.PI / 6); c.shadowColor = 'rgba(166,230,207,.9)'; c.shadowBlur = 6 * s; flake(R, Math.max(1, R * .095), MINT, '#fff'); c.shadowBlur = 0; c.globalAlpha = A * .9; flake(R * .96, Math.max(.4, R * .03), '#fff', '#fff'); }
     c.restore(); };
   const loop = now => { const dt = Math.max(0, Math.min(.05, (now - last) / 1000)); last = now; c.clearRect(0, 0, W, H);
     for (let i = L.length - 1; i >= 0; i--) { L[i].t += dt; if (L[i].t >= DUR) L.splice(i, 1); else draw(L[i]); } raf = L.length ? requestAnimationFrame(loop) : 0; if (!raf) c.clearRect(0, 0, W, H); };
-  return { burst(x, y, s) { L.push({ x, y, s: s || 1, t: 0, r: (Math.random() - .5) * .4 }); if (!raf) { last = performance.now(); raf = requestAnimationFrame(loop); } }, _draw: f => draw(f), _c: () => c };
+  const mk = () => { const r0 = Math.random() * Math.PI * 2; return Array.from({ length: 7 }, (_, i) => ({ a: r0 + i * Math.PI * 2 / 7 + (Math.random() - .5) * .5, d: 16 + Math.random() * 12, r: 2.2 + Math.random() * 1.4, rot: Math.random() * Math.PI, spin: (Math.random() - .5) * 4, dot: i % 3 === 2, col: i % 2 ? MINT : SOFT })); };
+  return { burst(x, y, s) { L.push({ x, y, s: s || 1, t: 0, r: Math.random() * Math.PI / 3, bits: mk() }); if (!raf) { last = performance.now(); raf = requestAnimationFrame(loop); } }, _draw: (f) => draw(f), _mk: mk, _c: () => c };
 })();
 // 끌기(창 옮기기 등)는 빼고, 제자리 클릭 · 탭에만
 let fxDown = null;
@@ -6030,7 +6034,7 @@ requestAnimationFrame(() => setTimeout(startDesk, 50));
   // 커서 : 도트 화살표 + 점선 + 하트 네 잎 클로버 (버튼 · 앱 위에서는 클로버가 살짝 다가와요) — 화살표 끝이 클릭 지점
   const CUR = (n, x, y, f) => { const a = `image-set(url("media/${n}.png?v=5") 1x, url("media/${n}@2x.png?v=5") 2x) ${x} ${y}, ${f}`, b = `-webkit-image-set(url("media/${n}.png?v=5") 1x, url("media/${n}@2x.png?v=5") 2x) ${x} ${y}, ${f}`;
     try { if (CSS.supports('cursor', a)) return a; if (CSS.supports('cursor', b)) return b; } catch (e) {} return `url("media/${n}.png?v=5") ${x} ${y}, ${f}`; };
-  const NORM = CUR('cursor-clover', 2, 2, 'auto'), PTR = CUR('cursor-clover-hover', 2, 2, 'pointer');
+  const NORM = CUR('cursor-snow', 2, 2, 'auto'), PTR = CUR('cursor-snow-hover', 2, 2, 'pointer');
   const css = document.createElement('style');
   css.textContent = `html,body{cursor:${NORM}}a,button,label,summary,select,[role=button],[data-app],.app-tile{cursor:${PTR}}input[type=text],input:not([type]),textarea,[contenteditable=true]{cursor:text}`;
   document.head.appendChild(css);
