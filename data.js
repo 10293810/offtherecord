@@ -1,5 +1,5 @@
 /* =========================================================
-   data.js — 홈페이지 내용 (✎ EDIT → 홈페이지에 저장 · 2026. 11. 24. 오전 1:33:51)
+   data.js — 홈페이지 내용 (✎ EDIT → 홈페이지에 저장 · 2026. 11. 24. 오전 1:47:59)
    - 홈페이지 주소 끝에 ?owner 를 붙여 들어가면 ✎ EDIT 로 바로 고칠 수 있어요.
    - 사진은 media/ 폴더에 있어요.
    ========================================================= */
@@ -2040,7 +2040,8 @@ const SITE = {
         "name": "東京青藍大学",
         "no": "CH-03",
         "member": [
-          {"avatar": "", 
+          {
+            "avatar": "",
             "dept": "工学部",
             "name": "서은율",
             "en": "Seo Eunyul",
@@ -2145,7 +2146,8 @@ const SITE = {
             ],
             "year": "3年生"
           },
-          {"avatar": "", 
+          {
+            "avatar": "",
             "dept": "言語学部",
             "name": "한사랑",
             "en": "Han Sarang",
@@ -2250,7 +2252,8 @@ const SITE = {
             ],
             "year": "3年生"
           },
-          {"avatar": "", 
+          {
+            "avatar": "",
             "dept": "デザイン学部",
             "name": "한하나",
             "en": "Han Hana",
@@ -2355,7 +2358,8 @@ const SITE = {
             ],
             "year": "4年生"
           },
-          {"avatar": "", 
+          {
+            "avatar": "",
             "dept": "소속",
             "name": "새 캐릭터 4",
             "en": "New Character 4",
@@ -2426,7 +2430,8 @@ const SITE = {
             "talk": [],
             "year": "2年生"
           },
-          {"avatar": "", 
+          {
+            "avatar": "",
             "dept": "人文学部",
             "name": "연유이",
             "en": "Yeon Yui",
@@ -2713,7 +2718,9 @@ const SITE = {
               }
             ]
           },
-          {"avatar": "", "hero": "", 
+          {
+            "avatar": "",
+            "hero": "",
             "group": "v1",
             "duo": [
               {
@@ -2942,7 +2949,8 @@ const SITE = {
         "name": "FRONTLINE",
         "no": "CH-04",
         "member": [
-          {"avatar": "", 
+          {
+            "avatar": "",
             "dept": "RED ZONE",
             "name": "Yvelyn Sinclair",
             "en": "이블린 싱클레어",
@@ -3046,7 +3054,8 @@ const SITE = {
               }
             ]
           },
-          {"avatar": "", 
+          {
+            "avatar": "",
             "dept": "소속",
             "name": "캐릭터 6",
             "en": "Character Six",
@@ -3150,7 +3159,8 @@ const SITE = {
               }
             ]
           },
-          {"avatar": "", 
+          {
+            "avatar": "",
             "dept": "CROWN GATE",
             "name": "새 캐릭터 5",
             "en": "New Character 5",
@@ -3220,7 +3230,8 @@ const SITE = {
             ],
             "talk": []
           },
-          {"avatar": "", 
+          {
+            "avatar": "",
             "dept": "소속",
             "name": "새 캐릭터 4",
             "en": "New Character 4",
@@ -3290,7 +3301,8 @@ const SITE = {
             ],
             "talk": []
           },
-          {"avatar": "", 
+          {
+            "avatar": "",
             "dept": "SILVER SLOT",
             "name": "새 캐릭터 5",
             "en": "New Character 5",
@@ -3360,7 +3372,8 @@ const SITE = {
             ],
             "talk": []
           },
-          {"avatar": "", 
+          {
+            "avatar": "",
             "dept": "소속",
             "name": "새 캐릭터 6",
             "en": "New Character 6",
@@ -3430,7 +3443,8 @@ const SITE = {
             ],
             "talk": []
           },
-          {"avatar": "", 
+          {
+            "avatar": "",
             "dept": "소속",
             "name": "새 캐릭터 7",
             "en": "New Character 7",
@@ -4460,6 +4474,13 @@ const SITE = {
       50,
       50,
       1.1
+    ],
+    "characters.worlds.seiran.member.1.photo": [
+      50,
+      31.1,
+      1.1,
+      0,
+      0
     ]
   }
 };
