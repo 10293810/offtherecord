@@ -6561,7 +6561,7 @@ html.sye-editing #winlayer .cxwin [data-ci] .cx-ov,html.sye-editing #winlayer .c
     if (l < .3) return toRgb(222, .12, Math.min(l, .11) + .01);                                  // 진한 초록 글씨 · 선 → 먹색
     if (l >= .84) return toRgb(212, .2, Math.max(l, .9));                                        // 아주 연한 민트 바탕 → 쿨 화이트
     if (l >= .66) return toRgb(HA, .5, Math.max(l, .8));                                         // 연한 민트 → 파스텔 민트 (대표색)
-    return toRgb(HA, .42, Math.max(.52, Math.min(.62, l + .1)));                                 // 중간 민트 · 청록 → 부드러운 민트 하나 (글씨 · 선용)
+    return toRgb(HA, .56, Math.max(.58, Math.min(.66, l + .15)));                                 // 중간 민트 · 청록 → 부드러운 민트 하나 (글씨 · 선용)
   };
   const remap = txt => txt.replace(/rgba?\(\s*(\d+),\s*(\d+),\s*(\d+)(\s*,\s*[\d.]+)?\s*\)/g, (m, r, g, b, a) => { const c = shift(r, g, b); return c ? (a ? `rgba(${c.join(', ')}${a})` : `rgb(${c.join(', ')})`) : m; })
     .replace(/#([0-9a-f]{6}|[0-9a-f]{3})\b/gi, (m, hx) => { if (hx.length === 3) hx = hx.split('').map(x => x + x).join(''); const c = shift(parseInt(hx.slice(0, 2), 16), parseInt(hx.slice(2, 4), 16), parseInt(hx.slice(4, 6), 16)); return c ? '#' + c.map(v => v.toString(16).padStart(2, '0')).join('') : m; });
