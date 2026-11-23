@@ -5735,7 +5735,10 @@ html:not(.sye-editing) .cx-add,html:not(.sye-editing) .cd-tags .ed{display:none!
     fm.querySelector('.ft').textContent = `${i == null ? '새로 추가' : '수정'} · ${world.name || w} ${isP ? '페어' : t === 'au' ? 'AU' : '캐릭터'}`;
     let h = '';
     const rowsOf = rs => (rs || []).map(r => Array.isArray(r) ? r.join(' : ') : r).join('\n');
-    const pic = (label, name, has) => `<label class="pic"><span>${label}</span><input type="file" name="${name}" accept="image/*">${has ? '<small>지금 사진이 있어요 · 바꿀 때만 골라요</small>' : ''}</label>`;
+    // 사진 칸 : 지금 들어 있는 사진을 작게 보여주고, 바꿀 때만 새로 골라요 (파일 칸은 원래 비어 보여요)
+    const picBase = i == null ? '' : `characters.worlds.${w}.${t}.${i}.`, picNow = k => { if (!picBase) return ''; const pth = picBase + k, v = o[k]; return SLOT_URL[pth] || PV[pth] || (typeof v === 'string' && /^(media\/|https?:|data:)/.test(v) ? v : SRC(v)); };
+    const PIC_KEY = { pic: isP ? 'photo' : 'card', pic_photo: world.style === 'roster' ? 'hero' : 'photo', pic_av: 'avatar' };
+    const pic = (label, name) => { const u = picNow(PIC_KEY[name] || 'card'); return `<label class="pic${u ? ' has' : ''}"><span>${label}</span><div class="pic-row">${u ? `<img class="pic-th" src="${E(u)}" alt="">` : ''}<input type="file" name="${name}" accept="image/*"></div>${u ? '<small>지금 넣어둔 사진이에요 · 바꿀 때만 새로 골라요</small>' : (name === 'pic' ? '<small>아직 사진이 없어요</small>' : '<small>아직 없어요 · 안 넣으면 목록 사진을 보여줘요</small>')}</label>`; };
     if (!isP) { const P = o.profile || {};
       h += `<div class="sec">기본 (이것만 적어도 돼요)</div>` + fld('이름 *', 'name', o.name) + fld(teamsOf(world) ? '한국어 이름' : world.style === 'roster' ? '코드네임 (영어)' : '영어 이름', 'en', o.en) + (world.style === 'roster' ? fld('그룹', 'rgroup', (g => g ? g.name + ' · ' + g.cls : '')((world.groups || []).find(g => g.key === o.group)), 'select', '목록에서 들어갈 줄', ['', ...(world.groups || []).map(g => g.name + ' · ' + g.cls)]) + fld('속성', 'el', rsElOf(o), 'select', '고르면 뱃지 색이 알아서 바뀌어요', Object.keys(RS_EL)) : '') + (world.grades ? fld('학년', 'year', o.year || '', 'select', '목록에서 학년별로 나눠서 보여줘요', ['', ...GR_Y.map(g => g[0])]) : '') + (teamsOf(world) ? fld('소속팀', 'dept', o.dept || (teamsOf(world).find(x => !x.match) || {}).key, 'select', '고른 팀 칸에 들어가요 · 카드 위 작은 글씨', [...teamsOf(world).map(x => x.key), ...(o.dept && !teamsOf(world).some(x => x.key === o.dept) ? [o.dept] : [])]) : fld('소속 · 학부', 'dept', o.dept, 'text', '카드 위 작은 글씨')) + fld('한 줄 소개', 'quote', o.quote) + fld('태그', 'tags', (o.tags || []).join(', '), 'text', '쉼표로 나눠요 · 예) #다정, #고양이상')
         + (world.style !== 'roster' ? fld('사진 쓰는 방법', 'picmode', o.picMode === 'sep' ? '목록 · 첫 화면 · 전환 사진 모두 따로' : '목록 · 전환 사진 같게 (첫 화면만 따로)', 'select', '고른 방법에 맞춰 아래 사진 칸이 바뀌어요 · 전환 = PROFILE 눌렀을 때 나오는 작은 네모 · 비어 있는 자리는 목록 사진을 빌려 보여줘요', ['목록 · 전환 사진 같게 (첫 화면만 따로)', '목록 · 첫 화면 · 전환 사진 모두 따로']) : '')
@@ -6705,4 +6708,11 @@ html.sye-editing #winlayer .cxwin [data-ci] .cx-ov,html.sye-editing #winlayer .c
 .sye-fm .fsug button{border:1px dashed #9EDDC4;background:#F3FBF7;color:#2F7A60;border-radius:999px;padding:3px 10px;font:700 11.5px 'IBM Plex Sans KR','Noto Sans JP',sans-serif;cursor:pointer;transition:background .15s}
 .sye-fm .fsug button::before{content:'＋ ';opacity:.6}
 .sye-fm .fsug button:hover{background:#E1F6EC;border-style:solid}
+`; document.head.appendChild(st); })();
+
+/* 수정 창 사진 칸 : 지금 사진 작게 보여주기 */
+(() => { const st = document.createElement('style'); st.textContent = `
+.sye-fm .pic-row{display:flex;align-items:center;gap:10px}
+.sye-fm .pic-row input{flex:1;min-width:0}
+.sye-fm .pic-th{flex:none;width:52px;height:52px;border-radius:12px;object-fit:cover;border:1px solid #E3E9ED;box-shadow:0 2px 6px rgba(20,30,40,.08)}
 `; document.head.appendChild(st); })();
