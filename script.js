@@ -2671,6 +2671,23 @@ function teamsOf(W) { return W && (W.teams || (W === (S.characters?.worlds || {}
 function cxCardHTML(m, i, isOn) { return `<button class="cx-card ${isOn(i) ? 'on' : ''}" data-ci="${i}">
           ${ph(m.card, { cls: 'cx-ph', seed: m.name + i })}
           <span class="cx-ov"><small>${esc(m.dept)}</small><span class="cx-nm">${esc(m.name)}</span>${m.en ? `<em class="cx-en">${esc(m.en)}</em>` : ''}</span></button>`; }
+
+// 한국어 → 로마자 (표준 로마자 표기 · 성씨는 흔한 영어 표기) : 수정 창 '제안' 칩에만 써요
+const RK_I = ['g','kk','n','d','tt','r','m','b','pp','s','ss','','j','jj','ch','k','t','p','h'], RK_V = ['a','ae','ya','yae','eo','e','yeo','ye','o','wa','wae','oe','yo','u','wo','we','wi','yu','eu','ui','i'],
+  RK_F = ['','k','k','k','n','n','n','t','l','k','m','l','l','l','p','l','m','p','p','t','t','ng','t','t','k','t','p','t'];
+const RK_SUR = { 김:'Kim',이:'Lee',박:'Park',최:'Choi',정:'Jung',강:'Kang',조:'Cho',윤:'Yoon',장:'Jang',임:'Lim',한:'Han',오:'Oh',서:'Seo',신:'Shin',권:'Kwon',황:'Hwang',안:'Ahn',송:'Song',류:'Ryu',유:'Yoo',홍:'Hong',전:'Jeon',고:'Ko',문:'Moon',양:'Yang',손:'Son',배:'Bae',백:'Baek',허:'Heo',남:'Nam',심:'Shim',노:'Noh',하:'Ha',곽:'Kwak',성:'Sung',차:'Cha',주:'Joo',우:'Woo',구:'Koo',민:'Min',진:'Jin',지:'Ji',엄:'Eom',채:'Chae',원:'Won',천:'Cheon',방:'Bang',공:'Kong',현:'Hyun',함:'Ham',변:'Byun',염:'Yeom',여:'Yeo',추:'Choo',도:'Do',소:'So',석:'Seok',선:'Sun',설:'Seol',마:'Ma',길:'Gil',연:'Yeon',위:'Wi',표:'Pyo',명:'Myung',기:'Ki',반:'Ban',왕:'Wang',금:'Geum',옥:'Ok',인:'In',제:'Je',모:'Mo',탁:'Tak',국:'Kook',나:'Na',태:'Tae',봉:'Bong',경:'Kyung',피:'Pi',범:'Beom' };
+function rkWord(w) { let o = '', pf = -1; for (const ch of w) { const c = ch.charCodeAt(0) - 0xAC00; if (c < 0 || c > 11171) { o += ch; pf = -1; continue; } const ini = Math.floor(c / 588), fin = c % 28; o += (ini === 5 && pf === 8 ? 'l' : RK_I[ini]) + RK_V[Math.floor(c % 588 / 28)] + RK_F[fin]; pf = fin; } return o; }
+const rkCap = w => w ? w[0].toUpperCase() + w.slice(1) : w;
+function romaKo(name) { const t = String(name).trim(); if (!t) return []; const ws = t.split(/\s+/);
+  if (ws.length > 1) return [ws.map(w => rkCap(rkWord(w))).join(' ')];
+  const syl = [...t], out = [];
+  if (syl.length >= 2 && syl.length <= 4) { const sur = RK_SUR[syl[0]] || rkCap(rkWord(syl[0])), giv = rkCap(rkWord(syl.slice(1).join(''))); out.push(`${sur} ${giv}`, `${giv} ${sur}`); }
+  if (syl.length <= 2) out.unshift(rkCap(rkWord(t))); else out.push(rkCap(rkWord(t))); return out; }
+// 학부 이름 한국어 → 일본어 (목록에 있는 것만 · 없으면 제안 안 해요)
+const JP_DEPT = { '인문':'人文','언어':'言語','디자인':'デザイン','법':'法','법학':'法','경제':'経済','경영':'経営','상':'商','상학':'商','문':'文','문학':'文','이공':'理工','이':'理','이학':'理','공':'工','공학':'工','정보':'情報','의':'医','의학':'医','치':'歯','치의학':'歯','간호':'看護','약':'薬','약학':'薬','교육':'教育','음악':'音楽','미술':'美術','예술':'芸術','사회':'社会','국제':'国際','국제교양':'国際教養','외국어':'外国語','심리':'心理','체육':'体育','스포츠과학':'スポーツ科学','건축':'建築','농':'農','농학':'農','환경':'環境','미디어':'メディア','영상':'映像','정치경제':'政治経済','관광':'観光','복지':'福祉','사회복지':'社会福祉','생활과학':'生活科学','영양':'栄養','문화구상':'文化構想','종합정책':'総合政策','상경':'商経','영문':'英文','신학':'神','종교':'宗教','철학':'哲','역사':'歴史','사학':'史','수학':'数','물리':'物理','화학':'化','생명과학':'生命科学','컴퓨터':'コンピュータ','게임':'ゲーム','애니메이션':'アニメーション','패션':'ファッション','실용음악':'ポピュラー音楽','연극영화':'演劇映画','무용':'舞踊' };
+function jaDept(v) { const t = String(v).trim().replace(/\s+/g, ''); const m = /^(.*?)(학부|학과|대학원|대학|부|과)?$/.exec(t); const stem = m[1], suf = m[2] || '학부';
+  const J = JP_DEPT[stem] || JP_DEPT[stem.replace(/학$/, '')]; if (!J) return '';
+  return J + ({ '학부': '学部', '부': '学部', '학과': '学科', '과': '学科', '대학원': '大学院', '대학': '学部' }[suf] || '学部'); }
 // 東京青藍大学 : 학년별 (1年生 ~ 4年生 · 학년 없으면 맨 아래)
 const GR_Y = [['1年生', 'FRESHMAN', '#8DB4E2'], ['2年生', 'SOPHOMORE', '#5B8FCF'], ['3年生', 'JUNIOR', '#3769AE'], ['4年生', 'SENIOR', '#20457E']];
 function gradesHTML(W, list, isOn) {
@@ -5741,7 +5758,17 @@ html:not(.sye-editing) .cx-add,html:not(.sye-editing) .cd-tags .ed{display:none!
         if (!card) { card = document.createElement('div'); card.className = 'fcard'; k.before(card); } card.append(k); }); };
     pack(FB);
     const duoRow = (a, b) => { const A = F.elements[a], B = F.elements[b]; const la = A && A.closest('label'), lb = B && B.closest('label'); if (!la || !lb || la.parentElement !== lb.parentElement) return; const r = document.createElement('div'); r.className = 'frow'; la.before(r); r.append(la, lb); };
-    duoRow('name', 'en'); duoRow('rgroup', 'el'); duoRow('year', 'dept'); duoRow('alink', 'aname'); duoRow('blink', 'bname');
+    duoRow('name', 'en'); duoRow('rgroup', 'el'); duoRow('year', 'dept');
+    // 제안 칩 : 한국어 이름 → 영어 이름 후보 · 세이란 학부 → 일본어 학부 후보 (누르면 넣어져요, 안 누르면 그대로)
+    const sug = (inp, get) => { if (!inp) return; const box = document.createElement('div'); box.className = 'fsug'; (inp.closest('label') || inp).append(box);
+      const draw = () => { const c = get().filter((x, i, a) => x && x !== inp.value.trim() && a.indexOf(x) === i); box.innerHTML = c.length ? `<span>제안</span>${c.map(x => `<button type="button">${E(x)}</button>`).join('')}` : ''; };
+      box.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; inp.value = b.textContent; inp.dispatchEvent(new Event('input', { bubbles: true })); draw(); });
+      return draw; };
+    const nmI = F.elements.name, enI = F.elements.en;
+    if (nmI && enI) { const d = sug(enI, () => /[가-힣]/.test(nmI.value) ? romaKo(nmI.value) : []); nmI.addEventListener('input', d); enI.addEventListener('input', d); d(); }
+    const dpI = F.elements.dept;
+    if (dpI && world.grades && dpI.tagName === 'INPUT') { dpI.setAttribute('list', 'sy-depts'); if (!document.getElementById('sy-depts')) { const dl = document.createElement('datalist'); dl.id = 'sy-depts'; dl.innerHTML = [...new Set(Object.values(JP_DEPT))].map(x => `<option value="${x}学部">`).join(''); document.body.append(dl); }
+      const d = sug(dpI, () => /[가-힣]/.test(dpI.value) ? [jaDept(dpI.value)] : []); dpI.addEventListener('input', d); d(); } duoRow('alink', 'aname'); duoRow('blink', 'bname');
     FS = { w, t, i, o }; fm.classList.add('on');
   }
   function commit(msg, w, sel) { pend(); try { localStorage.setItem('sye-draft', JSON.stringify(RAW)); } catch (e) { alert('저장 공간이 부족해서 저장하지 못했어요'); return; }
@@ -6617,4 +6644,14 @@ html.sye-editing #winlayer .cxwin [data-ci] .cx-ov,html.sye-editing #winlayer .c
 .sr-yl{flex:1;height:2px;border-radius:2px;margin-left:4px;background:linear-gradient(90deg,var(--yc),color-mix(in srgb,var(--yc) 25%,transparent) 60%,transparent)}
 .sr-yh em{font:900 13px 'Inter',sans-serif;font-style:normal;color:var(--yc)}
 .sr-yh em i{font:800 9px 'Noto Sans JP',sans-serif;font-style:normal;margin-left:2px;opacity:.8}
+`; document.head.appendChild(st); })();
+
+/* 수정 창 제안 칩 */
+(() => { const st = document.createElement('style'); st.textContent = `
+.sye-fm .fsug{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin-top:6px}
+.sye-fm .fsug:empty{display:none}
+.sye-fm .fsug span{font:800 9.5px 'Inter','IBM Plex Sans KR',sans-serif;letter-spacing:.08em;color:#9AA6AE;margin-right:2px}
+.sye-fm .fsug button{border:1px dashed #9EDDC4;background:#F3FBF7;color:#2F7A60;border-radius:999px;padding:3px 10px;font:700 11.5px 'IBM Plex Sans KR','Noto Sans JP',sans-serif;cursor:pointer;transition:background .15s}
+.sye-fm .fsug button::before{content:'＋ ';opacity:.6}
+.sye-fm .fsug button:hover{background:#E1F6EC;border-style:solid}
 `; document.head.appendChild(st); })();
