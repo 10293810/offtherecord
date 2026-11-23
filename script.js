@@ -2651,7 +2651,7 @@ function rosterHTML(W, list, isOn) {
   const G = (W.groups || []).slice(), keys = G.map(g => g.key);
   if (list.some(m => !keys.includes(m.group))) G.push({ key: '__etc', name: 'ETC.', cls: '', color: '#8EB2B7' });
   return G.map(g => { const ms = list.map((m, i) => [m, i]).filter(([m]) => g.key === '__etc' ? !keys.includes(m.group) : m.group === g.key); if (!ms.length) return '';
-    return `<div class="rs-blk"><div class="rs-sec"><b>${esc(g.name)}</b><span style="color:${esc(g.color || '')}">${esc(g.cls || '')}</span></div><div class="rs-ln" style="background:linear-gradient(90deg,${esc(g.color || '#8EB2B7')},transparent 70%)"></div>
+    return `<div class="rs-blk" style="--gc:${esc(g.color || '#8EB2B7')}"><div class="rs-sec"><b>${esc(g.name)}</b><span>${esc(g.cls || '')}</span></div><div class="rs-ln"></div>
       <div class="rs-grid">${ms.map(([m, i]) => `<button class="rs-card ${isOn(i) ? 'on' : ''}" data-ci="${i}">${ph(pv(m.card, m.hero), { seed: m.name + i })}<div class="ov"><b>${esc(m.name)}</b>${m.attr ? `<i style="background:${esc(m.attrColor || '#55C7D7')};color:${rsInk(m.attrColor || '#55C7D7')}">${esc(m.attr)}</i>` : ''}</div></button>`).join('')}</div></div>`; }).join('');
 }
 // FRONTLINE : 소속팀(카드 위 작은 글씨 = 소속)별로 나눠서 보여줘요 · 팀이 없는 캐릭터는 맨 아래 무소속
@@ -2887,7 +2887,7 @@ function agentSecHTML(x) {
 let agentWho = 0, agentKey = '';
 function drawAgent(rec) {
   const cn = charNow(); if (!cn) return; const { w: W } = cn, m0 = cn.m, b = rec.body;
-  const key = charSel.w + '/' + charSel.i; if (key !== agentKey) { agentKey = key; agentWho = 0; }
+  const key = charSel.w + '/' + charSel.i; if (key !== agentKey) { agentKey = key; const mm = ((S.characters?.worlds || {})[charSel.w]?.[charSel.t] || [])[charSel.i]; agentWho = mm && mm.duoFirst ? 1 : 0; }
   // 캐릭터 하나 = 칸 두 개 : 01 채팅하는 캐릭터 · 02 내 페르소나 (캐릭터마다 따로)
   const duo = Array.isArray(m0.duo) ? m0.duo : []; if (agentWho > 1) agentWho = 0;
   const P = duo[0] || { name: '페르소나', tag: 'PERSONA', level: '[ PERSONA FILE ]', quote: OWNER && SYE_ON ? '‘위의 02 칸을 눌러 이 캐릭터의 페르소나를 만들어요.’' : '‘아직 페르소나가 없어요.’', gallery: [], sections: [], _empty: true };
@@ -2896,12 +2896,12 @@ function drawAgent(rec) {
   $('.mcode', rec.el).textContent = `${W.term || 'TERMINAL'} · ${m.code || ''}`;
   $('.mf', rec.el).textContent = `FILE 0${agentTab === 'gallery' ? 2 : 1} / 02`;
   const ft = $('.ft', rec.el); if (ft) ft.textContent = W.footer || S.venue;
-  const strip = [[m0, 0], [P, 1]], LBL = ['01 · CHARACTER', '02 · PERSONA'];
+  const strip = m0.duoFirst ? [[P, 1], [m0, 0]] : [[m0, 0], [P, 1]], ROLE = ['CHARACTER', 'PERSONA'];
   let body;
   if (agentTab === 'gallery') { const G = m.gallery || []; body = `<div class="mp-gal"><div class="mp-gal-h">${esc(m.name)} · GALLERY<small>${G.length} PHOTOS</small></div><div class="g">${G.map((g, i) => ph(g, { seed: m.name + i, icon: 'heart' })).join('')}</div></div>`; }
   else body = `<div class="mp-hero ph ${V(m.name)} ${m.theme === 'dark' ? '' : 'lt'}" data-slot="${esc(SPATH(pv(m.hero, m.card)))}">${SRC(pv(m.hero, m.card)) ? `<img src="${esc(SRC(pv(m.hero, m.card)))}" alt="">` : `<span class="ph-ic">${ic('idcard')}</span>`}${m.badge ? `<span class="ent">${esc(m.badge)}</span>` : ''}
       <div class="cap"><small>${esc(m.level || '')}</small><h3>${esc(m.name)}</h3><p>${esc(m.quote || '')}</p></div></div>${(m.sections || []).map(agentSecHTML).join('')}`;
-  b.innerHTML = `<div class="mp-tabs" style="grid-template-columns:repeat(2,minmax(0,1fr))">${strip.map(([x, k]) => `<button class="mp-tab ${k === agentWho ? 'on' : ''}${x._empty ? ' empty' : ''}" data-whok="${k}"${x._empty && OWNER && SYE_ON ? ' data-duo-add="1"' : ''}>${ph(pv(x.avatar, x.card), { cls: 'av', seed: x.name })}<span><b>${esc(x.name)}</b><small>${LBL[k]}</small></span></button>`).join('')}</div>
+  b.innerHTML = `<div class="mp-tabs" style="grid-template-columns:repeat(2,minmax(0,1fr))">${strip.map(([x, k]) => `<button class="mp-tab ${k === agentWho ? 'on' : ''}${x._empty ? ' empty' : ''}" data-whok="${k}"${x._empty && OWNER && SYE_ON ? ' data-duo-add="1"' : ''}>${ph(pv(x.avatar, x.card), { cls: 'av', seed: x.name })}<span><b>${esc(x.name)}</b><small>${String(strip.findIndex(z => z[1] === k) + 1).padStart(2, '0')} · ${ROLE[k]}</small></span></button>`).join('')}${OWNER && SYE_ON ? `<button class="mp-swap" data-duo-swap="1" title="캐릭터 · 페르소나 자리 바꾸기">⇄</button>` : ''}</div>
     <div class="mp-body"><div class="mp-sub"><button class="${agentTab === 'profile' ? 'on' : ''}" data-tab="profile"><i>01</i>PROFILE</button><button class="${agentTab === 'gallery' ? 'on' : ''}" data-tab="gallery"><i>02</i>GALLERY</button>
     <span class="r">${m.bgm != null ? `<button data-song="${m.bgm}">♪ BGM</button>` : ''}${m.song != null ? `<button data-song="${m.song}">♪ CHARACTER SONG</button>` : ''}</span></div>
     <div class="mp-scroll">${body}</div></div>`;
@@ -2918,6 +2918,7 @@ function openAgent() {
       drawAgent(rec);
       b.addEventListener('click', e => {
         const dd = e.target.closest('[data-duo-del]'); if (dd) { e.stopPropagation(); if (confirm('이 상대 캐릭터를 지울까요?')) dispatchEvent(new CustomEvent('sye-duo', { detail: { w: charSel.w, i: charSel.i, del: +dd.dataset.duoDel } })); return; }
+        const ds = e.target.closest('[data-duo-swap]'); if (ds) { e.stopPropagation(); dispatchEvent(new CustomEvent('sye-duo', { detail: { w: charSel.w, i: charSel.i, swap: true } })); return; }
         const da = e.target.closest('[data-duo-add]'); if (da) { dispatchEvent(new CustomEvent('sye-duo', { detail: { w: charSel.w, i: charSel.i } })); return; }
         const w = e.target.closest('[data-whok]'); if (w) { agentWho = +w.dataset.whok; agentTab = 'profile'; drawAgent(rec); focusWin('agent'); return; }
         const t = e.target.closest('[data-tab]'); if (t) { agentTab = t.dataset.tab; drawAgent(rec); return; }
@@ -5091,7 +5092,7 @@ function syTheme() {
   for (const sh of document.styleSheets) { let rs; try { rs = sh.cssRules; } catch (e) { continue; } if (rs) walk(rs, false); }
   // 창 안에서 글자 · 그림이 직접 쓰는 색 (style · fill · stroke)
   const fix = el => { if (!(el instanceof Element) || el.closest('.sy-hero,.apps-panel')) return;
-    [el, ...el.querySelectorAll('[style],[fill],[stroke],stop')].forEach(e => {
+    [el, ...el.querySelectorAll('[style],[fill],[stroke],stop')].forEach(e => { if (e.closest('.rs-blk,.fl-team,[data-keepc]')) return;   // ARCH 그룹 · 속성 색은 그대로
       const st = e.getAttribute('style'); if (st) { const n = syMapStr(st); if (n !== st) e.setAttribute('style', n); }
       ['fill', 'stroke', 'stop-color'].forEach(a => { const v = e.getAttribute(a); if (v) { const n = syMapStr(v); if (n !== v) e.setAttribute(a, n); } });
     }); };
@@ -5672,7 +5673,7 @@ html:not(.sye-editing) .cx-add,html:not(.sye-editing) .cd-tags .ed{display:none!
     const rowsOf = rs => (rs || []).map(r => Array.isArray(r) ? r.join(' : ') : r).join('\n');
     const pic = (label, name, has) => `<label class="pic"><span>${label}</span><input type="file" name="${name}" accept="image/*"><small>${has ? '바꿀 때만 골라요 · ' : ''}여기서 고르면 저장할 때 같이 들어가요 (나중에 사진 자리를 눌러서 바꿔도 돼요)</small></label>`;
     if (!isP) { const P = o.profile || {};
-      h += `<div class="sec">기본 (이것만 적어도 돼요)</div>` + fld('이름 *', 'name', o.name) + fld('영어 이름', 'en', o.en) + (world.style === 'roster' ? fld('그룹', 'rgroup', ((world.groups || []).find(g => g.key === o.group) || {}).name || '', 'select', '목록에서 들어갈 줄', ['', ...(world.groups || []).map(g => g.name)]) + fld('등급', 'grade', o.grade || '', 'select', '카드 뱃지에 작게 들어가요 · 예) S급 얼음', RS_GR) + fld('속성', 'el', rsElOf(o), 'select', '고르면 뱃지 색이 알아서 바뀌어요', Object.keys(RS_EL)) : '') + (teamsOf(world) ? fld('소속팀', 'dept', o.dept || (teamsOf(world).find(x => !x.match) || {}).key, 'select', '고른 팀 칸에 들어가요 · 카드 위 작은 글씨', [...teamsOf(world).map(x => x.key), ...(o.dept && !teamsOf(world).some(x => x.key === o.dept) ? [o.dept] : [])]) : fld('소속 · 학부', 'dept', o.dept, 'text', '카드 위 작은 글씨')) + fld('한 줄 소개', 'quote', o.quote) + fld('태그', 'tags', (o.tags || []).join(', '), 'text', '쉼표로 나눠요 · 예) #다정, #고양이상')
+      h += `<div class="sec">기본 (이것만 적어도 돼요)</div>` + fld('이름 *', 'name', o.name) + fld('영어 이름', 'en', o.en) + (world.style === 'roster' ? fld('그룹', 'rgroup', ((world.groups || []).find(g => g.key === o.group) || {}).name || '', 'select', '목록에서 들어갈 줄', ['', ...(world.groups || []).map(g => g.name)]) + fld('속성', 'el', rsElOf(o), 'select', '고르면 뱃지 색이 알아서 바뀌어요', Object.keys(RS_EL)) : '') + (teamsOf(world) ? fld('소속팀', 'dept', o.dept || (teamsOf(world).find(x => !x.match) || {}).key, 'select', '고른 팀 칸에 들어가요 · 카드 위 작은 글씨', [...teamsOf(world).map(x => x.key), ...(o.dept && !teamsOf(world).some(x => x.key === o.dept) ? [o.dept] : [])]) : fld('소속 · 학부', 'dept', o.dept, 'text', '카드 위 작은 글씨')) + fld('한 줄 소개', 'quote', o.quote) + fld('태그', 'tags', (o.tags || []).join(', '), 'text', '쉼표로 나눠요 · 예) #다정, #고양이상')
         + pic(o.card ? '카드 사진 바꾸기' : '카드 사진', 'pic', !!o.card)
         + `<details class="more"><summary>더 적기 · 프로필 · 프롬프트 · 노래 (안 적어도 돼요)</summary>`
         + fld('사진 옆 작은 칸', 'spec', rowsOf(o.spec || [['AGE', ''], ['HEIGHT', ''], ['BIRTH', ''], ['LOVER', '']]), 'area', '', 4)
@@ -5722,6 +5723,15 @@ html:not(.sye-editing) .cx-add,html:not(.sye-editing) .cd-tags .ed{display:none!
     FF.innerHTML = `<button type="submit" class="sv">저장</button>${i != null ? '<button type="button" class="del">삭제</button>' : ''}<button type="button" class="cc">취소</button>`;
     FF.querySelector('.cc').onclick = fClose;
     const del = FF.querySelector('.del'); if (del) { let armed = false; del.onclick = () => { if (!armed) { armed = true; del.textContent = '한 번 더 누르면 삭제'; return; } fDelete(w, t, i); }; }
+    // 보기 좋게 : 제목 위 작은 글씨 · 칸을 하얀 카드로 묶고 · 짧은 칸은 두 줄로 나란히
+    F.classList.add('cf'); const ft2 = fm.querySelector('.ft'); ft2.innerHTML = `<small>${E((world.name || w) + ' · ' + (isP ? 'PAIR' : t === 'au' ? 'AU' : 'CHARACTER'))}</small><span>${i == null ? '새로 추가' : `<b>${E(o.name || '')}</b> 수정`}</span>`;
+    const pack = root => { const kids = [...root.children]; let card = null;
+      kids.forEach(k => { if (k.classList.contains('sec')) { card = document.createElement('div'); card.className = 'fcard'; k.before(card); card.append(k); return; }
+        if (k.tagName === 'DETAILS') { pack(k); card = null; return; } if (k.classList.contains('note') || k.tagName === 'SUMMARY') { card = null; return; }
+        if (!card) { card = document.createElement('div'); card.className = 'fcard'; k.before(card); } card.append(k); }); };
+    pack(FB);
+    const duoRow = (a, b) => { const A = F.elements[a], B = F.elements[b]; const la = A && A.closest('label'), lb = B && B.closest('label'); if (!la || !lb || la.parentElement !== lb.parentElement) return; const r = document.createElement('div'); r.className = 'frow'; la.before(r); r.append(la, lb); };
+    duoRow('name', 'en'); duoRow('rgroup', 'el'); duoRow('alink', 'aname'); duoRow('blink', 'bname');
     FS = { w, t, i, o }; fm.classList.add('on');
   }
   function commit(msg, w, sel) { pend(); try { localStorage.setItem('sye-draft', JSON.stringify(RAW)); } catch (e) { alert('저장 공간이 부족해서 저장하지 못했어요'); return; }
@@ -5755,7 +5765,7 @@ html:not(.sye-editing) .cx-add,html:not(.sye-editing) .cd-tags .ed{display:none!
     if (!v('name')) { toast('이름을 적어 주세요'); return; }
     if (!isP) {
       ['name', 'en', 'dept', 'quote'].forEach(k => { o[k] = v(k); });
-      if (W()[w].style === 'roster') { const gk = ((W()[w].groups || []).find(g => g.name === v('rgroup')) || {}).key; if (gk) o.group = gk; o.grade = v('grade'); o.el = v('el') || '무속성'; o.attr = rsBadge(o.el, o.grade); o.attrColor = RS_EL[o.el]; }
+      if (W()[w].style === 'roster') { const gk = ((W()[w].groups || []).find(g => g.name === v('rgroup')) || {}).key; if (gk) o.group = gk; delete o.grade; o.el = v('el') || '무속성'; o.attr = rsBadge(o.el, ''); o.attrColor = RS_EL[o.el]; }
       o.tags = v('tags').split(',').map(x => x.trim()).filter(Boolean);
       o.spec = lines(v('spec')).map(kv);
       o.profile = Object.assign({}, o.profile, { rows: lines(v('rows')).map(kv), personality: v('personality'), memo: v('memo') });
@@ -5783,7 +5793,7 @@ html:not(.sye-editing) .cx-add,html:not(.sye-editing) .cd-tags .ed{display:none!
     if (t === 'pair') o = { badge: 'NEW', name: `새 페어 ${n}`, en: 'NEW PAIR', quote: '페어 한 줄 소개를 적어 주세요', tags: '태그 X 태그', status: 'ING', since: new Date().toISOString().slice(0, 10), next: 100, photo: '', back: '', memo: '페어 메모를 적어 주세요',
       a: { name: '캐릭터 A', sub: 'A', avatar: '', link: '' }, b: { name: '캐릭터 B', sub: 'B', avatar: '', link: '' } };
     else if (world.style === 'roster' && (world.member || [])[0]) { o = JSON.parse(JSON.stringify(world.member[0])); Object.assign(o, { name: `새 캐릭터 ${n}`, en: `New Character ${n}`, quote: '‘한 줄 소개를 적어 주세요.’', card: '', avatar: '', hero: '', gallery: ['', '', ''] });
-      o.duo = [Object.assign(JSON.parse(JSON.stringify(o)), { name: '페르소나', en: 'Persona', tag: 'PERSONA', level: '[ PERSONA FILE ]', badge: '', group: undefined, attr: undefined, attrColor: undefined })]; delete o.duo[0].duo; }
+      o.duo = [Object.assign(JSON.parse(JSON.stringify(o)), { name: '페르소나', en: 'Persona', tag: 'PERSONA', level: '[ PERSONA FILE ]', badge: '', theme: o.theme === 'dark' ? 'light' : 'dark', group: undefined, attr: undefined, attrColor: undefined })]; delete o.duo[0].duo; }
     else o = { dept: '소속', name: `새 캐릭터 ${n}`, en: `New Character ${n}`, quote: '한 줄 소개를 적어 주세요', tags: ['#태그'],
       spec: [['AGE', '00'], ['HEIGHT', '000'], ['BIRTH', '00.00'], ['LOVER', '연인 이름']], card: '', photo: '', theme: { title: 'CHARACTER SONG', src: '' },
       profile: { rows: [['좋아하는 것', '내용'], ['싫어하는 것', '내용'], ['특징', '내용']], personality: '성격을 적어 주세요.', memo: '짧은 메모를 적어 주세요.' },
@@ -5792,13 +5802,14 @@ html:not(.sye-editing) .cx-add,html:not(.sye-editing) .cd-tags .ed{display:none!
     commit((t === 'pair' ? '새 페어' : '새 캐릭터') + '를 만들었어요 · 글자를 눌러 고치고, 사진 자리를 눌러 사진을 넣어요', w, { w, t, i: list.length - 1 });
   }
   // ARCH : 상대(duo) 캐릭터 추가 · 지우기
-  addEventListener('sye-duo', e => { const { w, i, del } = e.detail || {}, world = W()[w], m = world && (world.member || [])[i]; if (!m) return;
+  addEventListener('sye-duo', e => { const { w, i, del, swap } = e.detail || {}, world = W()[w], m = world && (world.member || [])[i]; if (!m) return;
+    if (swap) { m.duoFirst = !m.duoFirst; if (!m.duoFirst) delete m.duoFirst; agentKey = ''; commit(m.duoFirst ? '페르소나를 앞자리로 옮겼어요' : '캐릭터를 앞자리로 옮겼어요', w, null); return; }
     const duo = Array.isArray(m.duo) ? m.duo : (m.duo = []);
     if (del) { duo.splice(del - 1, 1); const base = `characters.worlds.${w}.member.${i}.duo.`;
       idbAll().then(all => Promise.all(Object.keys(all).filter(k => k.startsWith(base)).map(k => { const rest = k.slice(base.length), n = parseInt(rest, 10), tail = rest.slice(String(n).length);
         if (n === del - 1) return idbDel(k); if (n > del - 1) return idbDel(k).then(() => idbPut(base + (n - 1) + tail, all[k])); }))).catch(() => {}).then(() => { agentWho = 0; commit('상대 캐릭터를 지웠어요', w, null); }); return; }
     const o = JSON.parse(JSON.stringify(m)); delete o.duo; delete o.group; delete o.attr; delete o.attrColor;
-    Object.assign(o, { name: '페르소나', en: 'Persona', tag: 'PERSONA', level: '[ PERSONA FILE ]', code: '', badge: '', quote: '‘이 캐릭터의 상대, 내 페르소나예요. 한 줄 소개를 적어 주세요.’', card: '', avatar: '', hero: '', gallery: ['', '', ''] });
+    Object.assign(o, { theme: m.theme === 'dark' ? 'light' : 'dark', name: '페르소나', en: 'Persona', tag: 'PERSONA', level: '[ PERSONA FILE ]', code: '', badge: '', quote: '‘이 캐릭터의 상대, 내 페르소나예요. 한 줄 소개를 적어 주세요.’', card: '', avatar: '', hero: '', gallery: ['', '', ''] });
     duo.push(o); agentWho = duo.length; agentKey = w + '/' + i;
     commit('페르소나를 만들었어요 · 글자를 눌러 고치고, 사진 자리를 눌러 사진을 넣어요', w, null);
   });
@@ -6482,9 +6493,11 @@ html.sye-editing #winlayer .cxwin [data-ci] .cx-ov,html.sye-editing #winlayer .c
 #desk .win.cxwin .rs-blk{margin-bottom:18px}
 #desk .win.cxwin .rs-sec{align-items:center;gap:10px;margin-top:6px}
 #desk .win.cxwin .rs-sec b{font:900 19px var(--sans)!important;letter-spacing:-.01em;color:#16202A!important}
-#desk .win.cxwin .rs-sec > span{margin-left:auto;font:900 11px var(--sans)!important;letter-spacing:.04em}
+#desk .win.cxwin .rs-sec > span{margin-left:auto;font:900 10px var(--sans)!important;letter-spacing:.05em;color:var(--gc)!important}
 #desk .win.cxwin .rs-sec b *{font:inherit!important}
-#desk .win.cxwin .rs-ln{height:2px;margin:8px 0 14px}
+#desk .win.cxwin .rs-ln{height:3px!important;border-radius:2px;margin:8px 0 14px;background:linear-gradient(90deg,var(--gc) 0%,color-mix(in srgb,var(--gc) 55%,transparent) 35%,transparent 72%)!important}
+#desk .win .mp-tabs{position:relative}
+#desk .win .mp-swap{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:3;width:24px;height:24px;border-radius:50%;border:1px solid #D5DEE4;background:#fff;color:#3E8C72;font:900 12px var(--sans);box-shadow:0 2px 6px rgba(20,40,50,.15);cursor:pointer}
 #desk .win.cxwin .rs-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:12px!important}
 #desk .win.cxwin .rs-card{border-radius:8px!important;border:1.5px solid rgba(120,140,158,.55)!important;background:#2B3746!important;box-shadow:0 8px 18px -8px rgba(15,22,30,.45)!important;aspect-ratio:3/4}
 #desk .win.cxwin .rs-card.on{box-shadow:0 0 0 2.5px #5FD3BC,0 8px 18px -8px rgba(15,22,30,.45)!important}
@@ -6493,4 +6506,47 @@ html.sye-editing #winlayer .cxwin [data-ci] .cx-ov,html.sye-editing #winlayer .c
 #desk .win.cxwin .rs-card .ov{padding:44px 11px 12px!important;background:linear-gradient(rgba(14,17,22,0),rgba(14,17,22,.82) 55%,rgba(14,17,22,.95))!important}
 #desk .win.cxwin .rs-card .ov b{font:900 15px var(--sans)!important;color:#fff!important;letter-spacing:-.01em;text-shadow:0 1px 6px rgba(0,0,0,.35)}
 #desk .win.cxwin .rs-card .ov i{margin-top:6px!important;font:800 10px var(--sans)!important;padding:4px 10px!important;border-radius:999px!important;box-shadow:none}
+`; document.head.appendChild(st); })();
+
+/* 캐릭터 수정 창 : 깔끔한 카드형 (세이란 · ARCH · FRONTLINE · ETC 공통) */
+(() => { const st = document.createElement('style'); st.textContent = `
+.sye-fm{background:rgba(24,32,40,.34)!important;backdrop-filter:blur(3px)}
+.sye-fm form.cf{width:min(560px,100%);background:#F3F6F8;border-radius:20px;box-shadow:0 30px 70px -20px rgba(20,30,40,.45),0 0 0 1px rgba(255,255,255,.7) inset;position:relative}
+.sye-fm form.cf::before{content:'';position:absolute;left:0;right:0;top:0;height:4px;background:linear-gradient(90deg,#A6E6CF,#7FD7B1 45%,#CDEFE2);z-index:2}
+.sye-fm form.cf .fh{padding:18px 20px 14px;background:#fff;border-bottom:1px solid #E7ECEF}
+.sye-fm form.cf .ft{display:flex;flex-direction:column;gap:3px;font:800 17px 'IBM Plex Sans KR',sans-serif;color:#18212A;letter-spacing:-.01em}
+.sye-fm form.cf .ft small{font:800 10px 'Inter',sans-serif;letter-spacing:.16em;color:#5CC29C;text-transform:uppercase}
+.sye-fm form.cf .ft b{color:#3E8C72}
+.sye-fm form.cf .fh button{width:34px;height:34px;border-radius:50%;border:0;background:#F1F4F6;color:#5B6670;font-size:13px}
+.sye-fm form.cf .fh button:hover{background:#E6F6EF;color:#3E8C72}
+.sye-fm form.cf .fb{padding:6px 16px 18px}
+.sye-fm form.cf .fcard{background:#fff;border:1px solid #E6ECEF;border-radius:16px;padding:4px 16px 16px;margin-top:12px;box-shadow:0 1px 2px rgba(20,30,40,.03)}
+.sye-fm form.cf .sec{display:flex;align-items:center;gap:8px;margin:14px 0 4px;font:800 10.5px 'Inter','IBM Plex Sans KR',sans-serif;letter-spacing:.12em;color:#3E8C72}
+.sye-fm form.cf .sec::before{content:'';width:7px;height:7px;border-radius:50%;background:#7FD7B1;box-shadow:0 0 0 3px rgba(127,215,177,.22)}
+.sye-fm form.cf label{margin-top:12px}
+.sye-fm form.cf label > span{font:700 11.5px 'IBM Plex Sans KR',sans-serif;color:#4C5862;margin-bottom:6px}
+.sye-fm form.cf input,.sye-fm form.cf textarea,.sye-fm form.cf select{border:1px solid transparent;background:#F4F6F8;border-radius:11px;padding:10px 12px;font:500 13.5px 'IBM Plex Sans KR',sans-serif;color:#18212A;transition:background .15s,border-color .15s,box-shadow .15s}
+.sye-fm form.cf input:hover,.sye-fm form.cf textarea:hover,.sye-fm form.cf select:hover{background:#EEF2F4}
+.sye-fm form.cf input:focus,.sye-fm form.cf textarea:focus,.sye-fm form.cf select:focus{background:#fff;border-color:#8FDDBE;box-shadow:0 0 0 4px rgba(127,215,177,.2)}
+.sye-fm form.cf select{appearance:none;-webkit-appearance:none;padding-right:34px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M3 4.5l3 3 3-3' fill='none' stroke='%233E8C72' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;cursor:pointer}
+.sye-fm form.cf small{margin-top:5px;font-size:10.5px;color:#97A3AB}
+.sye-fm form.cf .frow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sye-fm form.cf .frow > label{min-width:0}
+.sye-fm form.cf label.pic input{background:#F7FBF9;border:1.5px dashed #B9E6D4;border-radius:12px;padding:12px;color:#5B6670}
+.sye-fm form.cf label.pic input::file-selector-button{margin-right:10px;border:0;border-radius:999px;padding:6px 14px;background:#E3F6EE;color:#2F7A60;font:800 12px 'IBM Plex Sans KR',sans-serif;cursor:pointer}
+.sye-fm form.cf details.more{margin-top:14px;border-top:0;padding-top:0}
+.sye-fm form.cf details.more summary{display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;border-radius:14px;background:#fff;border:1px dashed #C9E9DC;color:#3E8C72;font:800 12.5px 'IBM Plex Sans KR',sans-serif}
+.sye-fm form.cf details.more summary:hover{background:#F2FBF7}
+.sye-fm form.cf details.more[open] summary{border-style:solid;border-color:#E6ECEF}
+.sye-fm form.cf .re-r input,.sye-fm form.cf .re-r textarea{background:#F4F6F8}
+.sye-fm form.cf .re-x{border:0;background:#FBEFF2;border-radius:10px;height:40px}
+.sye-fm form.cf .re-add{border:1px dashed #9EDDC4;border-radius:999px;height:32px;background:#fff;color:#3E8C72}
+.sye-fm form.cf .note{margin:14px 2px 0;background:transparent;border:0;padding:0;text-align:center;color:#8A979F;font-size:11.5px}
+.sye-fm form.cf .note b{color:#3E8C72}
+.sye-fm form.cf .ff{padding:12px 16px calc(14px + env(safe-area-inset-bottom));border-top:1px solid #E7ECEF;gap:8px}
+.sye-fm form.cf .ff button{height:44px;border-radius:13px;border:1px solid #E3E9ED;font:800 13.5px 'IBM Plex Sans KR',sans-serif}
+.sye-fm form.cf .ff .sv{background:linear-gradient(160deg,#9BE2C6,#5CC29C);box-shadow:0 8px 18px -8px rgba(76,180,141,.7);color:#fff;border:0}
+.sye-fm form.cf .ff .sv:hover{filter:brightness(1.04)}
+.sye-fm form.cf .ff .del{color:#D9506A;background:#FFF7F9;border-color:#F6DDE3}
+@media (max-width:520px){.sye-fm form.cf .frow{grid-template-columns:1fr}}
 `; document.head.appendChild(st); })();

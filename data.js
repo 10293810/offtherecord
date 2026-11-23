@@ -2492,7 +2492,7 @@ const SITE = {
                 "name": "페르소나 A",
                 "en": "Persona",
                 "tag": "PERSONA",
-                "theme": "light",
+                "theme": "dark",
                 "badge": "",
                 "level": "[ PERSONA FILE ]",
                 "quote": "‘캐릭터 A의 상대, 내 페르소나예요. 한 줄 소개를 적어 주세요.’",
@@ -2582,153 +2582,6 @@ const SITE = {
             ]
           },
           {
-            "group": "prima",
-            "duo": [
-              {
-                "name": "페르소나 B",
-                "en": "Persona",
-                "tag": "PERSONA",
-                "theme": "light",
-                "badge": "",
-                "level": "[ PERSONA FILE ]",
-                "quote": "‘캐릭터 B의 상대, 내 페르소나예요. 한 줄 소개를 적어 주세요.’",
-                "card": "",
-                "avatar": "",
-                "hero": "",
-                "gallery": [
-                  "",
-                  "",
-                  ""
-                ],
-                "sections": [
-                  {
-                    "type": "table",
-                    "title": "PERSONA PROFILE",
-                    "rows": [
-                      [
-                        "NAME",
-                        "이름"
-                      ],
-                      [
-                        "RELATION",
-                        "캐릭터 B와의 관계"
-                      ],
-                      [
-                        "AGE",
-                        "00"
-                      ]
-                    ]
-                  }
-                ]
-              }
-            ],
-            "name": "캐릭터 B",
-            "en": "Agent B",
-            "attr": "전기 속성",
-            "attrColor": "#e8b93a",
-            "card": "",
-            "avatar": "",
-            "hero": "",
-            "tag": "S-CLASS SENTINEL",
-            "code": "U-0002",
-            "theme": "dark",
-            "badge": "S-CLASS ENTITY",
-            "level": "[ THREAT LEVEL : CONTROL ]",
-            "quote": "‘한 줄 소개가 들어가요. 캐릭터를 대표하는 대사나 문장을 적어주세요.’",
-            "bgm": 2,
-            "song": 4,
-            "gallery": [
-              "",
-              "",
-              ""
-            ],
-            "sections": [
-              {
-                "type": "directive",
-                "label": "[ EMERGENCY DIRECTIVE ]",
-                "title": "S급 센티널 ‘캐릭터 B’ 특별 관리 프로토콜",
-                "sub": "기밀 등급 표시 | 담당자 외 열람 금지"
-              },
-              {
-                "type": "report",
-                "title": "SITUATION REPORT",
-                "paragraphs": [
-                  "현재 상황 보고가 들어가요. 캐릭터가 어떤 상태인지, 무엇이 문제인지 적어주세요.",
-                  "<b>소속 · 직함</b> 같은 중요한 단어는 굵게, <span class=\"hl\">‘캐릭터 B’</span> 같은 이름은 강조로 표시할 수 있어요."
-                ]
-              },
-              {
-                "type": "table",
-                "title": "AGENT PROFILE",
-                "rows": [
-                  [
-                    "CODENAME",
-                    "코드네임 (Code)"
-                  ],
-                  [
-                    "CLASSIFICATION",
-                    "S-Class Elemental Sentinel"
-                  ],
-                  [
-                    "ATTRIBUTE",
-                    "[ 전기 (Fulmen) ]"
-                  ],
-                  [
-                    "AGE/NATIONALITY",
-                    "00세 / 국적"
-                  ]
-                ],
-                "evalLabel": "PSYCHOLOGICAL EVALUATION",
-                "eval": "“심리 평가가 들어가요. 성향, 불안 요소, 필요한 관리 같은 것을 적어주세요.”"
-              },
-              {
-                "type": "analysis",
-                "title": "SUBJECT ANALYSIS [TMI]",
-                "groups": [
-                  {
-                    "label": "외형적 특징 (VISUAL DATA)",
-                    "items": [
-                      [
-                        "신장/체격",
-                        "000cm. 체격 설명."
-                      ],
-                      [
-                        "주요 특징",
-                        "머리 · 눈 등 외형 특징."
-                      ],
-                      [
-                        "복장",
-                        "자주 입는 옷."
-                      ]
-                    ]
-                  },
-                  {
-                    "label": "성향 및 기호 (BEHAVIORAL PATTERN)",
-                    "items": [
-                      [
-                        "식성",
-                        "좋아하는 음식 · 싫어하는 음식."
-                      ],
-                      [
-                        "버릇",
-                        "자주 하는 행동."
-                      ],
-                      [
-                        "감정 표출",
-                        "감정을 드러내는 방식."
-                      ]
-                    ]
-                  }
-                ]
-              },
-              {
-                "type": "protocol",
-                "title": "HANDLING PROTOCOL",
-                "text": "이 캐릭터를 대할 때 주의할 점이 들어가요. <b>꼭 지켜야 하는 것</b>은 굵게 써주세요."
-              }
-            ]
-          },
-          {
             "group": "v1",
             "duo": [
               {
@@ -2813,92 +2666,6 @@ const SITE = {
                 "eval": "“평가가 들어가요.”"
               }
             ]
-          },
-          {
-            "group": "v1",
-            "duo": [
-              {
-                "name": "페르소나 D",
-                "en": "Persona",
-                "tag": "PERSONA",
-                "theme": "light",
-                "badge": "",
-                "level": "[ PERSONA FILE ]",
-                "quote": "‘캐릭터 D의 상대, 내 페르소나예요. 한 줄 소개를 적어 주세요.’",
-                "card": "",
-                "avatar": "",
-                "hero": "",
-                "gallery": [
-                  "",
-                  "",
-                  ""
-                ],
-                "sections": [
-                  {
-                    "type": "table",
-                    "title": "PERSONA PROFILE",
-                    "rows": [
-                      [
-                        "NAME",
-                        "이름"
-                      ],
-                      [
-                        "RELATION",
-                        "캐릭터 D와의 관계"
-                      ],
-                      [
-                        "AGE",
-                        "00"
-                      ]
-                    ]
-                  }
-                ]
-              }
-            ],
-            "name": "캐릭터 D",
-            "en": "Agent D",
-            "attr": "바람 속성",
-            "attrColor": "#4cbf7a",
-            "card": "",
-            "tag": "A-CLASS GUIDE",
-            "code": "V-0004",
-            "theme": "light",
-            "badge": "A-CLASS ENTITY",
-            "level": "[ VANGUARD : SUPPORT ]",
-            "quote": "‘한 줄 소개가 들어가요.’",
-            "bgm": 0,
-            "song": 1,
-            "gallery": [
-              "",
-              "",
-              ""
-            ],
-            "sections": [
-              {
-                "type": "table",
-                "title": "AGENT PROFILE",
-                "rows": [
-                  [
-                    "CODENAME",
-                    "코드네임"
-                  ],
-                  [
-                    "CLASSIFICATION",
-                    "A-Class Guide"
-                  ],
-                  [
-                    "ATTRIBUTE",
-                    "[ 바람 (Ventus) ]"
-                  ],
-                  [
-                    "AGE/NATIONALITY",
-                    "00세 / 국적"
-                  ]
-                ],
-                "evalLabel": "OFFICIAL EVALUATION",
-                "eval": "“평가가 들어가요.”"
-              }
-            ]
           }
         ],
         "pair": [
@@ -2919,8 +2686,8 @@ const SITE = {
               "link": "캐릭터 A"
             },
             "b": {
-              "name": "캐릭터 B",
-              "link": "캐릭터 B"
+              "name": "캐릭터 C",
+              "link": "캐릭터 C"
             }
           }
         ],
