@@ -2651,7 +2651,7 @@ function rosterHTML(W, list, isOn) {
   const G = (W.groups || []).slice(), keys = G.map(g => g.key);
   if (list.some(m => !keys.includes(m.group))) G.push({ key: '__etc', name: 'ETC.', cls: '', color: '#8EB2B7' });
   return G.map(g => { const ms = list.map((m, i) => [m, i]).filter(([m]) => g.key === '__etc' ? !keys.includes(m.group) : m.group === g.key); if (!ms.length) return '';
-    return `<div class="rs-blk" style="--gc:${esc(g.color || '#8EB2B7')}"><div class="rs-sec"><b>${esc(g.name)}</b><span>${esc(g.cls || '')}</span></div><div class="rs-ln"></div>
+    return `<div class="rs-blk" style="--gc:${esc(g.color || '#8EB2B7')};--cc:${esc(g.clsColor || g.color || '#8EB2B7')}"><div class="rs-sec"><b>${esc(g.name)}</b><span>${esc(g.cls || '')}</span></div><div class="rs-ln"></div>
       <div class="rs-grid">${ms.map(([m, i]) => `<button class="rs-card ${isOn(i) ? 'on' : ''}" data-ci="${i}">${ph(pv(m.card, m.hero), { seed: m.name + i })}<div class="ov"><b>${esc(m.name)}</b>${m.attr || m.el ? (() => { const e = rsElOf(m); return `<i style="background:${RS_EL[e]};color:${RS_INK[e] || '#fff'}">${esc(m.attr || rsBadge(e, ''))}</i>`; })() : ''}</div></button>`).join('')}</div></div>`; }).join('');
 }
 // FRONTLINE : 소속팀(카드 위 작은 글씨 = 소속)별로 나눠서 보여줘요 · 팀이 없는 캐릭터는 맨 아래 무소속
@@ -5673,7 +5673,7 @@ html:not(.sye-editing) .cx-add,html:not(.sye-editing) .cd-tags .ed{display:none!
     const rowsOf = rs => (rs || []).map(r => Array.isArray(r) ? r.join(' : ') : r).join('\n');
     const pic = (label, name, has) => `<label class="pic"><span>${label}</span><input type="file" name="${name}" accept="image/*"><small>${has ? '바꿀 때만 골라요 · ' : ''}여기서 고르면 저장할 때 같이 들어가요 (나중에 사진 자리를 눌러서 바꿔도 돼요)</small></label>`;
     if (!isP) { const P = o.profile || {};
-      h += `<div class="sec">기본 (이것만 적어도 돼요)</div>` + fld('이름 *', 'name', o.name) + fld('영어 이름', 'en', o.en) + (world.style === 'roster' ? fld('그룹', 'rgroup', ((world.groups || []).find(g => g.key === o.group) || {}).name || '', 'select', '목록에서 들어갈 줄', ['', ...(world.groups || []).map(g => g.name)]) + fld('속성', 'el', rsElOf(o), 'select', '고르면 뱃지 색이 알아서 바뀌어요', Object.keys(RS_EL)) : '') + (teamsOf(world) ? fld('소속팀', 'dept', o.dept || (teamsOf(world).find(x => !x.match) || {}).key, 'select', '고른 팀 칸에 들어가요 · 카드 위 작은 글씨', [...teamsOf(world).map(x => x.key), ...(o.dept && !teamsOf(world).some(x => x.key === o.dept) ? [o.dept] : [])]) : fld('소속 · 학부', 'dept', o.dept, 'text', '카드 위 작은 글씨')) + fld('한 줄 소개', 'quote', o.quote) + fld('태그', 'tags', (o.tags || []).join(', '), 'text', '쉼표로 나눠요 · 예) #다정, #고양이상')
+      h += `<div class="sec">기본 (이것만 적어도 돼요)</div>` + fld('이름 *', 'name', o.name) + fld('영어 이름', 'en', o.en) + (world.style === 'roster' ? fld('그룹', 'rgroup', (g => g ? g.name + ' · ' + g.cls : '')((world.groups || []).find(g => g.key === o.group)), 'select', '목록에서 들어갈 줄', ['', ...(world.groups || []).map(g => g.name + ' · ' + g.cls)]) + fld('속성', 'el', rsElOf(o), 'select', '고르면 뱃지 색이 알아서 바뀌어요', Object.keys(RS_EL)) : '') + (teamsOf(world) ? fld('소속팀', 'dept', o.dept || (teamsOf(world).find(x => !x.match) || {}).key, 'select', '고른 팀 칸에 들어가요 · 카드 위 작은 글씨', [...teamsOf(world).map(x => x.key), ...(o.dept && !teamsOf(world).some(x => x.key === o.dept) ? [o.dept] : [])]) : fld('소속 · 학부', 'dept', o.dept, 'text', '카드 위 작은 글씨')) + fld('한 줄 소개', 'quote', o.quote) + fld('태그', 'tags', (o.tags || []).join(', '), 'text', '쉼표로 나눠요 · 예) #다정, #고양이상')
         + pic(o.card ? '카드 사진 바꾸기' : '카드 사진', 'pic', !!o.card)
         + `<details class="more"><summary>더 적기 · 프로필 · 프롬프트 · 노래 (안 적어도 돼요)</summary>`
         + fld('사진 옆 작은 칸', 'spec', rowsOf(o.spec || [['AGE', ''], ['HEIGHT', ''], ['BIRTH', ''], ['LOVER', '']]), 'area', '', 4)
@@ -5683,7 +5683,7 @@ html:not(.sye-editing) .cx-add,html:not(.sye-editing) .cd-tags .ed{display:none!
         + fld('노래', 'music', (o.music || []).map(m => `${m.title || ''} | ${m.artist || ''} | ${m.src || ''}`).join('\n'), 'area', '', 3)
         + fld('캐릭터 송 (♪ 버튼) mp3 주소', 'theme', (o.theme && o.theme.src) || '', 'text', '없으면 비워요')
         + `</details><details class="more"><summary>리뷰 (TALK) 적기</summary>`
-        + fld('리뷰', 'talk', (o.talk || []).map(x => [x.name, x.relation, x.call, x.text, x.likes].map(v => v == null ? '' : v).join(' | ') + ((x.replies || []).length ? ' | ' + x.replies.map(r => r.join(': ')).join(' // ') : '')).join('\n'), 'area', '한 줄에 하나씩 · 이름 | 관계 | 호칭 | 내용 | 좋아요 수 | 답글(이름: 내용 // 이름: 내용)', 3)
+        + fld('리뷰', 'talk', (o.talk || []).map(x => [x.name, x.relation, x.call, x.text, x.likes].map(v => v == null ? '' : v).join(' | ') + ((x.replies || []).length ? ' | ' + x.replies.map(r => r.join(': ')).join(' // ') : '')).join('\n'), 'area', '리뷰 하나 = 카드 하나 · 맨 위 리뷰가 BEST 로 보여요', 3)
         + `</details>`;
     } else { const A = o.a || {}, B = o.b || {};
       h += `<div class="sec">기본 (이것만 적어도 돼요)</div>` + fld('페어 이름 *', 'name', o.name)
@@ -5699,14 +5699,14 @@ html:not(.sye-editing) .cx-add,html:not(.sye-editing) .cd-tags .ed{display:none!
     }
     h += `<div class="note">다 적었으면 <b>저장</b> → 모두에게 보이게 하려면 아래 바의 <b>홈페이지에 저장</b>.</div>`;
     FB.innerHTML = h; FB.scrollTop = 0;
-    const rowEd = (name, cols, sep) => {
+    const rowEd = (name, cols, sep, cls) => {
       const ta = F.elements[name]; if (!ta) return; ta.style.display = 'none';
       const box = document.createElement('div'); box.className = 'rowed'; ta.after(box);
-      const plus = document.createElement('button'); plus.type = 'button'; plus.className = 're-add'; plus.textContent = '+ 한 줄 더'; box.append(plus);
+      const plus = document.createElement('button'); plus.type = 'button'; plus.className = 're-add'; plus.textContent = cls === 'talk' ? '+ 리뷰 하나 더' : '+ 한 줄 더'; box.append(plus);
       const sync = () => { ta.value = [...box.querySelectorAll('.re-r')].map(r => [...r.querySelectorAll('input,textarea')].map(x => x.value.replace(/\s*\n\s*/g, ' ').trim()))
         .filter(v => v.some(Boolean)).map(v => v.join(sep)).join('\n'); };
-      const add = vals => { const r = document.createElement('div'); r.className = 're-r';
-        r.innerHTML = cols.map(c => c.area ? `<textarea rows="2" placeholder="${E(c.p)}"></textarea>` : `<input placeholder="${E(c.p)}">`).join('') + '<button type="button" class="re-x" title="이 줄 지우기">×</button>';
+      const add = vals => { const r = document.createElement('div'); r.className = 're-r' + (cls ? ' ' + cls : '');
+        r.innerHTML = cols.map(c => { const x = c.area ? `<textarea rows="${c.rows || 2}" placeholder="${E(c.p)}"></textarea>` : `<input${c.num ? ' type="number" min="0"' : ''} placeholder="${E(c.p)}">`; return c.cap ? `<label class="rc"><em>${E(c.cap)}</em>${x}</label>` : x; }).join('') + '<button type="button" class="re-x" title="이 줄 지우기">×</button>';
         [...r.querySelectorAll('input,textarea')].forEach((x, j) => { x.value = vals[j] || ''; }); box.insertBefore(r, plus); };
       const split = l => sep.trim() === ':' ? kv(l) : (() => { const b = bars(l); return cols.length === 2 ? [b[0], b.slice(1).join(' | ')] : b; })();
       const ls = ta.value.split('\n').filter(l => l.trim()); (ls.length ? ls : ['']).forEach(l => add(split(l)));
@@ -5719,6 +5719,7 @@ html:not(.sye-editing) .cx-add,html:not(.sye-editing) .cd-tags .ed{display:none!
       rowEd('rows', [{ p: '항목 (예: 좋아하는 것)' }, { p: '내용' }], ' : ');
       rowEd('prompts', [{ p: '제목' }, { p: '프롬프트', area: true }], ' | ');
       rowEd('music', [{ p: '노래 제목' }, { p: '가수' }, { p: 'mp3 주소 (없으면 비워요)' }], ' | ');
+      rowEd('talk', [{ cap: '이름', p: '예) 하루' }, { cap: '관계', p: '예) 소꿉친구' }, { cap: '부르는 말', p: '예) 너' }, { cap: '리뷰 내용', p: '이 캐릭터에 대한 한마디', area: true, rows: 3 }, { cap: '좋아요', p: '0', num: true }, { cap: '답글 (없으면 비워요)', p: '이름: 내용 // 이름: 내용', area: true }], ' | ', 'talk');
     }
     FF.innerHTML = `<button type="submit" class="sv">저장</button>${i != null ? '<button type="button" class="del">삭제</button>' : ''}<button type="button" class="cc">취소</button>`;
     FF.querySelector('.cc').onclick = fClose;
@@ -5765,7 +5766,7 @@ html:not(.sye-editing) .cx-add,html:not(.sye-editing) .cd-tags .ed{display:none!
     if (!v('name')) { toast('이름을 적어 주세요'); return; }
     if (!isP) {
       ['name', 'en', 'dept', 'quote'].forEach(k => { o[k] = v(k); });
-      if (W()[w].style === 'roster') { const gk = ((W()[w].groups || []).find(g => g.name === v('rgroup')) || {}).key; if (gk) o.group = gk; delete o.grade; o.el = v('el') || '무속성'; o.attr = rsBadge(o.el, ''); o.attrColor = RS_EL[o.el]; }
+      if (W()[w].style === 'roster') { const gk = ((W()[w].groups || []).find(g => g.name + ' · ' + g.cls === v('rgroup')) || {}).key; if (gk) o.group = gk; delete o.grade; o.el = v('el') || '무속성'; o.attr = rsBadge(o.el, ''); o.attrColor = RS_EL[o.el]; }
       o.tags = v('tags').split(',').map(x => x.trim()).filter(Boolean);
       o.spec = lines(v('spec')).map(kv);
       o.profile = Object.assign({}, o.profile, { rows: lines(v('rows')).map(kv), personality: v('personality'), memo: v('memo') });
@@ -6493,7 +6494,7 @@ html.sye-editing #winlayer .cxwin [data-ci] .cx-ov,html.sye-editing #winlayer .c
 #desk .win.cxwin .rs-blk{margin-bottom:18px}
 #desk .win.cxwin .rs-sec{align-items:center;gap:10px;margin-top:6px}
 #desk .win.cxwin .rs-sec b{font:900 19px var(--sans)!important;letter-spacing:-.01em;color:#16202A!important}
-#desk .win.cxwin .rs-sec > span{margin-left:auto;font:900 10px var(--sans)!important;letter-spacing:.05em;color:var(--gc)!important}
+#desk .win.cxwin .rs-sec > span{margin-left:auto;font:900 10px var(--sans)!important;letter-spacing:.05em;color:var(--cc,var(--gc))!important}
 #desk .win.cxwin .rs-sec b *{font:inherit!important}
 #desk .win.cxwin .rs-ln{height:3px!important;border-radius:2px;margin:8px 0 14px;background:linear-gradient(90deg,var(--gc) 0%,color-mix(in srgb,var(--gc) 55%,transparent) 35%,transparent 72%)!important}
 #desk .win .mp-tabs{position:relative}
@@ -6563,4 +6564,21 @@ html.sye-editing #winlayer .cxwin [data-ci] .cx-ov,html.sye-editing #winlayer .c
 #intro.gt.m .gt-ball{left:auto!important;right:50px!important;top:168px!important;width:52px!important;height:52px!important}
 #intro.gt.m .gt-ball::after{left:-22px;top:40px;width:16px;height:16px}
 @media (min-width:600px){#intro.gt.m .gt-ball{right:16%!important;top:170px!important;width:72px!important;height:72px!important}}
+`; document.head.appendChild(st); })();
+
+/* 수정 창 리뷰 : 리뷰 하나를 작은 카드로 (이름 · 관계 · 부르는 말 / 내용 / 좋아요 · 답글) */
+(() => { const st = document.createElement('style'); st.textContent = `
+.sye-fm .rowed:has(.re-r.talk){counter-reset:rv}
+.sye-fm .re-r.talk{position:relative;display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px 10px;margin-top:10px;padding:30px 12px 12px;background:#fff;border:1px solid #E6ECEF;border-radius:14px;counter-increment:rv;box-shadow:0 1px 2px rgba(20,30,40,.03)}
+.sye-fm .re-r.talk::before{content:'REVIEW ' counter(rv,decimal-leading-zero);position:absolute;left:12px;top:10px;font:800 9.5px 'Inter',sans-serif;letter-spacing:.14em;color:#5CC29C}
+.sye-fm .re-r.talk:first-of-type::after{content:'BEST';position:absolute;left:92px;top:8px;font:800 8.5px 'Inter',sans-serif;letter-spacing:.1em;color:#fff;background:#7FD7B1;border-radius:999px;padding:2px 7px}
+.sye-fm .re-r.talk .rc{display:flex;flex-direction:column;gap:4px;margin:0;min-width:0}
+.sye-fm .re-r.talk .rc em{font:700 10.5px 'IBM Plex Sans KR',sans-serif;font-style:normal;color:#6A7680}
+.sye-fm .re-r.talk .rc:nth-child(4){grid-column:1 / -1}
+.sye-fm .re-r.talk .rc:nth-child(5){grid-column:1 / 2}
+.sye-fm .re-r.talk .rc:nth-child(6){grid-column:2 / -1}
+.sye-fm .re-r.talk input,.sye-fm .re-r.talk textarea{width:100%;flex:none!important}
+.sye-fm .re-r.talk .re-x{position:absolute;right:8px;top:6px;width:24px!important;height:24px!important;border-radius:50%!important;font-size:13px!important;line-height:1!important;padding:0}
+.sye-fm .rowed:has(.re-r.talk) .re-add{width:100%;margin-top:10px}
+@media (max-width:520px){.sye-fm .re-r.talk{grid-template-columns:1fr 1fr}.sye-fm .re-r.talk .rc:nth-child(3){grid-column:1 / -1}.sye-fm .re-r.talk .rc:nth-child(5),.sye-fm .re-r.talk .rc:nth-child(6){grid-column:1 / -1}}
 `; document.head.appendChild(st); })();

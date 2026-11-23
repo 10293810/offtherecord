@@ -2540,20 +2540,7 @@ const SITE = {
         "style": "roster",
         "term": "ARCH TERMINAL",
         "footer": "ARCH CENTER",
-        "groups": [
-          {
-            "key": "prima",
-            "name": "ARCH-PRIMA",
-            "cls": "SS-CLASS",
-            "color": "#3d8de0"
-          },
-          {
-            "key": "v1",
-            "name": "VANGUARD 1팀",
-            "cls": "S-CLASS",
-            "color": "#e5534b"
-          }
-        ],
+        "groups": [{"key": "prima", "name": "ARCH-PRIMA", "cls": "SS-CLASS", "color": "#5093D1", "clsColor": "#5296D5"}, {"key": "v1", "name": "VANGUARD 1팀", "cls": "S-CLASS", "color": "#D15644", "clsColor": "#D65745"}, {"key": "v2", "name": "VANGUARD 2팀", "cls": "S-CLASS", "color": "#DD68A0", "clsColor": "#D65745"}, {"key": "agent", "name": "AGENT", "cls": "A-B CLASS", "color": "#E19C3B", "clsColor": "#E7A03C"}, {"key": "acolyte", "name": "ACOLYTE", "cls": "C-CLASS", "color": "#7F898A", "clsColor": "#818C8D"}, {"key": "hsupport", "name": "HARMONY DIV.", "cls": "SUPPORT", "color": "#95A1A2", "clsColor": "#98A5A6"}, {"key": "hrst", "name": "HARMONY DIV.", "cls": "R.S.T. (긴급제압팀)", "color": "#64C678", "clsColor": "#98A5A6"}, {"key": "hcore", "name": "HARMONY DIV.", "cls": "CORE", "color": "#AB9BD2", "clsColor": "#AB9BD2"}],
         "member": [
           {
             "group": "prima",
