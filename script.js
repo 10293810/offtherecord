@@ -2642,14 +2642,16 @@ function charLayout() {
   const x1 = Math.max(12, Math.round((deskW() - W1 - gap - W2) / 2)), y = Math.round(72 + (deskH() - 72 - 72 - H) / 2);
   return { solo: Math.max(12, Math.round((deskW() - W1) / 2)), list: { x: x1, y, w: W1, h: H, abs: true }, det: { x: x1 + W1 + gap, y, w: W2, h: H, abs: true } };
 }
-// ARCH 목록 (그룹별 줄 + 속성 뱃지 카드) · 그룹마다 카드 테마 (어두운 카드 / 밝은 카드)
+// ARCH 목록 (그룹별 줄 + 속성 뱃지 카드)
+const RS_EL = { '불': '#E0533F', '물': '#3F8FDB', '번개': '#F0C93E', '얼음': '#9ED3CB', '풀': '#6E9F55', '바람': '#56C06E', '무속성': '#9A9EA3' }, RS_GR = ['', 'SS', 'S', 'A', 'B', 'C'];
+function rsBadge(el, gr) { return gr ? `${gr}급 ${el}` : el === '무속성' ? '무속성' : `${el} 속성`; }
+function rsElOf(m) { if (m.el && RS_EL[m.el]) return m.el; const a = String(m.attr || ''); return Object.keys(RS_EL).find(k => a.includes(k)) || (/전기/.test(a) ? '번개' : '무속성'); }
 function rsInk(c) { const m = /^#?([0-9a-f]{6})$/i.exec(String(c).trim()); if (!m) return '#fff'; const n = parseInt(m[1], 16), r = n >> 16, g = n >> 8 & 255, b = n & 255; return (r * .299 + g * .587 + b * .114) > 168 ? '#2B2F33' : '#fff'; }
 function rosterHTML(W, list, isOn) {
   const G = (W.groups || []).slice(), keys = G.map(g => g.key);
   if (list.some(m => !keys.includes(m.group))) G.push({ key: '__etc', name: 'ETC.', cls: '', color: '#8EB2B7' });
   return G.map(g => { const ms = list.map((m, i) => [m, i]).filter(([m]) => g.key === '__etc' ? !keys.includes(m.group) : m.group === g.key); if (!ms.length) return '';
-    const lt = g.theme === 'light', tg = OWNER && SYE_ON && g.key !== '__etc' ? `<button class="rs-thm" data-rs-theme="${esc(g.key)}" title="카드 테마 바꾸기">${lt ? '◑ 밝은 카드' : '◐ 어두운 카드'}</button>` : '';
-    return `<div class="rs-blk ${lt ? 'rs-light' : 'rs-dark'}"><div class="rs-sec"><b>${esc(g.name)}</b>${tg}<span style="color:${esc(g.color || '')}">${esc(g.cls || '')}</span></div><div class="rs-ln" style="background:linear-gradient(90deg,${esc(g.color || '#8EB2B7')},transparent 70%)"></div>
+    return `<div class="rs-blk"><div class="rs-sec"><b>${esc(g.name)}</b><span style="color:${esc(g.color || '')}">${esc(g.cls || '')}</span></div><div class="rs-ln" style="background:linear-gradient(90deg,${esc(g.color || '#8EB2B7')},transparent 70%)"></div>
       <div class="rs-grid">${ms.map(([m, i]) => `<button class="rs-card ${isOn(i) ? 'on' : ''}" data-ci="${i}">${ph(pv(m.card, m.hero), { seed: m.name + i })}<div class="ov"><b>${esc(m.name)}</b>${m.attr ? `<i style="background:${esc(m.attrColor || '#55C7D7')};color:${rsInk(m.attrColor || '#55C7D7')}">${esc(m.attr)}</i>` : ''}</div></button>`).join('')}</div></div>`; }).join('');
 }
 // FRONTLINE : 소속팀(카드 위 작은 글씨 = 소속)별로 나눠서 보여줘요 · 팀이 없는 캐릭터는 맨 아래 무소속
@@ -5670,7 +5672,7 @@ html:not(.sye-editing) .cx-add,html:not(.sye-editing) .cd-tags .ed{display:none!
     const rowsOf = rs => (rs || []).map(r => Array.isArray(r) ? r.join(' : ') : r).join('\n');
     const pic = (label, name, has) => `<label class="pic"><span>${label}</span><input type="file" name="${name}" accept="image/*"><small>${has ? '바꿀 때만 골라요 · ' : ''}여기서 고르면 저장할 때 같이 들어가요 (나중에 사진 자리를 눌러서 바꿔도 돼요)</small></label>`;
     if (!isP) { const P = o.profile || {};
-      h += `<div class="sec">기본 (이것만 적어도 돼요)</div>` + fld('이름 *', 'name', o.name) + fld('영어 이름', 'en', o.en) + (teamsOf(world) ? fld('소속팀', 'dept', o.dept || (teamsOf(world).find(x => !x.match) || {}).key, 'select', '고른 팀 칸에 들어가요 · 카드 위 작은 글씨', [...teamsOf(world).map(x => x.key), ...(o.dept && !teamsOf(world).some(x => x.key === o.dept) ? [o.dept] : [])]) : fld('소속 · 학부', 'dept', o.dept, 'text', '카드 위 작은 글씨')) + fld('한 줄 소개', 'quote', o.quote) + fld('태그', 'tags', (o.tags || []).join(', '), 'text', '쉼표로 나눠요 · 예) #다정, #고양이상')
+      h += `<div class="sec">기본 (이것만 적어도 돼요)</div>` + fld('이름 *', 'name', o.name) + fld('영어 이름', 'en', o.en) + (world.style === 'roster' ? fld('그룹', 'rgroup', ((world.groups || []).find(g => g.key === o.group) || {}).name || '', 'select', '목록에서 들어갈 줄', ['', ...(world.groups || []).map(g => g.name)]) + fld('등급', 'grade', o.grade || '', 'select', '카드 뱃지에 작게 들어가요 · 예) S급 얼음', RS_GR) + fld('속성', 'el', rsElOf(o), 'select', '고르면 뱃지 색이 알아서 바뀌어요', Object.keys(RS_EL)) : '') + (teamsOf(world) ? fld('소속팀', 'dept', o.dept || (teamsOf(world).find(x => !x.match) || {}).key, 'select', '고른 팀 칸에 들어가요 · 카드 위 작은 글씨', [...teamsOf(world).map(x => x.key), ...(o.dept && !teamsOf(world).some(x => x.key === o.dept) ? [o.dept] : [])]) : fld('소속 · 학부', 'dept', o.dept, 'text', '카드 위 작은 글씨')) + fld('한 줄 소개', 'quote', o.quote) + fld('태그', 'tags', (o.tags || []).join(', '), 'text', '쉼표로 나눠요 · 예) #다정, #고양이상')
         + pic(o.card ? '카드 사진 바꾸기' : '카드 사진', 'pic', !!o.card)
         + `<details class="more"><summary>더 적기 · 프로필 · 프롬프트 · 노래 (안 적어도 돼요)</summary>`
         + fld('사진 옆 작은 칸', 'spec', rowsOf(o.spec || [['AGE', ''], ['HEIGHT', ''], ['BIRTH', ''], ['LOVER', '']]), 'area', '', 4)
@@ -5753,6 +5755,7 @@ html:not(.sye-editing) .cx-add,html:not(.sye-editing) .cd-tags .ed{display:none!
     if (!v('name')) { toast('이름을 적어 주세요'); return; }
     if (!isP) {
       ['name', 'en', 'dept', 'quote'].forEach(k => { o[k] = v(k); });
+      if (W()[w].style === 'roster') { const gk = ((W()[w].groups || []).find(g => g.name === v('rgroup')) || {}).key; if (gk) o.group = gk; o.grade = v('grade'); o.el = v('el') || '무속성'; o.attr = rsBadge(o.el, o.grade); o.attrColor = RS_EL[o.el]; }
       o.tags = v('tags').split(',').map(x => x.trim()).filter(Boolean);
       o.spec = lines(v('spec')).map(kv);
       o.profile = Object.assign({}, o.profile, { rows: lines(v('rows')).map(kv), personality: v('personality'), memo: v('memo') });
@@ -5789,9 +5792,6 @@ html:not(.sye-editing) .cx-add,html:not(.sye-editing) .cd-tags .ed{display:none!
     commit((t === 'pair' ? '새 페어' : '새 캐릭터') + '를 만들었어요 · 글자를 눌러 고치고, 사진 자리를 눌러 사진을 넣어요', w, { w, t, i: list.length - 1 });
   }
   // ARCH : 상대(duo) 캐릭터 추가 · 지우기
-  addEventListener('click', e => { const b = e.target.closest && e.target.closest('[data-rs-theme]'); if (!b) return; e.preventDefault(); e.stopPropagation();
-    const k = b.dataset.rsTheme, sel = charSel, wk = (sel && sel.w) || Object.keys(W()).find(x => (W()[x].groups || []).some(g => g.key === k)), world = W()[wk]; const g = world && (world.groups || []).find(x => x.key === k); if (!g) return;
-    g.theme = g.theme === 'light' ? 'dark' : 'light'; commit(g.theme === 'light' ? '밝은 카드로 바꿨어요' : '어두운 카드로 바꿨어요', wk, sel); }, true);
   addEventListener('sye-duo', e => { const { w, i, del } = e.detail || {}, world = W()[w], m = world && (world.member || [])[i]; if (!m) return;
     const duo = Array.isArray(m.duo) ? m.duo : (m.duo = []);
     if (del) { duo.splice(del - 1, 1); const base = `characters.worlds.${w}.member.${i}.duo.`;
@@ -6477,14 +6477,14 @@ html.sye-editing #winlayer .cxwin [data-ci] .cx-ov,html.sye-editing #winlayer .c
   const paint = () => document.querySelectorAll('.apps-panel .panel-tab .sy-cnt').forEach(e => { e.style.setProperty('background', '#7FD7B1', 'important'); e.style.setProperty('box-shadow', '0 0 0 3px rgba(127,215,177,.22)', 'important'); });
   paint(); [100, 800, 2500].forEach(t => setTimeout(paint, t)); addEventListener('load', () => setTimeout(paint, 100)); })();
 
-/* ARCH 목록 카드 : 사진 꽉 찬 세로 카드 · 얇은 테두리 · 아래 이름 + 속성 뱃지 (그룹마다 어두운 / 밝은 카드) */
+/* ARCH 목록 카드 : 사진 꽉 찬 세로 카드 · 얇은 테두리 · 아래 이름 + 속성 뱃지  */
 (() => { const st = document.createElement('style'); st.textContent = `
 #desk .win.cxwin .rs-blk{margin-bottom:18px}
 #desk .win.cxwin .rs-sec{align-items:center;gap:10px;margin-top:6px}
 #desk .win.cxwin .rs-sec b{font:900 19px var(--sans)!important;letter-spacing:-.01em;color:#16202A!important}
-#desk .win.cxwin .rs-sec span{margin-left:auto;font:900 12px var(--sans)!important;letter-spacing:.02em}
+#desk .win.cxwin .rs-sec > span{margin-left:auto;font:900 11px var(--sans)!important;letter-spacing:.04em}
+#desk .win.cxwin .rs-sec b *{font:inherit!important}
 #desk .win.cxwin .rs-ln{height:2px;margin:8px 0 14px}
-#desk .win.cxwin .rs-thm{font:800 10px var(--sans);color:#6B7A86;background:#EEF2F5;border:1px solid #DCE3E8;border-radius:999px;padding:3px 9px;cursor:pointer}
 #desk .win.cxwin .rs-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:12px!important}
 #desk .win.cxwin .rs-card{border-radius:8px!important;border:1.5px solid rgba(120,140,158,.55)!important;background:#2B3746!important;box-shadow:0 8px 18px -8px rgba(15,22,30,.45)!important;aspect-ratio:3/4}
 #desk .win.cxwin .rs-card.on{box-shadow:0 0 0 2.5px #5FD3BC,0 8px 18px -8px rgba(15,22,30,.45)!important}
@@ -6493,8 +6493,4 @@ html.sye-editing #winlayer .cxwin [data-ci] .cx-ov,html.sye-editing #winlayer .c
 #desk .win.cxwin .rs-card .ov{padding:44px 11px 12px!important;background:linear-gradient(rgba(14,17,22,0),rgba(14,17,22,.82) 55%,rgba(14,17,22,.95))!important}
 #desk .win.cxwin .rs-card .ov b{font:900 15px var(--sans)!important;color:#fff!important;letter-spacing:-.01em;text-shadow:0 1px 6px rgba(0,0,0,.35)}
 #desk .win.cxwin .rs-card .ov i{margin-top:6px!important;font:800 10px var(--sans)!important;padding:4px 10px!important;border-radius:999px!important;box-shadow:none}
-#desk .win.cxwin .rs-light .rs-card{border:1.5px solid #fff!important;background:#E9EDF1!important}
-#desk .win.cxwin .rs-blk.rs-light .rs-card .ph.is-empty,#desk .win.cxwin .rs-blk.rs-light .rs-card .ph:not(:has(img)){background-image:linear-gradient(#E4E9EE,#F3F5F8)!important}
-#desk .win.cxwin .rs-light .rs-card .ov{background:linear-gradient(rgba(248,250,252,0),rgba(248,250,252,.86) 55%,rgba(248,250,252,.97))!important}
-#desk .win.cxwin .rs-light .rs-card .ov b{color:#2B3440!important;text-shadow:none}
 `; document.head.appendChild(st); })();
