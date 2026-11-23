@@ -5765,7 +5765,7 @@ html:not(.sye-editing) .cx-add,html:not(.sye-editing) .cd-tags .ed{display:none!
       box.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; inp.value = b.textContent; inp.dispatchEvent(new Event('input', { bubbles: true })); draw(); });
       return draw; };
     const nmI = F.elements.name, enI = F.elements.en;
-    if (nmI && enI) { const d = sug(enI, () => /[가-힣]/.test(nmI.value) ? (world.grades ? romaKo(nmI.value).slice(0, 1) : romaKo(nmI.value)) : []);   // 세이란 : 성 이름 하나만 (서은율 → Seo Eunyul) nmI.addEventListener('input', d); enI.addEventListener('input', d); d(); }
+    if (nmI && enI) { const d = sug(enI, () => /[가-힣]/.test(nmI.value) ? romaKo(nmI.value).slice(0, 1) : []);   // '성 이름' 하나만 (서은율 → Seo Eunyul) nmI.addEventListener('input', d); enI.addEventListener('input', d); d(); }
     const dpI = F.elements.dept;
     if (dpI && world.grades && dpI.tagName === 'INPUT') { dpI.setAttribute('list', 'sy-depts'); if (!document.getElementById('sy-depts')) { const dl = document.createElement('datalist'); dl.id = 'sy-depts'; dl.innerHTML = [...new Set(Object.values(JP_DEPT))].map(x => `<option value="${x}学部">`).join(''); document.body.append(dl); }
       const d = sug(dpI, () => /[가-힣]/.test(dpI.value) ? [jaDept(dpI.value)] : []); dpI.addEventListener('input', d); d(); } duoRow('alink', 'aname'); duoRow('blink', 'bname');
