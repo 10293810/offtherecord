@@ -1,5 +1,5 @@
 /* =========================================================
-   data.js — 홈페이지 내용 (✎ EDIT → 홈페이지에 저장 · 2026. 11. 24. 오전 12:30:44)
+   data.js — 홈페이지 내용 (✎ EDIT → 홈페이지에 저장 · 2026. 11. 24. 오전 12:53:00)
    - 홈페이지 주소 끝에 ?owner 를 붙여 들어가면 ✎ EDIT 로 바로 고칠 수 있어요.
    - 사진은 media/ 폴더에 있어요.
    ========================================================= */
@@ -2664,6 +2664,119 @@ const SITE = {
                 ],
                 "evalLabel": "OFFICIAL EVALUATION",
                 "eval": "“평가가 들어가요.”"
+              }
+            ]
+          },
+          {
+            "group": "prima",
+            "duo": [
+              {
+                "name": "페르소나",
+                "en": "Persona",
+                "card": "",
+                "avatar": "",
+                "hero": "",
+                "tag": "PERSONA",
+                "code": "P-0001",
+                "theme": "dark",
+                "badge": "",
+                "level": "[ PERSONA FILE ]",
+                "quote": "‘한 줄 소개를 적어 주세요.’",
+                "bgm": 0,
+                "song": 1,
+                "gallery": [
+                  "",
+                  "",
+                  ""
+                ],
+                "sections": [
+                  {
+                    "type": "table",
+                    "title": "AGENT PROFILE",
+                    "rows": [
+                      [
+                        "CODENAME",
+                        "코드네임 (Code)"
+                      ],
+                      [
+                        "CLASSIFICATION",
+                        "A-Class Guide / Chief Medic"
+                      ],
+                      [
+                        "ATTRIBUTE",
+                        "[ 무속성 (Non-Attribute) ]"
+                      ],
+                      [
+                        "AGE/NATIONALITY",
+                        "00세 / 국적"
+                      ]
+                    ],
+                    "evalLabel": "OFFICIAL EVALUATION",
+                    "eval": "“공식 평가가 들어가요. 이 캐릭터가 조직 안에서 어떤 평가를 받고 있는지, 어떤 이력을 가지고 있는지 적어주세요.”"
+                  },
+                  {
+                    "type": "report",
+                    "title": "PERSONAL RECORD",
+                    "paragraphs": [
+                      "캐릭터의 과거와 지금을 적는 칸이에요. <b>굵게</b> 쓰고 싶은 곳은 b 태그로 감싸면 돼요.",
+                      "문단을 나누고 싶으면 쉼표로 구분해서 하나 더 적으면 돼요. <span class=\"hl\">강조하고 싶은 말</span>은 이렇게 표시돼요."
+                    ]
+                  }
+                ]
+              }
+            ],
+            "name": "새 캐릭터 3",
+            "en": "New Character 3",
+            "attr": "무속성",
+            "attrColor": "#7fb8c8",
+            "card": "",
+            "avatar": "",
+            "hero": "",
+            "tag": "A-CLASS GUIDE",
+            "code": "P-0001",
+            "theme": "light",
+            "badge": "A-CLASS ENTITY",
+            "level": "[ MEDICAL SUPPORT : ESSENTIAL ]",
+            "quote": "‘한 줄 소개를 적어 주세요.’",
+            "bgm": 0,
+            "song": 1,
+            "gallery": [
+              "",
+              "",
+              ""
+            ],
+            "sections": [
+              {
+                "type": "table",
+                "title": "AGENT PROFILE",
+                "rows": [
+                  [
+                    "CODENAME",
+                    "코드네임 (Code)"
+                  ],
+                  [
+                    "CLASSIFICATION",
+                    "A-Class Guide / Chief Medic"
+                  ],
+                  [
+                    "ATTRIBUTE",
+                    "[ 무속성 (Non-Attribute) ]"
+                  ],
+                  [
+                    "AGE/NATIONALITY",
+                    "00세 / 국적"
+                  ]
+                ],
+                "evalLabel": "OFFICIAL EVALUATION",
+                "eval": "“공식 평가가 들어가요. 이 캐릭터가 조직 안에서 어떤 평가를 받고 있는지, 어떤 이력을 가지고 있는지 적어주세요.”"
+              },
+              {
+                "type": "report",
+                "title": "PERSONAL RECORD",
+                "paragraphs": [
+                  "캐릭터의 과거와 지금을 적는 칸이에요. <b>굵게</b> 쓰고 싶은 곳은 b 태그로 감싸면 돼요.",
+                  "문단을 나누고 싶으면 쉼표로 구분해서 하나 더 적으면 돼요. <span class=\"hl\">강조하고 싶은 말</span>은 이렇게 표시돼요."
+                ]
               }
             ]
           }
