@@ -49,7 +49,7 @@ SYE_TZ(S, []);
 const TXT_PATH = [];
 const UN = s => typeof s === 'string' ? s.replace(/⁤[​‌‍⁠]*⁢?|⁡/g, '') : s;
 function SYE_TT(o, p, pk) {
-  const DENY = /^(id|key|type|icon|src|url|href|link|color|attrColor|since|date|theme|style|side|group|cursor|from|app|zone|zones|k|cls|mode|word|before|after|code)$/;
+  const DENY = /^(id|key|type|icon|src|url|href|link|color|attrColor|since|date|theme|style|side|group|cursor|from|app|zone|zones|k|cls|mode|word|before|after|code|year|el|grade|clsColor)$/;
   const ok = v => v && !/[⁣<>{}\n\r]/.test(v) && !/^[a-z0-9_\-.]+$/.test(v) && !/^#[0-9a-f]{3,8}$/i.test(v) && !/^(https?:|data:|blob:|\.{0,2}\/)/.test(v) && !/^[\d\s.:\-\/+%x×]+$/i.test(v);
   for (const k of Object.keys(o)) {
     if (!p.length && (k === 'intro' || k === 'cursor')) continue;
@@ -6503,7 +6503,7 @@ html.sye-editing #winlayer .cxwin [data-ci] .cx-ov,html.sye-editing #winlayer .c
 (() => { const st = document.createElement('style'); st.textContent = `
 #desk .win.cxwin .rs-blk{margin-bottom:18px}
 #desk .win.cxwin .rs-sec{align-items:center;gap:10px;margin-top:6px}
-#desk .win.cxwin .rs-sec b{font:900 19px var(--sans)!important;letter-spacing:-.01em;color:#16202A!important}
+#desk .win.cxwin .rs-sec b{font:900 16px var(--sans)!important;letter-spacing:-.01em;color:#16202A!important}
 #desk .win.cxwin .rs-sec > span{margin-left:auto;font:900 10px var(--sans)!important;letter-spacing:.05em;color:var(--cc,var(--gc))!important}
 #desk .win.cxwin .rs-sec b *{font:inherit!important}
 #desk .win.cxwin .rs-ln{height:3px!important;border-radius:2px;margin:8px 0 14px;background:linear-gradient(90deg,var(--gc) 0%,color-mix(in srgb,var(--gc) 55%,transparent) 35%,transparent 72%)!important}
