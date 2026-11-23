@@ -1,5 +1,5 @@
 /* =========================================================
-   data.js — 홈페이지 내용 (✎ EDIT → 홈페이지에 저장 · 2026. 11. 23. 오전 1:26:59)
+   data.js — 홈페이지 내용 (✎ EDIT → 홈페이지에 저장 · 2026. 11. 24. 오전 12:24:46)
    - 홈페이지 주소 끝에 ?owner 를 붙여 들어가면 ✎ EDIT 로 바로 고칠 수 있어요.
    - 사진은 media/ 폴더에 있어요.
    ========================================================= */
@@ -1351,9 +1351,18 @@ const SITE = {
       "name": "Playlist",
       "type": "list",
       "rows": [
-        ["항목 1", "11.21"],
-        ["항목 2", "11.18"],
-        ["항목 3", "11.15"]
+        [
+          "항목 1",
+          "11.21"
+        ],
+        [
+          "항목 2",
+          "11.18"
+        ],
+        [
+          "항목 3",
+          "11.15"
+        ]
       ]
     },
     {
@@ -1361,9 +1370,18 @@ const SITE = {
       "name": "Metronome",
       "type": "list",
       "rows": [
-        ["항목 1", "11.21"],
-        ["항목 2", "11.18"],
-        ["항목 3", "11.15"]
+        [
+          "항목 1",
+          "11.21"
+        ],
+        [
+          "항목 2",
+          "11.18"
+        ],
+        [
+          "항목 3",
+          "11.15"
+        ]
       ]
     },
     {
@@ -1371,9 +1389,18 @@ const SITE = {
       "name": "Polaroid",
       "type": "list",
       "rows": [
-        ["항목 1", "11.21"],
-        ["항목 2", "11.18"],
-        ["항목 3", "11.15"]
+        [
+          "항목 1",
+          "11.21"
+        ],
+        [
+          "항목 2",
+          "11.18"
+        ],
+        [
+          "항목 3",
+          "11.15"
+        ]
       ]
     },
     {
@@ -1381,9 +1408,18 @@ const SITE = {
       "name": "Backstage",
       "type": "list",
       "rows": [
-        ["항목 1", "11.21"],
-        ["항목 2", "11.18"],
-        ["항목 3", "11.15"]
+        [
+          "항목 1",
+          "11.21"
+        ],
+        [
+          "항목 2",
+          "11.18"
+        ],
+        [
+          "항목 3",
+          "11.15"
+        ]
       ]
     },
     {
@@ -1391,9 +1427,18 @@ const SITE = {
       "name": "Tour",
       "type": "list",
       "rows": [
-        ["항목 1", "11.21"],
-        ["항목 2", "11.18"],
-        ["항목 3", "11.15"]
+        [
+          "항목 1",
+          "11.21"
+        ],
+        [
+          "항목 2",
+          "11.18"
+        ],
+        [
+          "항목 3",
+          "11.15"
+        ]
       ]
     },
     {
@@ -1401,9 +1446,18 @@ const SITE = {
       "name": "Amp",
       "type": "list",
       "rows": [
-        ["항목 1", "11.21"],
-        ["항목 2", "11.18"],
-        ["항목 3", "11.15"]
+        [
+          "항목 1",
+          "11.21"
+        ],
+        [
+          "항목 2",
+          "11.18"
+        ],
+        [
+          "항목 3",
+          "11.15"
+        ]
       ]
     },
     {
@@ -1412,9 +1466,18 @@ const SITE = {
       "icon": "sparkle",
       "type": "list",
       "rows": [
-        ["항목 1", "11.21"],
-        ["항목 2", "11.18"],
-        ["항목 3", "11.15"]
+        [
+          "항목 1",
+          "11.21"
+        ],
+        [
+          "항목 2",
+          "11.18"
+        ],
+        [
+          "항목 3",
+          "11.15"
+        ]
       ]
     },
     {
@@ -1423,9 +1486,18 @@ const SITE = {
       "icon": "mail",
       "type": "list",
       "rows": [
-        ["항목 1", "11.21"],
-        ["항목 2", "11.18"],
-        ["항목 3", "11.15"]
+        [
+          "항목 1",
+          "11.21"
+        ],
+        [
+          "항목 2",
+          "11.18"
+        ],
+        [
+          "항목 3",
+          "11.15"
+        ]
       ]
     },
     {
@@ -1434,9 +1506,18 @@ const SITE = {
       "icon": "disc",
       "type": "list",
       "rows": [
-        ["항목 1", "11.21"],
-        ["항목 2", "11.18"],
-        ["항목 3", "11.15"]
+        [
+          "항목 1",
+          "11.21"
+        ],
+        [
+          "항목 2",
+          "11.18"
+        ],
+        [
+          "항목 3",
+          "11.15"
+        ]
       ]
     },
     {
@@ -1445,9 +1526,18 @@ const SITE = {
       "icon": "pick",
       "type": "list",
       "rows": [
-        ["항목 1", "11.21"],
-        ["항목 2", "11.18"],
-        ["항목 3", "11.15"]
+        [
+          "항목 1",
+          "11.21"
+        ],
+        [
+          "항목 2",
+          "11.18"
+        ],
+        [
+          "항목 3",
+          "11.15"
+        ]
       ]
     },
     {
@@ -1456,9 +1546,18 @@ const SITE = {
       "icon": "mic",
       "type": "list",
       "rows": [
-        ["항목 1", "11.21"],
-        ["항목 2", "11.18"],
-        ["항목 3", "11.15"]
+        [
+          "항목 1",
+          "11.21"
+        ],
+        [
+          "항목 2",
+          "11.18"
+        ],
+        [
+          "항목 3",
+          "11.15"
+        ]
       ]
     },
     {
@@ -1467,9 +1566,18 @@ const SITE = {
       "icon": "moon",
       "type": "list",
       "rows": [
-        ["항목 1", "11.21"],
-        ["항목 2", "11.18"],
-        ["항목 3", "11.15"]
+        [
+          "항목 1",
+          "11.21"
+        ],
+        [
+          "항목 2",
+          "11.18"
+        ],
+        [
+          "항목 3",
+          "11.15"
+        ]
       ]
     }
   ],
@@ -2379,7 +2487,45 @@ const SITE = {
         "member": [
           {
             "group": "prima",
-            "duo": [{"name": "페르소나 A", "en": "Persona", "tag": "PERSONA", "theme": "light", "badge": "", "level": "[ PERSONA FILE ]", "quote": "‘캐릭터 A의 상대, 내 페르소나예요. 한 줄 소개를 적어 주세요.’", "card": "", "avatar": "", "hero": "", "gallery": ["", "", ""], "sections": [{"type": "table", "title": "PERSONA PROFILE", "rows": [["NAME", "이름"], ["RELATION", "캐릭터 A와의 관계"], ["AGE", "00"]]}]}],
+            "duo": [
+              {
+                "name": "페르소나 A",
+                "en": "Persona",
+                "tag": "PERSONA",
+                "theme": "light",
+                "badge": "",
+                "level": "[ PERSONA FILE ]",
+                "quote": "‘캐릭터 A의 상대, 내 페르소나예요. 한 줄 소개를 적어 주세요.’",
+                "card": "",
+                "avatar": "",
+                "hero": "",
+                "gallery": [
+                  "",
+                  "",
+                  ""
+                ],
+                "sections": [
+                  {
+                    "type": "table",
+                    "title": "PERSONA PROFILE",
+                    "rows": [
+                      [
+                        "NAME",
+                        "이름"
+                      ],
+                      [
+                        "RELATION",
+                        "캐릭터 A와의 관계"
+                      ],
+                      [
+                        "AGE",
+                        "00"
+                      ]
+                    ]
+                  }
+                ]
+              }
+            ],
             "name": "캐릭터 A",
             "en": "Agent A",
             "attr": "무속성",
@@ -2437,7 +2583,45 @@ const SITE = {
           },
           {
             "group": "prima",
-            "duo": [{"name": "페르소나 B", "en": "Persona", "tag": "PERSONA", "theme": "light", "badge": "", "level": "[ PERSONA FILE ]", "quote": "‘캐릭터 B의 상대, 내 페르소나예요. 한 줄 소개를 적어 주세요.’", "card": "", "avatar": "", "hero": "", "gallery": ["", "", ""], "sections": [{"type": "table", "title": "PERSONA PROFILE", "rows": [["NAME", "이름"], ["RELATION", "캐릭터 B와의 관계"], ["AGE", "00"]]}]}],
+            "duo": [
+              {
+                "name": "페르소나 B",
+                "en": "Persona",
+                "tag": "PERSONA",
+                "theme": "light",
+                "badge": "",
+                "level": "[ PERSONA FILE ]",
+                "quote": "‘캐릭터 B의 상대, 내 페르소나예요. 한 줄 소개를 적어 주세요.’",
+                "card": "",
+                "avatar": "",
+                "hero": "",
+                "gallery": [
+                  "",
+                  "",
+                  ""
+                ],
+                "sections": [
+                  {
+                    "type": "table",
+                    "title": "PERSONA PROFILE",
+                    "rows": [
+                      [
+                        "NAME",
+                        "이름"
+                      ],
+                      [
+                        "RELATION",
+                        "캐릭터 B와의 관계"
+                      ],
+                      [
+                        "AGE",
+                        "00"
+                      ]
+                    ]
+                  }
+                ]
+              }
+            ],
             "name": "캐릭터 B",
             "en": "Agent B",
             "attr": "전기 속성",
@@ -2546,7 +2730,45 @@ const SITE = {
           },
           {
             "group": "v1",
-            "duo": [{"name": "페르소나 C", "en": "Persona", "tag": "PERSONA", "theme": "light", "badge": "", "level": "[ PERSONA FILE ]", "quote": "‘캐릭터 C의 상대, 내 페르소나예요. 한 줄 소개를 적어 주세요.’", "card": "", "avatar": "", "hero": "", "gallery": ["", "", ""], "sections": [{"type": "table", "title": "PERSONA PROFILE", "rows": [["NAME", "이름"], ["RELATION", "캐릭터 C와의 관계"], ["AGE", "00"]]}]}],
+            "duo": [
+              {
+                "name": "페르소나 C",
+                "en": "Persona",
+                "tag": "PERSONA",
+                "theme": "light",
+                "badge": "",
+                "level": "[ PERSONA FILE ]",
+                "quote": "‘캐릭터 C의 상대, 내 페르소나예요. 한 줄 소개를 적어 주세요.’",
+                "card": "",
+                "avatar": "",
+                "hero": "",
+                "gallery": [
+                  "",
+                  "",
+                  ""
+                ],
+                "sections": [
+                  {
+                    "type": "table",
+                    "title": "PERSONA PROFILE",
+                    "rows": [
+                      [
+                        "NAME",
+                        "이름"
+                      ],
+                      [
+                        "RELATION",
+                        "캐릭터 C와의 관계"
+                      ],
+                      [
+                        "AGE",
+                        "00"
+                      ]
+                    ]
+                  }
+                ]
+              }
+            ],
             "name": "캐릭터 C",
             "en": "Agent C",
             "attr": "불 속성",
@@ -2594,7 +2816,45 @@ const SITE = {
           },
           {
             "group": "v1",
-            "duo": [{"name": "페르소나 D", "en": "Persona", "tag": "PERSONA", "theme": "light", "badge": "", "level": "[ PERSONA FILE ]", "quote": "‘캐릭터 D의 상대, 내 페르소나예요. 한 줄 소개를 적어 주세요.’", "card": "", "avatar": "", "hero": "", "gallery": ["", "", ""], "sections": [{"type": "table", "title": "PERSONA PROFILE", "rows": [["NAME", "이름"], ["RELATION", "캐릭터 D와의 관계"], ["AGE", "00"]]}]}],
+            "duo": [
+              {
+                "name": "페르소나 D",
+                "en": "Persona",
+                "tag": "PERSONA",
+                "theme": "light",
+                "badge": "",
+                "level": "[ PERSONA FILE ]",
+                "quote": "‘캐릭터 D의 상대, 내 페르소나예요. 한 줄 소개를 적어 주세요.’",
+                "card": "",
+                "avatar": "",
+                "hero": "",
+                "gallery": [
+                  "",
+                  "",
+                  ""
+                ],
+                "sections": [
+                  {
+                    "type": "table",
+                    "title": "PERSONA PROFILE",
+                    "rows": [
+                      [
+                        "NAME",
+                        "이름"
+                      ],
+                      [
+                        "RELATION",
+                        "캐릭터 D와의 관계"
+                      ],
+                      [
+                        "AGE",
+                        "00"
+                      ]
+                    ]
+                  }
+                ]
+              }
+            ],
             "name": "캐릭터 D",
             "en": "Agent D",
             "attr": "바람 속성",
@@ -2880,6 +3140,146 @@ const SITE = {
           },
           {
             "dept": "소속",
+            "name": "새 캐릭터 5",
+            "en": "New Character 5",
+            "quote": "한 줄 소개를 적어 주세요",
+            "tags": [
+              "#태그"
+            ],
+            "spec": [
+              [
+                "AGE",
+                "00"
+              ],
+              [
+                "HEIGHT",
+                "000"
+              ],
+              [
+                "BIRTH",
+                "00.00"
+              ],
+              [
+                "LOVER",
+                "연인 이름"
+              ]
+            ],
+            "card": "",
+            "photo": "",
+            "theme": {
+              "title": "CHARACTER SONG",
+              "src": ""
+            },
+            "profile": {
+              "rows": [
+                [
+                  "좋아하는 것",
+                  "내용"
+                ],
+                [
+                  "싫어하는 것",
+                  "내용"
+                ],
+                [
+                  "특징",
+                  "내용"
+                ]
+              ],
+              "personality": "성격을 적어 주세요.",
+              "memo": "짧은 메모를 적어 주세요."
+            },
+            "prompts": [
+              {
+                "title": "기본 외형",
+                "text": "프롬프트를 적어요"
+              }
+            ],
+            "gallery": [
+              "",
+              "",
+              ""
+            ],
+            "music": [
+              {
+                "title": "노래 제목",
+                "artist": "가수",
+                "src": ""
+              }
+            ],
+            "talk": []
+          },
+          {
+            "dept": "소속",
+            "name": "새 캐릭터 4",
+            "en": "New Character 4",
+            "quote": "한 줄 소개를 적어 주세요",
+            "tags": [
+              "#태그"
+            ],
+            "spec": [
+              [
+                "AGE",
+                "00"
+              ],
+              [
+                "HEIGHT",
+                "000"
+              ],
+              [
+                "BIRTH",
+                "00.00"
+              ],
+              [
+                "LOVER",
+                "연인 이름"
+              ]
+            ],
+            "card": "",
+            "photo": "",
+            "theme": {
+              "title": "CHARACTER SONG",
+              "src": ""
+            },
+            "profile": {
+              "rows": [
+                [
+                  "좋아하는 것",
+                  "내용"
+                ],
+                [
+                  "싫어하는 것",
+                  "내용"
+                ],
+                [
+                  "특징",
+                  "내용"
+                ]
+              ],
+              "personality": "성격을 적어 주세요.",
+              "memo": "짧은 메모를 적어 주세요."
+            },
+            "prompts": [
+              {
+                "title": "기본 외형",
+                "text": "프롬프트를 적어요"
+              }
+            ],
+            "gallery": [
+              "",
+              "",
+              ""
+            ],
+            "music": [
+              {
+                "title": "노래 제목",
+                "artist": "가수",
+                "src": ""
+              }
+            ],
+            "talk": []
+          },
+          {
+            "dept": "SILVER SLOT",
             "name": "새 캐릭터 5",
             "en": "New Character 5",
             "quote": "한 줄 소개를 적어 주세요",
