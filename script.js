@@ -6732,3 +6732,20 @@ html.sye-editing #winlayer .cxwin [data-ci] .cx-ov,html.sye-editing #winlayer .c
 /* 입장화면 · 비밀번호 화면 모서리도 홈페이지와 같은 크기 · 같은 연한 민트 */
 (() => { const st = document.createElement('style'); st.textContent = '#intro.gt .gt-blob.b1,#intro.gt .gt-blob.b2{left:-6vw!important;top:-6vh!important;right:auto!important;bottom:auto!important;width:calc(100% + 12vw)!important;height:calc(100% + 12vh)!important;border-radius:0!important;filter:none!important;opacity:1!important;background:none!important;transform-origin:0 0}#intro.gt .gt-blob.b1{background-image:radial-gradient(41% 37% at 6vw 6vh,var(--glowb),transparent 72%)!important}#intro.gt .gt-blob.b2{transform-origin:100% 100%;background-image:radial-gradient(41% 37% at calc(100% - 6vw) calc(100% - 6vh),var(--glowb),transparent 72%)!important}'; /* 예전처럼 천천히 둥실 (크기 · 진하기는 홈페이지와 같게) */ document.head.appendChild(st);
   const d = () => { const e = document.getElementById('intro'); if (e) e.style.setProperty('--glowb', 'rgba(214,243,230,.72)'); else if (document.readyState !== 'complete') setTimeout(d, 60); }; d(); })();
+/* 창 안의 작은 민트 글씨 (프로필 · 리스트 · OOC · 프롬프트 등) : 파스텔이라 번쩍여 보여서 차분한 민트로 · 큰 제목 글씨는 그대로 */
+(() => {
+  const CALM = 'rgb(76, 148, 120)', seen = new WeakSet();
+  const hsl = (r, g, b) => { r /= 255; g /= 255; b /= 255; const mx = Math.max(r, g, b), mn = Math.min(r, g, b), l = (mx + mn) / 2, d = mx - mn; if (!d) return [0, 0, l]; const s = l > .5 ? d / (2 - mx - mn) : d / (mx + mn); let h = mx === r ? ((g - b) / d) % 6 : mx === g ? (b - r) / d + 2 : (r - g) / d + 4; h *= 60; if (h < 0) h += 360; return [h, s, l]; };
+  const fix = root => { if (!root || !root.querySelectorAll) return; [root, ...root.querySelectorAll('*')].forEach(e => {
+    if (seen.has(e) || !e.childNodes.length) return; if (![...e.childNodes].some(n => n.nodeType === 3 && n.textContent.trim())) return;
+    const c = getComputedStyle(e), fs = parseFloat(c.fontSize); if (fs > 16) return;
+    const m = /rgba?\((\d+),\s*(\d+),\s*(\d+)/.exec(c.color); if (!m) return; const [h, s, l] = hsl(+m[1], +m[2], +m[3]);
+    if (h >= 135 && h <= 178 && s > .25 && l >= .5 && l <= .82) { e.style.setProperty('color', CALM, 'important'); seen.add(e); } }); };
+  let q = new Set(), raf = 0; const flush = () => { raf = 0; const L = [...q]; q.clear(); L.forEach(fix); };
+  const go = () => { const host = document.getElementById('winlayer'); if (!host) return setTimeout(go, 300); fix(host);
+    new MutationObserver(ms => { ms.forEach(m => m.addedNodes.forEach(n => n.nodeType === 1 && q.add(n))); if (!raf) raf = requestAnimationFrame(() => setTimeout(flush, 30)); }).observe(host, { childList: true, subtree: true }); };
+  go();
+})();
+/* Linked 처방전 띠 : 예전처럼 민트에서 민트로 이어지는 그라데이션 (파스텔 톤) */
+(() => { const st = document.createElement('style'); st.textContent = '.dz-cct{background:linear-gradient(90deg,var(--rx1),var(--rx2))!important}'; document.head.appendChild(st);
+  document.documentElement.style.setProperty('--rx1', 'rgb(104, 201, 162)'); document.documentElement.style.setProperty('--rx2', 'rgb(146, 218, 189)'); })();
