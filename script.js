@@ -5640,10 +5640,15 @@ html.sye-editing .sye-t.on{background:rgba(127,214,176,.4);outline:2px solid #3F
     const out = clone(RAW), stamp = Date.now().toString(36), pics = [];
     Object.keys(PV).forEach(k => { if (PV[k] === '' && !SLOT_URL[k]) setAt(out, k, ''); });
     toast('사진 정리하는 중이에요…');
-    idbAll().then(all => Promise.all(Object.keys(all).map(k => shrink(all[k], /hero|banner|back|imageBack/.test(k) ? 1800 : 1400).then(r => {
-      if (!r || !r.blob) return; const name = 'media/' + k.replace(/[^A-Za-z0-9]+/g, '_') + '-' + stamp + '.' + r.ext;
-      if (setAt(out, k, name)) pics.push({ name, blob: r.blob });
-    })))).then(() => pics.reduce((p, f, i) => p.then(() => { toast(`사진 올리는 중… (${i + 1}/${pics.length})`); return toData(f.blob).then(u => ghPut(tok, f.name, u.split(',')[1], '사진 올리기: ' + f.name)); }), Promise.resolve()))
+    // 이미 올린 사진은 다시 안 올려요 (이 브라우저에 남아 있는 사진 중 새로 넣거나 바꾼 것만)
+    let UP = {}; try { UP = JSON.parse(localStorage.getItem('sye-up') || '{}') || {}; } catch (e) {}
+    const sig = b => b.slice(0, 65536).arrayBuffer().then(ab => { const u = new Uint8Array(ab); let x = 2166136261; for (let i = 0; i < u.length; i += 7) { x ^= u[i]; x = Math.imul(x, 16777619); } return b.size + ':' + (b.type || '') + ':' + (x >>> 0).toString(36); }).catch(() => b.size + ':' + (b.type || ''));
+    idbAll().then(all => Promise.all(Object.keys(all).map(k => sig(all[k]).then(sg => {
+      if (UP[k] && UP[k].sig === sg && UP[k].name) { setAt(out, k, UP[k].name); return; }
+      return shrink(all[k], /hero|banner|back|imageBack/.test(k) ? 1800 : 1400).then(r => {
+        if (!r || !r.blob) return; const name = 'media/' + k.replace(/[^A-Za-z0-9]+/g, '_') + '-' + stamp + '.' + r.ext;
+        if (setAt(out, k, name)) pics.push({ name, blob: r.blob, k, sg }); });
+    })))).then(() => pics.reduce((p, f, i) => p.then(() => { toast(`사진 올리는 중… (${i + 1}/${pics.length})`); return toData(f.blob).then(u => ghPut(tok, f.name, u.split(',')[1], '사진 올리기: ' + f.name)).then(() => { UP[f.k] = { sig: f.sg, name: f.name }; try { localStorage.setItem('sye-up', JSON.stringify(UP)); } catch (e) {} }); }), Promise.resolve()))
     .then(() => {
       const head = `/* =========================================================\n   data.js — 홈페이지 내용 (✎ EDIT → 홈페이지에 저장 · ${new Date().toLocaleString('ko-KR')})\n   - 홈페이지 주소 끝에 ?owner 를 붙여 들어가면 ✎ EDIT 로 바로 고칠 수 있어요.\n   - 사진은 media/ 폴더에 있어요.\n   ========================================================= */\n\n`;
       const parts = Object.keys(out).map(k => `  // ${(LABEL[k] || k).replace(/\*\//g, '')}\n  ${JSON.stringify(k)}: ${JSON.stringify(out[k], null, 2).replace(/\n/g, '\n  ')}`);
