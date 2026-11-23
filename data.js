@@ -1,5 +1,5 @@
 /* =========================================================
-   data.js — 홈페이지 내용 (✎ EDIT → 홈페이지에 저장 · 2026. 11. 24. 오전 2:12:59)
+   data.js — 홈페이지 내용 (✎ EDIT → 홈페이지에 저장 · 2026. 11. 24. 오전 2:20:42)
    - 홈페이지 주소 끝에 ?owner 를 붙여 들어가면 ✎ EDIT 로 바로 고칠 수 있어요.
    - 사진은 media/ 폴더에 있어요.
    ========================================================= */
@@ -2173,7 +2173,7 @@ const SITE = {
                 "연인 이름"
               ]
             ],
-            "card": "media/characters_worlds_seiran_member_1_card-mwtixoty.jpg",
+            "card": "media/characters_worlds_seiran_member_1_card-mwtj7eu1.jpg",
             "photo": "",
             "theme": {
               "title": "CHARACTER SONG",
@@ -2457,7 +2457,7 @@ const SITE = {
                 "연인 이름"
               ]
             ],
-            "card": "media/characters_worlds_seiran_member_4_card-mwtixoty.jpg",
+            "card": "media/characters_worlds_seiran_member_4_card-mwtj7eu1.jpg",
             "photo": "",
             "theme": {
               "title": "CHARACTER SONG",
@@ -2976,7 +2976,7 @@ const SITE = {
                 "연인 이름"
               ]
             ],
-            "card": "",
+            "card": "media/characters_worlds_frontline_member_0_card-mwtj7eu1.jpg",
             "photo": "",
             "theme": {
               "title": "CHARACTER SONG",
@@ -3081,7 +3081,7 @@ const SITE = {
                 "연인 이름"
               ]
             ],
-            "card": "media/characters_worlds_frontline_member_1_card-mwtixoty.jpg",
+            "card": "media/characters_worlds_frontline_member_1_card-mwtj7eu1.jpg",
             "photo": "",
             "theme": {
               "title": "CHARACTER SONG",
@@ -3257,7 +3257,7 @@ const SITE = {
                 "연인 이름"
               ]
             ],
-            "card": "",
+            "card": "media/characters_worlds_frontline_member_3_card-mwtj7eu1.jpg",
             "photo": "",
             "theme": {
               "title": "CHARACTER SONG",
@@ -3328,7 +3328,7 @@ const SITE = {
                 "연인 이름"
               ]
             ],
-            "card": "media/characters_worlds_frontline_member_4_card-mwtixoty.jpg",
+            "card": "media/characters_worlds_frontline_member_4_card-mwtj7eu1.jpg",
             "photo": "",
             "theme": {
               "title": "CHARACTER SONG",
@@ -3374,9 +3374,9 @@ const SITE = {
           },
           {
             "avatar": "",
-            "dept": "소속",
-            "name": "새 캐릭터 6",
-            "en": "New Character 6",
+            "dept": "NO AFFILIATION",
+            "name": "Élise Leblanc",
+            "en": "엘리즈 르블랑",
             "quote": "한 줄 소개를 적어 주세요",
             "tags": [
               "#태그"
@@ -3399,7 +3399,7 @@ const SITE = {
                 "연인 이름"
               ]
             ],
-            "card": "",
+            "card": "media/characters_worlds_frontline_member_5_card-mwtj7eu1.jpg",
             "photo": "",
             "theme": {
               "title": "CHARACTER SONG",
@@ -4497,6 +4497,34 @@ const SITE = {
       0
     ],
     "characters.worlds.frontline.member.4.photo": [
+      50,
+      50,
+      1.1,
+      0,
+      0
+    ],
+    "characters.worlds.frontline.member.1.photo": [
+      50,
+      50,
+      1.1,
+      0,
+      0
+    ],
+    "characters.worlds.frontline.member.0.photo": [
+      50,
+      50,
+      1.1,
+      0,
+      0
+    ],
+    "characters.worlds.frontline.member.3.photo": [
+      50,
+      50,
+      1.1,
+      0,
+      0
+    ],
+    "characters.worlds.frontline.member.5.photo": [
       50,
       50,
       1.1,
