@@ -5622,6 +5622,16 @@ html.sye-editing .sye-t.on{background:rgba(127,214,176,.4);outline:2px solid #3F
       .then(cur => fetch(url, { method: 'PUT', headers: H, body: JSON.stringify(Object.assign({ message: msg, content, branch: GH.branch }, cur && cur.sha ? { sha: cur.sha } : {})) }))
       .then(r => r.ok ? r.json() : r.json().catch(() => ({})).then(j => { throw Object.assign(new Error(j.message || ('HTTP ' + r.status)), { status: r.status }); }));
   };
+  // 안 쓰는 예전 사진 정리 : 홈페이지에 저장할 때마다, 홈페이지 어디에도 안 쓰이고 올린 지 10일이 넘은 사진만 지워요
+  //   (홈페이지에 저장으로 올라간 사진만 · 이름 끝 시간표로 날짜를 봐요 · BGM · 커서 그림 등은 건드리지 않아요)
+  const ghClean = (tok, used) => {
+    const H = { Authorization: 'Bearer ' + tok, Accept: 'application/vnd.github+json' }, url = `${GH.api}/repos/${GH.owner}/${GH.repo}/contents/media`, OLD = 10 * 864e5;
+    fetch(url + '?ref=' + GH.branch + '&t=' + Date.now(), { headers: H, cache: 'no-store' }).then(r => r.ok ? r.json() : []).then(list => {
+      const old = (Array.isArray(list) ? list : []).filter(f => { const m = /^[A-Za-z0-9_]+-([a-z0-9]{7,9})\.(jpe?g|png|webp|gif)$/i.exec(f.name || ''); if (!m) return false;
+        const t = parseInt(m[1], 36); return t > 1.6e12 && Date.now() - t > OLD && !used.includes(f.name); });
+      return old.reduce((p, f) => p.then(n => fetch(`${url}/${encodeURIComponent(f.name)}`, { method: 'DELETE', headers: H, body: JSON.stringify({ message: '안 쓰는 예전 사진 정리: ' + f.name, sha: f.sha, branch: GH.branch }) }).then(r => r.ok ? n + 1 : n, () => n)), Promise.resolve(0));
+    }).then(n => { if (n) toast(`안 쓰는 예전 사진 ${n}장도 정리했어요`); }).catch(() => {});
+  };
   let PUBBING = false;
   function publishGH() {
     if (PUBBING) return; const tok = ghToken(); if (!tok) { toast('토큰이 있어야 저장할 수 있어요'); return; }
@@ -5642,6 +5652,7 @@ html.sye-editing .sye-t.on{background:rgba(127,214,176,.4);outline:2px solid #3F
     }).then(() => {
       pend(0); try { localStorage.setItem('sye-pub-at', String(Date.now())); } catch (e) {}
       toast(pics.length ? `저장했어요! 사진 ${pics.length}장 · 1~10분 뒤 모두에게 보여요` : '저장했어요! 1~10분 뒤 모두에게 보여요'); done();
+      ghClean(tok, JSON.stringify(out));
     }).catch(err => {
       done();
       if (err && (err.status === 401 || err.status === 403 || err.status === 404)) { try { localStorage.removeItem('gh-token'); } catch (e) {} toast('토큰이 맞지 않아요 · 다시 누르면 토큰을 새로 넣을 수 있어요'); }
