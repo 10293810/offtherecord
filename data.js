@@ -2040,7 +2040,7 @@ const SITE = {
         "name": "東京青藍大学",
         "no": "CH-03",
         "member": [
-          {
+          {"avatar": "", 
             "dept": "工学部",
             "name": "서은율",
             "en": "Seo Eunyul",
@@ -2145,7 +2145,7 @@ const SITE = {
             ],
             "year": "3年生"
           },
-          {
+          {"avatar": "", 
             "dept": "言語学部",
             "name": "한사랑",
             "en": "Han Sarang",
@@ -2250,7 +2250,7 @@ const SITE = {
             ],
             "year": "3年生"
           },
-          {
+          {"avatar": "", 
             "dept": "デザイン学部",
             "name": "한하나",
             "en": "Han Hana",
@@ -2355,7 +2355,7 @@ const SITE = {
             ],
             "year": "4年生"
           },
-          {
+          {"avatar": "", 
             "dept": "소속",
             "name": "새 캐릭터 4",
             "en": "New Character 4",
@@ -2426,7 +2426,7 @@ const SITE = {
             "talk": [],
             "year": "2年生"
           },
-          {
+          {"avatar": "", 
             "dept": "人文学部",
             "name": "연유이",
             "en": "Yeon Yui",
@@ -2713,7 +2713,7 @@ const SITE = {
               }
             ]
           },
-          {
+          {"avatar": "", "hero": "", 
             "group": "v1",
             "duo": [
               {
@@ -2942,7 +2942,7 @@ const SITE = {
         "name": "FRONTLINE",
         "no": "CH-04",
         "member": [
-          {
+          {"avatar": "", 
             "dept": "RED ZONE",
             "name": "Yvelyn Sinclair",
             "en": "이블린 싱클레어",
@@ -3046,7 +3046,7 @@ const SITE = {
               }
             ]
           },
-          {
+          {"avatar": "", 
             "dept": "소속",
             "name": "캐릭터 6",
             "en": "Character Six",
@@ -3150,7 +3150,7 @@ const SITE = {
               }
             ]
           },
-          {
+          {"avatar": "", 
             "dept": "CROWN GATE",
             "name": "새 캐릭터 5",
             "en": "New Character 5",
@@ -3220,7 +3220,7 @@ const SITE = {
             ],
             "talk": []
           },
-          {
+          {"avatar": "", 
             "dept": "소속",
             "name": "새 캐릭터 4",
             "en": "New Character 4",
@@ -3290,7 +3290,7 @@ const SITE = {
             ],
             "talk": []
           },
-          {
+          {"avatar": "", 
             "dept": "SILVER SLOT",
             "name": "새 캐릭터 5",
             "en": "New Character 5",
@@ -3360,7 +3360,7 @@ const SITE = {
             ],
             "talk": []
           },
-          {
+          {"avatar": "", 
             "dept": "소속",
             "name": "새 캐릭터 6",
             "en": "New Character 6",
@@ -3430,7 +3430,7 @@ const SITE = {
             ],
             "talk": []
           },
-          {
+          {"avatar": "", 
             "dept": "소속",
             "name": "새 캐릭터 7",
             "en": "New Character 7",

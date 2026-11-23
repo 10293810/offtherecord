@@ -2829,7 +2829,9 @@ addEventListener('resize', () => { const d = wins.get('chardet'); if (d) request
 function pairSideInfo(w, x) {
   const mm = x.link ? (w.member || []).find(y => UN(y.name) === UN(x.link)) : null;
   return { name: x.name || mm?.name || '', en: x.en ?? mm?.en ?? '', sub: x.sub || mm?.dept || mm?.tag || '', quote: x.quote ?? mm?.quote ?? '', tags: x.tags || mm?.tags || [],
-    photo: pv(x.photo, mm?.photo, mm?.card, mm?.hero), avatar: pv(x.avatar, mm?.avatar, mm?.card), theme: x.theme || mm?.theme || null };
+    photo: pv(x.photo, mm?.photo, mm?.card, mm?.hero), avatar: pv(x.avatar, mm?.avatar, mm?.card), theme: x.theme || mm?.theme || null,
+    // 전환 동그라미 : 페어에 따로 넣은 게 있으면 그것 · 아니면 캐릭터 설정대로 (같게 = 목록 사진 / 모두 따로 = 캐릭터 동그라미 자리)
+    avHTML: o => SRC(x.avatar) || !mm ? phFb(x.avatar, x.photo, o) : mm.picMode === 'sep' ? phFb(mm.avatar, mm.card, o) : ph(pv(mm.card, mm.photo), o) };
 }
 function pairFloatHTML(w, m) {
   const sides = ['a', 'b'].filter(k => m[k]); if (!sides.includes(pairSide)) pairSide = sides[0] || 'a';
@@ -2839,7 +2841,7 @@ function pairFloatHTML(w, m) {
   return `<div class="cy-pcard fl"><button class="pf-x" title="닫기">${ic('x')}</button><small>${esc(w.name)}${I.sub ? ' · ' + esc(I.sub) : ''}</small><b>${esc(I.name)}${I.en ? `<span class="pf-en">${esc(I.en)}</span>` : ''}</b>${I.quote ? `<em>“${esc(I.quote)}”</em>` : ''}
     <div class="cd-tags">${tg.filter(Boolean).map(t => `<i>${esc(t)}</i>`).join('')}</div></div>
   <div class="cf-stage"><div class="cy-pv" data-k="${pairSide}">${ph(I.photo, { seed: I.name + 0, icon: 'idcard' })}</div>
-    <div class="cf-side">${sides.map(k => { const J = pairSideInfo(w, m[k]); return `<button class="cf-av ${k === pairSide ? 'on' : ''}" data-side="${k}" title="${esc(J.name)}">${ph(pv(J.avatar, J.photo), { cls: 'av', seed: J.name || k })}</button>`; }).join('')}</div></div>
+    <div class="cf-side">${sides.map(k => { const J = pairSideInfo(w, m[k]); return `<button class="cf-av ${k === pairSide ? 'on' : ''}" data-side="${k}" title="${esc(J.name)}">${J.avHTML({ cls: 'av', seed: J.name || k })}</button>`; }).join('')}</div></div>
   <div class="pf-bar"><button class="pf-song" data-pfsong="${pairSide}"><span class="pf-play">${ic('play')}</span><b>${esc(song.title || 'CHARACTER SONG')}</b><i>···</i></button><button class="pf-pair cp-log">PAIR ↗</button></div>`;
 }
 function pairDays(since) { const t = new Date(String(since).replace(/\./g, '-') + 'T00:00:00'); if (isNaN(t)) return 0; const n = new Date(); n.setHours(0, 0, 0, 0); return Math.floor((n - t) / 864e5) + 1; }
@@ -2931,7 +2933,7 @@ function drawAgent(rec) {
   else { const hs = SPATH(m.hero) || SPATH(pv(m.hero, m.card)), hsrc = SRC(m.hero) || SRC(m.card), hip = hs && (S.imgPos || {})[hs];
   body = `<div class="mp-hero ph ${V(m.name)} ${m.theme === 'dark' ? '' : 'lt'}" data-slot="${esc(hs)}"${SPATH(m.card) && SPATH(m.card) !== hs ? ` data-fb="${esc(SPATH(m.card))}"` : ''}>${hsrc ? `<img src="${esc(hsrc)}" alt=""${hip ? ` style="${imgPosCss(hip)}"` : ''}>` : `<span class="ph-ic">${ic('idcard')}</span>`}${m.badge ? `<span class="ent">${esc(m.badge)}</span>` : ''}
       <div class="cap"><small>${esc(m.level || '')}</small><h3>${esc(m.name)}</h3><p>${esc(m.quote || '')}</p></div></div>${(m.sections || []).map(agentSecHTML).join('')}`; }
-  b.innerHTML = `<div class="mp-tabs" style="grid-template-columns:repeat(2,minmax(0,1fr))">${strip.map(([x, k]) => `<button class="mp-tab ${k === agentWho ? 'on' : ''}${x._empty ? ' empty' : ''}" data-whok="${k}"${x._empty && OWNER && SYE_ON ? ' data-duo-add="1"' : ''}>${(x.picMode || m0.picMode) === 'sep' ? phFb(x.avatar, x.card, { cls: 'av', seed: x.name }) : ph(pv(x.card, x.hero), { cls: 'av', seed: x.name })}<span><b>${esc(x.name)}</b><small>${String(strip.findIndex(z => z[1] === k) + 1).padStart(2, '0')} · ${ROLE[k]}</small></span></button>`).join('')}${OWNER && SYE_ON ? `<button class="mp-swap" data-duo-swap="1" title="캐릭터 · 페르소나 자리 바꾸기">⇄</button>` : ''}</div>
+  b.innerHTML = `<div class="mp-tabs" style="grid-template-columns:repeat(2,minmax(0,1fr))">${strip.map(([x, k]) => `<button class="mp-tab ${k === agentWho ? 'on' : ''}${x._empty ? ' empty' : ''}" data-whok="${k}"${x._empty && OWNER && SYE_ON ? ' data-duo-add="1"' : ''}>${phFb(x.avatar, x.card, { cls: 'av', seed: x.name })}<span><b>${esc(x.name)}</b><small>${String(strip.findIndex(z => z[1] === k) + 1).padStart(2, '0')} · ${ROLE[k]}</small></span></button>`).join('')}${OWNER && SYE_ON ? `<button class="mp-swap" data-duo-swap="1" title="캐릭터 · 페르소나 자리 바꾸기">⇄</button>` : ''}</div>
     <div class="mp-body"><div class="mp-sub"><button class="${agentTab === 'profile' ? 'on' : ''}" data-tab="profile"><i>01</i>PROFILE</button><button class="${agentTab === 'gallery' ? 'on' : ''}" data-tab="gallery"><i>02</i>GALLERY</button>
     <span class="r">${m.bgm != null ? `<button data-song="${m.bgm}">♪ BGM</button>` : ''}${m.song != null ? `<button data-song="${m.song}">♪ CHARACTER SONG</button>` : ''}</span></div>
     <div class="mp-scroll">${body}</div></div>`;
@@ -5709,8 +5711,9 @@ html:not(.sye-editing) .cx-add,html:not(.sye-editing) .cd-tags .ed{display:none!
     const rowsOf = rs => (rs || []).map(r => Array.isArray(r) ? r.join(' : ') : r).join('\n');
     const pic = (label, name, has) => `<label class="pic"><span>${label}</span><input type="file" name="${name}" accept="image/*"><small>${has ? '바꿀 때만 골라요 · ' : ''}여기서 고르면 저장할 때 같이 들어가요 (나중에 사진 자리를 눌러서 바꿔도 돼요)</small></label>`;
     if (!isP) { const P = o.profile || {};
-      h += `<div class="sec">기본 (이것만 적어도 돼요)</div>` + fld('이름 *', 'name', o.name) + fld(teamsOf(world) ? '한국어 이름' : world.style === 'roster' ? '코드네임 (영어)' : '영어 이름', 'en', o.en) + (world.style === 'roster' ? fld('그룹', 'rgroup', (g => g ? g.name + ' · ' + g.cls : '')((world.groups || []).find(g => g.key === o.group)), 'select', '목록에서 들어갈 줄', ['', ...(world.groups || []).map(g => g.name + ' · ' + g.cls)]) + fld('속성', 'el', rsElOf(o), 'select', '고르면 뱃지 색이 알아서 바뀌어요', Object.keys(RS_EL)) + fld('사진 쓰는 방법', 'picmode', o.picMode === 'sep' ? '목록 · 첫 화면 · 전환 사진 모두 따로' : '목록 · 전환 사진 같게 (첫 화면만 따로)', 'select', '첫 화면 = 캐릭터 창 큰 사진 · 전환 = 위쪽 작은 동그라미 사진 · 비어 있는 자리는 목록 사진을 대신 보여줘요', ['목록 · 전환 사진 같게 (첫 화면만 따로)', '목록 · 첫 화면 · 전환 사진 모두 따로']) : '') + (world.grades ? fld('학년', 'year', o.year || '', 'select', '목록에서 학년별로 나눠서 보여줘요', ['', ...GR_Y.map(g => g[0])]) : '') + (teamsOf(world) ? fld('소속팀', 'dept', o.dept || (teamsOf(world).find(x => !x.match) || {}).key, 'select', '고른 팀 칸에 들어가요 · 카드 위 작은 글씨', [...teamsOf(world).map(x => x.key), ...(o.dept && !teamsOf(world).some(x => x.key === o.dept) ? [o.dept] : [])]) : fld('소속 · 학부', 'dept', o.dept, 'text', '카드 위 작은 글씨')) + fld('한 줄 소개', 'quote', o.quote) + fld('태그', 'tags', (o.tags || []).join(', '), 'text', '쉼표로 나눠요 · 예) #다정, #고양이상')
+      h += `<div class="sec">기본 (이것만 적어도 돼요)</div>` + fld('이름 *', 'name', o.name) + fld(teamsOf(world) ? '한국어 이름' : world.style === 'roster' ? '코드네임 (영어)' : '영어 이름', 'en', o.en) + (world.style === 'roster' ? fld('그룹', 'rgroup', (g => g ? g.name + ' · ' + g.cls : '')((world.groups || []).find(g => g.key === o.group)), 'select', '목록에서 들어갈 줄', ['', ...(world.groups || []).map(g => g.name + ' · ' + g.cls)]) + fld('속성', 'el', rsElOf(o), 'select', '고르면 뱃지 색이 알아서 바뀌어요', Object.keys(RS_EL)) : '') + (world.grades ? fld('학년', 'year', o.year || '', 'select', '목록에서 학년별로 나눠서 보여줘요', ['', ...GR_Y.map(g => g[0])]) : '') + (teamsOf(world) ? fld('소속팀', 'dept', o.dept || (teamsOf(world).find(x => !x.match) || {}).key, 'select', '고른 팀 칸에 들어가요 · 카드 위 작은 글씨', [...teamsOf(world).map(x => x.key), ...(o.dept && !teamsOf(world).some(x => x.key === o.dept) ? [o.dept] : [])]) : fld('소속 · 학부', 'dept', o.dept, 'text', '카드 위 작은 글씨')) + fld('한 줄 소개', 'quote', o.quote) + fld('태그', 'tags', (o.tags || []).join(', '), 'text', '쉼표로 나눠요 · 예) #다정, #고양이상')
         + pic(o.card ? '카드 사진 바꾸기' : '카드 사진', 'pic', !!o.card)
+        + (world.style !== 'roster' ? fld('사진 쓰는 방법', 'picmode', o.picMode === 'sep' ? '목록 · 첫 화면 · 전환 사진 모두 따로' : '목록 · 전환 사진 같게 (첫 화면만 따로)', 'select', '목록 = 카드 사진 · 첫 화면 = 캐릭터 누르면 나오는 큰 사진 · 전환 = 페어에서 캐릭터 바꿀 때 작은 동그라미 · 비어 있는 자리는 목록 사진을 빌려 보여줘요', ['목록 · 전환 사진 같게 (첫 화면만 따로)', '목록 · 첫 화면 · 전환 사진 모두 따로']) : '')
         + `<details class="more"><summary>더 적기 · 프로필 · 프롬프트 · 노래 (안 적어도 돼요)</summary>`
         + fld('사진 옆 작은 칸', 'spec', rowsOf(o.spec || [['AGE', ''], ['HEIGHT', ''], ['BIRTH', ''], ['LOVER', '']]), 'area', '', 4)
         + fld('프로필 표', 'rows', rowsOf(P.rows || [['좋아하는 것', ''], ['싫어하는 것', ''], ['특징', '']]), 'area', '', 4)
@@ -5816,7 +5819,8 @@ html:not(.sye-editing) .cx-add,html:not(.sye-editing) .cd-tags .ed{display:none!
     if (!isP) {
       ['name', 'en', 'dept', 'quote'].forEach(k => { o[k] = v(k); });
       if (W()[w].grades) { if (v('year')) o.year = v('year'); else delete o.year; }
-      if (W()[w].style === 'roster') { const gk = ((W()[w].groups || []).find(g => g.name + ' · ' + g.cls === v('rgroup')) || {}).key; if (gk) o.group = gk; delete o.grade; if (/모두 따로/.test(v('picmode'))) o.picMode = 'sep'; else delete o.picMode; o.el = v('el') || '무속성'; o.attr = rsBadge(o.el, ''); o.attrColor = RS_EL[o.el]; }
+      if (F.elements.picmode) { if (/모두 따로/.test(v('picmode'))) o.picMode = 'sep'; else delete o.picMode; }
+      if (W()[w].style === 'roster') { const gk = ((W()[w].groups || []).find(g => g.name + ' · ' + g.cls === v('rgroup')) || {}).key; if (gk) o.group = gk; delete o.grade; o.el = v('el') || '무속성'; o.attr = rsBadge(o.el, ''); o.attrColor = RS_EL[o.el]; }
       o.tags = v('tags').split(',').map(x => x.trim()).filter(Boolean);
       o.spec = lines(v('spec')).map(kv);
       o.profile = Object.assign({}, o.profile, { rows: lines(v('rows')).map(kv), personality: v('personality'), memo: v('memo') });
@@ -5825,7 +5829,7 @@ html:not(.sye-editing) .cx-add,html:not(.sye-editing) .cd-tags .ed{display:none!
       o.theme = Object.assign({ title: 'CHARACTER SONG' }, o.theme, { src: v('theme') });
       o.talk = lines(v('talk')).map(l => { const b = bars(l); return { name: b[0] || '', avatar: '', relation: b[1] || '', call: b[2] || '', best: false, likes: +(b[4] || 0) || 0, text: b[3] || '', replies: b[5] ? b[5].split('//').map(x => kv(x.replace(':', ' : ')).map(s => s.trim())).filter(r => r[0] || r[1]) : [] }; });
       if (o.talk[0]) o.talk[0].best = true;
-      if (!('card' in o)) o.card = ''; if (!('photo' in o)) o.photo = ''; if (!o.gallery) o.gallery = ['', '', ''];
+      if (!('card' in o)) o.card = ''; if (!('photo' in o)) o.photo = ''; if (!('avatar' in o)) o.avatar = ''; if (!o.gallery) o.gallery = ['', '', ''];
     } else {
       ['name', 'en', 'badge', 'tags', 'quote', 'status', 'since', 'memo'].forEach(k => { o[k] = v(k); }); o.next = +v('next') || 100;
       o.a = Object.assign({ avatar: '' }, o.a, { name: v('alink') || v('aname'), sub: v('asub'), link: v('alink') });
