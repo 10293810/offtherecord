@@ -6563,12 +6563,8 @@ html.sye-editing #winlayer .cxwin [data-ci] .cx-ov,html.sye-editing #winlayer .c
     if (l >= .66) return toRgb(HA, .46, Math.max(l, .8));                                         // 연한 민트 → 파스텔 민트 (대표색)
     return toRgb(HA, .46, .56 + Math.max(0, Math.min(1, (l - .3) / .36)) * .12);                   // 중간 민트 → 파스텔 민트 (원래 진했던 건 조금 더 진하게 남겨서 구분돼요 · 글씨 · 선용)
   };
-  // 글씨용 민트 : 파스텔은 흰 바탕 위 글씨로 쓰면 번쩍여 보여서, 글씨(color)만 차분하게 한 톤 진한 민트로
-  const shiftText = (r, g, b) => { const [h, s, l] = toHsl(+r, +g, +b); if (!(h >= 95 && h <= 205) || s < .22 || l < .3 || l >= .84) return shift(r, g, b); return toRgb(HA, .36, .43 + Math.max(0, Math.min(1, (l - .3) / .54)) * .06); };
-  let SHIFT = shift;
-  const remapT = txt => { SHIFT = shiftText; try { return remap(txt); } finally { SHIFT = shift; } };
-  const remap = txt => txt.replace(/rgba?\(\s*(\d+),\s*(\d+),\s*(\d+)(\s*,\s*[\d.]+)?\s*\)/g, (m, r, g, b, a) => { const c = SHIFT(r, g, b); return c ? (a ? `rgba(${c.join(', ')}${a})` : `rgb(${c.join(', ')})`) : m; })
-    .replace(/#([0-9a-f]{6}|[0-9a-f]{3})\b/gi, (m, hx) => { if (hx.length === 3) hx = hx.split('').map(x => x + x).join(''); const c = SHIFT(parseInt(hx.slice(0, 2), 16), parseInt(hx.slice(2, 4), 16), parseInt(hx.slice(4, 6), 16)); return c ? '#' + c.map(v => v.toString(16).padStart(2, '0')).join('') : m; });
+  const remap = txt => txt.replace(/rgba?\(\s*(\d+),\s*(\d+),\s*(\d+)(\s*,\s*[\d.]+)?\s*\)/g, (m, r, g, b, a) => { const c = shift(r, g, b); return c ? (a ? `rgba(${c.join(', ')}${a})` : `rgb(${c.join(', ')})`) : m; })
+    .replace(/#([0-9a-f]{6}|[0-9a-f]{3})\b/gi, (m, hx) => { if (hx.length === 3) hx = hx.split('').map(x => x + x).join(''); const c = shift(parseInt(hx.slice(0, 2), 16), parseInt(hx.slice(2, 4), 16), parseInt(hx.slice(4, 6), 16)); return c ? '#' + c.map(v => v.toString(16).padStart(2, '0')).join('') : m; });
   // 색만 그 자리에서 바꿔요 (규칙을 맨 뒤로 복사하면 크기 · 칸 규칙 순서가 뒤집혀서 모바일 아이콘이 커졌어요)
   const mine = new WeakMap();          // 규칙마다 내가 칠한 값 (다른 색 스크립트가 나중에 바꾸면 다시 칠해요)
   const run = () => {
@@ -6578,7 +6574,7 @@ html.sye-editing #winlayer .cxwin [data-ci] .cx-ov,html.sye-editing #winlayer .c
       if (!/rgb|#[0-9a-f]{3}/i.test(r.style.cssText)) continue;
       const st = r.style, props = []; for (let i = 0; i < st.length; i++) props.push(st[i]);
       let m = mine.get(r); if (!m) mine.set(r, m = {});
-      for (const pr of props) { const v = st.getPropertyValue(pr); if (m[pr] === v) continue; const t = (pr === 'color' || pr === '-webkit-text-fill-color') ? remapT(v) : remap(v); if (t !== v) st.setProperty(pr, t, st.getPropertyPriority(pr)); m[pr] = st.getPropertyValue(pr); }
+      for (const pr of props) { const v = st.getPropertyValue(pr); if (m[pr] === v) continue; const t = remap(v); if (t !== v) st.setProperty(pr, t, st.getPropertyPriority(pr)); m[pr] = st.getPropertyValue(pr); }
     } };
     for (const sh of document.styleSheets) { try { walk(sh.cssRules); } catch (e) {} }
   };
@@ -6732,20 +6728,25 @@ html.sye-editing #winlayer .cxwin [data-ci] .cx-ov,html.sye-editing #winlayer .c
 /* 입장화면 · 비밀번호 화면 모서리도 홈페이지와 같은 크기 · 같은 연한 민트 */
 (() => { const st = document.createElement('style'); st.textContent = '#intro.gt .gt-blob.b1,#intro.gt .gt-blob.b2{left:-6vw!important;top:-6vh!important;right:auto!important;bottom:auto!important;width:calc(100% + 12vw)!important;height:calc(100% + 12vh)!important;border-radius:0!important;filter:none!important;opacity:1!important;background:none!important;transform-origin:0 0}#intro.gt .gt-blob.b1{background-image:radial-gradient(41% 37% at 6vw 6vh,var(--glowb),transparent 72%)!important}#intro.gt .gt-blob.b2{transform-origin:100% 100%;background-image:radial-gradient(41% 37% at calc(100% - 6vw) calc(100% - 6vh),var(--glowb),transparent 72%)!important}'; /* 예전처럼 천천히 둥실 (크기 · 진하기는 홈페이지와 같게) */ document.head.appendChild(st);
   const d = () => { const e = document.getElementById('intro'); if (e) e.style.setProperty('--glowb', 'rgba(214,243,230,.72)'); else if (document.readyState !== 'complete') setTimeout(d, 60); }; d(); })();
-/* 창 안의 작은 민트 글씨 (프로필 · 리스트 · OOC · 프롬프트 등) : 파스텔이라 번쩍여 보여서 차분한 민트로 · 큰 제목 글씨는 그대로 */
+
+/* 창 안의 작은 민트 글씨 (STATUS · ITEM · No.01 · COPY · 칩 …) : 너무 연해서 번쩍여 보여서, 캐릭터 상세 창의 민트(104,199,158)로
+   · 숫자 옆 제목 줄(.dz-head)과 큰 글씨는 그대로 */
 (() => {
-  const CALM = 'rgb(76, 148, 120)', seen = new WeakSet();
-  const hsl = (r, g, b) => { r /= 255; g /= 255; b /= 255; const mx = Math.max(r, g, b), mn = Math.min(r, g, b), l = (mx + mn) / 2, d = mx - mn; if (!d) return [0, 0, l]; const s = l > .5 ? d / (2 - mx - mn) : d / (mx + mn); let h = mx === r ? ((g - b) / d) % 6 : mx === g ? (b - r) / d + 2 : (r - g) / d + 4; h *= 60; if (h < 0) h += 360; return [h, s, l]; };
-  const fix = root => { if (!root || !root.querySelectorAll) return; [root, ...root.querySelectorAll('*')].forEach(e => {
-    if (seen.has(e) || !e.childNodes.length) return; if (![...e.childNodes].some(n => n.nodeType === 3 && n.textContent.trim())) return;
-    const c = getComputedStyle(e), fs = parseFloat(c.fontSize); if (fs > 16) return;
-    const m = /rgba?\((\d+),\s*(\d+),\s*(\d+)/.exec(c.color); if (!m) return; const [h, s, l] = hsl(+m[1], +m[2], +m[3]);
-    if (h >= 135 && h <= 178 && s > .25 && l >= .5 && l <= .82) { e.style.setProperty('color', CALM, 'important'); seen.add(e); } }); };
-  let q = new Set(), raf = 0; const flush = () => { raf = 0; const L = [...q]; q.clear(); L.forEach(fix); };
-  const go = () => { const host = document.getElementById('winlayer'); if (!host) return setTimeout(go, 300); fix(host);
-    new MutationObserver(ms => { ms.forEach(m => m.addedNodes.forEach(n => n.nodeType === 1 && q.add(n))); if (!raf) raf = requestAnimationFrame(() => setTimeout(flush, 30)); }).observe(host, { childList: true, subtree: true }); };
-  go();
+  const MINT = 'rgb(104, 199, 158)';
+  const hsl = (r, g, b) => { r /= 255; g /= 255; b /= 255; const mx = Math.max(r, g, b), mn = Math.min(r, g, b), l = (mx + mn) / 2, d = mx - mn; if (!d) return [0, 0, l]; const s = d / (1 - Math.abs(2 * l - 1)); let h = mx === r ? ((g - b) / d) % 6 : mx === g ? (b - r) / d + 2 : (r - g) / d + 4; return [(h * 60 + 360) % 360, s, l]; };
+  const fix = root => {
+    if (!root || !root.querySelectorAll) return;
+    root.querySelectorAll('*').forEach(e => {
+      if (e.closest('.dz-head')) return;
+      if (![...e.childNodes].some(n => n.nodeType === 3 && n.textContent.trim())) return;
+      const cs = getComputedStyle(e); if (parseFloat(cs.fontSize) > 14) return;
+      const m = cs.color.match(/[\d.]+/g); if (!m) return;
+      const [h, s, l] = hsl(+m[0], +m[1], +m[2]);
+      if (h < 135 || h > 178 || s < .25 || l < .72 || l > .9) return;
+      e.setAttribute('data-keepc', ''); e.style.setProperty('color', MINT, 'important');
+    });
+  };
+  let t = 0; const go = () => { clearTimeout(t); t = setTimeout(() => fix(document.getElementById('winlayer')), 60); };
+  const start = () => { const wl = document.getElementById('winlayer'); if (!wl) return setTimeout(start, 300); new MutationObserver(go).observe(wl, { childList: true, subtree: true }); go(); };
+  start();
 })();
-/* Linked 처방전 띠 : 예전처럼 민트에서 민트로 이어지는 그라데이션 (파스텔 톤) */
-(() => { const st = document.createElement('style'); st.textContent = '.dz-cct{background:linear-gradient(90deg,var(--rx1),var(--rx2))!important}'; document.head.appendChild(st);
-  document.documentElement.style.setProperty('--rx1', 'rgb(104, 201, 162)'); document.documentElement.style.setProperty('--rx2', 'rgb(146, 218, 189)'); })();
