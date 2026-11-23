@@ -210,12 +210,15 @@ const fillIcons = (root = document) => $$('[data-icon]', root).forEach(el => { i
 /* ---------- 이미지 자리 ---------- */
 const hash = s => [...String(s)].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7);
 const V = s => ['', 'v2', 'v3', 'v4'][hash(s) % 4];
-const imgPosCss = p => `object-position:${+p[0]}% ${+p[1]}%;transform:scale(${+p[2] || 1});transform-origin:${+p[0]}% ${+p[1]}%`;
+const imgPosCss = p => `object-position:${+p[0]}% ${+p[1]}%;transform:translate(${+p[3] || 0}%,${+p[4] || 0}%) scale(${+p[2] || 1});transform-origin:${+p[0]}% ${+p[1]}%`;
 function ph(src, { cls = '', label = '', seed = label || cls, icon = '', style = '' } = {}) {
   const sp = SPATH(src); src = SRC(src);
   const ip = sp && S.imgPos && S.imgPos[sp];
   return `<div class="ph ${V(seed)} ${cls}${sp && !src ? ' is-empty' : ''}" ${sp ? `data-slot="${esc(sp)}"` : ''} data-label="${esc(label)}" ${style ? `style="${style}"` : ''}>${src ? `<img src="${esc(src)}" alt="" loading="lazy"${ip ? ` style="${imgPosCss(ip)}"` : ''}>` : icon ? `<span class="ph-ic">${ic(icon)}</span>` : ''}</div>`;
 }
+// 사진 자리 따로 쓰기 : own 자리(예: 첫 화면 사진)에 사진이 없으면 fb(목록 사진)를 대신 보여주되, 누르면 own 자리에 넣어져요
+function phFb(own, fb, o = {}) { if (!SPATH(own)) return ph(pv(own, fb), o); if (SRC(own) || !SRC(fb)) return ph(own, o).replace(/data-slot="([^"]*)"/, a0 => SPATH(fb) ? `${a0} data-fb="${esc(SPATH(fb))}"` : a0); const sp = SPATH(own), ip = (S.imgPos || {})[sp];
+  return ph(own, o).replace(' is-empty', ' is-fb').replace(/data-slot="([^"]*)"/, (a0) => `${a0} data-fb="${esc(SPATH(fb))}"`).replace(/>(<span class="ph-ic">[\s\S]*?<\/span>)?<\/div>$/, `><img src="${esc(SRC(fb))}" alt="" loading="lazy"${ip ? ` style="${imgPosCss(ip)}"` : ''}></div>`); }
 function barcode(w = 74, h = 21, seed = 'x') {
   let x = 0, out = '', s = hash(seed);
   while (x < w) { s = (s * 1103515245 + 12345) >>> 0; const bw = .7 + (s % 3) * .6; if ((s >> 4) % 3) out += `<rect x="${x.toFixed(1)}" y="0" width="${bw.toFixed(1)}" height="${h}"/>`; x += bw + .8 + ((s >> 8) % 2) * .6; }
@@ -2652,7 +2655,7 @@ function rosterHTML(W, list, isOn) {
   if (list.some(m => !keys.includes(m.group))) G.push({ key: '__etc', name: 'ETC.', cls: '', color: '#8EB2B7' });
   return G.map(g => { const ms = list.map((m, i) => [m, i]).filter(([m]) => g.key === '__etc' ? !keys.includes(m.group) : m.group === g.key); if (!ms.length) return '';
     return `<div class="rs-blk" style="--gc:${esc(g.color || '#8EB2B7')};--cc:${esc(g.clsColor || g.color || '#8EB2B7')}"><div class="rs-sec"><b>${esc(g.name)}</b><span>${esc(g.cls || '')}</span></div><div class="rs-ln"></div>
-      <div class="rs-grid">${ms.map(([m, i]) => `<button class="rs-card ${isOn(i) ? 'on' : ''}" data-ci="${i}">${ph(pv(m.card, m.hero), { seed: m.name + i })}<div class="ov"><b>${esc(m.name)}</b>${m.attr || m.el ? (() => { const e = rsElOf(m); return `<i style="background:${RS_EL[e]};color:${RS_INK[e] || '#fff'}">${esc(m.attr || rsBadge(e, ''))}</i>`; })() : ''}</div></button>`).join('')}</div></div>`; }).join('');
+      <div class="rs-grid">${ms.map(([m, i]) => `<button class="rs-card ${isOn(i) ? 'on' : ''}" data-ci="${i}">${phFb(m.card, m.hero, { seed: m.name + i })}<div class="ov"><b>${esc(m.name)}</b>${m.attr || m.el ? (() => { const e = rsElOf(m); return `<i style="background:${RS_EL[e]};color:${RS_INK[e] || '#fff'}">${esc(m.attr || rsBadge(e, ''))}</i>`; })() : ''}</div></button>`).join('')}</div></div>`; }).join('');
 }
 // FRONTLINE : 소속팀(카드 위 작은 글씨 = 소속)별로 나눠서 보여줘요 · 팀이 없는 캐릭터는 맨 아래 무소속
 const FL_TEAMS = [
@@ -2785,7 +2788,7 @@ function charDetailHTML() {
   if (charView === 'photo') { const tg = (m.tags || []).filter(Boolean), song = m.theme || {};   // 영상처럼: 위 정보 카드 · 큰 사진 · 아래 노래 + PROFILE
     return `<div class="cy-pcard fl"><button class="pf-x" title="닫기">${ic('x')}</button><small>${esc(w.name)}${m.dept ? ' · ' + esc(m.dept) : ''}</small><b>${esc(m.name)}${m.en ? `<span class="pf-en">${esc(m.en)}</span>` : ''}</b>${m.quote ? `<em>“${esc(m.quote)}”</em>` : ''}
       <div class="cd-tags">${tg.map(t => `<i>${esc(t)}</i>`).join('')}</div></div>
-    <div class="cf-stage"><div class="cy-pv">${ph(pv(m.photo, m.card), { seed: m.name + 0, icon: 'idcard' })}</div></div>
+    <div class="cf-stage"><div class="cy-pv">${phFb(m.photo, m.card, { seed: m.name + 0, icon: 'idcard' })}</div></div>
     <div class="pf-bar"><button class="pf-song" data-msong="1"><span class="pf-play">${ic('play')}</span><b>${esc(song.title || 'CHARACTER SONG')}</b><i>···</i></button><button class="pf-pair cd-toggle">PROFILE ↗</button></div>`; }
   let tb = '';
   const GL = (m.gallery && m.gallery.length) ? m.gallery : ['', '', ''];
@@ -2925,9 +2928,10 @@ function drawAgent(rec) {
   const strip = m0.duoFirst ? [[P, 1], [m0, 0]] : [[m0, 0], [P, 1]], ROLE = ['CHARACTER', 'PERSONA'];
   let body;
   if (agentTab === 'gallery') { const G = m.gallery || []; body = `<div class="mp-gal"><div class="mp-gal-h">${esc(m.name)} · GALLERY<small>${G.length} PHOTOS</small></div><div class="g">${G.map((g, i) => ph(g, { seed: m.name + i, icon: 'heart' })).join('')}</div></div>`; }
-  else body = `<div class="mp-hero ph ${V(m.name)} ${m.theme === 'dark' ? '' : 'lt'}" data-slot="${esc(SPATH(pv(m.hero, m.card)))}">${SRC(pv(m.hero, m.card)) ? `<img src="${esc(SRC(pv(m.hero, m.card)))}" alt="">` : `<span class="ph-ic">${ic('idcard')}</span>`}${m.badge ? `<span class="ent">${esc(m.badge)}</span>` : ''}
-      <div class="cap"><small>${esc(m.level || '')}</small><h3>${esc(m.name)}</h3><p>${esc(m.quote || '')}</p></div></div>${(m.sections || []).map(agentSecHTML).join('')}`;
-  b.innerHTML = `<div class="mp-tabs" style="grid-template-columns:repeat(2,minmax(0,1fr))">${strip.map(([x, k]) => `<button class="mp-tab ${k === agentWho ? 'on' : ''}${x._empty ? ' empty' : ''}" data-whok="${k}"${x._empty && OWNER && SYE_ON ? ' data-duo-add="1"' : ''}>${ph(pv(x.avatar, x.card), { cls: 'av', seed: x.name })}<span><b>${esc(x.name)}</b><small>${String(strip.findIndex(z => z[1] === k) + 1).padStart(2, '0')} · ${ROLE[k]}</small></span></button>`).join('')}${OWNER && SYE_ON ? `<button class="mp-swap" data-duo-swap="1" title="캐릭터 · 페르소나 자리 바꾸기">⇄</button>` : ''}</div>
+  else { const hs = SPATH(m.hero) || SPATH(pv(m.hero, m.card)), hsrc = SRC(m.hero) || SRC(m.card), hip = hs && (S.imgPos || {})[hs];
+  body = `<div class="mp-hero ph ${V(m.name)} ${m.theme === 'dark' ? '' : 'lt'}" data-slot="${esc(hs)}"${SPATH(m.card) && SPATH(m.card) !== hs ? ` data-fb="${esc(SPATH(m.card))}"` : ''}>${hsrc ? `<img src="${esc(hsrc)}" alt=""${hip ? ` style="${imgPosCss(hip)}"` : ''}>` : `<span class="ph-ic">${ic('idcard')}</span>`}${m.badge ? `<span class="ent">${esc(m.badge)}</span>` : ''}
+      <div class="cap"><small>${esc(m.level || '')}</small><h3>${esc(m.name)}</h3><p>${esc(m.quote || '')}</p></div></div>${(m.sections || []).map(agentSecHTML).join('')}`; }
+  b.innerHTML = `<div class="mp-tabs" style="grid-template-columns:repeat(2,minmax(0,1fr))">${strip.map(([x, k]) => `<button class="mp-tab ${k === agentWho ? 'on' : ''}${x._empty ? ' empty' : ''}" data-whok="${k}"${x._empty && OWNER && SYE_ON ? ' data-duo-add="1"' : ''}>${(x.picMode || m0.picMode) === 'sep' ? phFb(x.avatar, x.card, { cls: 'av', seed: x.name }) : ph(pv(x.card, x.hero), { cls: 'av', seed: x.name })}<span><b>${esc(x.name)}</b><small>${String(strip.findIndex(z => z[1] === k) + 1).padStart(2, '0')} · ${ROLE[k]}</small></span></button>`).join('')}${OWNER && SYE_ON ? `<button class="mp-swap" data-duo-swap="1" title="캐릭터 · 페르소나 자리 바꾸기">⇄</button>` : ''}</div>
     <div class="mp-body"><div class="mp-sub"><button class="${agentTab === 'profile' ? 'on' : ''}" data-tab="profile"><i>01</i>PROFILE</button><button class="${agentTab === 'gallery' ? 'on' : ''}" data-tab="gallery"><i>02</i>GALLERY</button>
     <span class="r">${m.bgm != null ? `<button data-song="${m.bgm}">♪ BGM</button>` : ''}${m.song != null ? `<button data-song="${m.song}">♪ CHARACTER SONG</button>` : ''}</span></div>
     <div class="mp-scroll">${body}</div></div>`;
@@ -5336,7 +5340,7 @@ html.sye-editing [data-slot]{position:relative}
   const setURL = (k, b) => { if (SLOT_URL[k] && SLOT_URL[k].startsWith('blob:')) URL.revokeObjectURL(SLOT_URL[k]); if (b) SLOT_URL[k] = URL.createObjectURL(b); else delete SLOT_URL[k]; };
   // 화면에 이미 그려진 사진 칸 다시 칠하기
   const paint = (only) => document.querySelectorAll(only ? `[data-slot="${CSS.escape(only)}"]` : '[data-slot]').forEach(e => {
-    const k = e.dataset.slot; if (!k) return; const u = SLOT_URL[k] || PV[k] || '';
+    const k = e.dataset.slot; if (!k) return; const fb = e.dataset.fb, u = SLOT_URL[k] || PV[k] || (fb ? SLOT_URL[fb] || PV[fb] || '' : '');
     let im = e.querySelector(':scope > img');
     if (u) { if (!im) { im = document.createElement('img'); im.alt = ''; e.querySelectorAll(':scope > .ph-ic, :scope > .pb-txt').forEach(x => x.remove()); e.prepend(im); } im.src = u; e.classList.remove('is-empty'); const ip = (RAW.imgPos || {})[k]; if (ip) im.style.cssText = imgPosCss(ip); else if (!e.classList.contains('sye-adj')) { im.style.objectPosition = ''; im.style.transform = ''; } }
     else { if (im) im.remove(); e.classList.add('is-empty'); }
@@ -5366,27 +5370,33 @@ html.sye-editing [data-slot]{position:relative}
   document.addEventListener('paste', e => { if (!SYE_ON || !hovSlot || e.target.closest('input,textarea')) return; const f = [...(e.clipboardData?.files || [])].find(x => /^image\//.test(x.type)); if (!f) return; e.preventDefault(); putPhoto(hovSlot.dataset.slot, f); });
   // 사진 위치 · 크기 조절 : 사진을 끌어서 보이는 부분을 옮기고, 휠(또는 + −)로 확대
   const setPos = (k, p) => { RAW.imgPos = RAW.imgPos || {}; if (p) RAW.imgPos[k] = p; else delete RAW.imgPos[k]; try { const d = JSON.parse(localStorage.getItem('sye-draft') || 'null') || {}; d.imgPos = RAW.imgPos; localStorage.setItem('sye-draft', JSON.stringify(d)); } catch (err) {} if (ED) ED.imgPos = clone(RAW.imgPos); };
-  const adjBar = el('<div class="sye-adjbar"><span>사진을 끌어서 위치 · 휠로 확대</span><button type="button" data-z="-1">−</button><button type="button" data-z="1">＋</button><button type="button" data-z="0">원래대로</button><button type="button" data-z="ok" class="pri">완료</button></div>');
+  const adjBar = el('<div class="sye-adjbar"><span>끌어서 위치 · 휠로 크기</span><button type="button" data-m="0,-1" title="위로">↑</button><button type="button" data-m="0,1" title="아래로">↓</button><button type="button" data-m="-1,0" title="왼쪽으로">←</button><button type="button" data-m="1,0" title="오른쪽으로">→</button><button type="button" data-z="-1">−</button><button type="button" data-z="1">＋</button><button type="button" data-z="0">원래대로</button><button type="button" data-z="ok" class="pri">완료</button></div>');
   document.body.append(adjBar);
   let adj = null;
+  // 움직이기 : 사진이 칸보다 넓은 방향은 보이는 부분을 옮기고, 꽉 맞는 방향은 사진 자체를 옮겨요 (위아래 · 좌우 다 돼요)
+  const adjMove = (p0, dxPct, dyPct) => { const im = adj.el.querySelector('img'), r = adj.el.getBoundingClientRect(); const nr = im && im.naturalWidth ? im.naturalWidth / im.naturalHeight : r.width / r.height, cr = r.width / r.height;
+    const hx = nr > cr + .01, vy = nr < cr - .01, s = p0[2] || 1;
+    if (hx) adj.p[0] = Math.max(0, Math.min(100, +(p0[0] - dxPct / s).toFixed(1))); else adj.p[3] = Math.max(-45, Math.min(45, +((p0[3] || 0) + dxPct / s).toFixed(1)));
+    if (vy) adj.p[1] = Math.max(0, Math.min(100, +(p0[1] - dyPct / s).toFixed(1))); else adj.p[4] = Math.max(-45, Math.min(45, +((p0[4] || 0) + dyPct / s).toFixed(1))); };
   const adjApply = () => { if (!adj) return; $$(`[data-slot="${CSS.escape(adj.k)}"] > img`).forEach(im => { im.style.cssText = imgPosCss(adj.p); }); };
-  const adjEnd = save => { if (!adj) return; const a = adj; adj = null; a.el.classList.remove('sye-adj'); adjBar.classList.remove('on'); if (save) { setPos(a.k, (a.p[0] === 50 && a.p[1] === 50 && a.p[2] === 1) ? null : a.p); pend(); toast('사진 위치를 저장했어요'); } else { const o = (RAW.imgPos || {})[a.k]; $$(`[data-slot="${CSS.escape(a.k)}"] > img`).forEach(im => { im.style.cssText = o ? imgPosCss(o) : ''; }); } };
+  const adjEnd = save => { if (!adj) return; const a = adj; adj = null; a.el.classList.remove('sye-adj'); adjBar.classList.remove('on'); if (save) { setPos(a.k, (a.p[0] === 50 && a.p[1] === 50 && a.p[2] === 1 && !a.p[3] && !a.p[4]) ? null : a.p); pend(); toast('사진 위치를 저장했어요'); } else { const o = (RAW.imgPos || {})[a.k]; $$(`[data-slot="${CSS.escape(a.k)}"] > img`).forEach(im => { im.style.cssText = o ? imgPosCss(o) : ''; }); } };
   const adjStart = sl => {
     adjEnd(true); const k = sl.dataset.slot, o = (RAW.imgPos || {})[k] || [50, 50, 1];
-    adj = { k, el: sl, p: [o[0], o[1], o[2] || 1] }; sl.classList.add('sye-adj'); adjApply();
+    adj = { k, el: sl, p: [o[0], o[1], o[2] || 1, o[3] || 0, o[4] || 0] }; sl.classList.add('sye-adj'); adjApply();
     const r = sl.getBoundingClientRect(); adjBar.classList.add('on'); adjBar.style.left = Math.max(8, Math.min(r.left + r.width / 2 - 170, innerWidth - 348)) + 'px'; adjBar.style.top = (r.bottom + 54 > innerHeight ? Math.max(8, r.top - 46) : r.bottom + 8) + 'px';
   };
-  adjBar.addEventListener('click', e => { e.stopPropagation(); const b = e.target.closest('[data-z]'); if (!b || !adj) return; const z = b.dataset.z; if (z === 'ok') return adjEnd(true); if (z === '0') adj.p = [50, 50, 1]; else adj.p[2] = Math.max(1, Math.min(3, +(adj.p[2] + (+z) * .1).toFixed(2))); adjApply(); });
+  adjBar.addEventListener('click', e => { e.stopPropagation(); const mb = e.target.closest('[data-m]'); if (mb && adj) { const [mx, my] = mb.dataset.m.split(',').map(Number); adjMove(adj.p.slice(), mx * 3, my * 3); adjApply(); return; }
+    const b = e.target.closest('[data-z]'); if (!b || !adj) return; const z = b.dataset.z; if (z === 'ok') return adjEnd(true); if (z === '0') adj.p = [50, 50, 1, 0, 0]; else adj.p[2] = Math.max(.5, Math.min(3, +(adj.p[2] + (+z) * .1).toFixed(2))); adjApply(); });
   ['pointerdown', 'mousedown', 'click'].forEach(ev => adjBar.addEventListener(ev, e => e.stopPropagation()));
   document.addEventListener('pointerdown', e => {
     if (!adj) return; const ar = adj.el.getBoundingClientRect(), inside = e.clientX >= ar.left && e.clientX <= ar.right && e.clientY >= ar.top && e.clientY <= ar.bottom, sl = adj.el;
     if (!inside) { if (!e.target.closest('.sye-adjbar')) adjEnd(true); return; }
     e.preventDefault(); e.stopPropagation(); const r = sl.getBoundingClientRect(), sx = e.clientX, sy = e.clientY, p0 = adj.p.slice();
-    const mv = ev => { if (!adj) return; adj.p[0] = Math.max(0, Math.min(100, +(p0[0] - (ev.clientX - sx) / r.width * 100 / p0[2]).toFixed(1))); adj.p[1] = Math.max(0, Math.min(100, +(p0[1] - (ev.clientY - sy) / r.height * 100 / p0[2]).toFixed(1))); adjApply(); };
+    const mv = ev => { if (!adj) return; adjMove(p0, (ev.clientX - sx) / r.width * 100, (ev.clientY - sy) / r.height * 100); adjApply(); };
     const up = () => { removeEventListener('pointermove', mv); removeEventListener('pointerup', up); };
     addEventListener('pointermove', mv); addEventListener('pointerup', up);
   }, true);
-  document.addEventListener('wheel', e => { if (!adj) return; const ar = adj.el.getBoundingClientRect(); if (e.clientX < ar.left || e.clientX > ar.right || e.clientY < ar.top || e.clientY > ar.bottom) return; e.preventDefault(); adj.p[2] = Math.max(1, Math.min(3, +(adj.p[2] - Math.sign(e.deltaY) * .06).toFixed(2))); adjApply(); }, { passive: false });
+  document.addEventListener('wheel', e => { if (!adj) return; const ar = adj.el.getBoundingClientRect(); if (e.clientX < ar.left || e.clientX > ar.right || e.clientY < ar.top || e.clientY > ar.bottom) return; e.preventDefault(); adj.p[2] = Math.max(.5, Math.min(3, +(adj.p[2] - Math.sign(e.deltaY) * .06).toFixed(2))); adjApply(); }, { passive: false });
   document.addEventListener('keydown', e => { if (adj && (e.key === 'Escape' || e.key === 'Enter')) { e.preventDefault(); adjEnd(e.key === 'Enter'); } });
   document.addEventListener('click', e => {
     if (!SYE_ON || e.target.closest('.sye-ebar,.sye-pop,.sye,.sye-own,.sye-adjbar') || e.target === fP || e.target === fB) return;
@@ -5394,9 +5404,9 @@ html.sye-editing [data-slot]{position:relative}
     if (pop.classList.contains('on')) { pop.classList.remove('on'); e.preventDefault(); e.stopPropagation(); return; }
     const sl = e.target.closest('[data-slot]'); if (!sl || !sl.dataset.slot) return;
     e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
-    const k = sl.dataset.slot; if (!SLOT_URL[k] && !PV[k]) { pick(k); return; }
+    const k = sl.dataset.slot, fbk = sl.dataset.fb, fbHas = fbk && (SLOT_URL[fbk] || PV[fbk]); if (!SLOT_URL[k] && !PV[k] && !fbHas) { pick(k); return; }
     pop.innerHTML = '';
-    [['위치 · 크기 조절', () => adjStart(sl)], ['다른 사진으로 바꾸기', () => pick(k)], ['사진 빼기', () => { idbDel(k).then(() => { setURL(k, null); PV[k] = ''; setPos(k, null); paint(k); pend(); toast('사진을 뺐어요'); }); }], ['취소', () => {}]].forEach(([t, f]) => { const x = el(`<button type="button">${t}</button>`); x.onclick = ev => { ev.stopPropagation(); pop.classList.remove('on'); f(); }; pop.appendChild(x); });
+    [['위치 · 크기 조절', () => adjStart(sl)], [!SLOT_URL[k] && !PV[k] ? '이 자리에만 다른 사진 넣기' : '다른 사진으로 바꾸기', () => pick(k)], ...(!SLOT_URL[k] && !PV[k] ? [] : [[fbHas ? '사진 빼기 (목록 사진으로 돌아가요)' : '사진 빼기', () => { idbDel(k).then(() => { setURL(k, null); PV[k] = ''; setPos(k, null); paint(k); pend(); toast('사진을 뺐어요'); }); }]]), ['취소', () => {}]].forEach(([t, f]) => { const x = el(`<button type="button">${t}</button>`); x.onclick = ev => { ev.stopPropagation(); pop.classList.remove('on'); f(); }; pop.appendChild(x); });
     pop.style.left = Math.min(e.clientX, innerWidth - 190) + 'px'; pop.style.top = Math.min(e.clientY, innerHeight - 150) + 'px'; pop.classList.add('on');
   }, true);
   ['pointerdown', 'mousedown'].forEach(ev => document.addEventListener(ev, e => { if (SYE_ON && e.target.closest('[data-slot]') && !e.target.closest('.sye')) e.stopPropagation(); }, true));
@@ -5699,7 +5709,7 @@ html:not(.sye-editing) .cx-add,html:not(.sye-editing) .cd-tags .ed{display:none!
     const rowsOf = rs => (rs || []).map(r => Array.isArray(r) ? r.join(' : ') : r).join('\n');
     const pic = (label, name, has) => `<label class="pic"><span>${label}</span><input type="file" name="${name}" accept="image/*"><small>${has ? '바꿀 때만 골라요 · ' : ''}여기서 고르면 저장할 때 같이 들어가요 (나중에 사진 자리를 눌러서 바꿔도 돼요)</small></label>`;
     if (!isP) { const P = o.profile || {};
-      h += `<div class="sec">기본 (이것만 적어도 돼요)</div>` + fld('이름 *', 'name', o.name) + fld(teamsOf(world) ? '한국어 이름' : world.style === 'roster' ? '코드네임 (영어)' : '영어 이름', 'en', o.en) + (world.style === 'roster' ? fld('그룹', 'rgroup', (g => g ? g.name + ' · ' + g.cls : '')((world.groups || []).find(g => g.key === o.group)), 'select', '목록에서 들어갈 줄', ['', ...(world.groups || []).map(g => g.name + ' · ' + g.cls)]) + fld('속성', 'el', rsElOf(o), 'select', '고르면 뱃지 색이 알아서 바뀌어요', Object.keys(RS_EL)) : '') + (world.grades ? fld('학년', 'year', o.year || '', 'select', '목록에서 학년별로 나눠서 보여줘요', ['', ...GR_Y.map(g => g[0])]) : '') + (teamsOf(world) ? fld('소속팀', 'dept', o.dept || (teamsOf(world).find(x => !x.match) || {}).key, 'select', '고른 팀 칸에 들어가요 · 카드 위 작은 글씨', [...teamsOf(world).map(x => x.key), ...(o.dept && !teamsOf(world).some(x => x.key === o.dept) ? [o.dept] : [])]) : fld('소속 · 학부', 'dept', o.dept, 'text', '카드 위 작은 글씨')) + fld('한 줄 소개', 'quote', o.quote) + fld('태그', 'tags', (o.tags || []).join(', '), 'text', '쉼표로 나눠요 · 예) #다정, #고양이상')
+      h += `<div class="sec">기본 (이것만 적어도 돼요)</div>` + fld('이름 *', 'name', o.name) + fld(teamsOf(world) ? '한국어 이름' : world.style === 'roster' ? '코드네임 (영어)' : '영어 이름', 'en', o.en) + (world.style === 'roster' ? fld('그룹', 'rgroup', (g => g ? g.name + ' · ' + g.cls : '')((world.groups || []).find(g => g.key === o.group)), 'select', '목록에서 들어갈 줄', ['', ...(world.groups || []).map(g => g.name + ' · ' + g.cls)]) + fld('속성', 'el', rsElOf(o), 'select', '고르면 뱃지 색이 알아서 바뀌어요', Object.keys(RS_EL)) + fld('사진 쓰는 방법', 'picmode', o.picMode === 'sep' ? '목록 · 첫 화면 · 전환 사진 모두 따로' : '목록 · 전환 사진 같게 (첫 화면만 따로)', 'select', '첫 화면 = 캐릭터 창 큰 사진 · 전환 = 위쪽 작은 동그라미 사진 · 비어 있는 자리는 목록 사진을 대신 보여줘요', ['목록 · 전환 사진 같게 (첫 화면만 따로)', '목록 · 첫 화면 · 전환 사진 모두 따로']) : '') + (world.grades ? fld('학년', 'year', o.year || '', 'select', '목록에서 학년별로 나눠서 보여줘요', ['', ...GR_Y.map(g => g[0])]) : '') + (teamsOf(world) ? fld('소속팀', 'dept', o.dept || (teamsOf(world).find(x => !x.match) || {}).key, 'select', '고른 팀 칸에 들어가요 · 카드 위 작은 글씨', [...teamsOf(world).map(x => x.key), ...(o.dept && !teamsOf(world).some(x => x.key === o.dept) ? [o.dept] : [])]) : fld('소속 · 학부', 'dept', o.dept, 'text', '카드 위 작은 글씨')) + fld('한 줄 소개', 'quote', o.quote) + fld('태그', 'tags', (o.tags || []).join(', '), 'text', '쉼표로 나눠요 · 예) #다정, #고양이상')
         + pic(o.card ? '카드 사진 바꾸기' : '카드 사진', 'pic', !!o.card)
         + `<details class="more"><summary>더 적기 · 프로필 · 프롬프트 · 노래 (안 적어도 돼요)</summary>`
         + fld('사진 옆 작은 칸', 'spec', rowsOf(o.spec || [['AGE', ''], ['HEIGHT', ''], ['BIRTH', ''], ['LOVER', '']]), 'area', '', 4)
@@ -5806,7 +5816,7 @@ html:not(.sye-editing) .cx-add,html:not(.sye-editing) .cd-tags .ed{display:none!
     if (!isP) {
       ['name', 'en', 'dept', 'quote'].forEach(k => { o[k] = v(k); });
       if (W()[w].grades) { if (v('year')) o.year = v('year'); else delete o.year; }
-      if (W()[w].style === 'roster') { const gk = ((W()[w].groups || []).find(g => g.name + ' · ' + g.cls === v('rgroup')) || {}).key; if (gk) o.group = gk; delete o.grade; o.el = v('el') || '무속성'; o.attr = rsBadge(o.el, ''); o.attrColor = RS_EL[o.el]; }
+      if (W()[w].style === 'roster') { const gk = ((W()[w].groups || []).find(g => g.name + ' · ' + g.cls === v('rgroup')) || {}).key; if (gk) o.group = gk; delete o.grade; if (/모두 따로/.test(v('picmode'))) o.picMode = 'sep'; else delete o.picMode; o.el = v('el') || '무속성'; o.attr = rsBadge(o.el, ''); o.attrColor = RS_EL[o.el]; }
       o.tags = v('tags').split(',').map(x => x.trim()).filter(Boolean);
       o.spec = lines(v('spec')).map(kv);
       o.profile = Object.assign({}, o.profile, { rows: lines(v('rows')).map(kv), personality: v('personality'), memo: v('memo') });
@@ -6542,6 +6552,7 @@ html.sye-editing #winlayer .cxwin [data-ci] .cx-ov,html.sye-editing #winlayer .c
 #desk .win.cxwin .rs-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:12px!important}
 #desk .win.cxwin .rs-card{border-radius:8px!important;border:1.5px solid rgba(120,140,158,.55)!important;background:#2B3746!important;box-shadow:0 8px 18px -8px rgba(15,22,30,.45)!important;aspect-ratio:3/4}
 #desk .win.cxwin .rs-card.on{box-shadow:0 0 0 2.5px #5FD3BC,0 8px 18px -8px rgba(15,22,30,.45)!important}
+#desk .win.cxwin .rs-card > .ph{position:absolute!important;inset:0!important;width:auto!important;height:auto!important;border-radius:0!important}
 #desk .win.cxwin .rs-blk .rs-card .ph.is-empty,#desk .win.cxwin .rs-blk .rs-card .ph:not(:has(img)){background-image:linear-gradient(#334255,#2A3647)!important}
 #desk .win.cxwin .rs-blk .rs-card .ph::after{display:none!important}
 #desk .win.cxwin .rs-card .ov{padding:44px 11px 12px!important;background:linear-gradient(rgba(14,17,22,0),rgba(14,17,22,.82) 55%,rgba(14,17,22,.95))!important}
