@@ -5644,7 +5644,9 @@ html.sye-editing .sye-t.on{background:rgba(127,214,176,.4);outline:2px solid #3F
     let UP = {}; try { UP = JSON.parse(localStorage.getItem('sye-up') || '{}') || {}; } catch (e) {}
     const sig = b => b.slice(0, 65536).arrayBuffer().then(ab => { const u = new Uint8Array(ab); let x = 2166136261; for (let i = 0; i < u.length; i += 7) { x ^= u[i]; x = Math.imul(x, 16777619); } return b.size + ':' + (b.type || '') + ':' + (x >>> 0).toString(36); }).catch(() => b.size + ':' + (b.type || ''));
     idbAll().then(all => Promise.all(Object.keys(all).map(k => sig(all[k]).then(sg => {
-      if (UP[k] && UP[k].sig === sg && UP[k].name) { setAt(out, k, UP[k].name); return; }
+      // 같은 사진이면 (캐릭터를 지우거나 순서가 바뀌어 자리 이름이 달라져도) 올려둔 파일을 그대로 써요
+      const hit = (UP[k] && UP[k].sig === sg && UP[k].name) ? UP[k] : Object.values(UP).find(x => x && x.sig === sg && x.name);
+      if (hit) { setAt(out, k, hit.name); UP[k] = hit; return; }
       return shrink(all[k], /hero|banner|back|imageBack/.test(k) ? 1800 : 1400).then(r => {
         if (!r || !r.blob) return; const name = 'media/' + k.replace(/[^A-Za-z0-9]+/g, '_') + '-' + stamp + '.' + r.ext;
         if (setAt(out, k, name)) pics.push({ name, blob: r.blob, k, sg }); });
