@@ -6805,3 +6805,14 @@ html.sye-editing #winlayer .cxwin [data-ci] .cx-ov,html.sye-editing #winlayer .c
   html.msheet #desk #winlayer .win.cydet.float .cy-pv .ph{-webkit-mask:linear-gradient(180deg,#000 90%,transparent 100%)!important;mask:linear-gradient(180deg,#000 90%,transparent 100%)!important}
   html.msheet #desk #winlayer .win.cydet.float .cy-pv .ph > img{object-fit:contain!important;object-position:50% 50%!important;transform:none!important}
 }`; document.head.appendChild(st); })();
+
+/* 아래 음악 바 : 노래가 나와도 사진 칸은 네모 그대로 (동그라미로 안 바뀌게) · 긴 노래 제목은 버튼까지 안 가고 … 로 줄임 */
+(() => { const st = document.createElement('style'); st.textContent = `
+#desk .taskbar .mini.playing .mini-cover{border-radius:5px!important;animation:none!important;transform:none!important}
+#desk .taskbar .mini-t b{display:block!important;max-width:100%!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
+#desk .taskbar .mini-t{overflow:hidden!important}
+@media (max-width:720px),(max-aspect-ratio:4/5) and (max-width:1100px),(max-height:599px){
+  #desk .mini-t{flex:1 1 auto!important;min-width:0!important;overflow:hidden!important}
+  #desk .mini-t b{display:block!important;max-width:100%!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
+  #desk .mini-eq{flex:none!important}
+}`; document.head.appendChild(st); })();
