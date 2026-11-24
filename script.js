@@ -6533,7 +6533,7 @@ html.sye-editing #winlayer .cxwin [data-ci] .cx-ov,html.sye-editing #winlayer .c
   .fl-tt b{font:900 11.5px/1 'Montserrat','IBM Plex Sans KR',sans-serif;letter-spacing:.14em;color:#1E2A27;white-space:nowrap}
   .fl-tt small{font:600 9.5px/1 'IBM Plex Sans KR',sans-serif;color:#7C8B86;letter-spacing:.04em;white-space:nowrap}
   .fl-tt small i{font-style:normal;color:var(--tc);margin:0 1px}
-  .fl-deco{flex:none;width:34px;margin-left:auto!important;align-self:center;height:5px;margin:0 2px 0 6px;opacity:.55}
+  .fl-deco{flex:none;width:34px;margin-left:auto!important;align-self:center;height:5px;margin:0 2px 0 6px;opacity:.55;visibility:hidden}
   .fl-red .fl-deco{background:repeating-linear-gradient(-45deg,var(--tc) 0 3px,transparent 3px 7px);-webkit-mask:linear-gradient(90deg,transparent,#000 70%);mask:linear-gradient(90deg,transparent,#000 70%)}
   .fl-silver .fl-deco{background:repeating-linear-gradient(90deg,var(--tc) 0 1px,transparent 1px 6px) bottom/100% 5px no-repeat,repeating-linear-gradient(90deg,var(--tc) 0 1px,transparent 1px 30px) bottom/100% 8px no-repeat;-webkit-mask:linear-gradient(90deg,transparent,#000 60%);mask:linear-gradient(90deg,transparent,#000 60%)}
   .fl-crown .fl-deco{height:6px;background:radial-gradient(circle,var(--tc) 0 1.6px,transparent 2px) 100% 50%/14px 6px repeat-x;-webkit-mask:linear-gradient(90deg,transparent,#000 70%);mask:linear-gradient(90deg,transparent,#000 70%);opacity:.7}
