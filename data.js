@@ -1,5 +1,5 @@
 /* =========================================================
-   data.js — 홈페이지 내용 (✎ EDIT → 홈페이지에 저장 · 2026. 11. 24. 오전 3:04:29)
+   data.js — 홈페이지 내용 (✎ EDIT → 홈페이지에 저장 · 2026. 11. 25. 오전 12:14:45)
    - 홈페이지 주소 끝에 ?owner 를 붙여 들어가면 ✎ EDIT 로 바로 고칠 수 있어요.
    - 사진은 media/ 폴더에 있어요.
    ========================================================= */
@@ -2173,7 +2173,7 @@ const SITE = {
                 "연인 이름"
               ]
             ],
-            "card": "media/characters_worlds_seiran_member_1_card-mwtj7eu1.jpg",
+            "card": "media/characters_worlds_seiran_member_1_card-mwuu5i8i.jpg",
             "photo": "",
             "theme": {
               "title": "CHARACTER SONG",
@@ -2279,7 +2279,7 @@ const SITE = {
                 "연인 이름"
               ]
             ],
-            "card": "media/characters_worlds_seiran_member_2_card-mwthjg5c.jpg",
+            "card": "media/characters_worlds_seiran_member_2_card-mwuu5i8i.jpg",
             "photo": "",
             "theme": {
               "title": "CHARACTER SONG",
@@ -2457,7 +2457,7 @@ const SITE = {
                 "연인 이름"
               ]
             ],
-            "card": "media/characters_worlds_seiran_member_4_card-mwtj7eu1.jpg",
+            "card": "media/characters_worlds_seiran_member_4_card-mwuu5i8i.jpg",
             "photo": "",
             "theme": {
               "title": "CHARACTER SONG",
