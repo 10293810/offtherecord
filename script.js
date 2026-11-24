@@ -6797,3 +6797,11 @@ html.sye-editing #winlayer .cxwin [data-ci] .cx-ov,html.sye-editing #winlayer .c
 (() => { const st = document.createElement('style'); st.textContent = 'html.cxdim-on #wdim{backdrop-filter:none!important;-webkit-backdrop-filter:none!important} html.wdim-on #cxdim.on{backdrop-filter:blur(11.4px) saturate(1.15)!important;-webkit-backdrop-filter:blur(11.4px) saturate(1.15)!important} html.wdim-on #desk > :not(#winlayer), html.wdim-on #desk > :not(#winlayer) *, html.cxdim-on #desk > :not(#winlayer), html.cxdim-on #desk > :not(#winlayer) *{animation-play-state:paused!important}'; document.head.appendChild(st);
   const sync = () => { const d = document.getElementById('cxdim'); document.documentElement.classList.toggle('cxdim-on', !!(d && d.classList.contains('on'))); };
   const hook = () => { const d = document.getElementById('cxdim'); if (!d) return setTimeout(hook, 400); new MutationObserver(sync).observe(d, { attributes: true, attributeFilter: ['class'] }); sync(); }; hook(); })();
+
+/* 휴대폰만 : 캐릭터 상세 큰 사진이 잘리지 않게 — 이름 카드 바로 아래부터 사진 전체가 다 보이게 (노트북 · 패드는 그대로) */
+(() => { const st = document.createElement('style'); st.textContent = `
+@media (max-width:720px),(max-height:500px){
+  html.msheet #desk #winlayer .win.cydet.float .cy-pstage .cy-pv,html.msheet #desk #winlayer .win.cydet.float .cf-stage .cy-pv{top:10px!important;bottom:4px!important}
+  html.msheet #desk #winlayer .win.cydet.float .cy-pv .ph{-webkit-mask:linear-gradient(180deg,#000 90%,transparent 100%)!important;mask:linear-gradient(180deg,#000 90%,transparent 100%)!important}
+  html.msheet #desk #winlayer .win.cydet.float .cy-pv .ph > img{object-fit:contain!important;object-position:50% 50%!important;transform:none!important}
+}`; document.head.appendChild(st); })();
