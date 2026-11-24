@@ -6769,3 +6769,28 @@ html.sye-editing #winlayer .cxwin [data-ci] .cx-ov,html.sye-editing #winlayer .c
   st.textContent = '@media (pointer:coarse){#intro,#desk,#winlayer,#intro *,#desk *,#winlayer *,.sye-t,[data-slot]{cursor:pointer!important}}';
   document.head.appendChild(st);
 })();
+
+/* 아이패드 (휴대폰 아닌 넓은 화면 + 손가락) : 사파리가 '손가락이 닿자마자 화면이 바뀌었다'고 판단하면 누르기(click)를 삼켜버려요
+   → 손가락으로 제자리를 톡 눌렀는데 누르기가 안 오면 대신 눌러 주고, 늦게 온 진짜 누르기는 한 번만 되게 막아요 */
+(() => {
+  const u = navigator.userAgent; if (!(/AppleWebKit/.test(u) && !/Chrome|Chromium|Edg|OPR|Android/.test(u))) return;
+  let d = null, tm = 0, got = false, syn = null;
+  const st = document.createElement('style'); st.textContent = 'html,body{touch-action:manipulation}'; document.head.appendChild(st);
+  addEventListener('pointerdown', e => { if (e.pointerType === 'mouse') { d = null; return; } d = { x: e.clientX, y: e.clientY, t: e.target, ts: Date.now() }; clearTimeout(tm); }, true);
+  addEventListener('pointercancel', () => { d = null; clearTimeout(tm); }, true);
+  addEventListener('click', e => {
+    if (e.isTrusted && syn && Date.now() - syn.at < 900 && Math.hypot(e.clientX - syn.x, e.clientY - syn.y) < 30) { syn = null; e.preventDefault(); e.stopImmediatePropagation(); return; }
+    got = true;
+  }, true);
+  addEventListener('pointerup', e => {
+    if (!d || e.pointerType === 'mouse') return;
+    const s = d; d = null;
+    if (Math.hypot(e.clientX - s.x, e.clientY - s.y) > 10 || Date.now() - s.ts > 800) return;
+    got = false; clearTimeout(tm);
+    tm = setTimeout(() => {
+      if (got || !s.t.isConnected) return;
+      syn = { at: Date.now(), x: e.clientX, y: e.clientY };
+      s.t.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, clientX: e.clientX, clientY: e.clientY, view: window }));
+    }, 320);
+  }, true);
+})();
