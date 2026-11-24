@@ -6779,18 +6779,15 @@ html.sye-editing #winlayer .cxwin [data-ci] .cx-ov,html.sye-editing #winlayer .c
   addEventListener('pointerdown', e => { if (e.pointerType === 'mouse') { d = null; return; } d = { x: e.clientX, y: e.clientY, t: e.target, ts: Date.now() }; clearTimeout(tm); }, true);
   addEventListener('pointercancel', () => { d = null; clearTimeout(tm); }, true);
   addEventListener('click', e => {
-    if (e.isTrusted && syn && Date.now() - syn.at < 900 && Math.hypot(e.clientX - syn.x, e.clientY - syn.y) < 30) { syn = null; e.preventDefault(); e.stopImmediatePropagation(); return; }
+    if (e.isTrusted && syn && Date.now() - syn.at < 1200 && Math.hypot(e.clientX - syn.x, e.clientY - syn.y) < 30) { syn = null; e.preventDefault(); e.stopImmediatePropagation(); return; }
     got = true;
   }, true);
   addEventListener('pointerup', e => {
     if (!d || e.pointerType === 'mouse') return;
     const s = d; d = null;
     if (Math.hypot(e.clientX - s.x, e.clientY - s.y) > 10 || Date.now() - s.ts > 800) return;
-    got = false; clearTimeout(tm);
-    tm = setTimeout(() => {
-      if (got || !s.t.isConnected) return;
-      syn = { at: Date.now(), x: e.clientX, y: e.clientY };
-      s.t.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, clientX: e.clientX, clientY: e.clientY, view: window }));
-    }, 320);
+    if (s.t.closest && s.t.closest('input,textarea,select,[contenteditable="true"],label')) return;   // 글 입력칸은 사파리에 맡겨요
+    syn = { at: Date.now(), x: e.clientX, y: e.clientY };
+    s.t.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, clientX: e.clientX, clientY: e.clientY, view: window }));
   }, true);
 })();
