@@ -6702,7 +6702,7 @@ html.sye-editing #winlayer .cxwin [data-ci] .cx-ov,html.sye-editing #winlayer .c
 .sr-yh b.sr-yt{font:800 15px 'Noto Sans JP','IBM Plex Sans KR',sans-serif;color:#18212A;letter-spacing:.02em}
 .sr-yt small{font:800 9px 'Inter',sans-serif;letter-spacing:.16em;color:var(--yc)}
 .sr-yl{flex:1;height:2px;border-radius:2px;margin-left:4px;background:linear-gradient(90deg,var(--yc),color-mix(in srgb,var(--yc) 25%,transparent) 60%,transparent)}
-.sr-yh em{font:900 13px 'Inter',sans-serif;font-style:normal;color:color-mix(in srgb,var(--yc) 70%,#22344A)}
+.sr-yh em{font:800 9px/1 'DM Mono',monospace;font-style:normal;letter-spacing:.08em;color:color-mix(in srgb,var(--yc) 70%,#22344A)}
 .sr-yh em i{font:800 9px 'Noto Sans JP',sans-serif;font-style:normal;margin-left:2px;opacity:.8}
 `; document.head.appendChild(st); })();
 
