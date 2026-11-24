@@ -6734,20 +6734,21 @@ html.sye-editing #winlayer .cxwin [data-ci] .cx-ov,html.sye-editing #winlayer .c
 (() => {
   const MINT = 'rgb(104, 199, 158)';
   const hsl = (r, g, b) => { r /= 255; g /= 255; b /= 255; const mx = Math.max(r, g, b), mn = Math.min(r, g, b), l = (mx + mn) / 2, d = mx - mn; if (!d) return [0, 0, l]; const s = d / (1 - Math.abs(2 * l - 1)); let h = mx === r ? ((g - b) / d) % 6 : mx === g ? (b - r) / d + 2 : (r - g) / d + 4; return [(h * 60 + 360) % 360, s, l]; };
-  const fix = root => {
-    if (!root || !root.querySelectorAll) return;
-    root.querySelectorAll('*').forEach(e => {
-      if (e.closest('.dz-head')) return;
-      if (![...e.childNodes].some(n => n.nodeType === 3 && n.textContent.trim())) return;
-      const cs = getComputedStyle(e); if (parseFloat(cs.fontSize) > 14) return;
-      const m = cs.color.match(/[\d.]+/g); if (!m) return;
-      const [h, s, l] = hsl(+m[0], +m[1], +m[2]);
-      if (h < 135 || h > 178 || s < .25 || l < .72 || l > .9) return;
-      e.setAttribute('data-keepc', ''); e.style.setProperty('color', MINT, 'important');
-    });
+  const done = new WeakSet();
+  const one = e => {
+    if (done.has(e)) return; done.add(e);
+    if (e.closest('.dz-head')) return;
+    if (![...e.childNodes].some(n => n.nodeType === 3 && n.textContent.trim())) return;
+    const cs = getComputedStyle(e); if (parseFloat(cs.fontSize) > 14) return;
+    const m = cs.color.match(/[\d.]+/g); if (!m) return;
+    const [h, s, l] = hsl(+m[0], +m[1], +m[2]);
+    if (h < 135 || h > 178 || s < .25 || l < .72 || l > .9) return;
+    e.setAttribute('data-keepc', ''); e.style.setProperty('color', MINT, 'important');
   };
-  let t = 0; const go = () => { clearTimeout(t); t = setTimeout(() => fix(document.getElementById('winlayer')), 60); };
-  const start = () => { const wl = document.getElementById('winlayer'); if (!wl) return setTimeout(start, 300); new MutationObserver(go).observe(wl, { childList: true, subtree: true }); go(); };
+  const fix = root => { if (!root || root.nodeType !== 1 || !root.isConnected) return; one(root); root.querySelectorAll('*').forEach(one); };
+  let t = 0, todo = new Set();   // 새로 생긴 부분만 살펴봐요 (창 전체를 매번 다시 훑지 않게)
+  const go = recs => { recs.forEach(r => r.addedNodes.forEach(n => n.nodeType === 1 && todo.add(n))); clearTimeout(t); t = setTimeout(() => { const l = [...todo]; todo = new Set(); l.forEach(fix); }, 60); };
+  const start = () => { const wl = document.getElementById('winlayer'); if (!wl) return setTimeout(start, 300); new MutationObserver(go).observe(wl, { childList: true, subtree: true }); fix(wl); };
   start();
 })();
 
@@ -6791,3 +6792,8 @@ html.sye-editing #winlayer .cxwin [data-ci] .cx-ov,html.sye-editing #winlayer .c
     s.t.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, clientX: e.clientX, clientY: e.clientY, view: window }));
   }, true);
 })();
+
+/* 창이 떠 있을 땐 (뒤가 흐리게 가려져 있으니) 뒤 화면 움직임을 잠깐 멈추고, 겹친 흐림 두 장을 한 장으로 : 캐릭터 넘길 때 덜 버벅이게 · 보이는 건 그대로 */
+(() => { const st = document.createElement('style'); st.textContent = 'html.cxdim-on #wdim{backdrop-filter:none!important;-webkit-backdrop-filter:none!important} html.wdim-on #cxdim.on{backdrop-filter:blur(11.4px) saturate(1.15)!important;-webkit-backdrop-filter:blur(11.4px) saturate(1.15)!important} html.wdim-on #desk > :not(#winlayer), html.wdim-on #desk > :not(#winlayer) *, html.cxdim-on #desk > :not(#winlayer), html.cxdim-on #desk > :not(#winlayer) *{animation-play-state:paused!important}'; document.head.appendChild(st);
+  const sync = () => { const d = document.getElementById('cxdim'); document.documentElement.classList.toggle('cxdim-on', !!(d && d.classList.contains('on'))); };
+  const hook = () => { const d = document.getElementById('cxdim'); if (!d) return setTimeout(hook, 400); new MutationObserver(sync).observe(d, { attributes: true, attributeFilter: ['class'] }); sync(); }; hook(); })();
