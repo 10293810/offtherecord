@@ -6757,3 +6757,15 @@ html.sye-editing #winlayer .cxwin [data-ci] .cx-ov,html.sye-editing #winlayer .c
 
 /* 東京青藍大学 학년 줄 : 선을 학년 글씨 아래로 (FRONTLINE 처럼) · 색과 그라데이션은 그대로 */
 (() => { const st = document.createElement('style'); st.textContent = '.sr-yh{position:relative;padding-bottom:10px}.sr-yh .sr-yl{position:absolute;left:0;right:0;bottom:0;margin:0!important;flex:none}.sr-yh em{margin-left:auto}'; document.head.appendChild(st); })();
+
+/* 아이패드 · 아이폰 사파리 : 화면 전체에 걸어 둔 '누르기' 신호가 그냥 글씨·그림(div)을 누를 땐 안 전해지는 사파리 버릇이 있어서
+   → 큰 덩어리마다 빈 '누르기' 받이를 달고, 터치 화면에선 누를 수 있는 손가락 커서로 표시 (보이는 건 그대로) */
+(() => {
+  const noop = () => {}, seen = new WeakSet();
+  const hook = el => { if (!el || seen.has(el) || el.nodeType !== 1) return; seen.add(el); el.addEventListener('click', noop); };
+  const all = () => { [...document.body.children].forEach(hook); ['intro', 'desk', 'winlayer', 'launcher'].forEach(id => hook(document.getElementById(id))); document.querySelectorAll('.win').forEach(hook); };
+  let q = 0; all(); new MutationObserver(() => { if (!q) q = requestAnimationFrame(() => { q = 0; all(); }); }).observe(document.body, { childList: true, subtree: true });
+  const st = document.createElement('style');
+  st.textContent = '@media (pointer:coarse){#intro,#desk,#winlayer,#intro *,#desk *,#winlayer *,.sye-t,[data-slot]{cursor:pointer!important}}';
+  document.head.appendChild(st);
+})();
