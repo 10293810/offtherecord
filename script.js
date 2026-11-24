@@ -6592,7 +6592,7 @@ html.sye-editing #winlayer .cxwin [data-ci] .cx-ov,html.sye-editing #winlayer .c
 #desk .win.cxwin .rs-sec b{font:900 16px var(--sans)!important;letter-spacing:-.01em;color:#16202A!important}
 #desk .win.cxwin .rs-sec > span{margin-left:auto;font:900 10px var(--sans)!important;letter-spacing:.05em;color:var(--cc,var(--gc))!important}
 #desk .win.cxwin .rs-sec b *{font:inherit!important}
-#desk .win.cxwin .rs-ln{height:3px!important;border-radius:2px;margin:8px 0 14px;background:linear-gradient(90deg,var(--gc) 0%,color-mix(in srgb,var(--gc) 55%,transparent) 35%,transparent 72%)!important}
+#desk .win.cxwin .rs-ln{height:2px!important;border-radius:2px;margin:8px 0 14px;background:linear-gradient(90deg,var(--gc) 0%,color-mix(in srgb,var(--gc) 55%,transparent) 35%,transparent 72%)!important}
 #desk .win .mp-tabs{position:relative}
 #desk .win .mp-swap{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:3;width:24px;height:24px;border-radius:50%;border:1px solid #D5DEE4;background:#fff;color:#3E8C72;font:900 12px var(--sans);box-shadow:0 2px 6px rgba(20,40,50,.15);cursor:pointer}
 #desk .win.cxwin .rs-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:12px!important}
