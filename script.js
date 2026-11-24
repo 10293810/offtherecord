@@ -6752,5 +6752,5 @@ html.sye-editing #winlayer .cxwin [data-ci] .cx-ov,html.sye-editing #winlayer .c
 })();
 
 /* Linked 처방전 띠 : 왼쪽 민트 → 오른쪽 연한 회색 (사진 속 그대로) */
-(() => { const st = document.createElement('style'); st.textContent = '.dz-cct{background:linear-gradient(90deg,var(--rx1) 0%,var(--rx2) 100%)!important}'; document.head.appendChild(st);
-  document.documentElement.style.setProperty('--rx1', 'rgb(176, 224, 202)'); document.documentElement.style.setProperty('--rx2', 'rgb(226, 229, 233)'); })();
+(() => { const st = document.createElement('style'); st.textContent = '.dz-cct{background:linear-gradient(180deg,rgba(255,255,255,.28),rgba(255,255,255,0) 55%),linear-gradient(90deg,var(--rx1) 0%,var(--rx3) 42%,var(--rx4) 72%,var(--rx2) 100%)!important;box-shadow:inset 0 -1px 0 rgba(255,255,255,.35)}.dz-cct,.dz-cct *{text-shadow:0 1px 2px rgba(60,140,110,.22)}'; document.head.appendChild(st);
+  const R = document.documentElement.style; R.setProperty('--rx1', 'rgb(150, 214, 187)'); R.setProperty('--rx3', 'rgb(182, 225, 206)'); R.setProperty('--rx4', 'rgb(210, 230, 223)'); R.setProperty('--rx2', 'rgb(229, 232, 236)'); })();
