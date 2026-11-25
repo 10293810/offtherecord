@@ -1869,6 +1869,14 @@ const SITE = {
       "line": "눈 내리는 동아리방, 마지막 합주"
     },
     {
+      "title": "RUN TO BLUE (우리들의 여름 주파수)",
+      "artist": "SEIRAN UNIV. BAND",
+      "cover": "",
+      "src": "media/bgm-run-to-blue.mp3",
+      "time": "2:08",
+      "line": "시원한 기타 리프, 여름 페스티벌 무대 위로"
+    },
+    {
       "title": "Love Disorder",
       "artist": "PURE × UXI",
       "cover": "",
