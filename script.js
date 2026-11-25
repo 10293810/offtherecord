@@ -2995,7 +2995,7 @@ const SB = (() => {
   const pick = o => { const k = Object.keys(o); return k[Math.floor(Math.random() * k.length)]; };
   let libP = null;
   const loadJS = src => new Promise((res, rej) => { const s = document.createElement('script'); s.src = src; s.onload = res; s.onerror = rej; document.head.appendChild(s); });
-  const lib = () => libP || (libP = (window.THREE ? Promise.resolve() : loadJS('vendor/three.min.js')).then(() => window.SB3 ? 0 : loadJS('snowball3d.js?v=2')));
+  const lib = () => libP || (libP = (window.THREE ? Promise.resolve() : loadJS('vendor/three.min.js')).then(() => window.SB3 ? 0 : loadJS('snowball3d.js?v=3')));
 
   let tab = 'char', who = 0, api = null;
   const sw = c => `<i style="background:${c}"></i>`;

@@ -127,7 +127,7 @@
     R.shadowMap.enabled = true; R.shadowMap.type = T.PCFSoftShadowMap;
     host.appendChild(R.domElement); R.domElement.style.cssText = 'width:100%;height:100%;display:block;border-radius:inherit;touch-action:none';
     const S = new T.Scene(), cam = new T.PerspectiveCamera(38, W() / H(), .1, 100);
-    cam.position.set(0, 2.15, 6.3); cam.lookAt(0, 1.72, 0);
+    cam.position.set(0, 2.0, 6.0); cam.lookAt(0, 1.62, 0);
     const hemi = new T.HemisphereLight('#fff', '#888', 1); S.add(hemi);
     const key = new T.DirectionalLight('#fff', .7); key.position.set(3, 6, 5); key.castShadow = true; key.shadow.mapSize.set(1024, 1024); key.shadow.camera.left = -3; key.shadow.camera.right = 3; key.shadow.camera.top = 4; key.shadow.camera.bottom = -2; S.add(key);
     const fill = new T.PointLight('#FFD9A8', .5, 8); fill.position.set(-2, 2.6, 2.4); S.add(fill);
@@ -137,7 +137,7 @@
     let chars = [];
 
     /* 유리 */
-    const GR = 1.55, GC = 2.05;
+    const GR = 1.6, GC = 1.74, BK = .8;
     const rim = new T.ShaderMaterial({ transparent: true, depthWrite: false, uniforms: { c: { value: new T.Color('#FFFFFF') } },
       vertexShader: 'varying vec3 vN;varying vec3 vV;void main(){vec4 mv=modelViewMatrix*vec4(position,1.);vN=normalize(normalMatrix*normal);vV=normalize(-mv.xyz);gl_Position=projectionMatrix*mv;}',
       fragmentShader: 'uniform vec3 c;varying vec3 vN;varying vec3 vV;void main(){float f=pow(1.-max(dot(vN,vV),0.),2.6);gl_FragColor=vec4(c,.015+f*.42);}' });
@@ -149,25 +149,25 @@
     const buildBase = () => {
       globe.remove(baseG); baseG = new T.Group(); globe.add(baseG);
       const [b1, b2] = BASES[st.base] || BASES.walnut, wood = new T.MeshStandardMaterial({ color: b1, roughness: .55, metalness: .05 });
-      const pts = [[0, 0], [1.72, 0], [1.78, .06], [1.74, .16], [1.6, .22], [1.62, .48], [1.5, .58], [1.42, .62], [0, .62]].map(([x, y]) => new T.Vector2(x, y));
+      const pts = [[0, 0], [1.72, 0], [1.78, .06], [1.74, .16], [1.6, .22], [1.62, .48], [1.5, .58], [1.42, .62], [0, .62]].map(([x, y]) => new T.Vector2(x * BK, y));
       const b = M(new T.LatheGeometry(pts, 64), wood); b.receiveShadow = b.castShadow = true; baseG.add(b);
-      const ring = M(new T.TorusGeometry(1.615, .045, 10, 80), new T.MeshStandardMaterial({ color: BANDS[st.band] || BANDS.gold, metalness: .75, roughness: .28 }), 0, .36, 0); ring.rotation.x = Math.PI / 2; baseG.add(ring);
-      const r2 = M(new T.TorusGeometry(1.74, .025, 8, 80), new T.MeshStandardMaterial({ color: BANDS[st.band] || BANDS.gold, metalness: .75, roughness: .28 }), 0, .11, 0); r2.rotation.x = Math.PI / 2; baseG.add(r2);
-      const dark = M(new T.CylinderGeometry(1.5, 1.5, .04, 64), new T.MeshStandardMaterial({ color: b2, roughness: .7 }), 0, .62, 0); baseG.add(dark);
+      const ring = M(new T.TorusGeometry(1.615 * BK, .045, 10, 80), new T.MeshStandardMaterial({ color: BANDS[st.band] || BANDS.gold, metalness: .75, roughness: .28 }), 0, .36, 0); ring.rotation.x = Math.PI / 2; baseG.add(ring);
+      const r2 = M(new T.TorusGeometry(1.74 * BK, .025, 8, 80), new T.MeshStandardMaterial({ color: BANDS[st.band] || BANDS.gold, metalness: .75, roughness: .28 }), 0, .11, 0); r2.rotation.x = Math.PI / 2; baseG.add(r2);
+      const dark = M(new T.CylinderGeometry(1.5 * BK, 1.5 * BK, .04, 64), new T.MeshStandardMaterial({ color: b2, roughness: .7 }), 0, .62, 0); baseG.add(dark);
       /* 이름표 */
       if (st.plate) { const tx = canvasTex(512, 96, (g) => { g.clearRect(0, 0, 512, 96); g.font = '800 46px "DM Mono", ui-monospace, monospace'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillStyle = st.base === 'white' || st.base === 'maple' ? '#5B4636' : '#FFF6E6'; g.fillText(String(st.plate).slice(0, 18), 256, 50); });
-        const p = M(new T.CylinderGeometry(1.625, 1.625, .17, 64, 1, true, -.9, 1.8), new T.MeshBasicMaterial({ map: tx, transparent: true, depthWrite: false }), 0, .24, 0); p.rotation.y = Math.PI; baseG.add(p); }
+        const p = M(new T.CylinderGeometry(1.625 * BK, 1.625 * BK, .17, 64, 1, true, -1.1, 2.2), new T.MeshBasicMaterial({ map: tx, transparent: true, depthWrite: false }), 0, .24, 0); p.rotation.y = Math.PI; baseG.add(p); }
     };
     /* 안쪽 (눈 언덕 · 트리 · 캐릭터) */
     const buildInner = () => {
       globe.remove(inner); inner = new T.Group(); globe.add(inner);
-      const mound = M(new T.SphereGeometry(1.48, 48, 16, 0, Math.PI * 2, 0, .42), new T.MeshStandardMaterial({ color: '#FFFFFF', map: snowTex, roughness: 1 }), 0, .62 - 1.48 * Math.cos(.42) + .02, 0); mound.receiveShadow = true;
+      const mound = M(new T.SphereGeometry(1.16 / Math.sin(.42), 48, 16, 0, Math.PI * 2, 0, .42), new T.MeshStandardMaterial({ color: '#FFFFFF', map: snowTex, roughness: 1 }), 0, .62 - (1.16 / Math.sin(.42)) * Math.cos(.42) + .02, 0); mound.receiveShadow = true;
       const lid = M(new T.CircleGeometry(1.48 * Math.sin(.42), 48), new T.MeshStandardMaterial({ color: '#FFFFFF' }), 0, .64, 0); lid.rotation.x = -Math.PI / 2;
       inner.add(mound);
       const tr = lowTree(1.35, '#3E8A6A', '#5CA585'); tr.position.set(0, .66, -.55); inner.add(tr);
       const star = M(new T.OctahedronGeometry(.11, 0), new T.MeshStandardMaterial({ color: '#F6D47A', emissive: '#E6B84E', emissiveIntensity: .8, metalness: .3, roughness: .3 }), 0, .66 + 1.38 * 1.35 * .78, -.55); inner.add(star);
       const orn = ['#D9606B', '#8EBFE6', '#F2D58C', '#F2A7B8']; for (let i = 0; i < 9; i++) { const a = i * 2.4, y = .25 + (i / 9) * .8, r = .42 * (1 - i / 11); inner.add(M(ico(.045, 1), mat(orn[i % 4], { roughness: .3, metalness: .2 }), Math.cos(a) * r, .66 + y * 1.35, -.55 + Math.sin(a) * r)); }
-      [[-1.05, -.35, .5], [1.02, -.4, .55]].forEach(([x, z, s]) => { const t = lowTree(s); t.position.set(x, .62, z); inner.add(t); });
+      [[-.86, -.3, .45], [.84, -.34, .5]].forEach(([x, z, s]) => { const t = lowTree(s); t.position.set(x, .62, z); inner.add(t); });
       chars = [];
       const n = st.count === 1 ? 1 : 2, pos = n === 1 ? [[0, .3]] : [[-.5, .32], [.52, .32]];
       for (let i = 0; i < n; i++) { const ch = critter(st.c[i] || st.c[0]); const s = n === 1 ? .8 : .66; ch.scale.setScalar(s); ch.position.set(pos[i][0], .64, pos[i][1]); ch.rotation.y = n === 1 ? 0 : (i ? -.28 : .28); ch.userData.y0 = .64; ch.userData.ph = i * 1.7; inner.add(ch); chars.push(ch); }
@@ -209,7 +209,7 @@
     const buildSnow = () => {
       if (snowIn) globe.remove(snowIn);
       const n = [140, 320, 620][st.snow] ?? 320, p = new Float32Array(n * 3); vel = new Float32Array(n * 3);
-      for (let i = 0; i < n; i++) { const a = rnd(0, Math.PI * 2), r = Math.sqrt(Math.random()) * 1.35; p[i * 3] = Math.cos(a) * r; p[i * 3 + 1] = rnd(.7, GC + 1.2); p[i * 3 + 2] = Math.sin(a) * r; vel[i * 3 + 1] = -rnd(.002, .006); }
+      for (let i = 0; i < n; i++) { const a = rnd(0, Math.PI * 2), r = Math.sqrt(Math.random()) * 1.2; p[i * 3] = Math.cos(a) * r; p[i * 3 + 1] = rnd(.7, GC + 1.2); p[i * 3 + 2] = Math.sin(a) * r; vel[i * 3 + 1] = -rnd(.002, .006); }
       const g = new T.BufferGeometry(); g.setAttribute('position', new T.BufferAttribute(p, 3));
       snowIn = new T.Points(g, new T.PointsMaterial({ size: .05, map: dotTex, transparent: true, depthWrite: false, color: '#FFFFFF' }));
       globe.add(snowIn);
