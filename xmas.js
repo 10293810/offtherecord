@@ -1,6 +1,6 @@
-/* 🎄 크리스마스 꾸미기 — 이 파일만 index.html 에서 빼면 원래대로 돌아가요 (2027.1.1 부터는 저절로 꺼져요) */
+/* 🎄 크리스마스 꾸미기 — 이 파일만 index.html 에서 빼면 원래대로 돌아가요 (2026.12.26 0시부터는 저절로 꺼져요) */
 (function () {
-  if (Date.now() >= new Date('2027-01-01T00:00:00+09:00').getTime()) return;
+  if (Date.now() >= new Date('2026-12-26T00:00:00+09:00').getTime()) return;
   const start = () => {
 window.__X = {
   add(sel, html, css) { document.querySelectorAll(sel).forEach(t => { if (getComputedStyle(t).position === 'static') t.style.position = 'relative'; const d = document.createElement('div'); d.className = 'xm'; d.style.cssText = 'position:absolute;pointer-events:none;z-index:30;' + (css || ''); d.innerHTML = html; t.appendChild(d); }); },
@@ -168,7 +168,6 @@ const run = () => {
   K('.en-hit', 'cap', cap(10), 'left:10px;right:10px;top:-4px;z-index:2');
   { const v = document.querySelector('.gt-vin'); if (v && v.offsetWidth) { const w = Math.round(v.offsetWidth * 1.07); K('.gt-vin', 'wr', D.wreathThin(w), `left:calc(50% - ${w / 2}px);top:calc(50% - ${w / 2}px);z-index:3`); } }
   if (!PHONE()) {
-    K('.gt-tk', 'tag', tag('✻ WINTER EDITION · 12.25'), 'left:62px;bottom:16px');
     const sc = .86;
     K('.gt-tk', 'grp', `<div style="position:relative;width:330px;height:180px">
       <div style="position:absolute;left:0;bottom:0">${window.__GIFT(60, 44, '#F4F1EA', '#E9E3D6', '#D9707A')}</div>
@@ -190,7 +189,6 @@ const run = () => {
     K('.sy-hero', 'b1', D.bauble(18, '#8ED3B5', '#fff', 'stripe'), 'left:560px;top:2px;z-index:3');
     K('.sy-hero', 'b2', D.star(34), 'left:594px;top:2px;z-index:3');
     K('.sy-hero', 'b3', D.bauble(10, '#F2B7BC', '#fff', 'dot'), 'left:628px;top:2px;z-index:3');
-    K('.sy-hero', 'tag', tag('✻ WINTER EDITION · 12.25'), 'left:330px;top:30px');
     K('.sy-hero', 'santa', CH.santa(.8), 'left:720px;top:-58px;z-index:4');
     K('.apps-panel', 'swag', D.swag(240, 14, 1), 'right:-8px;top:-10px;z-index:3');
     K('.apps-panel', 'deer', CH.deer(.66), 'left:120px;top:-46px;z-index:4');
