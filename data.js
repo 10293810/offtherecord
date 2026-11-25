@@ -1872,7 +1872,7 @@ const SITE = {
       "title": "RUN TO BLUE (우리들의 여름 주파수)",
       "artist": "SEIRAN UNIV. BAND",
       "cover": "",
-      "src": "media/bgm-run-to-blue.mp3",
+      "src": "media/bgm-run-to-blue.mp3?v=2",
       "time": "2:08",
       "line": "시원한 기타 리프, 여름 페스티벌 무대 위로"
     },
