@@ -138,6 +138,7 @@ const P = {
   swords: '<path d="M14.5 17.5 3 6V3h3l11.5 11.5"/><path d="M13 19l6-6M16 16l4 4M19 21l2-2"/><path d="M14.5 6.5 18 3h3v3l-3.5 3.5"/><path d="M5 14l4 4M7 17l-3 3M3 19l2 2"/>',
   sentinel: '<path d="M12 3 4.5 6v5.5c0 4.6 3.2 8 7.5 9.5 4.3-1.5 7.5-4.9 7.5-9.5V6Z"/><path d="M7.8 12s1.6-2.8 4.2-2.8 4.2 2.8 4.2 2.8-1.6 2.8-4.2 2.8-4.2-2.8-4.2-2.8Z"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/>',
   sparkle: '<path d="M12 3c.6 4.2 1.8 5.4 6 6-4.2.6-5.4 1.8-6 6-.6-4.2-1.8-5.4-6-6 4.2-.6 5.4-1.8 6-6Z"/><path d="M18.5 14.5c.3 1.9.8 2.4 2.5 2.7-1.7.3-2.2.8-2.5 2.7-.3-1.9-.8-2.4-2.5-2.7 1.7-.3 2.2-.8 2.5-2.7Z"/><circle cx="5.5" cy="17.5" r="1.3"/>',
+  snowglobe: '<circle cx="12" cy="10" r="7"/><path d="M6.5 16.5 5 21h14l-1.5-4.5"/><path d="M9 11.5l1.4-2.6 1.6 2.6 1.6-2.6 1.4 2.6"/><path d="M9.6 6.8h.01M14.4 7.6h.01"/>',
   moon: '<path d="M19.5 14.6A7.8 7.8 0 1 1 9.4 4.5a6.2 6.2 0 0 0 10.1 10.1Z"/>',
   arrow: '<path d="M5 12h14M13 6l6 6-6 6"/>',
   folder: '<path d="M3 7.5A1.5 1.5 0 0 1 4.5 6H9l2 2h8.5A1.5 1.5 0 0 1 21 9.5v8a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 17.5Z"/>',
@@ -2974,11 +2975,213 @@ function openAgent() {
   });
 }
 
+/* ---------- ❄ Snowball : 스노우볼 만들기 ---------- */
+const SB = (() => {
+  const KEY = 'sy-snowball';
+  const SCENES = { mint: ['민트 밤', '#CFEFE3', '#F3FBF8', '#BFE6D6'], night: ['푸른 겨울밤', '#2C4A6B', '#6E92B8', '#9DB8D6'], pink: ['핑크 눈마을', '#F7D7DD', '#FFF3F5', '#EFC2CB'], cream: ['크림', '#F6EBD8', '#FFFAF1', '#E8D7BA'], lav: ['라벤더', '#DCD5F2', '#F6F3FF', '#C9BEEA'] };
+  const PROPS = { none: '없음', trees: '트리 숲', village: '작은 마을', lights: '전구 줄', moon: '달과 별' };
+  const KINDS = { rabbit: '토끼', cat: '고양이', bear: '곰', panda: '판다', fox: '여우', hamster: '햄스터', penguin: '펭귄', snowman: '눈사람' };
+  const FUR = { white: ['흰색', '#FFFFFF', '#F1EEEA'], cream: ['크림', '#F6E6CC', '#FFF6E6'], cocoa: ['코코아', '#B98A65', '#E9D3BE'], gray: ['회색', '#C9CDD3', '#EEF0F2'], peach: ['복숭아', '#F6C9B5', '#FFE9DF'], mint: ['민트', '#BDE8D6', '#EAF8F2'], black: ['차콜', '#4A4E57', '#D9DCE1'] };
+  const FACES = { smile: '웃음', wink: '윙크', sleepy: '졸린', sparkle: '반짝', o: '놀람' };
+  const ACC = { none: '없음', scarf: '목도리', santa: '산타 모자', muffs: '귀마개', bow: '리본', crown: '왕관', halo: '천사링' };
+  const ACCCOL = { red: '#D9707A', mint: '#7FCFB0', gold: '#E6C36E', sky: '#9CC8EA', pink: '#F2AEB9' };
+  const BASES = { walnut: ['원목 월넛', '#8A5E44', '#6B4532'], maple: ['원목 메이플', '#E3C59A', '#C9A574'], mint: ['민트', '#86D4B2', '#5FB894'], pink: ['핑크', '#F2B7C2', '#DE93A3'], white: ['화이트', '#F4F5F7', '#D9DCE2'] };
+  const BANDS = { gold: ['금', '#E6C36E'], silver: ['은', '#C9CED6'], rose: ['로즈', '#E9A7A9'] };
+  const SNOW = { 0: '적게', 1: '보통', 2: '많이' };
+  const def = () => ({ scene: 'mint', prop: 'trees', count: 2, plate: 'PURE × UXI', base: 'walnut', band: 'gold', snow: 1, glitter: true,
+    c: [{ kind: 'rabbit', fur: 'white', face: 'smile', acc: 'scarf', ac: 'red' }, { kind: 'bear', fur: 'cocoa', face: 'wink', acc: 'santa', ac: 'red' }] });
+  let st; try { st = Object.assign(def(), JSON.parse(localStorage.getItem(KEY) || '{}')); } catch (e) { st = def(); }
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (e) {} };
+  const pick = o => { const k = Object.keys(o); return k[Math.floor(Math.random() * k.length)]; };
+
+  /* ----- 그림 (SVG) ----- */
+  const face = (f, x, y, s, dark) => {
+    const ink = dark ? '#FFFFFF' : '#3A3E46', e = 6.5 * s;
+    const eye = (cx, kind) => kind === 'wink' ? `<path d="M${cx - 3.4 * s} ${y} q${3.4 * s} ${-3.4 * s} ${6.8 * s} 0" stroke="${ink}" stroke-width="${1.8 * s}" fill="none" stroke-linecap="round"/>`
+      : kind === 'sleepy' ? `<path d="M${cx - 3.4 * s} ${y - .6 * s} q${3.4 * s} ${3.2 * s} ${6.8 * s} 0" stroke="${ink}" stroke-width="${1.8 * s}" fill="none" stroke-linecap="round"/>`
+      : kind === 'smile' ? `<path d="M${cx - 3.2 * s} ${y + 1 * s} q${3.2 * s} ${-4 * s} ${6.4 * s} 0" stroke="${ink}" stroke-width="${1.9 * s}" fill="none" stroke-linecap="round"/>`
+      : kind === 'sparkle' ? `<circle cx="${cx}" cy="${y}" r="${2.9 * s}" fill="${ink}"/><circle cx="${cx - .9 * s}" cy="${y - 1 * s}" r="${1 * s}" fill="#fff"/><circle cx="${cx + 1 * s}" cy="${y + 1 * s}" r="${.5 * s}" fill="#fff"/>`
+      : `<circle cx="${cx}" cy="${y}" r="${2.4 * s}" fill="${ink}"/>`;
+    const L = f === 'wink' ? 'dot' : f, R = f;
+    const mouth = f === 'o' ? `<ellipse cx="${x}" cy="${y + 7 * s}" rx="${1.9 * s}" ry="${2.4 * s}" fill="${ink}"/>`
+      : `<path d="M${x - 2.6 * s} ${y + 5.6 * s} q${1.3 * s} ${1.8 * s} ${2.6 * s} 0 q${1.3 * s} ${1.8 * s} ${2.6 * s} 0" stroke="${ink}" stroke-width="${1.4 * s}" fill="none" stroke-linecap="round"/>`;
+    return eye(x - e, L === 'o' ? 'dot' : L) + eye(x + e, R === 'o' ? 'dot' : R) + mouth +
+      `<ellipse cx="${x - 11 * s}" cy="${y + 4 * s}" rx="${3.4 * s}" ry="${2.2 * s}" fill="#F4A9B3" opacity=".65"/><ellipse cx="${x + 11 * s}" cy="${y + 4 * s}" rx="${3.4 * s}" ry="${2.2 * s}" fill="#F4A9B3" opacity=".65"/>`;
+  };
+  const critter = (c, cx, by, s) => {   // by = 바닥 y
+    const [, F, B] = FUR[c.fur] || FUR.white, AC = ACCCOL[c.ac] || ACCCOL.red;
+    const hx = cx, hy = by - 62 * s, hr = 24 * s;
+    let back = '', body = '', head = '', front = '';
+    const line = c.fur === 'white' ? '#E3E0DA' : 'none';
+    if (c.kind === 'snowman') {
+      body = `<circle cx="${cx}" cy="${by - 24 * s}" r="${26 * s}" fill="#FFFFFF" stroke="#E2ECEA" stroke-width="${1.2 * s}"/>${[0, 1, 2].map(i => `<circle cx="${cx}" cy="${by - 34 * s + i * 9 * s}" r="${2.2 * s}" fill="#4A4E57"/>`).join('')}`;
+      head = `<circle cx="${hx}" cy="${hy + 2 * s}" r="${20 * s}" fill="#FFFFFF" stroke="#E2ECEA" stroke-width="${1.2 * s}"/>` + face(c.face, hx, hy, s * .85) + `<path d="M${hx} ${hy + 3 * s} l${12 * s} ${2.4 * s} l${-12 * s} ${2.2 * s}Z" fill="#EF9A5B"/>`;
+    } else if (c.kind === 'penguin') {
+      body = `<ellipse cx="${cx}" cy="${by - 22 * s}" rx="${24 * s}" ry="${24 * s}" fill="#3F4652"/><ellipse cx="${cx}" cy="${by - 20 * s}" rx="${15 * s}" ry="${18 * s}" fill="#FFFFFF"/><ellipse cx="${cx - 9 * s}" cy="${by - 1 * s}" rx="${7 * s}" ry="${3 * s}" fill="#EFB45B"/><ellipse cx="${cx + 9 * s}" cy="${by - 1 * s}" rx="${7 * s}" ry="${3 * s}" fill="#EFB45B"/>`;
+      head = `<circle cx="${hx}" cy="${hy}" r="${hr}" fill="#3F4652"/><ellipse cx="${hx}" cy="${hy + 4 * s}" rx="${17 * s}" ry="${14 * s}" fill="#FFFFFF"/>` + face(c.face, hx, hy + 1 * s, s * .85) + `<path d="M${hx - 3.4 * s} ${hy + 4 * s} h${6.8 * s} l${-3.4 * s} ${4 * s}Z" fill="#EFB45B"/>`;
+    } else {
+      const ear = { rabbit: () => [-1, 1].map(d => `<ellipse cx="${hx + d * 10 * s}" cy="${hy - 28 * s}" rx="${7 * s}" ry="${18 * s}" fill="${F}" stroke="${line}" transform="rotate(${d * 10} ${hx + d * 10 * s} ${hy - 14 * s})"/><ellipse cx="${hx + d * 10 * s}" cy="${hy - 27 * s}" rx="${3.4 * s}" ry="${12 * s}" fill="#F6C3CB" transform="rotate(${d * 10} ${hx + d * 10 * s} ${hy - 14 * s})"/>`).join(''),
+        cat: () => [-1, 1].map(d => `<path d="M${hx + d * 21 * s} ${hy - 6 * s} L${hx + d * 17 * s} ${hy - 28 * s} L${hx + d * 5 * s} ${hy - 19 * s}Z" fill="${F}" stroke="${line}"/><path d="M${hx + d * 17 * s} ${hy - 11 * s} L${hx + d * 15.6 * s} ${hy - 22 * s} L${hx + d * 9 * s} ${hy - 18 * s}Z" fill="#F6C3CB"/>`).join(''),
+        fox: () => [-1, 1].map(d => `<path d="M${hx + d * 22 * s} ${hy - 4 * s} L${hx + d * 19 * s} ${hy - 31 * s} L${hx + d * 4 * s} ${hy - 19 * s}Z" fill="${F}"/><path d="M${hx + d * 19 * s} ${hy - 11 * s} L${hx + d * 18 * s} ${hy - 25 * s} L${hx + d * 9 * s} ${hy - 18 * s}Z" fill="#4A4E57" opacity=".75"/>`).join(''),
+        bear: () => [-1, 1].map(d => `<circle cx="${hx + d * 17 * s}" cy="${hy - 18 * s}" r="${8 * s}" fill="${F}" stroke="${line}"/><circle cx="${hx + d * 17 * s}" cy="${hy - 18 * s}" r="${4 * s}" fill="${B}"/>`).join(''),
+        panda: () => [-1, 1].map(d => `<circle cx="${hx + d * 17 * s}" cy="${hy - 18 * s}" r="${8 * s}" fill="#4A4E57"/>`).join(''),
+        hamster: () => [-1, 1].map(d => `<circle cx="${hx + d * 16 * s}" cy="${hy - 19 * s}" r="${6 * s}" fill="${F}" stroke="${line}"/><circle cx="${hx + d * 16 * s}" cy="${hy - 19 * s}" r="${3 * s}" fill="#F6C3CB"/>`).join('') }[c.kind] || (() => '');
+      const fur = c.kind === 'panda' ? '#FFFFFF' : c.kind === 'fox' ? (c.fur === 'white' || c.fur === 'gray' ? F : '#EFA166') : F;
+      const fx = c.kind === 'fox' ? '#FFF4EA' : B;
+      back = ear().replaceAll(F, fur);
+      body = `<path d="M${cx - 22 * s} ${by} Q${cx - 26 * s} ${by - 40 * s} ${cx} ${by - 42 * s} Q${cx + 26 * s} ${by - 40 * s} ${cx + 22 * s} ${by}Z" fill="${fur}" stroke="${line}"/><ellipse cx="${cx}" cy="${by - 14 * s}" rx="${12 * s}" ry="${12 * s}" fill="${fx}"/>` +
+        `<ellipse cx="${cx - 21 * s}" cy="${by - 22 * s}" rx="${6 * s}" ry="${9 * s}" fill="${fur}" stroke="${line}" transform="rotate(20 ${cx - 21 * s} ${by - 22 * s})"/><ellipse cx="${cx + 21 * s}" cy="${by - 22 * s}" rx="${6 * s}" ry="${9 * s}" fill="${fur}" stroke="${line}" transform="rotate(-20 ${cx + 21 * s} ${by - 22 * s})"/>` +
+        (c.kind === 'panda' ? `<ellipse cx="${cx - 21 * s}" cy="${by - 22 * s}" rx="${6 * s}" ry="${9 * s}" fill="#4A4E57" transform="rotate(20 ${cx - 21 * s} ${by - 22 * s})"/><ellipse cx="${cx + 21 * s}" cy="${by - 22 * s}" rx="${6 * s}" ry="${9 * s}" fill="#4A4E57" transform="rotate(-20 ${cx + 21 * s} ${by - 22 * s})"/>` : '') +
+        `<ellipse cx="${cx - 10 * s}" cy="${by - 1.5 * s}" rx="${8 * s}" ry="${4 * s}" fill="${fur}" stroke="${line}"/><ellipse cx="${cx + 10 * s}" cy="${by - 1.5 * s}" rx="${8 * s}" ry="${4 * s}" fill="${fur}" stroke="${line}"/>`;
+      const muzzle = ['bear', 'fox', 'hamster'].includes(c.kind) ? `<ellipse cx="${hx}" cy="${hy + 7 * s}" rx="${9 * s}" ry="${6.4 * s}" fill="${fx}"/>` : '';
+      const nose = c.kind === 'cat' || c.kind === 'rabbit' ? `<path d="M${hx - 2 * s} ${hy + 3.4 * s} h${4 * s} l${-2 * s} ${2.2 * s}Z" fill="#E98E9B"/>` : `<ellipse cx="${hx}" cy="${hy + 4 * s}" rx="${2.6 * s}" ry="${1.8 * s}" fill="#4A4E57"/>`;
+      const patch = c.kind === 'panda' ? [-1, 1].map(d => `<ellipse cx="${hx + d * 7 * s}" cy="${hy + 1 * s}" rx="${5.6 * s}" ry="${7 * s}" fill="#4A4E57" transform="rotate(${d * -25} ${hx + d * 7 * s} ${hy + 1 * s})"/>`).join('') : '';
+      head = `<circle cx="${hx}" cy="${hy}" r="${hr}" fill="${fur}" stroke="${line}"/>${c.kind === 'hamster' ? `<ellipse cx="${hx}" cy="${hy + 9 * s}" rx="${20 * s}" ry="${12 * s}" fill="${fx}"/>` : ''}${muzzle}${patch}` + face(c.face, hx, hy - 1 * s, s, c.kind === 'panda') + nose;
+    }
+    /* 소품 */
+    if (c.acc === 'scarf') front += `<path d="M${cx - 20 * s} ${by - 44 * s} Q${cx} ${by - 34 * s} ${cx + 20 * s} ${by - 44 * s} L${cx + 20 * s} ${by - 37 * s} Q${cx} ${by - 27 * s} ${cx - 20 * s} ${by - 37 * s}Z" fill="${AC}"/><path d="M${cx + 8 * s} ${by - 36 * s} l${4 * s} ${16 * s} l${7 * s} ${-2 * s} l${-3 * s} ${-15 * s}Z" fill="${AC}"/><path d="M${cx + 10 * s} ${by - 27 * s} l${6 * s} ${-1.6 * s}" stroke="#fff" stroke-width="${1.2 * s}" opacity=".6"/>`;
+    if (c.acc === 'santa') front += `<path d="M${hx - 22 * s} ${hy - 12 * s} Q${hx - 6 * s} ${hy - 50 * s} ${hx + 26 * s} ${hy - 30 * s} L${hx + 20 * s} ${hy - 16 * s}Z" fill="${AC}"/><rect x="${hx - 24 * s}" y="${hy - 17 * s}" width="${48 * s}" height="${9 * s}" rx="${4.5 * s}" fill="#FFFFFF"/><circle cx="${hx + 27 * s}" cy="${hy - 29 * s}" r="${5.4 * s}" fill="#FFFFFF"/>`;
+    if (c.acc === 'muffs') front += `<path d="M${hx - 22 * s} ${hy - 2 * s} Q${hx} ${hy - 40 * s} ${hx + 22 * s} ${hy - 2 * s}" stroke="${AC}" stroke-width="${3.4 * s}" fill="none"/><circle cx="${hx - 23 * s}" cy="${hy}" r="${8 * s}" fill="${AC}"/><circle cx="${hx + 23 * s}" cy="${hy}" r="${8 * s}" fill="${AC}"/><circle cx="${hx - 25 * s}" cy="${hy - 2 * s}" r="${2.4 * s}" fill="#fff" opacity=".6"/>`;
+    if (c.acc === 'bow') front += `<g transform="translate(${hx + 13 * s} ${hy - 20 * s}) rotate(18) scale(${s})"><path d="M0 0 C-5 -8 -14 -7 -13 -1 C-12 4 -5 3 0 0Z M0 0 C5 -8 14 -7 13 -1 C12 4 5 3 0 0Z" fill="${AC}"/><circle r="3" fill="${AC}"/><circle r="1.2" fill="#fff" opacity=".5"/></g>`;
+    if (c.acc === 'crown') front += `<path d="M${hx - 13 * s} ${hy - 20 * s} l${-2 * s} ${-14 * s} l${7 * s} ${7 * s} l${8 * s} ${-12 * s} l${8 * s} ${12 * s} l${7 * s} ${-7 * s} l${-2 * s} ${14 * s}Z" fill="#E6C36E" stroke="#CFA651" stroke-width="${1 * s}"/><circle cx="${hx}" cy="${hy - 24 * s}" r="${2.2 * s}" fill="${AC === '#E6C36E' ? '#D9707A' : AC}"/>`;
+    if (c.acc === 'halo') back = `<ellipse cx="${hx}" cy="${hy - 34 * s}" rx="${16 * s}" ry="${4.6 * s}" fill="none" stroke="#F1D48A" stroke-width="${3.2 * s}"/>` + back;
+    return `<ellipse cx="${cx}" cy="${by + 1}" rx="${30 * s}" ry="${4 * s}" fill="#4B6F63" opacity=".14"/>${back}${body}${head}${front}`;
+  };
+  const tree = (x, y, s, c1, c2) => `<g transform="translate(${x} ${y}) scale(${s})"><path d="M0 -40 L15 -16 L8 -16 L20 2 L10 2 L24 20 L-24 20 L-10 2 L-20 2 L-8 -16 L-15 -16Z" fill="${c1}"/><path d="M0 -40 L15 -16 L8 -16 L20 2 L10 2 L24 20 L0 20Z" fill="${c2}"/><path d="M-12 -14 Q0 -10 11 -15 M-17 4 Q0 9 18 3" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" opacity=".9"/><rect x="-3" y="20" width="6" height="6" fill="#A9876A"/></g>`;
+  const house = (x, y, s, wall, roof) => `<g transform="translate(${x} ${y}) scale(${s})"><rect x="-18" y="-20" width="36" height="28" fill="${wall}"/><path d="M-24 -18 L0 -40 L24 -18Z" fill="${roof}"/><path d="M-24 -18 L0 -40 L24 -18 L20 -14 L0 -32 L-20 -14Z" fill="#fff"/><rect x="-11" y="-12" width="9" height="9" rx="1.5" fill="#FBE3A0"/><rect x="3" y="-12" width="9" height="9" rx="1.5" fill="#FBE3A0"/><rect x="-4" y="-2" width="8" height="10" rx="2" fill="#B78C6E"/><rect x="10" y="-38" width="6" height="10" fill="${roof}"/></g>`;
+  const scene = () => {
+    const [, top, bot, hill] = SCENES[st.scene] || SCENES.mint, dark = st.scene === 'night';
+    let props = '';
+    if (st.prop === 'trees') props = tree(108, 262, 1.25, '#7FCFB0', '#68BC9C') + tree(296, 268, 1.05, '#94D9BE', '#7CC8AA') + tree(150, 276, .7, '#A6E0C9', '#8FD2B7') + tree(258, 280, .62, '#A6E0C9', '#8FD2B7');
+    if (st.prop === 'village') props = house(110, 268, 1.05, '#F6E7D2', '#D9707A') + house(292, 272, .95, '#E9F4EF', '#7FCFB0') + house(200, 250, .7, '#FFF3E6', '#9CC8EA') + tree(150, 286, .55, '#7FCFB0', '#68BC9C');
+    if (st.prop === 'lights') { let b = ''; const C = ['#F2D58C', '#F2AEAE', '#8ED9B8', '#AFD6F0']; for (let i = 0; i <= 12; i++) { const t = i / 12, x = 60 + t * 280, y = 120 + Math.sin(t * Math.PI) * 46; b += `<circle cx="${x}" cy="${y + 7}" r="9" fill="${C[i % 4]}" opacity=".25"/><ellipse cx="${x}" cy="${y + 7}" rx="3.2" ry="4.6" fill="${C[i % 4]}"/>`; }
+      props = `<path d="M50 120 Q200 212 350 120" stroke="${dark ? '#8EA7BF' : '#9AB3A8'}" stroke-width="1.4" fill="none"/>` + b + tree(200, 262, 1.5, '#7FCFB0', '#68BC9C') + `<path d="M200 192 l3.6 7.4 8.2.8-6.2 5.4 1.8 8L200 209.4l-7.4 4.2 1.8-8-6.2-5.4 8.2-.8Z" fill="#F1D48A"/>`; }
+    if (st.prop === 'moon') props = `<circle cx="282" cy="112" r="22" fill="#FFF4C9"/><circle cx="294" cy="104" r="20" fill="${top}"/>` + [[110, 96, 1.2], [150, 70, .8], [220, 84, 1], [330, 170, .8], [86, 160, .7]].map(([x, y, k]) => `<path d="M${x} ${y - 7 * k} L${x + 2 * k} ${y - 2 * k} L${x + 7 * k} ${y} L${x + 2 * k} ${y + 2 * k} L${x} ${y + 7 * k} L${x - 2 * k} ${y + 2 * k} L${x - 7 * k} ${y} L${x - 2 * k} ${y - 2 * k}Z" fill="#FFF1B8"/>`).join('');
+    const n = st.count, cs = n === 2 ? [[150, st.c[0]], [252, st.c[1]]] : [[200, st.c[0]]];
+    const chars = cs.map(([x, c]) => critter(c, x, 302, n === 2 ? 1.32 : 1.6)).join('');
+    return `<defs><linearGradient id="sbSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${top}"/><stop offset="1" stop-color="${bot}"/></linearGradient>
+      <radialGradient id="sbGlass" cx="36%" cy="28%" r="80%"><stop offset="0" stop-color="#fff" stop-opacity=".75"/><stop offset=".5" stop-color="#fff" stop-opacity=".08"/><stop offset=".86" stop-color="#E4F4EE" stop-opacity=".22"/><stop offset="1" stop-color="#A9D9C6" stop-opacity=".55"/></radialGradient>
+      <clipPath id="sbClip"><circle cx="200" cy="200" r="168"/></clipPath></defs>
+      <g clip-path="url(#sbClip)"><rect width="400" height="400" fill="url(#sbSky)"/>${props}
+      <path d="M20 300 Q110 270 200 290 T380 282 L400 400 L0 400Z" fill="#FFFFFF"/><path d="M20 300 Q110 270 200 290 T380 282" stroke="${hill}" stroke-width="2" fill="none"/>${chars}</g>`;
+  };
+  const glassAndBase = () => {
+    const [, b1, b2] = BASES[st.base] || BASES.walnut, band = (BANDS[st.band] || BANDS.gold)[1];
+    return `<circle cx="200" cy="200" r="168" fill="url(#sbGlass)"/><circle cx="200" cy="200" r="168" fill="none" stroke="#fff" stroke-width="3" opacity=".9"/>
+      <path d="M86 112 A132 132 0 0 1 170 52" stroke="#fff" stroke-width="12" stroke-linecap="round" fill="none" opacity=".8"/><circle cx="78" cy="140" r="6" fill="#fff" opacity=".85"/>
+      <path d="M318 268 A132 132 0 0 1 280 318" stroke="#fff" stroke-width="5" stroke-linecap="round" fill="none" opacity=".55"/>
+      <ellipse cx="200" cy="350" rx="122" ry="18" fill="${b2}"/>
+      <path d="M84 350 Q200 372 316 350 L346 432 Q200 462 54 432Z" fill="${b1}"/>
+      <path d="M84 350 Q200 372 316 350 L319 360 Q200 382 81 360Z" fill="#fff" opacity=".25"/>
+      <path d="M66 388 Q200 410 334 388 L338 402 Q200 426 62 402Z" fill="${band}"/>
+      <path d="M54 432 Q200 462 346 432 L342 448 Q200 478 58 448Z" fill="${b2}"/>
+      <rect x="140" y="400" width="120" height="0" fill="none"/>`;
+  };
+  const svgOf = () => `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="480" viewBox="0 0 400 480"><ellipse cx="200" cy="466" rx="150" ry="10" fill="#2F6F5A" opacity=".12"/>${scene()}${glassAndBase()}</svg>`;
+
+  /* ----- 캔버스 · 눈 ----- */
+  let cv, cx2, img = null, flakes = [], raf = 0, shake = 0;
+  const N = () => [40, 90, 160][st.snow] || 90;
+  const seed = () => { flakes = []; for (let i = 0; i < N(); i++) flakes.push(nf(true)); };
+  const nf = any => { const a = Math.random() * Math.PI * 2, r = Math.sqrt(Math.random()) * 160; return { x: 200 + Math.cos(a) * r, y: any ? 200 + Math.sin(a) * r * .9 : 40 + Math.random() * 30, vx: 0, vy: .25 + Math.random() * .45, z: 1.2 + Math.random() * 2.6, g: Math.random() < .16 }; };
+  const rebuild = () => { const i = new Image(); const url = URL.createObjectURL(new Blob([svgOf()], { type: 'image/svg+xml' })); i.onload = () => { img = i; URL.revokeObjectURL(url); }; i.src = url; };
+  const draw = (t) => {
+    if (!cv || !cv.isConnected) { raf = 0; return; }
+    const c = cx2; c.clearRect(0, 0, 400, 480);
+    if (img) c.drawImage(img, 0, 0, 400, 480);
+    c.save(); c.beginPath(); c.arc(200, 200, 166, 0, Math.PI * 2); c.clip();
+    for (const f of flakes) {
+      if (shake > 0) { f.vx += (Math.random() - .5) * .9 * shake; f.vy += (Math.random() - .62) * 1.1 * shake; }
+      f.vx *= .96; f.vy = f.vy * .97 + .02; f.x += f.vx + Math.sin((t / 900) + f.z) * .15; f.y += f.vy * .6;
+      const dx = f.x - 200, dy = f.y - 200, d = Math.hypot(dx, dy); if (d > 162) { f.x = 200 + dx / d * 160; f.y = 200 + dy / d * 160; f.vx *= -.4; f.vy *= -.2; }
+      if (f.y > 296 && shake <= 0 && Math.random() < .02) Object.assign(f, nf(false));
+      c.globalAlpha = .9; c.fillStyle = '#FFFFFF'; c.beginPath(); c.arc(f.x, f.y, f.z, 0, Math.PI * 2); c.fill();
+      if (st.glitter && f.g) { c.globalAlpha = .55 + .45 * Math.sin(t / 180 + f.x); c.fillStyle = '#F1D48A'; c.fillRect(f.x - f.z * .5, f.y - f.z * .5, f.z, f.z); }
+    }
+    c.restore(); c.globalAlpha = 1;
+    if (st.plate) { c.font = '800 15px "DM Mono", ui-monospace, monospace'; c.textAlign = 'center'; c.fillStyle = (BASES[st.base] || BASES.walnut)[0].includes('화이트') || st.base === 'maple' ? '#5B4636' : '#FFFFFF'; c.globalAlpha = .9; c.fillText(String(st.plate).slice(0, 22), 200, 427); c.globalAlpha = 1; }
+    if (shake > 0) shake = Math.max(0, shake - .03);
+    raf = requestAnimationFrame(draw);
+  };
+
+  /* ----- 메뉴 ----- */
+  let tab = 'scene', who = 0;
+  const chips = (key, obj, cur, lab = v => Array.isArray(v) ? v[0] : v, sw) => `<div class="sb-chips">${Object.entries(obj).map(([k, v]) => `<button class="sb-chip ${String(cur) === k ? 'on' : ''}" data-k="${key}" data-v="${k}">${sw ? `<i style="background:${sw(k, v)}"></i>` : ''}${esc(lab(v))}</button>`).join('')}</div>`;
+  const panel = () => {
+    const C = st.c[who] || st.c[0];
+    if (tab === 'scene') return `<h5>배경</h5>${chips('scene', SCENES, st.scene, v => v[0], (k, v) => `linear-gradient(${v[1]},${v[2]})`)}<h5>소품</h5>${chips('prop', PROPS, st.prop)}<h5>눈</h5>${chips('snow', SNOW, st.snow)}<label class="sb-tg"><input type="checkbox" data-k="glitter" ${st.glitter ? 'checked' : ''}> 금빛 반짝이</label>`;
+    if (tab === 'char') return `<h5>인원</h5>${chips('count', { 1: '1명', 2: '2명' }, st.count)}${st.count === 2 ? `<div class="sb-who">${[0, 1].map(i => `<button class="${who === i ? 'on' : ''}" data-who="${i}">${i ? '두 번째' : '첫 번째'}</button>`).join('')}</div>` : ''}
+      <h5>종류</h5>${chips('kind', KINDS, C.kind)}<h5>털 색</h5>${chips('fur', FUR, C.fur, v => v[0], (k, v) => v[1])}<h5>얼굴</h5>${chips('face', FACES, C.face)}`;
+    if (tab === 'acc') return `${st.count === 2 ? `<div class="sb-who">${[0, 1].map(i => `<button class="${who === i ? 'on' : ''}" data-who="${i}">${i ? '두 번째' : '첫 번째'}</button>`).join('')}</div>` : ''}<h5>소품</h5>${chips('acc', ACC, C.acc)}<h5>소품 색</h5>${chips('ac', ACCCOL, C.ac, k => ({ red: '빨강', mint: '민트', gold: '금', sky: '하늘', pink: '분홍' })[Object.keys(ACCCOL).find(x => ACCCOL[x] === k)] || '', (k, v) => v)}`;
+    return `<h5>받침</h5>${chips('base', BASES, st.base, v => v[0], (k, v) => v[1])}<h5>띠</h5>${chips('band', BANDS, st.band, v => v[0], (k, v) => v[1])}<h5>이름표</h5><input class="sb-in" data-k="plate" maxlength="22" value="${esc(st.plate)}" placeholder="받침에 쓸 글씨">`;
+  };
+  const CSS = `.sbwin .win-b{padding:0;overflow:hidden}
+.sb{display:flex;height:100%;background:#F7FAF9}
+.sb-view{flex:0 0 52%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:18px;background:radial-gradient(circle at 50% 38%,#FFFFFF,#EEF6F3 70%);border-right:1px solid #E3ECE9}
+.sb-view canvas{width:min(100%,330px);aspect-ratio:400/480;height:auto;filter:drop-shadow(0 10px 18px rgba(47,111,90,.12))}
+.sb-acts{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.sb-acts button{border:0;border-radius:999px;padding:9px 14px;font:800 12px/1 inherit;letter-spacing:.02em;background:#fff;color:#2F4A42;box-shadow:0 0 0 1px #DDE8E4;cursor:pointer}
+.sb-acts button.main{background:#74CDA8;color:#fff;box-shadow:none}
+.sb-side{flex:1;display:flex;flex-direction:column;min-width:0}
+.sb-tabs{display:flex;gap:4px;padding:12px 12px 0}
+.sb-tabs button{flex:1;border:0;background:none;padding:9px 0;border-radius:10px 10px 0 0;font:800 12px inherit;color:#8A9893;cursor:pointer}
+.sb-tabs button.on{background:#fff;color:#2F4A42;box-shadow:0 -1px 0 #E3ECE9 inset}
+.sb-pane{flex:1;overflow:auto;background:#fff;margin:0 12px 12px;border-radius:0 0 12px 12px;padding:6px 14px 16px}
+.sb-pane h5{margin:14px 0 8px;font:800 10px/1 'DM Mono',monospace;letter-spacing:.18em;color:#6FC4A2}
+.sb-chips{display:flex;flex-wrap:wrap;gap:6px}
+.sb-chip{display:inline-flex;align-items:center;gap:6px;border:0;border-radius:999px;padding:7px 11px;background:#F2F6F5;color:#3A4A45;font:700 12px/1 inherit;cursor:pointer}
+.sb-chip i{width:12px;height:12px;border-radius:50%;box-shadow:0 0 0 1px rgba(0,0,0,.08) inset}
+.sb-chip.on{background:#74CDA8;color:#fff}
+.sb-who{display:flex;gap:6px;margin-top:12px}.sb-who button{flex:1;border:0;border-radius:10px;padding:8px;background:#F2F6F5;font:800 12px inherit;color:#6B7A75;cursor:pointer}.sb-who button.on{background:#2F4A42;color:#fff}
+.sb-tg{display:flex;align-items:center;gap:8px;margin-top:14px;font:700 12px inherit;color:#3A4A45}
+.sb-in{width:100%;box-sizing:border-box;border:1px solid #DDE8E4;border-radius:10px;padding:10px 12px;font:700 13px inherit}
+@media (max-width:720px){.sb{flex-direction:column;overflow:auto}.sb-view{flex:none;border-right:0;border-bottom:1px solid #E3ECE9}.sb-view canvas{width:min(78vw,300px)}.sb-side{flex:none}.sb-pane{overflow:visible}}`;
+  const open = X => {
+    if (!document.getElementById('sb-css')) { const s = document.createElement('style'); s.id = 'sb-css'; s.textContent = CSS; document.head.appendChild(s); }
+    openWin('x-' + X.id, {
+      icon: X.icon || 'snowglobe', title: X.name || 'Snowball', sub: 'SNOWBALL MAKER', task: X.name || 'Snowball', cls: 'xwin sbwin',
+      x: 300, y: 64, w: 720, h: 600,
+      render(b) {
+        b.innerHTML = `<div class="sb"><div class="sb-view"><canvas width="800" height="960"></canvas><div class="sb-acts"><button class="main" data-act="shake">❄ 흔들기</button><button data-act="rand">랜덤</button><button data-act="save">이미지 저장</button></div></div>
+          <div class="sb-side"><div class="sb-tabs">${[['scene', '장면'], ['char', '캐릭터'], ['acc', '꾸미기'], ['base', '받침']].map(([k, l]) => `<button data-tab="${k}" class="${tab === k ? 'on' : ''}">${l}</button>`).join('')}</div><div class="sb-pane">${panel()}</div></div></div>`;
+        cv = b.querySelector('canvas'); cx2 = cv.getContext('2d'); cx2.setTransform(2, 0, 0, 2, 0, 0);
+        const pane = b.querySelector('.sb-pane'), redraw = () => { pane.innerHTML = panel(); b.querySelectorAll('.sb-tabs button').forEach(x => x.classList.toggle('on', x.dataset.tab === tab)); };
+        const apply = (k, v) => {
+          if (['kind', 'fur', 'face', 'acc', 'ac'].includes(k)) { const C = st.c[who] || st.c[0]; C[k] = v; if (k === 'kind' && v === 'panda') C.fur = 'white'; }
+          else if (k === 'count') { st.count = +v; if (who >= st.count) who = 0; }
+          else if (k === 'snow') { st.snow = +v; seed(); }
+          else st[k] = v;
+          save(); rebuild(); redraw();
+        };
+        b.addEventListener('click', e => {
+          const t = e.target.closest('[data-tab]'); if (t) { tab = t.dataset.tab; redraw(); return; }
+          const w = e.target.closest('[data-who]'); if (w) { who = +w.dataset.who; redraw(); return; }
+          const ch = e.target.closest('.sb-chip'); if (ch) { apply(ch.dataset.k, ch.dataset.v); return; }
+          const a = e.target.closest('[data-act]'); if (!a) return;
+          if (a.dataset.act === 'shake') { shake = 1; }
+          if (a.dataset.act === 'rand') {
+            st.scene = pick(SCENES); st.prop = pick(PROPS); st.base = pick(BASES); st.band = pick(BANDS); st.count = Math.random() < .6 ? 2 : 1;
+            st.c = [0, 1].map(() => ({ kind: pick(KINDS), fur: pick(FUR), face: pick(FACES), acc: pick(ACC), ac: pick(ACCCOL) })); who = 0; save(); rebuild(); redraw(); shake = .8;
+          }
+          if (a.dataset.act === 'save') {
+            try { const url = cv.toDataURL('image/png'); const l = document.createElement('a'); l.href = url; l.download = 'snowball.png'; document.body.appendChild(l); l.click(); l.remove(); a.textContent = '저장했어요!'; setTimeout(() => { a.textContent = '이미지 저장'; }, 1600); } catch (err) { a.textContent = '저장 실패'; }
+          }
+        });
+        b.addEventListener('change', e => { const k = e.target.dataset.k; if (k === 'glitter') { st.glitter = e.target.checked; save(); } });
+        b.addEventListener('input', e => { if (e.target.dataset.k === 'plate') { st.plate = e.target.value; save(); } });
+        seed(); rebuild(); if (!raf) raf = requestAnimationFrame(draw);
+      }
+    });
+  };
+  return { open, svgOf };
+})();
+
 /* ---------- 6×4 새 칸 창 ---------- */
 function openExtra(key) {
   const X = (S.extraApps || []).find(x => x.id === key); if (!X) return;
   if (['about', 'inventory', 'linked'].includes(X.type)) return openDossier(X);
   if (X.type === 'ooc' || X.type === 'prompt') return openRoom(X);
+  if (X.type === 'snowball') return SB.open(X);
   const n = (S.extraApps || []).indexOf(X);
   openWin('x-' + key, {
     icon: X.icon || X.id, title: X.name, sub: 'SETLIST / APPLICATIONS', task: X.name, cls: 'xwin',

@@ -1561,24 +1561,10 @@ const SITE = {
       ]
     },
     {
-      "id": "afterparty",
-      "name": "Afterparty",
-      "icon": "moon",
-      "type": "list",
-      "rows": [
-        [
-          "항목 1",
-          "11.21"
-        ],
-        [
-          "항목 2",
-          "11.18"
-        ],
-        [
-          "항목 3",
-          "11.15"
-        ]
-      ]
+      "id": "snowball",
+      "name": "Snowball",
+      "icon": "snowglobe",
+      "type": "snowball"
     }
   ],
 
